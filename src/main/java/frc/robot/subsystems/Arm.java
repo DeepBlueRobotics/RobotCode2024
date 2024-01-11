@@ -16,10 +16,13 @@ public class Arm extends SubsystemBase {
     public Arm() {
 			//arm AND wrist, if it happens
       /*
-       have 2 set positions
-       The first would face intake direction and the second would face the opposite
-       Both should keep the same angle
+       have 3 set positions
+       Speaker position 
+       Amp position
+       Trap possition
        These set positions would also be conrtolled by buttons
+
+       There will also be a manual control for the arm using the right joystick
       */
     }
 
