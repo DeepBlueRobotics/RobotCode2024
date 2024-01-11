@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class Intake extends SubsystemBase {
-    public Intake() {
+public class Flywheel extends SubsystemBase {
+    public Flywheel() {
     }
 
     @Override
