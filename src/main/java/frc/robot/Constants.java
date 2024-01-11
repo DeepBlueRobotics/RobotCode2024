@@ -16,17 +16,27 @@ public final class Constants {
 	public static final class Drivetrain {
 	}
 	public static final class Elevator {
+		
+		public static final double zeroOffset = 0;
+		public static final double trapOffset = 50;//rotations
+		
 	}
 	public static final class Arm {
-		//all angles in deg here
-		public static final intakeAngle = -10;
-		public static final ampAngle = 30;
-		public static final speakerAngle = 50;
+		
+		//all angles in rot here
+		public static final double intakeAngle = -.1;
+		public static final double ampAngle = .3;
+		public static final double speakerAngle = .4;
 		//if needed
 //		public static final trapAngle = 80;
 		
 	}
 	public static final class Flywheel {
+		//in set() speed
+		public static final double idleSpeed = 0;
+		public static final double intakeSpeed = 1;
+		public static final double outtakeSpeed = 2;
+
 	}
-	//not real just place holders
+
 }
