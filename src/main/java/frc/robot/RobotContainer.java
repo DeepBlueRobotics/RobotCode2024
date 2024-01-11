@@ -31,8 +31,11 @@ public class RobotContainer {
 	}
 	
 	private void configureBindingsManipulator() {
-		// 3 setpositions of elevator on letterpad
+		// 3 setpositions of elevator on arrowpad
 		// intake/outtake on triggers
+
+    //3 setpositions of arm on letterpad
+    //right joystick used for manual arm control
 	}
 
   public Command getAutonomousCommand() {
