@@ -15,11 +15,21 @@ package frc.robot;
 public final class Constants {
 	public static final class Drivetrain {
 	}
+	
 	public static final class Elevator {
 		
-		public static final double zeroOffset = 0;
-		public static final double trapOffset = 50;//rotations
+		public static final double zeroOffset = 0.0;
+		public static final double trapOffset = 50.0;//rotations
+		public static final double maxOffset = 51.0;
+		public static final double minOffset = -.01;
 		
+		//Motor Controllers: pid, trapezoidal
+		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
+		
+		public static final double MAX_VEL = 1; // rot / s
+		public static final double MAX_ACCEL = 1; // rot / s^2
+		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL_AUTO[ARM], MAX_FF_ACCEL[ARM]);
+
 	}
 	public static final class Arm {
 		
@@ -30,12 +40,20 @@ public final class Constants {
 		//if needed
 //		public static final trapAngle = 80;
 		
+		//Motor Controllers: pid, FF
+		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
+		// Feedforward
+		public static final double kS = 0.1;
+		public static final double kG = 0.1;
+		public static final double kV = 0.1;
+		public static final double kA = 0.1;
+		
 	}
 	public static final class Flywheel {
 		//in set() speed
 		public static final double idleSpeed = 0;
-		public static final double intakeSpeed = 1;
-		public static final double outtakeSpeed = 2;
+		public static final double intakeSpeed = .7;
+		public static final double outtakeSpeed = 1;
 
 	}
 
