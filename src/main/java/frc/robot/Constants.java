@@ -13,12 +13,20 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-//not real just place holders
-
-double ampAngle = 30;
-double speakerAngle = 50;
-double trapAngle= 80;
-
-
-
+	public static final class Drivetrain {
+	}
+	public static final class Elevator {
+	}
+	public static final class Arm {
+		//all angles in deg here
+		public static final intakeAngle = -10;
+		public static final ampAngle = 30;
+		public static final speakerAngle = 50;
+		//if needed
+//		public static final trapAngle = 80;
+		
+	}
+	public static final class Flywheel {
+	}
+	//not real just place holders
 }
