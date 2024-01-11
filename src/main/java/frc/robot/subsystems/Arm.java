@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase {
     public Arm() {
 			//arm AND wrist, if it happens
       /*
-       Use a button to extend arm and have 2 set positions
+       have 2 set positions
        The first would face intake direction and the second would face the opposite
        Both should keep the same angle
        These set positions would also be conrtolled by buttons
