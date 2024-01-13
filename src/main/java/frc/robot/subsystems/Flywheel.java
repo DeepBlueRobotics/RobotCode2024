@@ -32,7 +32,7 @@ public class Flywheel extends SubsystemBase {
     public void isHoldingNote(){
       
     }
-    // method to check if holding note (limit switch)
+    // method to check if holding note (beam breaker/digital input)
     
     @Override
     public void periodic() {

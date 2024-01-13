@@ -35,9 +35,11 @@ public class Arm extends SubsystemBase {
     public void setTrapPos() {
       //Sets arm to the optimal angle for trap | used to score in trap
     }
-
+    public void moveArm(double manipulatirJoyStick) {
+      // move the arm around based off the right joystick movement on the manipulator joystick
+    }
     @Override
     public void periodic() {
-     
+     // run moveArm passing in controller here
 		}
 }
