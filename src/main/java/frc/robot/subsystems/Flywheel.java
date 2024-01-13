@@ -15,12 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand; 
 
 
 public class Flywheel extends SubsystemBase {
-
-
+    CANSparkMax leftFlywheelMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
+    CANSparkMax rightFlywheelMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO_550);
     public Flywheel() {
     }
     public void intake() {
@@ -30,9 +30,9 @@ public class Flywheel extends SubsystemBase {
       //set front flywheel to max then wait until proper velocity then turn on back flywheel
     }
     public void isHoldingNote(){
-      
+
     }
-    // method to check if holding note (beam breaker/digital input)
+    // method to check if holding note (beambreaker / digital input)
     
     @Override
     public void periodic() {

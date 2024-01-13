@@ -56,5 +56,6 @@ public final class Constants {
 		public static final double outtakeSpeed = 1;
 
 	}
+	//array or enum with arm and wrist values 
 
 }
