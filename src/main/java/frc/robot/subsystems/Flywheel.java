@@ -29,6 +29,9 @@ public class Flywheel extends SubsystemBase {
     public void outtake() {
       //set front flywheel to max then wait until proper velocity then turn on back flywheel
     }
+    public void isHoldingNote(){
+      
+    }
     // method to check if holding note (limit switch)
     
     @Override
