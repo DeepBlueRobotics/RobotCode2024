@@ -26,13 +26,17 @@ public class Flywheel extends SubsystemBase {
     public void intake() {
       //turn wheel backwards to suckkkkkk
     }
-    public void outtake() {
-      //set front flywheel to max then wait until proper velocity then turn on back flywheel
-    }
     public void isHoldingNote(){
 
     }
     // method to check if holding note (beambreaker / digital input)
+
+    public void outtakeAmp(){
+      //sets flywheel to ideal amp angle and speed
+    }
+    public void outtakeSpeaker(){
+      //sets flywheel to ideal speaker angle and speed
+    }
     
     @Override
     public void periodic() {
