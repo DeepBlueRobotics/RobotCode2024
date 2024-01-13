@@ -18,10 +18,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand; 
 
 
-public class Flywheel extends SubsystemBase {
+public class Shooter extends SubsystemBase {
     CANSparkMax leftFlywheelMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
     CANSparkMax rightFlywheelMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO_550);
-    public Flywheel() {
+    public Shooter() {
     }
     public void intake() {
       //turn wheel backwards to suckkkkkk
@@ -31,13 +31,11 @@ public class Flywheel extends SubsystemBase {
     }
     // method to check if holding note (beambreaker / digital input)
 
-    public void outtakeAmp(){
-      //sets flywheel to ideal amp angle and speed
+    public void outtake(){
+      //sets flywheel to ideal speed
     }
-    public void outtakeSpeaker(){
-      //sets flywheel to ideal speaker angle and speed
-    }
-    
+  
+    //1 outske
     @Override
     public void periodic() {
 
