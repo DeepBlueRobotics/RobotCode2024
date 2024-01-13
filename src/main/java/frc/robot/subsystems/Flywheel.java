@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Flywheel extends SubsystemBase {
 
+
     public Flywheel() {
     }
     public void intake() {
@@ -28,9 +29,11 @@ public class Flywheel extends SubsystemBase {
     public void outtake() {
       //set front flywheel to max then wait until proper velocity then turn on back flywheel
     }
+    // method to check if holding note (limit switch)
     
     @Override
     public void periodic() {
+
      
 		}
 }
