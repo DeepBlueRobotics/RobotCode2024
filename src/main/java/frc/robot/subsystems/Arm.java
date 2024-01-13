@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Arm extends SubsystemBase {
+    CANSparkMax armLeftMotor = MotorControllerFactory.createSparkMax(2,MotorConfig.NEO);
+    CANSparkMax armRightMotor = MotorControllerFactory.createSparkMax(3,MotorConfig.NEO);
+    //^might change to neo vortex
     public Arm() {
 			//arm AND wrist, if it happens
       /*
