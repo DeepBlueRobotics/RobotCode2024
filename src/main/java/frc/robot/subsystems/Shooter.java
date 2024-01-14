@@ -23,17 +23,24 @@ public class Shooter extends SubsystemBase {
     CANSparkMax rightFlywheelMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO_550);
     public Shooter() {
     }
-    public void intake() {
-      //turn wheel backwards to suckkkkkk
-    }
-    public void isHoldingNote(){
+ 
+    public boolean isHoldingNote(){
+      return true;
 
     }
     // method to check if holding note (beambreaker / digital input)
-
-    public void outtake(){
+    public double getGamePieceDistanceIn() {
+      return Units.metersToInches((distSensor.getRange() - distSensorDepthMM */) / 1000 /* Convert mm to m */);
+                                                                        
+      //The sensor measures from the back of the sensor
+      
+                                                                           
+    }
+    public void setSpeed(){
       //sets flywheel to ideal speed
     }
+
+
   
     //1 outske
     @Override
