@@ -2,7 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package org.carlmontrobotics.subsystems;
+
+import org.carlmontrobotics.Constants.Arm;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +27,8 @@ public class Arm extends SubsystemBase {
        There will also be a manual control for the arm using the right joystick
       */
     }
-    public void setArmPos() {
+	
+    public void setArmPos(ArmAngle angle) {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
       //pass in where scorign and use switch statement
@@ -33,9 +36,8 @@ public class Arm extends SubsystemBase {
 
     }
     
-    ///change to 1 method
-    public void moveArm(double manipulatirJoyStick) {
-      // move the arm around based off the right joystick movement on the manipulator joystick
+    public void setSpeed() {
+      //move the arm around based off the right joystick movement on the manipulator joystick
       //use the trapezoid thingy from robot code 2023
     }
     
