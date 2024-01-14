@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-
+import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,10 +21,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class Shooter extends SubsystemBase {
     CANSparkMax leftFlywheelMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
     CANSparkMax rightFlywheelMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO_550);
+    //CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(2,MotorConfig.NEO_550);
+    //CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(3,MotorConfig.NEO_550);
+    
     public Shooter() {
     }
     public void intake() {
-      //turn wheel backwards to suckkkkkk
+      //sets the intake motors to a certain rpm to intake a note
     }
     public void isHoldingNote(){
 
