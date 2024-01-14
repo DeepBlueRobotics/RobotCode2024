@@ -4,7 +4,7 @@
 
 package org.carlmontrobotics.subsystems;
 
-import org.carlmontrobotics.Constants.Arm;
+import org.carlmontrobotics.Constants.Arm.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +28,7 @@ public class Arm extends SubsystemBase {
       */
     }
 	
-    public void setArmPos(ArmAngle angle) {
+    public void setArmPos() {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
       //pass in where scorign and use switch statement

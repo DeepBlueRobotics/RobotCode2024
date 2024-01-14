@@ -7,7 +7,7 @@ package org.carlmontrobotics.subsystems;
 import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
-import org.carlmontrobotics.Constants.IntakeShooter;
+import org.carlmontrobotics.Constants.IntakeShooter.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,10 +31,9 @@ public class IntakeShooter extends SubsystemBase {
     }
 	
 		public void intake() {}//run both intake and passing motors
-    public void fire(ShooterSpeed speed) {}//run both passing and firing motors
+    public void fire() {}//run both passing and firing motors
 		
 		public void eject() {}//throw ring onto ground (run all motors in reverse)
-		public void blankFire() {}//fire ring out without trying to score - min voltage pls
 	
 	
     public void isHoldingNote(){
