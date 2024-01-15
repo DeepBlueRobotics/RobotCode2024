@@ -29,9 +29,10 @@ public class IntakeShooter extends SubsystemBase {
     CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO);
     CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO);
     
-    CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(leftPassPort, MotorConfig.NEO_550);
-	CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(rightPassPort,MotorConfig.NEO_550);
-	
+    //CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(leftPassPort, MotorConfig.NEO_550);
+	//CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(rightPassPort,MotorConfig.NEO_550);
+	//I don't think we are using passing motors anymore
+
 	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
   	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(rightIntakePort, MotorConfig.NEO_550);
 	private final RelativeEncoder leftFiringEncoder = leftFiringMotor.getEncoder();
@@ -42,11 +43,11 @@ public class IntakeShooter extends SubsystemBase {
 
 	}
 	
-	public void intake() {}//run both intake and passing motors
+	public void intake() {}//runs Intake motors
     
     public void shoot() {
 			
-	}//run both passing and shooting motors. May need PID for this
+	}//runs shooting motors. May need PID for this
 		
 	public void eject() {
 
