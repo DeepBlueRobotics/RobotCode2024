@@ -68,10 +68,9 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation('org.carlmontrobotics:lib199') {
         version {
-            branch = 'master'
+            branch = '2024'
         }
     }
 }
