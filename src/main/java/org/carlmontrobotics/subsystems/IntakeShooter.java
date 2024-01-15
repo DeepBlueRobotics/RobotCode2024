@@ -7,6 +7,7 @@ package org.carlmontrobotics.subsystems;
 import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 
