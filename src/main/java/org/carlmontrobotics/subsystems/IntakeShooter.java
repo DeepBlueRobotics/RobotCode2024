@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand; 
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.controller.PIDController;
+
 
 
 
@@ -31,16 +34,23 @@ public class IntakeShooter extends SubsystemBase {
 	
 	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
   	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(rightIntakePort, MotorConfig.NEO_550);
+	private final RelativeEncoder leftFiringEncoder = leftFiringMotor.getEncoder();
+	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
+	//todo: figure out way to make it so its not "constants."
+	private final PIDController firingMotorPID = new PIDController(Constants.kP[Constants.shooter], Constants.kI[Constants.shooter], Constants.kD[Constants.shooter]);
+	public IntakeShooter() {
+
+	}
 	
-		public IntakeShooter() {}
-	
-		public void intake() {}//run both intake and passing motors
+	public void intake() {}//run both intake and passing motors
     
-    	public void shoot() {
+    public void shoot() {
 			
-		}//run both passing and shooting motors. May need PID for this
+	}//run both passing and shooting motors. May need PID for this
 		
-		public void eject() {}//throw ring onto ground (run all motors in reverse)
+	public void eject() {
+
+	}//throw ring onto ground (run all motors in reverse)
 	
 	
     public void isHoldingNote(){

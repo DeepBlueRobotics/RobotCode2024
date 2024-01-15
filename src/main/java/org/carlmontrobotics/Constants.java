@@ -15,6 +15,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+	///array indexed
+	public static final int shooter = 0;
+	public static double[] kP = {0, 0}; //0 for now
+    public static double[] kI = {0, 0}; 
+    public static double[] kD = {0,0};
 	public static final class Drivetrain {
 	}
 	
