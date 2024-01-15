@@ -33,7 +33,9 @@ public class IntakeShooter extends SubsystemBase {
 	
 		public void intake() {}//run both intake and passing motors
     
-    	public void shoot() {}//run both passing and shooting motors. May need PID for this
+    	public void shoot() {
+			
+		}//run both passing and shooting motors. May need PID for this
 		
 		public void eject() {}//throw ring onto ground (run all motors in reverse)
 	
