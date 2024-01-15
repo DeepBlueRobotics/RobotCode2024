@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
+import org.carlmontrobotics.lib199.MotorConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,8 +37,10 @@ public class IntakeShooter extends SubsystemBase {
 		public void eject() {}//throw ring onto ground (run all motors in reverse)
 	
 	
-    public void isHoldingNote(){
+    public boolean isHoldingNote(){
+      return true;
 			// method to check if holding note (beambreaker / digital input)
+
     }
 
   
