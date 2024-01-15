@@ -9,6 +9,12 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
+import org.carlmontrobotics.Constants.OI;
+//subsystems
+import org.carlmontrobotics.subsystems.IntakeShooter;
+import org.carlmontrobotics.subsystems.Arm;
+//import org.carlmontrobotics.subsystems.Drivetrain;
+
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -26,6 +32,9 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  private final IntakeShooter intakeShooter = new IntakeShooter();
+  private final Arm arm = new Arm(); 
+  //private final Drivetrain drivetrain = new Drivetrain();  
 
   //1. using GenericHID allows us to use different kinds of controllers
   //2. Use absolute paths from constants to reduce confusion
@@ -47,6 +56,14 @@ public class RobotContainer {
     //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
     //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
+
+    // arm.setDefaultCommand(new ArmTeleop(
+    //   arm,
+    //   () -> inputProcessing(getStickValue(manipulatorController, Axis.kLeftY)),
+    //   () -> inputProcessing(getStickValue(manipulatorController, Axis.kRightY))
+    // ));
+  
+
   }
   private void setBindingsDriver() {}
   private void setBindingsManipulator() {}
