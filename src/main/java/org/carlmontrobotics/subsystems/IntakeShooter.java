@@ -7,6 +7,7 @@ package org.carlmontrobotics.subsystems;
 import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import static org.carlmontrobotics.Constants.IntakeShooter.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
@@ -20,15 +21,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand; 
 
 
+
 public class IntakeShooter extends SubsystemBase {
-    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO);
-    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(1, MotorConfig.NEO);
+    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO);
+    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO);
     
-    CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(2, MotorConfig.NEO_550);
-	CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(3,MotorConfig.NEO_550);
+    CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(leftPassPort, MotorConfig.NEO_550);
+	CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(rightPassPort,MotorConfig.NEO_550);
 	
-	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(4, MotorConfig.NEO_550);
-  	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(5, MotorConfig.NEO_550);
+	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
+  	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(rightIntakePort, MotorConfig.NEO_550);
 	
 		public IntakeShooter() {}
 	
