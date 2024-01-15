@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package org.carlmontrobotics;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
@@ -15,28 +15,18 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+	///array indexed
+	public static final int shooter = 0;
+	public static double[] kP = {0, 0}; //0 for now
+    public static double[] kI = {0, 0}; 
+    public static double[] kD = {0,0};
 	public static final class Drivetrain {
 	}
 	
-	public static final class Elevator {
-		
-		public static final double zeroOffset = 0.0;
-		public static final double trapOffset = 50.0;//rotations
-		public static final double maxOffset = 51.0;
-		public static final double minOffset = -.01;
-		
-		//Motor Controllers: pid, trapezoidal
-		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
-		
-		public static final double MAX_VEL = 1; // rot / s
-		public static final double MAX_ACCEL = 1; // rot / s^2
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL_AUTO[ARM], MAX_FF_ACCEL[ARM]);
-
-	}
 	public static final class Arm {
-		public static final int ARM = 0;
-		//Port
-		public static final int armMotorPort = 1;
+		//ports
+		armMotorPort = 
+		
 		//all angles in rot here
 		public static final double intakeAngle = -.1;
 		public static final double ampAngle = .3;
@@ -52,13 +42,32 @@ public final class Constants {
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
 		
+		public static final double MAX_FF_VEL = 1; // rot / s
+		public static final double MAX_FF_ACCEL = 1; // rot / s^2
+		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
+		
 	}
-	public static final class Flywheel {
+	public static final class IntakeShooter {
 		//in set() speed
 		public static final double idleSpeed = 0;
 		public static final double intakeSpeed = .7;
 		public static final double outtakeSpeed = 1;
+		
+		public static final int leftFiringPort = 0;
+		public static final int rightFiringPort = 1;
+		public static final int leftPassPort = 2;
+		public static final int rightPassPort = 3;
+		public static final int leftIntakePort = 4;
+		public static final int rightIntakePort = 5;
 
 	}
-
+	
+	public static final class OI {
+        public static final class Driver {
+            public static final int port = 0;
+        }
+        public static final class Manipulator {
+            public static final int port = 1;
+        }
+    }
 }

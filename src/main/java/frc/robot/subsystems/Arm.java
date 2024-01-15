@@ -4,6 +4,13 @@
 
 package frc.robot.subsystems;
 
+import org.carlmontrobotics.lib199.MotorConfig;
+import org.carlmontrobotics.lib199.MotorControllerFactory;
+
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +20,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Arm extends SubsystemBase {
+private final CANSparkMax armMotor = MotorControllerFactory.createSparkMax(armMotorPort, MotorConfig.NEO);
+  private final RelativeEncoder armRelEncoder = armMotor.getEncoder();
+  private final SparkMaxAbsoluteEncoder armEncoder = armMotor
+          .getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+  private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS[ARM], kV[ARM], kA[ARM]);
     public Arm() {
 			//arm AND wrist, if it happens
       /*
