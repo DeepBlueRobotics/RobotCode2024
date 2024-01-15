@@ -20,6 +20,7 @@ public final class Constants {
 	public static double[] kP = {0, 0}; //0 for now
     public static double[] kI = {0, 0}; 
     public static double[] kD = {0,0};
+	public static double[] kS = {0,0};
 	public static final class Drivetrain {
 	}
 	
