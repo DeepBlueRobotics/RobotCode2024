@@ -4,6 +4,8 @@
 
 package org.carlmontrobotics.subsystems;
 
+import org.carlmontrobotics.Constants.Arm.*;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +27,7 @@ public class Arm extends SubsystemBase {
        There will also be a manual control for the arm using the right joystick
       */
     }
+	
     public void setArmPos() {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
@@ -33,9 +36,8 @@ public class Arm extends SubsystemBase {
 
     }
     
-    ///change to 1 method
-    public void moveArm(double manipulatirJoyStick) {
-      // move the arm around based off the right joystick movement on the manipulator joystick
+    public void setSpeed() {
+      //move the arm around based off the right joystick movement on the manipulator joystick
       //use the trapezoid thingy from robot code 2023
     }
     
