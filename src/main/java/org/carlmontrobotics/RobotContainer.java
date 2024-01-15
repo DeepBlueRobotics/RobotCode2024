@@ -6,6 +6,7 @@ package org.carlmontrobotics;
 
 import org.carlmontrobotics.commands.*;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -17,41 +18,38 @@ import java.util.HashMap;
 
 public class RobotContainer {
 	//set up subsystems / controllers / limelight
-	
-	
+
+
 	//auto & paths {
-	
+
 	////AUTO-USABLE COMMANDS
 	private final Command[] autoUseableCommands = new Command[] {
 		AutoIntakeOnce
-		//stuff here
+		//other commands here
 	};
 	for (Command cmd : autoUseableCommands) {
-//		registerCommand(cmd.getName(), newFunctionalCommand( cmd::onInit,  cmd::onEnd, cmd::isFinished, cmd.getRequirements()));
 		registerCommand(cmd.getName(), (FunctionalCommand) cmd);
 	};
-	
+
 	////CREATING PATHS
-	private final String[] autoNames = new String[] {
+	private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
 		"Penis"
 	};
-
 	private final PathPlannerPath[] autoPaths = autoNames.stream().map((name)->fromPathFile(name)).collect(Collectors.toList());
-		
-	
-	////CREATING AUTO COMMANDS
+
+	////CREATE COMMANDS FROM PATHS
 	private final AutoBuilder atBuilder = new AutoBuilder();
 	private Command[] autoCommands = new Command[] {
 		atBuilder.followPath(PathPlannerPath path)
 	};
-	
+
 	//}end
-	
-	
+
+
   public RobotContainer() {
 		//defaultCommands: elevator, dt
 		//(pass in controller!)
-		
+
     configureBindingsDriver();
 		configureBindingsManipulator();
   }
@@ -61,7 +59,7 @@ public class RobotContainer {
 		// slowmode toggle on trigger
 		// 3 cardinal directions on letterpad
 	}
-	
+
 	private void configureBindingsManipulator() {
 		// 3 setpositions of elevator on arrowpad
 		// intake/outtake on triggers
@@ -71,13 +69,13 @@ public class RobotContainer {
 	}
 
   public Command getAutonomousCommand() {
-    Command autoCommand = null;
+    public Command autoCommand = null;
 
-		//get the funny ports on the robot
-		public final DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length(), 26)];
-		for(int i = 0; i < autoSelectors.length; i++) autoSelectors[i] = new DigitalInput(i);
-		
-		//check which ones are short-circuiting
+	//get the funny ports on the robot
+	public final DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 26)];
+	for(int a = 0; a < autoSelectors.length; a++) autoSelectors[i] = new DigitalInput(i);
+
+	//check which ones are short-circuiting
     for(int i = 0; i < autoSelectors.length; i++) {
       if(!autoSelectors[i].get()) {
         System.out.println("Using Path: " + i);
@@ -87,6 +85,6 @@ public class RobotContainer {
     }
 
     //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-     return autoCommands == null ? new PrintCommand("Auto selector broke :(") : autoCommand; 
+     return autoCommand == null ? new PrintCommand("Auto selector broke :(") : autoCommand;
   }
 }
