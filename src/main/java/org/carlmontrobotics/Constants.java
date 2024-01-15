@@ -45,6 +45,12 @@ public final class Constants {
 		public static final double idleSpeed = 0;
 		public static final double intakeSpeed = .7;
 		public static final double outtakeSpeed = 1;
+		public static final int leftFiringPort = 1;
+		public static final int rightFiringPort = 2;
+		public static final int leftPassPort = 3;
+		public static final int rightPassPort = 4;
+		public static final int leftIntakePort = 5;
+		public static final int rightIntakePort = 6;
 
 	}
 	

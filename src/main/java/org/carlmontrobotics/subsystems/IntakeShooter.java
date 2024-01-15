@@ -20,19 +20,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public class IntakeShooter extends SubsystemBase {
-    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO);
-    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO);
-    CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(2, MotorConfig.NEO_550);
-		CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(3,MotorConfig.NEO_550);
+    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO);
+    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort,MotorConfig.NEO);
+    
+    CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(leftPassPort, MotorConfig.NEO_550);
+	CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(rightPassPort,MotorConfig.NEO_550);
 	
-		CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(4, MotorConfig.NEO_550);
-//	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(5, MotorConfig.NEO_550);
+	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
+  	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
 	
-		public IntakeShooter() {
-    }
+		public IntakeShooter() {}
 	
 		public void intake() {}//run both intake and passing motors
-    public void fire() {}//run both passing and firing motors
+    
+    	public void shoot() {}//run both passing and shooting motors. May need PID for this
 		
 		public void eject() {}//throw ring onto ground (run all motors in reverse)
 	
