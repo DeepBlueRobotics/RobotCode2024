@@ -6,9 +6,9 @@ package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class eject extends Command {
+public class Eject extends Command {
   /** Creates a new eject. */
-  public eject() {
+  public Eject() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
