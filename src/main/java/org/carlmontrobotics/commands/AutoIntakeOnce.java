@@ -5,8 +5,9 @@
 package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AutoIntakeOnce extends Command {
+public class AutoIntakeOnce extends CommandBase {
   /** Creates a new StartIntake. */
   public AutoIntakeOnce() {
     // Use addRequirements() here to declare subsystem dependencies.

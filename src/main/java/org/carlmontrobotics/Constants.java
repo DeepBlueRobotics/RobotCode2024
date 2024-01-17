@@ -4,6 +4,8 @@
 
 package org.carlmontrobotics;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -35,7 +37,7 @@ public final class Constants {
 		
 		public static final double MAX_VEL = 1; // rot / s
 		public static final double MAX_ACCEL = 1; // rot / s^2
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL_AUTO[ARM], MAX_FF_ACCEL[ARM]);
+		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_VEL, MAX_ACCEL);
 		
 	}
 	public static final class IntakeShooter {

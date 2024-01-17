@@ -33,6 +33,7 @@ public class RobotContainer {
 	}
 
   public Command getAutonomousCommand() {
-     return PrintCommand("null :(");
+     return Commands.print("No autonomous command configured");
+
   }
 }
