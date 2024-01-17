@@ -47,6 +47,17 @@ wpi.java.debugJni = false
 // Set this to true to enable desktop support.
 def includeDesktopSupport = true
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }//for lib199
+    }
+}
+
+// Don't cache changing modules
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
@@ -68,11 +79,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    implementation('org.carlmontrobotics:lib199') {
-        version {
-            branch = '2024'
-        }
-    }
+     implementation "com.github.deepbluerobotics:lib199:2024-SNAPSHOT"
 }
 
 test {
