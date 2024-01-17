@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import com.kauailabs.navx.frc.AHRS;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
-import org.carlmontrobotics.lib199.path.SwerveDriveInterface;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;
@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
+public class Drivetrain extends SubsystemBase {
    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
 
    private SwerveDriveKinematics kinematics = null;
@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
 
        // Calibrate Gyro
        {
-           gyro.calibrate();
+           //gyro.calibrate();
            double initTimestamp = Timer.getFPGATimestamp();
            double currentTimestamp = initTimestamp;
            while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
@@ -97,25 +97,25 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
            SwerveModule moduleFL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FL,
                    driveMotors[0] = MotorControllerFactory.createSparkMax(driveFrontLeftPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnFrontLeftPort, MotorConfig.NEO),
-                   MotorControllerFactory.createCANCoder(canCoderPortFL), 0,
+                   SensorFactory.createCANCoder(canCoderPortFL), 0,
                    pitchSupplier, rollSupplier);
            // Forward-Right
            SwerveModule moduleFR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FR,
                    driveMotors[1] = MotorControllerFactory.createSparkMax(driveFrontRightPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnFrontRightPort, MotorConfig.NEO),
-                   MotorControllerFactory.createCANCoder(canCoderPortFR), 1,
+                   SensorFactory.createCANCoder(canCoderPortFR), 1,
                    pitchSupplier, rollSupplier);
            // Backward-Left
            SwerveModule moduleBL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BL,
                    driveMotors[2] = MotorControllerFactory.createSparkMax(driveBackLeftPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnBackLeftPort, MotorConfig.NEO),
-                   MotorControllerFactory.createCANCoder(canCoderPortBL), 2,
+                   SensorFactory.createCANCoder(canCoderPortBL), 2,
                    pitchSupplier, rollSupplier);
            // Backward-Right
            SwerveModule moduleBR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BR,
                    driveMotors[3] = MotorControllerFactory.createSparkMax(driveBackRightPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnBackRightPort, MotorConfig.NEO),
-                   MotorControllerFactory.createCANCoder(canCoderPortBR), 3,
+                   SensorFactory.createCANCoder(canCoderPortBR), 3,
                    pitchSupplier, rollSupplier);
            modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
            for(CANSparkMax driveMotor: driveMotors) driveMotor.setOpenLoopRampRate(secsPer12Volts);
@@ -194,7 +194,6 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
        drive(getSwerveStates(forward, strafe, rotation));
    }
 
-   @Override
    public void drive(SwerveModuleState[] moduleStates) {
        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, maxSpeed);
 
@@ -207,7 +206,6 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
        }
    }
 
-   @Override
    public void stop() {
        for(SwerveModule module: modules) module.move(0, 0);
    }
@@ -262,22 +260,18 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
        return Math.IEEEremainder(x * (isGyroReversed ? -1.0 : 1.0), 360);
    }
 
-   @Override
    public double getHeadingDeg() {
        return getHeading();
    }
 
-   @Override
    public SwerveModulePosition[] getModulePositions() {
        return Arrays.stream(modules).map(SwerveModule::getCurrentPosition).toArray(SwerveModulePosition[]::new);
    }
 
-   @Override
    public Pose2d getPose() {
        return odometry.getPoseMeters();
    }
 
-   @Override
    public void setPose(Pose2d initialPose) {
        odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
    }
@@ -313,7 +307,6 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
        gyro.reset();
    }
 
-   @Override
    public SwerveDriveKinematics getKinematics() {
        return kinematics;
    }
@@ -337,18 +330,7 @@ public class Drivetrain extends SubsystemBase implements SwerveDriveInterface {
        for (SwerveModule module: modules)
            module.coast();
    }
-
-   @Override
-   public double getMaxAccelMps2() {
-       return autoMaxAccelMps2;
-   }
-
-   @Override
-   public double getMaxSpeedMps() {
-       return autoMaxSpeedMps;
-   }
-
-   @Override
+  
    public double[][] getPIDConstants() {
        return new double[][] {
            xPIDController,
