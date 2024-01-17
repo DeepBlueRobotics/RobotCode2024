@@ -4,7 +4,13 @@
 
 package org.carlmontrobotics;
 
+import org.carlmontrobotics.lib199.Limelight;
+import org.carlmontrobotics.lib199.Limelight.Transform;
+import org.carlmontrobotics.lib199.swerve.SwerveConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,15 +27,15 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(19.75);
-			public static final double trackWidth = Units.inchesToMeters(28.75);
+			public static final double wheelBase = Units.inchesToMeters(19.75); 
+			public static final double trackWidth = Units.inchesToMeters(28.75); 
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
 			// Gearing for the Swerve Modules is 6.75 : 1
-			public static final double driveGearing = 6.75;
+			public static final double driveGearing = 6.75; 
 
-			public static final double driveModifier = 1;
+			public static final double driveModifier = 1; 
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
 			public static final double mu = 0.5; /* 70/83.2;  */
 
@@ -182,5 +188,6 @@ public final class Constants {
         public static final class Manipulator {
             public static final int port = 1;
         }
+		public static final double JOY_THRESH = 0.01;
     }
 }
