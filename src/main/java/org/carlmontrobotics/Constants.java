@@ -26,8 +26,9 @@ public final class Constants {
 		public static final double ampAngle = .3;
 		public static final double speakerAngle = .4;
 		//if needed
-//		public static final trapAngle = 80;
-		
+		public static final double UPPER_ANGLE = 70;
+		public static final double LOWER_ANGLE = 0;
+		public static final double ARM_DICONT_RAD = (LOWER_ANGLE + UPPER_ANGLE) /2 - Math.PI;
 		//Motor Controllers: pid, FF
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
 		// Feedforward

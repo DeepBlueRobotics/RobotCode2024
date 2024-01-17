@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+
 public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT,MotorConfig.NEO);
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
@@ -41,20 +42,24 @@ public class Arm extends SubsystemBase {
       this.controller = controller;
     }
 	
-    public void setArmPos(double targetPosition, double targetVelocity) {
+    public void setArmGoal(double targetPosition, double targetVelocity) {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
       //pass in where scorign and use switch statement
-
+      targetPosition = getArmClampedGoal(targetPosition);
       
     }
-    
+    public static boolean positionForbidden(double armPos) {
+
+      return false;
+    }
     public void controllerSetSpeed(double rightJoystick) {
       //move the arm around based off the right joystick movement on the manipulator joystick
       //use the trapezoid thingy from robot code 2023
+      
     }
     public double getArmClampedGoal(double goal) {
-      return MathUtil.clamp(MathUtil.inputModulus(goal, goal, goal), goal, goal);
+      return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE, Constants.Arm.UPPER_ANGLE);
     }
     @Override
     public void periodic() {
