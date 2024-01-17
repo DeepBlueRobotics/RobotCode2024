@@ -11,6 +11,7 @@ import static org.carlmontrobotics.Constants.IntakeShooter.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +40,7 @@ public class IntakeShooter extends SubsystemBase {
 	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
 	private final PIDController firingMotorPID = new PIDController(Constants.kP[Constants.shooter], Constants.kI[Constants.shooter], Constants.kD[Constants.shooter]);
+	private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.kS[Constants.shooter], Constants.kV[Constants.shooter], Constants.kA[Constants.shooter]);
 	public IntakeShooter() {
 
 	}
