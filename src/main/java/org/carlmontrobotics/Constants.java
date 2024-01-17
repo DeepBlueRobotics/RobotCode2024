@@ -19,7 +19,8 @@ public final class Constants {
 	}
 	
 	public static final class Arm {
-		
+		//Motor port
+		public final static int MOTOR_PORT = 8;
 		//all angles in rot here
 		public static final double intakeAngle = -.1;
 		public static final double ampAngle = .3;
