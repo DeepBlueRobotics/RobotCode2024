@@ -64,6 +64,33 @@ public class RobotContainer {
       autoPaths.add(PathPlannerPath.fromPathFile(name));
     }
 
+    // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+    // import com.pathplanner.lib.util.PIDConstants;
+    // com.pathplanner.lib.util.ReplanningConfig
+    
+    // AutoBuilder.configureHolonomic
+    //   Supplier<Pose2d> poseSupplier, 
+    //   Consumer<Pose2d> resetPose, 
+    //   Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier, 
+    //   Consumer<ChassisSpeeds> robotRelativeOutput, 
+    //   HolonomicPathFollowerConfig new HolonomicPathFollowerConfig​(
+      // PIDConstants translationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
+      // PIDConstants rotationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
+      // double maxModuleSpeed, 
+      // double driveBaseRadius, 
+      // ReplanningConfig new ReplanningConfig​( /*put in Constants.Drivetrain.Auto*/
+        // boolean enableInitialReplanning, //replan at start of path if robot not at start of path?
+        // boolean enableDynamicReplanning, //replan if total error surpasses total error/spike threshold?
+        // double dynamicReplanningTotalErrorThreshold, //total error threshold in meters that will cause the path to be replanned
+        // double dynamicReplanningErrorSpikeThreshold //error spike threshold, in meters, that will cause the path to be replanned
+        // ), 
+      // double period
+      // ), 
+    //   BooleanSupplier shouldFlipPath,
+    //   Subsystem driveSubsystem
+    // )
+
+    //note: //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
     ////CREATE COMMANDS FROM PATHS
     autoCommands = (Command[]) autoPaths.stream().map(
       (PathPlannerPath path)->AutoBuilder.followPath(path)
