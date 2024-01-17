@@ -23,5 +23,13 @@ pluginManagement {
             name 'frcHome'
             url frcHomeMaven
         }
+        sourceControl {
+            gitRepository("https://github.com/DeepBlueRobotics/lib199.git") {
+                producesModule("org.carlmontrobotics:lib199")
+            }
+        }
     }
 }
+
+Properties props = System.getProperties();
+props.setProperty("org.gradle.internal.native.headers.unresolved.dependencies.ignore", "true");
