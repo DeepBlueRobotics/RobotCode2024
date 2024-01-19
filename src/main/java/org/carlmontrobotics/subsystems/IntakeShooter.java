@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
