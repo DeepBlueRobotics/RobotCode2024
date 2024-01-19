@@ -61,10 +61,10 @@ public class RobotContainer {
 		// 3 cardinal directions on letterpad
   }
   private void setBindingsManipulator() {
-    // 3 setpositions of elevator on arrowpad
 		// intake/outtake on triggers
-
+    //Left trigger will be intake whilst right trigger will be outtake
     //3 setpositions of arm on letterpad
+    //Up is Speaker, down is ground, right is Amp
     //right joystick used for manual arm control
   }
 

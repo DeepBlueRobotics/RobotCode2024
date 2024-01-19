@@ -4,6 +4,7 @@
 
 package org.carlmontrobotics;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
@@ -20,14 +21,15 @@ public final class Constants {
 	
 	public static final class Arm {
 		//Motor port
-		public final static int MOTOR_PORT = 8;
+		public static final int MOTOR_PORT1 = 7;
+		public final static int MOTOR_PORT2 = 8;
 		//all angles in rot here
 		public static final double intakeAngle = -.1;
 		public static final double ampAngle = .3;
 		public static final double speakerAngle = .4;
 		//if needed
-		public static final double UPPER_ANGLE = 70;
-		public static final double LOWER_ANGLE = 0;
+		public static final double UPPER_ANGLE = Math.toRadians(70); 
+		public static final double LOWER_ANGLE = Math.toRadians(0);
 		public static final double ARM_DICONT_RAD = (LOWER_ANGLE + UPPER_ANGLE) /2 - Math.PI;
 		//Motor Controllers: pid, FF
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
