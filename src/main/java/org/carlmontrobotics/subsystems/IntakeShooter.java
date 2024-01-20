@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand; 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.math.controller.PIDController;
 
 
@@ -35,10 +37,10 @@ public class IntakeShooter extends SubsystemBase {
 	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
 	private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
-	//private final PIDController firingMotorPID = new PIDController(Constants.kP[Constants.shooter], Constants.kI[Constants.shooter], Constants.kD[Constants.shooter]);
-	public IntakeShooter() {
-
-	}
+	private final SparkPIDController firingMotorPID = new SparkPIDController(Constants.IntakeShooter.kP[1], Constants.IntakeShooter.kI[2], Constants.IntakeShooter.kD[3]);
+	
+	
+	public IntakeShooter() {}
 	
 	/*/public void intake() {}//runs Intake motors
     
