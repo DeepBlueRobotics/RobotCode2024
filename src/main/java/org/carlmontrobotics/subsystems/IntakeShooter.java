@@ -52,6 +52,9 @@ public class IntakeShooter extends SubsystemBase {
     public void isHoldingNote(){
 		//method to check if holding note (beambreaker / digital input)
 	}
+	public void setSpeed(){
+		//method that gets the shooter motors up to speed
+	}
     @Override
     public void periodic() {
 			//is pid needed? for rpm speeds?
