@@ -25,7 +25,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public class Arm extends SubsystemBase {
-    private final CANSparkMax armMotor = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT,MotorConfig.NEO);
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT1,MotorConfig.NEO);
+    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
 
     public Arm() {

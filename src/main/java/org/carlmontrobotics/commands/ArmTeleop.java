@@ -32,6 +32,7 @@ public class ArmTeleop extends CommandBase {
   @Override
   public void execute() {
     double value = joystick.getAsDouble();
+    // use trapazoid math and controllerMoveArm method from arm subsytem to apply voltage to the motor
   }
 
   // Called once the command ends or is interrupted.

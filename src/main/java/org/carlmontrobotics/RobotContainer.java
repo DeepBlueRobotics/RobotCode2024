@@ -8,7 +8,9 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
-//controllers
+import org.carlmontrobotics.commands.ArmTeleop;
+import org.carlmontrobotics.subsystems.Arm;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 
@@ -18,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -34,7 +35,7 @@ public class RobotContainer {
   public final GenericHID driverController = new GenericHID(OI.Driver.port);
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
-  public Arm arm = new Arm();
+	public Arm arm = new Arm();
 
   public RobotContainer() {
 
@@ -45,7 +46,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
 
-    arm.setDefaultCommand(new ArmTeleop(() -> ProcessedAxisValue(driverController, Axis.kLeftY)));
+    arm.setDefaultCommand(new ArmTeleop(() -> ProcessedAxisValue(driverController, Axis.kLeftY), arm));
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,
