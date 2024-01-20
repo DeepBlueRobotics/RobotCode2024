@@ -4,6 +4,7 @@
 
 package org.carlmontrobotics.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
@@ -37,7 +38,8 @@ public class IntakeShooter extends SubsystemBase {
 	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
 	private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
-	private final SparkPIDController firingMotorPID = new SparkPIDController(Constants.IntakeShooter.kP[1], Constants.IntakeShooter.kI[2], Constants.IntakeShooter.kD[3]);
+	private final SparkPIDController leftFiringMotorPID = leftFiringMotor.getPIDController();
+	private final SparkPIDController rightFiringMotorPID = rightFiringMotor.getPIDController();
 	
 	
 	public IntakeShooter() {}
