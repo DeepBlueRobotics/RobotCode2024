@@ -49,22 +49,7 @@ public class Arm extends SubsystemBase {
       targetPosition = getArmClampedGoal(targetPosition);
       
     }
-    public void controllerMoveArm(double rightJoystick) {
-      /*
-      // move the arm around based off the right joystick movement on the manipulator joystick
-      //use the trapezoid thingy from robot code 2023
-      //Math below | Summary: Take in controller Y axis as a double then calculate amount of volts needed to pass to the arm and when to stop based off of the controller movement. Done so by finding the constraints of the arm, translating the controller numbers, and finding how many volts and when to stop using feedvolts and PID
-        double kgv = getKg();
-        double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
-        double armPIDVolts = armPID.calculate(getArmPos(), state.position);
-        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && state.velocity > 0) ||
-            (getArmPos() < ARM_LOWER_LIMIT_RAD && state.velocity < 0)) {
-              forbFlag = true;  
-            armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
-            */
-
-      
-    }
+    
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE, Constants.Arm.UPPER_ANGLE);
