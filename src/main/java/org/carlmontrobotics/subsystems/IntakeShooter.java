@@ -43,15 +43,20 @@ public class IntakeShooter extends SubsystemBase {
 	
 	
 	public IntakeShooter() {}
-	
-	/*/public void intake() {}//runs Intake motors
-    
-    public void shoot() {}//runs shooting motors. May need PID for this
-		
-	public void eject() {}//throw ring onto ground (run all motors in reverse)/*/
-    public void isHoldingNote(){
-		//method to check if holding note (beambreaker / digital input)
+
+	//make a more general method a setRPM method
+
+	public void setRPMIntake(){
+		//Intake
 	}
+    public void setRPMOuttake(){
+		//Outtake
+	}
+	public void setRPMEject(){
+		//Eject
+	}
+
+    
     @Override
     public void periodic() {
 			//is pid needed? for rpm speeds?

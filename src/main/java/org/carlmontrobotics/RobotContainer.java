@@ -67,7 +67,7 @@ public class RobotContainer {
   }
   private void setBindingsDriver() {}
   private void setBindingsManipulator() {
-    
+  //have the trigger and button bindings here call the Intake, Shoot, and Eject commands  
   }
 
   public Command getAutonomousCommand() {
