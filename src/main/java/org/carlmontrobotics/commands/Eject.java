@@ -18,7 +18,9 @@ public class Eject extends Command{
   // Called every time the scheduler runs while the command is scheduled.
 
   @Override
-  public void execute() {}
+  public void execute() {
+    //apply the voltage to the motor in this method using PID
+  }
   // Called once the command ends or is interrupted.
 
   @Override

@@ -26,7 +26,10 @@ public class IntakeShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.(Periodic)
   
   @Override
-  public void execute() {}
+  public void execute() {
+      //apply the voltage to the motor in this method using PID for shooter
+      //apply the voltage to the motor here for Intake
+  }
   // Called once the command ends or is interrupted.
 
   @Override
