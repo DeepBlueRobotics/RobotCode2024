@@ -66,7 +66,9 @@ public class RobotContainer {
 
   }
   private void setBindingsDriver() {}
-  private void setBindingsManipulator() {}
+  private void setBindingsManipulator() {
+    
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

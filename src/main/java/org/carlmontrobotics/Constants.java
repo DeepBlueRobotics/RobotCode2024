@@ -15,16 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	///array indexed
-	public static final int shooter = 0;
-	public static double[] kP = {0, 0}; //0 for now
-    public static double[] kI = {0, 0}; 
-    public static double[] kD = {0,0};
-	public static double[] kS = {0,0};
-	public static double[] kA = {0,0};
-	public static double [] kV = {0,0};
-	public static final class Drivetrain {
-	}
+	public static final class Drivetrain {}
 	
 	public static final class Arm {
 		
@@ -33,12 +24,12 @@ public final class Constants {
 		public static final double ampAngle = .3;
 		public static final double speakerAngle = .4;
 		//if needed
-//		public static final trapAngle = 80;
+		//public static final trapAngle = 80;
 		
 		//Motor Controllers: pid, FF
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
 		// Feedforward
-		public static final double kS = 0.1;
+		public static final double kS = 0.1; 
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
@@ -49,6 +40,14 @@ public final class Constants {
 		
 	}
 	public static final class IntakeShooter {
+		public static final int shooter = 0;
+		//PID values
+		public static double[] kP = {0, 0}; //0 for now
+		public static double[] kI = {0, 0}; 
+		public static double[] kD = {0,0};
+		//public static double[] kS = {0,0};
+		//public static double[] kA = {0,0};
+		//public static double [] kV = {0,0};
 		//in set() speed
 		public static final double idleSpeed = 0;
 		public static final double intakeSpeed = .7;
@@ -56,10 +55,7 @@ public final class Constants {
 		
 		public static final int leftFiringPort = 0;
 		public static final int rightFiringPort = 1;
-		public static final int leftPassPort = 2;
-		public static final int rightPassPort = 3;
-		public static final int leftIntakePort = 4;
-		public static final int rightIntakePort = 5;
+		public static final int rightIntakePort = 2;
 
 	}
 	

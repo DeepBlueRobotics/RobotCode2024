@@ -29,36 +29,22 @@ import edu.wpi.first.math.controller.PIDController;
 public class IntakeShooter extends SubsystemBase {
     CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO);
     CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO);
-    
-    //CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(leftPassPort, MotorConfig.NEO_550);
-	//CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(rightPassPort,MotorConfig.NEO_550);
-	//I don't think we are using passing motors anymore
+    CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
 
-	CANSparkMax leftIntakeMotor = MotorControllerFactory.createSparkMax(leftIntakePort, MotorConfig.NEO_550);
-  	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(rightIntakePort, MotorConfig.NEO_550);
 	private final RelativeEncoder leftFiringEncoder = leftFiringMotor.getEncoder();
 	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
+	private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
-	private final PIDController firingMotorPID = new PIDController(Constants.kP[Constants.shooter], Constants.kI[Constants.shooter], Constants.kD[Constants.shooter]);
-	private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.kS[Constants.shooter], Constants.kV[Constants.shooter], Constants.kA[Constants.shooter]);
+	//private final PIDController firingMotorPID = new PIDController(Constants.kP[Constants.shooter], Constants.kI[Constants.shooter], Constants.kD[Constants.shooter]);
 	public IntakeShooter() {
 
 	}
 	
-	public void intake() {}//runs Intake motors
+	/*/public void intake() {}//runs Intake motors
     
     public void shoot() {}//runs shooting motors. May need PID for this
 		
-	public void eject() {
-
-	}//throw ring onto ground (run all motors in reverse)
-	
-	
-    public void isHoldingNote(){
-			// method to check if holding note (beambreaker / digital input)
-    }
-
-  
+	public void eject() {}//throw ring onto ground (run all motors in reverse)/*/
     
     @Override
     public void periodic() {

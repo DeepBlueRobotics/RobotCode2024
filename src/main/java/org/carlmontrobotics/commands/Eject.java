@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Eject extends Command {
   /** Creates a new eject. */
   public Eject() {
-    // Use addRequirements() here to declare subsystem dependencies.
+    //sets the motors to a certain rpm to drop the note into the amp
   }
 
   // Called when the command is initially scheduled.

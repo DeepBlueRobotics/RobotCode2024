@@ -6,10 +6,18 @@ package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ManualIntake extends Command {
-  /** Creates a new ManualIntake. */
-  public ManualIntake() {
+public class IntakeShoot extends Command {
+  /** Creates a new Shoot. */
+  public void Shoot() {
+    // Tells the motors to spin when the button is pressed
+  }
+
+  public void Intake() {
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public void isHoldingNote(){
+    // method to check if holding note (beambreaker / digital input)
   }
 
   // Called when the command is initially scheduled.
