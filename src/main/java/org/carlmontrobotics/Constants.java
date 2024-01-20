@@ -55,7 +55,7 @@ public final class Constants {
 		
 		public static final int leftFiringPort = 0;
 		public static final int rightFiringPort = 1;
-		public static final int rightIntakePort = 2;
+		public static final int intakePort = 2;
 
 	}
 	
