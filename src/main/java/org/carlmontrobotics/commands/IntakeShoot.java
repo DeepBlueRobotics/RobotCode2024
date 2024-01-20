@@ -16,9 +16,7 @@ public class IntakeShoot extends Command {
     //Sets the motors to a certain rpm to intake a note when the left trigger is pressed
   }
 
-  public void isHoldingNote(){
-    //method to check if holding note (beambreaker / digital input)
-  }
+  
 
   // Called when the command is initially scheduled.
   @Override
