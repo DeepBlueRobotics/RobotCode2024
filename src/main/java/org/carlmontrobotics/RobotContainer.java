@@ -7,6 +7,8 @@ package org.carlmontrobotics;
 //199 files
 // import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
+import org.carlmontrobotics.subsystems.Drivetrain;
+
 import static org.carlmontrobotics.Constants.OI;
 
 //controllers
@@ -36,8 +38,15 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 public class RobotContainer {
 	//set up subsystems / controllers / limelight
+  Drivetrain dt = new Drivetrain();
 
   private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
     "Penis"
@@ -64,29 +73,27 @@ public class RobotContainer {
       autoPaths.add(PathPlannerPath.fromPathFile(name));
     }
 
-    // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-    // import com.pathplanner.lib.util.PIDConstants;
-    // com.pathplanner.lib.util.ReplanningConfig;
-    // edu.wpi.first.math.kinematics.ChassisSpeeds;
-    
-    // AutoBuilder.configureHolonomic
+    AutoBuilder autoBuilder = new AutoBuilder();
+    dt.configureBuilder(autoBuilder);
+
+    // AutoBuilder.configureHolonomic(
     //   Supplier<Pose2d> poseSupplier, 
     //   Consumer<Pose2d> resetPose, 
     //   Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier, 
     //   Consumer<ChassisSpeeds> robotRelativeOutput, 
     //   HolonomicPathFollowerConfig new HolonomicPathFollowerConfig​(
-      // PIDConstants translationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-      // PIDConstants rotationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-      // double maxModuleSpeed, 
-      // double driveBaseRadius, 
-      // ReplanningConfig new ReplanningConfig​( /*put in Constants.Drivetrain.Auto*/
-        // boolean enableInitialReplanning, //replan at start of path if robot not at start of path?
-        // boolean enableDynamicReplanning, //replan if total error surpasses total error/spike threshold?
-        // double dynamicReplanningTotalErrorThreshold, //total error threshold in meters that will cause the path to be replanned
-        // double dynamicReplanningErrorSpikeThreshold //error spike threshold, in meters, that will cause the path to be replanned
-        // ), 
-      // double period
-      // ), 
+    //   PIDConstants translationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
+    //   PIDConstants rotationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
+    //   double maxModuleSpeed, 
+    //   double driveBaseRadius, 
+    //   ReplanningConfig new ReplanningConfig​( /*put in Constants.Drivetrain.Auto*/
+    //     boolean enableInitialReplanning, //replan at start of path if robot not at start of path?
+    //     boolean enableDynamicReplanning, //replan if total error surpasses total error/spike threshold?
+    //     double dynamicReplanningTotalErrorThreshold, //total error threshold in meters that will cause the path to be replanned
+    //     double dynamicReplanningErrorSpikeThreshold //error spike threshold, in meters, that will cause the path to be replanned
+    //     ), 
+    //   double period
+    //   ), 
     //   BooleanSupplier shouldFlipPath,
     //   Subsystem driveSubsystem
     // )
@@ -126,7 +133,7 @@ public class RobotContainer {
     Command autoCommand = null;
 
     //get the funny ports on the robot
-    DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 26)];
+    DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
     for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);
 
     //check which ones are short-circuiting
