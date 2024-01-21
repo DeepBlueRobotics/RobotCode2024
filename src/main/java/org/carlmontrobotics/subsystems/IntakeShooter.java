@@ -60,6 +60,14 @@ public class IntakeShooter extends SubsystemBase {
 	public void setRPMEject(){
 		//Eject
 	}
+	public boolean isHoldingNote(){
+		return true;
+		//use distance sensor
+
+	}
+	public double getDistanceIn(){
+		return 0;
+	}
 
     
 
