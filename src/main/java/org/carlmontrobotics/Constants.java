@@ -154,12 +154,12 @@ public final class Constants {
 			public static final double[] velocityTolerance = {Units.inchesToMeters(1), Units.inchesToMeters(1), 5}; // Meters, Meters, Degrees/Second
 
 			public static final class Auto {
-				ReplanningConfig replanningConfig = new ReplanningConfig( /*put in Constants.Drivetrain.Auto*/
+				public static final ReplanningConfig replanningConfig = new ReplanningConfig( /*put in Constants.Drivetrain.Auto*/
 					false, //replan at start of path if robot not at start of path?
 					false, //replan if total error surpasses total error/spike threshold?
 					1.5, //total error threshold in meters that will cause the path to be replanned
 					.8 //error spike threshold, in meters, that will cause the path to be replanned
-				)
+				);
 			}
 			//#endregion
 	}
