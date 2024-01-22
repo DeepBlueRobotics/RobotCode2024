@@ -29,27 +29,17 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 //pathplanner
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-//import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerPath;
-
-import java.util.ArrayList;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class RobotContainer {
 	//set up subsystems / controllers / limelight
   Drivetrain dt = new Drivetrain();
 
-  private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
-    "Penis"
+  /* These must be equal to the pathPlanner path names from the GUI! */
+  // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
+  private final String[] autoNames = new String[] {
+    "Peepee"
   };
   private Command[] autoCommands;
 
@@ -67,43 +57,22 @@ public class RobotContainer {
     ////AUTO-USABLE COMMANDS
     NamedCommands.registerCommand("AutoIntakeOnce", new AutoIntakeOnce());
 
+    /*
     ////CREATING PATHS
     ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
     for (String name : autoNames) {
       autoPaths.add(PathPlannerPath.fromPathFile(name));
     }
 
-    AutoBuilder autoBuilder = new AutoBuilder();
-    dt.configureBuilder(autoBuilder);
 
-    // AutoBuilder.configureHolonomic(
-    //   Supplier<Pose2d> poseSupplier, 
-    //   Consumer<Pose2d> resetPose, 
-    //   Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier, 
-    //   Consumer<ChassisSpeeds> robotRelativeOutput, 
-    //   HolonomicPathFollowerConfig new HolonomicPathFollowerConfig​(
-    //   PIDConstants translationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-    //   PIDConstants rotationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-    //   double maxModuleSpeed, 
-    //   double driveBaseRadius, 
-    //   ReplanningConfig new ReplanningConfig​( /*put in Constants.Drivetrain.Auto*/
-    //     boolean enableInitialReplanning, //replan at start of path if robot not at start of path?
-    //     boolean enableDynamicReplanning, //replan if total error surpasses total error/spike threshold?
-    //     double dynamicReplanningTotalErrorThreshold, //total error threshold in meters that will cause the path to be replanned
-    //     double dynamicReplanningErrorSpikeThreshold //error spike threshold, in meters, that will cause the path to be replanned
-    //     ), 
-    //   double period
-    //   ), 
-    //   BooleanSupplier shouldFlipPath,
-    //   Subsystem driveSubsystem
-    // )
+    //AutoBuilder is setup in the drivetrain.
 
-    //note: //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
+    //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
     ////CREATE COMMANDS FROM PATHS
     autoCommands = (Command[]) autoPaths.stream().map(
       (PathPlannerPath path)->AutoBuilder.followPath(path)
       ).collect(Collectors.toList()).toArray();
-
+    */
     //}end
   }
 
@@ -130,23 +99,21 @@ public class RobotContainer {
 	}
 
   public Command getAutonomousCommand() {
-    Command autoCommand = null;
-
     //get the funny ports on the robot
     DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
     for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);
 
     //check which ones are short-circuiting
-      for(int i = 0; i < autoSelectors.length; i++) {
+      for(int i = 1; i < autoSelectors.length; i++) { /* skip index 0, reserved for null auto */
         if(!autoSelectors[i].get()) {
-          System.out.println("Using Path: " + i);
-          autoCommand = autoCommands[i];
-          break;
+          String name = autoNames[i-1];
+          System.out.println("Using Path " + i + ": " + name);
+          return new PathPlannerAuto(name);
         }
       }
 
     //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-     return autoCommand == null ? new PrintCommand("Auto selector broke :(") : autoCommand;
+    return new PrintCommand("No Auto selected | Auto selector broke :(");
 	}
 
 	/**

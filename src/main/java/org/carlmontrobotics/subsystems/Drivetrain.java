@@ -7,11 +7,14 @@ import java.util.function.Supplier;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
+import org.carlmontrobotics.Constants.Drivetrain.Auto;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;
 
@@ -19,6 +22,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -81,6 +85,9 @@ public class Drivetrain extends SubsystemBase {
            Translation2d locationBR = new Translation2d(-wheelBase / 2, -trackWidth / 2);
 
            kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
+
+           // Setup autopath builder
+           configurePPLAutoBuilder();
        }
 
        // Initialize modules
@@ -152,23 +159,32 @@ public class Drivetrain extends SubsystemBase {
        // gyro.isMagneticDisturbance());
    }
 
-   public void configureBuilder(AutoBuilder builder){
-     builder.configureHolonomic(
-      ()            -> getPose().getTranslation()+autoGyroOffset,//position supplier
+   public void configurePPLAutoBuilder(){
+     AutoBuilder.configureHolonomic(
+      () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
       (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
-      () -> getSpeeds(), //chassisSpeed supplier 
+      this::getSpeeds, //chassisSpeed supplier 
       (ChassisSpeeds cs) -> drive(cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond),
-      new HolonomicPathFollowerConfig​(
-        new PIDConstants​(1.891, 0., 0., driveIzone), //translation (drive) pid
-        new PIDConstants​(0.00374, 0., 0., turnIzone), //rotation pid
+      new HolonomicPathFollowerConfig(
+        new PIDConstants(1.891, 0., 0., driveIzone), //translation (drive) pid
+        new PIDConstants(0.00374, 0., 0., turnIzone), //rotation pid
         maxSpeed, 
         swerveRadius, 
         Auto.replanningConfig,
         .05//robot period
       ), 
-      false,//should flip path? TODO: get robot side
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
+      },
       this
-    )
+    );
    }
 
    public void autoCancelDtCommand() {
