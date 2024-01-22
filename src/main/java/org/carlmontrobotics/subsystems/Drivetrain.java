@@ -49,7 +49,6 @@ public class Drivetrain extends SubsystemBase {
 
        // Calibrate Gyro
        {
-           gyro.calibrate();
            double initTimestamp = Timer.getFPGATimestamp();
            double currentTimestamp = initTimestamp;
            while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
