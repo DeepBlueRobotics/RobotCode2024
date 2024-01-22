@@ -42,9 +42,8 @@ public final class Constants {
 	public static final class IntakeShooter {
 		public static final int shooter = 0;
 		//PID values
-		public final double shooterkP = 0;
-		public final double shooterkI = 0;
-		public final double shooterkD = 0;
+		public final double[] shooterPID = new double[] {.1,0,0};
+		//public final int kBeamBreak = 10;
 		//public static double[] kS = {0,0};
 		//public static double[] kA = {0,0};
 		//public static double [] kV = {0,0};
@@ -56,6 +55,10 @@ public final class Constants {
 		public static final int leftFiringPort = 0;
 		public static final int rightFiringPort = 1;
 		public static final int intakePort = 2;
+
+		public static final int beamBreakPort = 11;
+
+
 
 	}
 	

@@ -1,7 +1,9 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+// the WPILib BSD license file in the root directory of this project.             
+//TODO: also need to work with arm
+//TODO: consider making intake semi autonomous 
+//TODO: change name to AMP
 package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Intake extends Command { 
 
   /** Creates a new Intake. */
+
+  //TODO: pass in the IntakeShooter subsystem
   public Intake() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,6 +34,8 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    //placeholder
+    return true;
+    //should check if have ring or 5sec passed
   }
 }

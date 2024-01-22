@@ -4,26 +4,29 @@
 
 package org.carlmontrobotics.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class AutoIntakeOnce extends CommandBase {
-  /** Creates a new StartIntake. */
-  public AutoIntakeOnce() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+public class Amp extends Command{
+
+  /** Creates a new eject. */
+  //TODO: also need to work with arm
+  //TODO: pass in the IntakeShooter subsystem
+  public Amp() {}
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
+  public void initialize() {
+    //calls the setRPMEject method in the IntakeShooter subsystem when method is ran
+  }
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
-
   // Called once the command ends or is interrupted.
+
   @Override
   public void end(boolean interrupted) {}
-
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

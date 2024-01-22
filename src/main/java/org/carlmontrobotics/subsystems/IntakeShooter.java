@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//TODO: change motor names to shooter
 package org.carlmontrobotics.subsystems;
 
 import com.revrobotics.CANSparkBase;
@@ -13,7 +14,8 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,39 +42,38 @@ public class IntakeShooter extends SubsystemBase {
 	//todo: figure out way to make it so its not "constants."
 	private final SparkPIDController leftFiringMotorPID = leftFiringMotor.getPIDController();
 	private final SparkPIDController rightFiringMotorPID = rightFiringMotor.getPIDController();
+	private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
+
 	
 	
 	public IntakeShooter() {}
 
-	//make a more general method a setRPM method
-
 	public void setRPMIntake(){
 		//Intake
 	}
-
-	public void setShooterSpeed(){
-		//method that gets the shooter motors up to speed
+    
+	//TODO: make setRPMShooter and setRPMEject the same method
+    public void setRPMSpeaker(){
+		//method that gets the speaker motors up to speed
 	}
 
-    public void setRPMOuttake(){
-		//method that gets the shooter motors up to speed
-	}
-	public void setRPMEject(){
-		//Eject
+	public void setRPMAmp(){
+		//method that gets the Shooter motors up to a speed to eject a note
 	}
 	public boolean isHoldingNote(){
-		return true;
-		//use distance sensor
+		//use beam break to check if holding note
+		return beamBreak.get();
 
 	}
 	public double getDistanceIn(){
 		return 0;
+		//TODO: explan in comments
 	}
 
     
 
     @Override
     public void periodic() {
-			//is pid needed? for rpm speeds?
+			//pid needed for rpm speeds
 		}
 }
