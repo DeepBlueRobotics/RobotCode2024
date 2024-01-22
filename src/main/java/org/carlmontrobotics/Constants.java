@@ -8,8 +8,6 @@ import org.carlmontrobotics.lib199.Limelight;
 import org.carlmontrobotics.lib199.Limelight.Transform;
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
 
-import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -71,7 +69,6 @@ public final class Constants {
 			public static final double[] turnkI = {0, 0, 0, 0};
 			public static final double[] turnkD = {0, 0, 0, 0};
 			public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
-			public static final double turnIzone = .01;
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
 			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
@@ -81,10 +78,9 @@ public final class Constants {
 			// kP is an average of the forward and backward kP values
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
-			public static final double[] drivekP = {1.82, 1.815, 2.015, 1.915};//avg: 1.891
+			public static final double[] drivekP = {1.82, 1.815, 2.015, 1.915};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
-			public static final double driveIzone = .01;
 			public static final boolean[] driveInversion = {false, false, false, false};
 			public static final boolean[] turnInversion = {true, true, true, true};
 
@@ -153,14 +149,6 @@ public final class Constants {
 			public static final double[] positionTolerance = {Units.inchesToMeters(.5), Units.inchesToMeters(.5), 5}; // Meters, Meters, Degrees
 			public static final double[] velocityTolerance = {Units.inchesToMeters(1), Units.inchesToMeters(1), 5}; // Meters, Meters, Degrees/Second
 
-			public static final class Auto {
-				ReplanningConfig replanningConfig = new ReplanningConfig( /*put in Constants.Drivetrain.Auto*/
-					false, //replan at start of path if robot not at start of path?
-					false, //replan if total error surpasses total error/spike threshold?
-					1.5, //total error threshold in meters that will cause the path to be replanned
-					.8 //error spike threshold, in meters, that will cause the path to be replanned
-				)
-			}
 			//#endregion
 	}
 

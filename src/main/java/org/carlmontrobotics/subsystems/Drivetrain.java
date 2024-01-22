@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
@@ -36,8 +35,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
-   private Pose2d autoGyroOffset = new Pose2d(0.,0.,new Rotation2d(0.)); 
-   // ^used by PathPlanner for chaining paths
 
    private SwerveDriveKinematics kinematics = null;
    private SwerveDriveOdometry odometry = null;
@@ -52,6 +49,7 @@ public class Drivetrain extends SubsystemBase {
 
        // Calibrate Gyro
        {
+           gyro.calibrate();
            double initTimestamp = Timer.getFPGATimestamp();
            double currentTimestamp = initTimestamp;
            while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
@@ -150,25 +148,6 @@ public class Drivetrain extends SubsystemBase {
        // SmartDashboard.putNumber("Compass Offset", compassOffset);
        // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
        // gyro.isMagneticDisturbance());
-   }
-
-   public void configureBuilder(AutoBuilder builder){
-     builder.configureHolonomic(
-      ()            -> getPose().getTranslation()+autoGyroOffset,//position supplier
-      (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
-      () -> getSpeeds(), //chassisSpeed supplier 
-      (ChassisSpeeds cs) -> drive(cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond),
-      new HolonomicPathFollowerConfig​(
-        new PIDConstants​(1.891, 0., 0., driveIzone), //translation (drive) pid
-        new PIDConstants​(0.00374, 0., 0., turnIzone), //rotation pid
-        maxSpeed, 
-        swerveRadius, 
-        Auto.replanningConfig,
-        .05//robot period
-      ), 
-      false,//should flip path? TODO: get robot side
-      this
-    )
    }
 
    public void autoCancelDtCommand() {
