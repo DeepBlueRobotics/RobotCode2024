@@ -44,7 +44,7 @@ public final class Constants {
 			public static final double maxSpeed = NEOFreeSpeed * (wheelDiameterMeters / 2.0) / driveGearing;
 			public static final double maxForward = maxSpeed;
 			public static final double maxStrafe = maxSpeed;
-		 // seconds it takes to go from 0 to 12 volts(aka MAX)
+		 	// seconds it takes to go from 0 to 12 volts(aka MAX)
 			public static final double secsPer12Volts = 0.1;
 
 
@@ -140,10 +140,6 @@ public final class Constants {
 			public static final double kAlignMultiplier = 1D/3D;
 			public static final double kAlignForward = 0.6;
 
-			public static final double chargeStationAlignToleranceDeg = 2.5;
-			public static final double chargeStationAlignSpeedMpSPerDeg = 0.3 / 20;
-			public static final double chargeStationAlignTime = 500;
-			public static final double chargeStationAlignFFMpS = 0;
 			public static final double wheelTurnDriveSpeed = 0.0001; // Meters / Second ; A non-zero speed just used to orient the wheels to the correct angle. This should be very small to avoid actually moving the robot.
 
 			public static final double[] positionTolerance = {Units.inchesToMeters(.5), Units.inchesToMeters(.5), 5}; // Meters, Meters, Degrees
