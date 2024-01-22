@@ -19,13 +19,16 @@ public class Limelight extends SubsystemBase {
     */
   }
   
-  public void getTargetValid(){
+  public boolean getTargetValid(){
+    return false; //placeholder
     //returns targetValid
   }
 
-  public void calcDistanceAlignment(){
+  public double calcDistanceAlignment(){
+    return 0; //placeholder
     /* -calculate adjustment
      * -put adjustment to smartdashboard
+     * -return adjustment
      */
     //figure out the math to do this
   }
