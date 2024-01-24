@@ -27,23 +27,23 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
-
+import static org.carlmontrobotics.Constants.IntakeShooter.*;
 
 
 
 public class IntakeShooter extends SubsystemBase {
-    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO);
-    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO);
+    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO_550);
+    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO_550);
     CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
 
 	private final RelativeEncoder leftFiringEncoder = leftFiringMotor.getEncoder();
 	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
+
 	private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
 	private final SparkPIDController leftFiringMotorPID = leftFiringMotor.getPIDController();
 	private final SparkPIDController rightFiringMotorPID = rightFiringMotor.getPIDController();
 	private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
-
 	
 	
 	public IntakeShooter() {}
@@ -53,6 +53,7 @@ public class IntakeShooter extends SubsystemBase {
 	}
     
 	//TODO: make setRPMShooter and setRPMEject the same method
+	
     public void setRPMSpeaker(){
 		//method that gets the speaker motors up to speed
 	}
@@ -75,5 +76,12 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
 			//pid needed for rpm speeds
+
+
+
+			//sets goal rpms for different shooting modes for PID
+			//setReference​(double AMPLIFIERRPM, CANSparkBase.CANSparkMax.kVelocity);
+			//setReference​(double SPEAKERRPM, CANSparkBase.CANSparkMax.kVelocity);
+
 		}
 }
