@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-//TODO: change motor names to shooter
 package org.carlmontrobotics.subsystems;
 
 import com.revrobotics.CANSparkBase;
@@ -32,17 +31,17 @@ import static org.carlmontrobotics.Constants.IntakeShooter.*;
 
 
 public class IntakeShooter extends SubsystemBase {
-    CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(leftFiringPort, MotorConfig.NEO_550);
-    CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(rightFiringPort, MotorConfig.NEO_550);
+    CANSparkMax leftShootingMotor = MotorControllerFactory.createSparkMax(leftShootingPort, MotorConfig.NEO_550);
+    CANSparkMax rightShootingMotor = MotorControllerFactory.createSparkMax(rightShootingPort, MotorConfig.NEO_550);
     CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
 
-	private final RelativeEncoder leftFiringEncoder = leftFiringMotor.getEncoder();
-	private final RelativeEncoder rightFiringEncoder = rightFiringMotor.getEncoder();
+	private final RelativeEncoder leftShootingEncoder = leftShootingMotor.getEncoder();
+	private final RelativeEncoder rightShootingEncoder = rightShootingMotor.getEncoder();
 
 	private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 	//todo: figure out way to make it so its not "constants."
-	private final SparkPIDController leftFiringMotorPID = leftFiringMotor.getPIDController();
-	private final SparkPIDController rightFiringMotorPID = rightFiringMotor.getPIDController();
+	private final SparkPIDController leftShootingMotorPID = leftShootingMotor.getPIDController();
+	private final SparkPIDController rightShootingMotorPID = rightShootingMotor.getPIDController();
 	private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
 	
 	
@@ -68,7 +67,7 @@ public class IntakeShooter extends SubsystemBase {
 	}
 	public double getDistanceIn(){
 		return 0;
-		//TODO: explan in comments
+		//TODO: explain in comments
 	}
 
     

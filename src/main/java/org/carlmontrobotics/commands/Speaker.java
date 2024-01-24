@@ -9,7 +9,7 @@ package org.carlmontrobotics.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Speaker extends Command {
-  //TODO: also need to work with arm
+  //TODO: also needs to work with arm
   //TODO: write javadoc comments for all methods and commands
   /** Creates a new Shoot. */
   //TODO: pass in the IntakeShooter subsystem

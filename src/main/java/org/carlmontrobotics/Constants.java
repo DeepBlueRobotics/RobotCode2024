@@ -52,8 +52,8 @@ public final class Constants {
 		public static final double intakeSpeed = .7;
 		public static final double outtakeSpeed = 1;
 		
-		public static final int leftFiringPort = 0;
-		public static final int rightFiringPort = 1;
+		public static final int leftShootingPort = 0;
+		public static final int rightShootingPort = 1;
 		public static final int intakePort = 2;
 
 		public static final int beamBreakPort = 11;
