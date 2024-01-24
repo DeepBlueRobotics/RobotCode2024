@@ -4,9 +4,11 @@
 
 package org.carlmontrobotics.commands;
 
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Amp extends Command{
+  //private final IntakeShooter IntakeShooter;
 
   /** Creates a new eject. */
   //TODO: also need to work with arm

@@ -4,10 +4,11 @@
 //TODO: also need to work with arm
 //TODO: consider making intake semi autonomous 
 package org.carlmontrobotics.commands;
-
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class Intake extends Command { 
+public class Intake extends Command {
 
   /** Creates a new Intake. */
 
