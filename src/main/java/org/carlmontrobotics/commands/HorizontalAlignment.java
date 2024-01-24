@@ -1,12 +1,16 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class DistanceAlignment extends Command {
+public class HorizontalAlignment extends Command {
   //create limelight and drivetrain instances
 
-  public DistanceAlignment() {
-    // set limelight and drivetrain as requirements
+  public HorizontalAlignment() {
+    //set limelight and drivetrain as requirements
   }
 
   @Override
@@ -16,13 +20,13 @@ public class DistanceAlignment extends Command {
   public void execute() {
     /* calls getTargetValid() from limelight
      * if there is a target: 
-     *   -call calcDistanceAlignment from limelight
+     *   -call calcHorizontalAlignment from limelight
      *   -drive to adjust (function in drivetrain?):
      *      -convert offset to a number useable by drive
      *      -find out what direction drivetrain is facing
-     *      -input offset values to make drivetrain move straight towards the target
+     *      -input offset values to make drivetrain move left/right towards the target
      * else if already alignment:
-     *   -put 0 as the dAdjustment
+     *   -put 0 as the adjustment
      *   -in other commands, use this 0 value from smartdashboard to confirm alignment before running
      * else (no target):
      *   -do nothing
@@ -30,16 +34,14 @@ public class DistanceAlignment extends Command {
      */
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     //tell drivetrain to stop
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //placeholder
-    //finsihed when the adjustment is 0
+    return false;
+    //when the offset is 0
   }
 }

@@ -31,10 +31,20 @@ public class Limelight extends SubsystemBase {
 
   public double calcDistanceAlignment(){
     return 0; //placeholder
-    /* -calculate adjustment
-     * -put adjustment to smartdashboard
-     * -return adjustment
+    /* -calculate dAdjustment
+     * -put dAdjustment to smartdashboard
+     * -return dAdjustment
      */
     //figure out the math to do this
+  }
+
+  public double calcHorizontalAlignment(){
+    return 0; //placeholder
+    /* -calculate hAdjustment
+     * -put hAdjustment to smartdashboard
+     * -return hAdjustment 
+    */
+
+
   }
 }
