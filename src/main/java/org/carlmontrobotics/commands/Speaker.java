@@ -8,19 +8,21 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Speaker extends Command {
-  
+  private final IntakeShooter InShoot;
+
   //TODO: also needs to work with arm
   //TODO: write javadoc comments for all methods and commands
   /** Creates a new Shoot. */
   //TODO: pass in the IntakeShooter subsystem
-  public Speaker() {
+  public Speaker(IntakeShooter InShoot) {
+    this.InShoot = InShoot;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //calls setRPMShooter method in the IntakeShooter subsystem when method is ran
+    //calls the setRPMSpeaker method in the IntakeShooter subsystem when method is ran
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Intake extends Command {
-
+  private final IntakeShooter InShoot;
   /** Creates a new Intake. */
 
   //TODO: pass in the IntakeShooter subsystem
-  public Intake() {
+  public Intake(IntakeShooter InShoot) {
+    this.InShoot = InShoot;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
