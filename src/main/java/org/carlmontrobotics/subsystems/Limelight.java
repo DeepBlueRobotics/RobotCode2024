@@ -13,7 +13,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public void tracking() {
-    /* gets certain limelight values (ta, tx, ty, tv, etc)
+    /* gets certain limelight values (ta, tx, ty, tv, tid, etc)
     checks if there is a target and updates targetValid
     puts those values to SmartDashboard
     */
@@ -22,6 +22,11 @@ public class Limelight extends SubsystemBase {
   public boolean getTargetValid(){
     return false; //placeholder
     //returns targetValid
+  }
+
+  public double getTargetID(){
+    return 0; //placeholder
+    //returns the id of the detected apriltag
   }
 
   public double calcDistanceAlignment(){

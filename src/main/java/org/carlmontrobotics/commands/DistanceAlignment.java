@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DistanceAlignment extends Command {
   
   public DistanceAlignment() {
-    // limelight and drivetrain requirements
+    // set limelight and drivetrain as requirements
   }
 
   @Override
@@ -39,6 +39,6 @@ public class DistanceAlignment extends Command {
   @Override
   public boolean isFinished() {
     return false; //placeholder
-    //when the adjustment is 0
+    //finsihed when the adjustment is 0
   }
 }
