@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.             
 //TODO: also need to work with arm
 //TODO: consider making intake semi autonomous 
-//TODO: change name to AMP
 package org.carlmontrobotics.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
