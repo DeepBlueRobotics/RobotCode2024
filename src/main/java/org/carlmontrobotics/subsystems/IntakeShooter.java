@@ -13,6 +13,9 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -27,6 +30,12 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
 import static org.carlmontrobotics.Constants.IntakeShooter.*;
+
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.networktables.NetworkTable;
+//import edu.wpi.first.networktables.NetworkTableEntry;
+//import edu.wpi.first.networktables.NetworkTableInstance;
+//these 4 imports above are for limelight
 
 
 
@@ -43,8 +52,18 @@ public class IntakeShooter extends SubsystemBase {
 	private final SparkPIDController leftShootingMotorPID = leftShootingMotor.getPIDController();
 	private final SparkPIDController rightShootingMotorPID = rightShootingMotor.getPIDController();
 	private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
-	
-	
+
+		//NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+		//NetworkTableEntry tx = table.getEntry("tx");
+		//NetworkTableEntry ty = table.getEntry("ty");
+		//NetworkTableEntry ta = table.getEntry("ta");
+
+		//SmartDashboard.putNumber("LimelightX", x);
+		//SmartDashboard.putNumber("LimelightY", y);
+		//SmartDashboard.putNumber("LimelightArea", area);
+
+		//the above commented out code is for limelight
+								
 	public IntakeShooter() {}
 
 	public void setRPMIntake(){
@@ -76,6 +95,10 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
 			//pid needed for rpm speeds
 
+			//double x = tx.getDouble(0.0);
+			//double y = ty.getDouble(0.0);
+			//double area = ta.getDouble(0.0);
+			//the above code is for limelight; idk if i put it in the right spot tho
 
 
 			//sets goal rpms for different shooting modes for PID
