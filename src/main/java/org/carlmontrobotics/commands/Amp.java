@@ -4,19 +4,23 @@
 
 package org.carlmontrobotics.commands;
 
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Amp extends Command{
+  private final IntakeShooter InShoot;
 
   /** Creates a new eject. */
   //TODO: also need to work with arm
   //TODO: pass in the IntakeShooter subsystem
-  public Amp() {}
+  public Amp(IntakeShooter InShoot) {
+    this.InShoot = InShoot;
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //calls the setRPMEject method in the IntakeShooter subsystem when method is ran
+    //calls the setRPMAmp method in the IntakeShooter subsystem when method is ran
   }
   
   // Called every time the scheduler runs while the command is scheduled.
