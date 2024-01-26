@@ -10,10 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Speaker extends Command {
   private final IntakeShooter InShoot;
 
-  //TODO: also needs to work with arm
+  //TODO: all commands have to work with arm
   //TODO: write javadoc comments for all methods and commands
   /** Creates a new Shoot. */
-  //TODO: pass in the IntakeShooter subsystem
   public Speaker(IntakeShooter InShoot) {
     this.InShoot = InShoot;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,6 +35,19 @@ public class Speaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    //placeholder
+    return true;
+    //should check if the ring has left the shooter or 5 seconds has passed
+    
+    /*/probably need 1 If statement and 1 If else statement.    
+    1. One to check if the motor speed or compression is different than the regular speed.  
+       The If part of the statement will return true while the else part of the 
+       statement will return false.  If the statement is true, the shooter timer will stop 
+       and reset
+    2. This is a backup if statement if the motor if statement is not checking. 
+       If 5 seconds has passed since pressing the right trigger and the other If statement hasn't 
+       responded, then we assume that the note has left the shooter and the code returns true.
+       The timer will stop and reset   
+    /*/
   }
 }

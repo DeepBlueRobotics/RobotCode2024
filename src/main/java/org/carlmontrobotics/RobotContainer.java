@@ -56,21 +56,15 @@ public class RobotContainer {
     //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
     //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
-
-    // arm.setDefaultCommand(new ArmTeleop(
-    //   arm,
-    //   () -> inputProcessing(getStickValue(manipulatorController, Axis.kLeftY)),
-    //   () -> inputProcessing(getStickValue(manipulatorController, Axis.kRightY))
-    // ));
   
 
   }
   private void setBindingsDriver() {}
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands 
-  //Xbox right trigger button -> Shoot
+  //Xbox right trigger button -> Speaker
   //Xbox left trigger button -> Intake
-  //Xbox right bumper button -> Eject 
+  //Xbox right bumper button -> Amp 
 
  
   }
