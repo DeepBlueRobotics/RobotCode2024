@@ -57,6 +57,7 @@ public final class Constants {
 		public static final int intakePort = 2;
 
 		public static final int beamBreakPort = 11;
+		public static final int distSensorPort = 12;
 
 
 

@@ -4,6 +4,7 @@
 
 package org.carlmontrobotics.subsystems;
 
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 
@@ -51,7 +52,10 @@ public class IntakeShooter extends SubsystemBase {
 	//todo: figure out way to make it so its not "constants."
 	private final SparkPIDController leftShootingMotorPID = leftShootingMotor.getPIDController();
 	private final SparkPIDController rightShootingMotorPID = rightShootingMotor.getPIDController();
-	private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
+	private final TimeOfFlight distSensor = new TimeOfFlight(distSensorPort);
+
+	//private final DigitalOutput beamBreak = new DigitalOutput(beamBreakPort);
+	//We may use this
 
 		//NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 		//NetworkTableEntry tx = table.getEntry("tx");
@@ -69,9 +73,7 @@ public class IntakeShooter extends SubsystemBase {
 	public void setRPMIntake(){
 		//Intake
 	}
-    
-	//TODO: make setRPMShooter and setRPMEject the same method
-	
+    	
     public void setRPMSpeaker(){
 		//method that gets the speaker motors up to speed
 	}
@@ -80,9 +82,15 @@ public class IntakeShooter extends SubsystemBase {
 		//method that gets the Shooter motors up to a speed to eject a note
 	}
 	public boolean isHoldingNote(){
-		//use beam break to check if holding note
-		return beamBreak.get();
-
+		//return beamBreak.get(); use if using beambrake
+		
+		//use distance sensor to check if holding note
+		//we will use get range();
+		/*/we will use an if statement and see if the 
+		distance is between two certain numbers.  If the
+		distance is between the two certain numbers, this will return true/*/
+		//Placeholder
+		return true;
 	}
 	public double getDistanceIn(){
 		return 0;

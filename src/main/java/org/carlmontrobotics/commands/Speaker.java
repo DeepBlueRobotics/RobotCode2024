@@ -35,7 +35,6 @@ public class Speaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //placeholder
     return true;
     //we will use timer and wait 2 seconds since the right trigger is pressed
   }
