@@ -81,14 +81,21 @@ public class IntakeShooter extends SubsystemBase {
 	public void setRPMAmp(){
 		//method that gets the Shooter motors up to a speed to eject a note
 	}
+
+	public void setRPMEject(){
+		//method that runs the shooting and intake motors backwards
+	}
 	public boolean isHoldingNote(){
-		//return beamBreak.get(); use if using beambrake
+		//return beamBreak.get(); use if using beambraker
 		
 		//use distance sensor to check if holding note
 		//we will use get range();
+
 		/*/we will use an if statement and see if the 
 		distance is between two certain numbers.  If the
-		distance is between the two certain numbers, this will return true/*/
+		distance is between the two certain numbers, this will return true
+		and stop all motors/*/
+
 		//Placeholder
 		return true;
 	}

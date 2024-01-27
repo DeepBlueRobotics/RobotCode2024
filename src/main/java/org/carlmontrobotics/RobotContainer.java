@@ -8,8 +8,6 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
-
-import org.carlmontrobotics.Constants.OI;
 //subsystems
 import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Arm;
@@ -60,11 +58,14 @@ public class RobotContainer {
 
   }
   private void setBindingsDriver() {}
+  
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands 
-  //Xbox right trigger button -> Speaker
-  //Xbox left trigger button -> Intake
+  //Xbox right trigger axis -> Speaker
+  //Xbox left trigger axis -> Intake
   //Xbox right bumper button -> Amp 
+  //Xbox down button -> Eject 
+
 
  
   }

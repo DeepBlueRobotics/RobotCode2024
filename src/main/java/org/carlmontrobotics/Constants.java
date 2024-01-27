@@ -40,7 +40,6 @@ public final class Constants {
 		
 	}
 	public static final class IntakeShooter {
-		public static final int shooter = 0;
 		//PID values
 		public final double[] shooterPID = new double[] {.1,0,0};
 		//public final int kBeamBreak = 10;
