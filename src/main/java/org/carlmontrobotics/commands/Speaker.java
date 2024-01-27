@@ -37,17 +37,6 @@ public class Speaker extends Command {
   public boolean isFinished() {
     //placeholder
     return true;
-    //should check if the ring has left the shooter or 5 seconds has passed
-    
-    /*/probably need 1 If statement and 1 If else statement.    
-    1. One to check if the motor speed or compression is different than the regular speed.  
-       The If part of the statement will return true while the else part of the 
-       statement will return false.  If the statement is true, the shooter timer will stop 
-       and reset
-    2. This is a backup if statement if the motor if statement is not checking. 
-       If 5 seconds has passed since pressing the right trigger and the other If statement hasn't 
-       responded, then we assume that the note has left the shooter and the code returns true.
-       The timer will stop and reset   
-    /*/
+    //we will use timer and wait 2 seconds since the right trigger is pressed
   }
 }
