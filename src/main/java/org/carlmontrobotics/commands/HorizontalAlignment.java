@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class HorizontalAlignment extends Command {
   //create limelight and drivetrain instances
-
   public HorizontalAlignment() {
     //set limelight and drivetrain as requirements
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    //private double distance;
+  }
 
   @Override
   public void execute() {
@@ -42,6 +43,6 @@ public class HorizontalAlignment extends Command {
   @Override
   public boolean isFinished() {
     return false;
-    //when the offset is 0
+    //return isCenteredEnough(distance);
   }
 }

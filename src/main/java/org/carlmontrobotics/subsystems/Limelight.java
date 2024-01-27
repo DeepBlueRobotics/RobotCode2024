@@ -20,7 +20,7 @@ public class Limelight extends SubsystemBase {
     checks if there is a target and updates targetValid
     puts those values to SmartDashboard
     */
-
+    
     /* 
      * tid = NetworkTableInstance.getDefault().getTable(“limelight”).getEntry(“tid”).getDouble(0);
      * tv = NetworkTableInstance.getDefault().getTable(“limelight”).getEntry("tv").getDouble(0);
@@ -46,20 +46,10 @@ public class Limelight extends SubsystemBase {
     return false;
     //return targetValid;
   }
-
   public double getTargetID(){
     return 0; //placeholder
     //returns the id of the detected apriltag
     //return tid;
-  }
-
-  public double calcDistanceAlignment(){
-    return 0; //placeholder
-    /* -calculate dAdjustment
-     * -put dAdjustment to smartdashboard
-     * -return dAdjustment
-     */
-    //figure out the math to do this
   }
 
   public double calcHorizontalAlignment(){
@@ -69,5 +59,14 @@ public class Limelight extends SubsystemBase {
      * -return hAdjustment 
     */
 
+  }
+
+  public boolean isCenteredEnough(double distance){
+    return true; //placeholder
+    /*if MathUtil.applyDeadband(distance, Constants.Limelight.kErrorTolerance) == 0
+     * return true
+     * else
+     * return false
+     */
   }
 }
