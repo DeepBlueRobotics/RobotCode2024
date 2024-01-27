@@ -93,8 +93,7 @@ public class IntakeShooter extends SubsystemBase {
 
 		/*/we will use an if statement and see if the 
 		distance is between two certain numbers.  If the
-		distance is between the two certain numbers, this will return true
-		and stop all motors/*/
+		distance is between the two certain numbers, this will return true/*/
 
 		//Placeholder
 		return true;
