@@ -16,7 +16,7 @@ public class Intake extends Command {
   /** Creates a new Intake. */
 
   public Intake(IntakeShooter InShoot) {
-    this.InShoot = InShoot;
+    addRequirements(this.InShoot = InShoot);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

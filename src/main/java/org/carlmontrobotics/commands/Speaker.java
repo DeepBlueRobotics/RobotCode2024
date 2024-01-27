@@ -14,7 +14,7 @@ public class Speaker extends Command {
   //TODO: write javadoc comments for all methods and commands
   /** Creates a new Shoot. */
   public Speaker(IntakeShooter InShoot) {
-    this.InShoot = InShoot;
+    addRequirements(this.InShoot = InShoot);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

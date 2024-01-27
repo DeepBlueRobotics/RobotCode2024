@@ -9,10 +9,10 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Eject extends Command {
-  private final IntakeShooter InShoot;
+   private final IntakeShooter InShoot;
   /** Creates a new Eject. */
   public Eject(IntakeShooter InShoot) {
-    this.InShoot = InShoot;
+    addRequirements(this.InShoot = InShoot);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
