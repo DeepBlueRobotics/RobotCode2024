@@ -5,6 +5,8 @@
 package org.carlmontrobotics;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -55,7 +57,13 @@ public final class Constants {
 
 		public static final int beamBreakPort = 11;
 		public static final int distSensorPort = 12;
+	}
 
+	public static class ManipulatorButtons{
+		public static final Axis IntakeButton = Axis.kRightTrigger;
+		public static final Axis ShooterButton = Axis.kRightTrigger;
+		public static final int EjectButton = Button.kA.value;
+		public static final int AmpButton = Button.kRightBumper.value;
 
 
 	}
