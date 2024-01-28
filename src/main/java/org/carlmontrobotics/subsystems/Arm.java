@@ -27,7 +27,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT1,MotorConfig.NEO);
-d    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
+    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
     //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final PIDController armPID = new PIDController(kP[ARM], kI[ARM], kD[ARM]);
