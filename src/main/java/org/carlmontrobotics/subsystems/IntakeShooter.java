@@ -41,8 +41,8 @@ import static org.carlmontrobotics.Constants.IntakeShooter.*;
 
 
 public class IntakeShooter extends SubsystemBase {
-    CANSparkMax leftShootingMotor = MotorControllerFactory.createSparkMax(leftShootingPort, MotorConfig.NEO_550);
-    CANSparkMax rightShootingMotor = MotorControllerFactory.createSparkMax(rightShootingPort, MotorConfig.NEO_550);
+    CANSparkMax leftShootingMotor = MotorControllerFactory.createSparkMax(leftShootingPort, MotorConfig.NEO);
+    CANSparkMax rightShootingMotor = MotorControllerFactory.createSparkMax(rightShootingPort, MotorConfig.NEO);
     CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
 
 	private final RelativeEncoder leftShootingEncoder = leftShootingMotor.getEncoder();
