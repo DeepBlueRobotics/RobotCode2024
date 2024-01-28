@@ -30,11 +30,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT1,MotorConfig.NEO);
-    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
+    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
+    //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final PIDController armPID = new PIDController(Constants.Arm.pidVals[0], Constants.Arm.pidVals[1], Constants.Arm.pidVals[2]);
@@ -88,8 +90,23 @@ public class Arm extends SubsystemBase {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE, Constants.Arm.UPPER_ANGLE);
     }
+
     @Override
     public void periodic() {
-    
+  
 		}
+
+    public void driveArm(TrapezoidProfile.State state){
+        // set voltage to armMotor
+        double kgv = getKg();
+        double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
+        double armPIDVolts = armPID.calculate(getArmPos(), state.position);
+        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && state.velocity > 0) || 
+            (getArmPos() < ARM_LOWER_LIMIT_RAD && state.velocity < 0)) {
+              forbFlag = true;  
+            armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
+        }
+        double volts = armFeedVolts + armPIDVolts;
+        armMotor.setVoltage(volts);
+    }
 }

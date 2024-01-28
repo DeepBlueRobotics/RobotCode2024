@@ -20,6 +20,8 @@ public final class Constants {
 	}
 	
 	public static final class Arm {
+		// Array Indexes (Just to make things easier to read)
+        public static final int ARM = 0;
 		//Motor port
 		public static final int MOTOR_PORT1 = 7;
 		public final static int MOTOR_PORT2 = 8;
@@ -38,6 +40,12 @@ public final class Constants {
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
+		// PID Constants
+		// placeholder numbers for now
+        public static double[] kP = {0.1, 0.1};
+        public static double[] kI = {0.1, 0.1};
+        public static double[] kD = {0.1, 0.1};
+		
 		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
 		public static final double COM_ARM_LENGTH_METERS = 1;
 		public static final double ARM_MASS_KG = 1;

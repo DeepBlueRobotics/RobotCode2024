@@ -17,7 +17,7 @@ public class ArmTeleop extends CommandBase {
   private final DoubleSupplier joystick; 
   private final Arm armSubsystem;
   /** Creates a new ArmTeleop. */
-  public ArmTeleop(DoubleSupplier joystickSupplier, Arm armSubsystem) {
+  public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     joystick = joystickSupplier;
     this.armSubsystem = armSubsystem;
