@@ -4,16 +4,24 @@
 
 package org.carlmontrobotics.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +36,8 @@ public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT1,MotorConfig.NEO);
     private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
-
+    private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final PIDController armPID = new PIDController(Constants.Arm.pidVals[0], Constants.Arm.pidVals[1], Constants.Arm.pidVals[2]);
     public Arm() {
 			//arm 
       /*
@@ -49,7 +58,32 @@ public class Arm extends SubsystemBase {
       targetPosition = getArmClampedGoal(targetPosition);
       
     }
-    
+
+    public double getArmPos() {
+      return MathUtil.inputModulus(armEncoder.getPosition(), Constants.Arm.ARM_DICONT_RAD,
+              Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI);
+  }
+
+    public double getKg() {
+      return 17; //This is a placeholder number
+    }
+
+    public Translation2d getCoM() {
+      // the constants are placeholders
+      Translation2d comOfArm = new Translation2d(Constants.Arm.COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
+                .times(Constants.Arm.ARM_MASS_KG);
+      return comOfArm;
+    }
+
+    public void driveArm(TrapezoidProfile.State state) {
+        double kgv = getKg();
+        double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
+        double armPIDVolts = armPID.calculate(getArmPos(), state.position);
+        if ((getArmPos() > Constants.Arm.UPPER_ANGLE && state.velocity > 0) || 
+            (getArmPos() < Constants.Arm.LOWER_ANGLE && state.velocity < 0)) {
+            armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
+    }
+  }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE, Constants.Arm.UPPER_ANGLE);
