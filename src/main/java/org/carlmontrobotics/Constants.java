@@ -27,17 +27,17 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(16.5); 
-			public static final double trackWidth = Units.inchesToMeters(23.25); 
+			public static final double wheelBase = Units.inchesToMeters(16.5);
+			public static final double trackWidth = Units.inchesToMeters(23.25);
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
 			// Gearing for the Swerve Modules is 6.75 : 1
-			public static final double driveGearing = 6.75; 
+			public static final double driveGearing = 6.75;
 
-			public static final double driveModifier = 1; 
+			public static final double driveModifier = 1;
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
-			public static final double mu = 0.8; /* 70/83.2;  */
+			public static final double mu = 0.7; /* 70/83.2;  */
 
 			public static final double NEOFreeSpeed = 5676 * (2 * Math.PI) / 60;    // radians/s
 			// Angular speed to translational speed --> v = omega * r / gearing
@@ -65,10 +65,10 @@ public final class Constants {
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
-			public static final double[] turnkP = {0.00374, 0.00374, 0.00374, 0.00374}; 
+			public static final double[] turnkP = {0.00374, 0.00374, 0.00374, 0.00374};
 			public static final double[] turnkI = {0, 0, 0, 0};
 			public static final double[] turnkD = {0, 0, 0, 0}; // todo: use d
-			public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2}; 
+			public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
 			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
@@ -164,7 +164,7 @@ public final class Constants {
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
-		
+
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
@@ -176,7 +176,7 @@ public final class Constants {
 		public static final double outtakeSpeed = 1;
 
 	}
-	
+
 	public static final class OI {
         public static final class Driver {
             public static final int port = 0;
