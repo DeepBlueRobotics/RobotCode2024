@@ -27,12 +27,11 @@ public final class Constants {
 		//public static final trapAngle = 80;
 		
 		//Motor Controllers: pid, FF
+		//PID
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
-		// Feedforward
-		public static final double kS = 0.1; 
-		public static final double kG = 0.1;
-		public static final double kV = 0.1;
-		public static final double kA = 0.1;
+		//Feed Forward
+		public static final double[] FeedforwardVals = new double[] { /*/kS/*/0.1, /*/kG/*/0.1, /*/kV/*/0.1, /*/kA/*/0.1 };
+	
 		
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
@@ -51,9 +50,8 @@ public final class Constants {
 		public static final double intakeSpeed = .7;
 		public static final double outtakeSpeed = 1;
 		
-		public static final int leftShootingPort = 0;
-		public static final int rightShootingPort = 1;
-		public static final int intakePort = 2;
+		public static final int outtakePort = 0;
+		public static final int intakePort = 1;
 
 		public static final int beamBreakPort = 11;
 		public static final int distSensorPort = 12;

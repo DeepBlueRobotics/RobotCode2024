@@ -21,7 +21,7 @@ public class Speaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //calls the setRPMSpeaker method in the IntakeShooter subsystem when method is ran
+    //calls the setRPMShooter method in the IntakeShooter subsystem when method is ran
   }
 
   // Called every time the scheduler runs while the command is scheduled.
