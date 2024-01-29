@@ -47,16 +47,11 @@ public class IntakeShooter extends SubsystemBase {
 	private final TimeOfFlight distSensor = new TimeOfFlight(distSensorPort);
 
 								
-	public IntakeShooter() {}
-
-
-
-	/**
-	 * @param location on the field
-	 * @return void
-	 */
+	public IntakeShooter() {
+	}
 	public void setRMPShooter(/*location*/){
-		//pass in location, diagonally, right in front, fromm wing
+		//pass in location, from the calculate RPM method 
+		//   - diagonally, right in front, fromm wing
 		//set rmp for shootiong in speaker depending on location
 
 	}
@@ -78,6 +73,10 @@ public class IntakeShooter extends SubsystemBase {
 
 	public void calculateRPM(/*/location/*/){
 		//calculates the speed depending on location and use that in setRPM
+		/**
+	 	* @param location on the field
+		* @return void
+	 	*/
 	}
 	
 
