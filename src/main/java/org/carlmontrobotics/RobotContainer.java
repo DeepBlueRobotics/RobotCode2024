@@ -4,11 +4,15 @@
 
 package org.carlmontrobotics;
 
+import org.carlmontrobotics.Constants.OI;
+import org.carlmontrobotics.Constants.OI.Driver;
+import org.carlmontrobotics.Constants.OI.Manipulator;
 //199 files
-// import org.carlmontrobotics.subsystems.*;
+import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 //controllers
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -36,83 +40,58 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+//java
+import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+
 public class RobotContainer {
 	//set up subsystems / controllers / limelight
+  public final GenericHID driverController = new GenericHID(OI.Driver.port);
+  public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
+
+  Drivetrain drivetrain = new Drivetrain();
 
   private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
     "Penis"
   };
-  private Command[] autoCommands;
 
   public RobotContainer() {
 		//defaultCommands: elevator, dt
 		//(pass in controller!)
 
-    setupAutos();
+    // setupAutos();
 		setDefaultCommands();
 		setBindingsDriver();
 		setBindingsManipulator();
   }
-
-  private void setupAutos() {
-    ////AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("AutoIntakeOnce", new AutoIntakeOnce());
-
-    ////CREATING PATHS
-    ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
-    for (String name : autoNames) {
-      autoPaths.add(PathPlannerPath.fromPathFile(name));
-    }
-
-    // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-    // import com.pathplanner.lib.util.PIDConstants;
-    // com.pathplanner.lib.util.ReplanningConfig;
-    // edu.wpi.first.math.kinematics.ChassisSpeeds;
-    
-    // AutoBuilder.configureHolonomic
-    //   Supplier<Pose2d> poseSupplier, 
-    //   Consumer<Pose2d> resetPose, 
-    //   Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier, 
-    //   Consumer<ChassisSpeeds> robotRelativeOutput, 
-    //   HolonomicPathFollowerConfig new HolonomicPathFollowerConfig​(
-      // PIDConstants translationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-      // PIDConstants rotationConstants new PIDConstants​(double kP, double kI, double kD, double iZone), 
-      // double maxModuleSpeed, 
-      // double driveBaseRadius, 
-      // ReplanningConfig new ReplanningConfig​( /*put in Constants.Drivetrain.Auto*/
-        // boolean enableInitialReplanning, //replan at start of path if robot not at start of path?
-        // boolean enableDynamicReplanning, //replan if total error surpasses total error/spike threshold?
-        // double dynamicReplanningTotalErrorThreshold, //total error threshold in meters that will cause the path to be replanned
-        // double dynamicReplanningErrorSpikeThreshold //error spike threshold, in meters, that will cause the path to be replanned
-        // ), 
-      // double period
-      // ), 
-    //   BooleanSupplier shouldFlipPath,
-    //   Subsystem driveSubsystem
-    // )
-
-    //note: //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
-    ////CREATE COMMANDS FROM PATHS
-    autoCommands = (Command[]) autoPaths.stream().map(
-      (PathPlannerPath path)->AutoBuilder.followPath(path)
-      ).collect(Collectors.toList()).toArray();
-
-    //}end
-  }
-
+  
 	private void setDefaultCommands() {
-    // drivetrain.setDefaultCommand(new TeleopDrive(
-    //   drivetrain,
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftY)),
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftX)),
-    //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
-    //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
-    // ));
+    drivetrain.setDefaultCommand(new TeleopDrive(
+      drivetrain,
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+      (BooleanSupplier)() -> driverController.getRawButton(OI.Driver.slowDriveButton)
+    ));
   }
   private void setBindingsDriver() {
-		// 4 cardinal directions on arrowpad
-		// slowmode toggle on trigger
-		// 3 cardinal directions on letterpad
+		// reset field orientation??
+    new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
+      new InstantCommand(drivetrain::resetFieldOrientation));
+    // toggle orientation plane between field and relative
+    new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
+      new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+    
+      // 4 cardinal directions on arrowpad
+    new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+    
+    //TODO: 3 cardinal directions on letterpad
+    // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative120Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
 	}
   private void setBindingsManipulator() {
 		// 3 setpositions of elevator on arrowpad
@@ -125,21 +104,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command autoCommand = null;
 
-    //get the funny ports on the robot
-    DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 26)];
-    for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);
-
-    //check which ones are short-circuiting
-      for(int i = 0; i < autoSelectors.length; i++) {
-        if(!autoSelectors[i].get()) {
-          System.out.println("Using Path: " + i);
-          autoCommand = autoCommands[i];
-          break;
-        }
-      }
 
     //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-     return autoCommand == null ? new PrintCommand("Auto selector broke :(") : autoCommand;
+     return new PrintCommand("No Auto, this is drivetrain branch");
 	}
 
 	/**

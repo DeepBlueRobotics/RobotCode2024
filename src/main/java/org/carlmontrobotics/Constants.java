@@ -11,6 +11,7 @@ import org.carlmontrobotics.lib199.swerve.SwerveConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -180,10 +181,20 @@ public final class Constants {
 	public static final class OI {
         public static final class Driver {
             public static final int port = 0;
+
+			public static final int slowDriveButton = Button.kLeftBumper.value;
+			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
+            public static final int toggleFieldOrientedButton = Button.kStart.value;
+			
+            public static final int rotateFieldRelative0Deg = Button.kY.value;
+            public static final int rotateFieldRelative90Deg = Button.kB.value;
+            public static final int rotateFieldRelative180Deg = Button.kA.value;
+            public static final int rotateFieldRelative270Deg = Button.kX.value;
         }
         public static final class Manipulator {
             public static final int port = 1;
         }
 		public static final double JOY_THRESH = 0.01;
+        public static final double MIN_AXIS_TRIGGER_VALUE = 0.25;
     }
 }
