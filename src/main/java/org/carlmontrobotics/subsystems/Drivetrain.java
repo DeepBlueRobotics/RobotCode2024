@@ -142,7 +142,7 @@ public class Drivetrain extends SubsystemBase {
        SmartDashboard.putNumber("Robot Heading", getHeading());
        // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
        // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
-       // fieldOriented = SmartDashboard.getBoolean("Field Oriented", true);
+       SmartDashboard.putBoolean("Field Oriented", fieldOriented);
        // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
        // SmartDashboard.putNumber("Compass Offset", compassOffset);
        // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
