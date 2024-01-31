@@ -14,6 +14,7 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Constants.IntakeShooter.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -45,6 +46,8 @@ public class IntakeShooter extends SubsystemBase {
 	//private final SparkPIDController leftShootingMotorPID = leftShootingMotor.getPIDController();
 	private final SparkPIDController outtakeMotorPID = outtakeMotor.getPIDController();
 	private final TimeOfFlight distSensor = new TimeOfFlight(distSensorPort);
+ 	private double DSdepth = 9.97;
+  	private double DSdetectdistance = 23;
 
 								
 	public IntakeShooter() {
@@ -60,7 +63,12 @@ public class IntakeShooter extends SubsystemBase {
 	public void setRPMEject(){
 		//method that runs the shooting and intake motors backwards
 	}
-	public boolean isHoldingNote(){		
+	public double getGamePieceDistanceIn() {
+		return Units.metersToInches((distSensor.getRange() - DSdepth) / 1000 /* Convert mm to m */);
+	  }
+	
+	public boolean isHoldingNote(){	
+		return getGamePieceDistanceIn() < DSdetectdistance;	
 		//use distance sensor to check if holding note
 		//we will use get range();
 
@@ -69,7 +77,7 @@ public class IntakeShooter extends SubsystemBase {
 		distance is between the two certain numbers, this will return true/*/
 
 		//Placeholder
-		return true;
+		
 	}
 
 	public void calculateRPM(/*/location/*/){
