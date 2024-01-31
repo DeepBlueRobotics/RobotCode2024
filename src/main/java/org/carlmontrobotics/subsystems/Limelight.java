@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
   //public boolean targetValid = false;
-  //private double tid, tv, tx, ty, ta;
+  private double tid, tv, tx, ty, ta;
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
 
@@ -46,10 +46,10 @@ public class Limelight extends SubsystemBase {
     return false;
     //return targetValid;
   }
+
   public double getTargetID(){
-    return 0; //placeholder
     //returns the id of the detected apriltag
-    //return tid;
+    return tid;
   }
 
   public double calcHorizontalAlignment(){
@@ -61,7 +61,7 @@ public class Limelight extends SubsystemBase {
 
   }
 
-  public boolean isCenteredEnough(double distance){
+  public boolean isAligned(double distance){
     return true; //placeholder
     /*if MathUtil.applyDeadband(distance, Constants.Limelight.kErrorTolerance) == 0
      * return true

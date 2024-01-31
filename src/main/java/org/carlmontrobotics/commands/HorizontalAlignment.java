@@ -7,6 +7,7 @@ package org.carlmontrobotics.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class HorizontalAlignment extends Command {
+  //private boolean finished;
   //create limelight and drivetrain instances
   public HorizontalAlignment() {
     //set limelight and drivetrain as requirements
@@ -22,16 +23,14 @@ public class HorizontalAlignment extends Command {
     /* calls getTargetValid() from limelight
      * if there is a target: 
      *   -call calcHorizontalAlignment from limelight
-     *   -drive to adjust (function in drivetrain?):
-     *      -convert offset to a number useable by drive
-     *      -find out what direction drivetrain is facing
-     *      -input offset values to make drivetrain move left/right towards the target
-     * else if already alignment:
+     *   -rotate by calling the command RotateToFieldRelativeAngle
+     * else if there is a targt and limelight.isAligned is true:
      *   -put 0 as the adjustment
-     *   -in other commands, use this 0 value from smartdashboard to confirm alignment before running
+     *   -set finished to true
      * else (no target):
      *   -do nothing
      *   -put -1 as the adjustment to smartdashboard
+     *   -set finished to true
      */
   }
 
@@ -43,6 +42,6 @@ public class HorizontalAlignment extends Command {
   @Override
   public boolean isFinished() {
     return false;
-    //return isCenteredEnough(distance);
+    //return finished;
   }
 }
