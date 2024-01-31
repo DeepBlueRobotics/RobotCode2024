@@ -19,10 +19,10 @@ public class Arm extends SubsystemBase {
 			//arm 
       /*
        have 3 set positions
-       Speaker position 
+       Speaker position
        Amp position
-        ground position
-       These set positions would also be conrtolled by buttons
+       ground position
+       These set positions would also be controlled by buttons
 
        There will also be a manual control for the arm using the right joystick
       */
@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     public void setArmPos() {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
-      //pass in where scorign and use switch statement
+      //pass in where scoring and use switch statement
     
 
     }

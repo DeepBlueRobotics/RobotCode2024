@@ -51,8 +51,9 @@ public class IntakeShooter extends SubsystemBase {
 	}
 	public void setRMPShooter(/*location*/){
 		//pass in location, from the calculate RPM method 
-		//   - diagonally, right in front, fromm wing
-		//set rmp for shootiong in speaker depending on location
+		//   - diagonally, right in front, from wing
+		//does the above comment refer to the location of the robot compared to the speaker?
+		//set rpm for shooting in speaker depending on location
 
 	}
 

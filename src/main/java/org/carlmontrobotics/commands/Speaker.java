@@ -36,6 +36,6 @@ public class Speaker extends Command {
   @Override
   public boolean isFinished() {
     return true;
-    //we will use timer and wait 2 seconds since the right trigger is pressed
+    //we will use isHoldingNote() boolean (distance sensor) after the right trigger is pressed
   }
 }

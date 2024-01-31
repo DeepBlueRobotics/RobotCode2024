@@ -35,6 +35,6 @@ public class Eject extends Command {
   public boolean isFinished() {
     //placeholder
     return true;
-    //waits 5 seconds after the down button is pressed
+    //if isHoldingNote is false (distance sensor) after the down button is pressed
   }
 }

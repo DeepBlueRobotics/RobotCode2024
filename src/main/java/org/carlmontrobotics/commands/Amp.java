@@ -34,6 +34,7 @@ public class Amp extends Command{
   public boolean isFinished() {
   //placeholder
   return true;
-  //we will use timer and wait 4 seconds since the right trigger is pressed
+  //we will use isHoldingNote() boolean from intake shooter (distance sensor) to determine when to end the command
+  //(instead of timer)
   }
 }
