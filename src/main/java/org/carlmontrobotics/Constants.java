@@ -6,6 +6,9 @@ package org.carlmontrobotics;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -20,19 +23,18 @@ public final class Constants {
 	}
 	
 	public static final class Arm {
-		// Array Indexes (Just to make things easier to read)
-        public static final int ARM = 0;
 		//Motor port
-		public static final int MOTOR_PORT1 = 7;
-		public final static int MOTOR_PORT2 = 8;
+		public static final int LEFT_MOTOR_PORT = 7;
+		public final static int RIGHT_MOTOR_PORT = 8;
 		//all angles in rot here
-		public static final double intakeAngle = -.1;
-		public static final double ampAngle = .3;
-		public static final double speakerAngle = .4;
+		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
+		public static final double intakeAngle = Math.toDegrees(-0.1);
+		public static final double ampAngle = Math.toDegrees(0.3);
+		public static final double speakerAngle = Math.toDegrees(0.4);
 		//if needed
-		public static final double UPPER_ANGLE = Math.toRadians(70); 
-		public static final double LOWER_ANGLE = Math.toRadians(0);
-		public static final double ARM_DICONT_RAD = (LOWER_ANGLE + UPPER_ANGLE) /2 - Math.PI;
+		public static final double UPPER_ANGLE_LIMIT = Math.toRadians(70); 
+		public static final double LOWER_ANGLE_LIMIT = Math.toRadians(0);
+		public static final double ARM_DICONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
 		//Motor Controllers: pid, FF
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
 		// Feedforward
@@ -42,9 +44,9 @@ public final class Constants {
 		public static final double kA = 0.1;
 		// PID Constants
 		// placeholder numbers for now
-        public static double[] kP = {0.1, 0.1};
-        public static double[] kI = {0.1, 0.1};
-        public static double[] kD = {0.1, 0.1};
+        public static final double kP = 0.1;
+		public static final double kI = 0.1;
+		public static final double kD = 0.1;
 		
 		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
 		public static final double COM_ARM_LENGTH_METERS = 1;
