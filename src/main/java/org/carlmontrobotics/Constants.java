@@ -28,8 +28,8 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(16.5);
-			public static final double trackWidth = Units.inchesToMeters(23.25);
+			public static final double wheelBase = Units.inchesToMeters(16.75);
+			public static final double trackWidth = Units.inchesToMeters(23.75);
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
@@ -115,15 +115,15 @@ public final class Constants {
 
 			//#region Ports
 
-			public static final int driveFrontLeftPort = 8;
-			public static final int driveFrontRightPort = 13;
-			public static final int driveBackLeftPort = 5;
-			public static final int driveBackRightPort = 11;
+			public static final int driveFrontLeftPort = 11;
+			public static final int driveFrontRightPort = 16;
+			public static final int driveBackLeftPort = 1;
+			public static final int driveBackRightPort = 18;
 
-			public static final int turnFrontLeftPort = 7;
+			public static final int turnFrontLeftPort = 12;
 			public static final int turnFrontRightPort = 14;
-			public static final int turnBackLeftPort = 6;
-			public static final int turnBackRightPort = 12;
+			public static final int turnBackLeftPort = 20;
+			public static final int turnBackRightPort = 19;
 
 			public static final int canCoderPortFL = 1;
 			public static final int canCoderPortFR = 2;
