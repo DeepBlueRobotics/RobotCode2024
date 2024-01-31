@@ -45,82 +45,96 @@ import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
-	//set up subsystems / controllers / limelight
-  public final GenericHID driverController = new GenericHID(OI.Driver.port);
-  public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
+	// set up subsystems / controllers / limelight
+	public final GenericHID driverController = new GenericHID(OI.Driver.port);
+	public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
-  Drivetrain drivetrain = new Drivetrain();
+	Drivetrain drivetrain = new Drivetrain();
 
-  private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
-    "Penis"
-  };
+	private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
+			"Penis"
+	};
 
-  public RobotContainer() {
-		//defaultCommands: elevator, dt
-		//(pass in controller!)
+	public RobotContainer() {
+		// defaultCommands: elevator, dt
+		// (pass in controller!)
 
-    // setupAutos();
+		// setupAutos();
 		setDefaultCommands();
 		setBindingsDriver();
 		setBindingsManipulator();
-  }
-  
-	private void setDefaultCommands() {
-    drivetrain.setDefaultCommand(new TeleopDrive(
-      drivetrain,
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-      (BooleanSupplier)() -> driverController.getRawButton(OI.Driver.slowDriveButton)
-    ));
-  }
-  private void setBindingsDriver() {
-		// reset field orientation??
-    new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
-      new InstantCommand(drivetrain::resetFieldOrientation));
-    // toggle orientation plane between field and relative
-    new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
-      new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
-    
-      // 4 cardinal directions on arrowpad
-    new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
-    
-    //TODO: 3 cardinal directions on letterpad
-    // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
-    // new JoystickButton(driverController, Driver.rotateFieldRelative120Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
-    // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
 	}
-  private void setBindingsManipulator() {
+
+	private void setDefaultCommands() {
+		drivetrain.setDefaultCommand(new TeleopDrive(
+				drivetrain,
+				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+				(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
+	}
+
+	private void setBindingsDriver() {
+		// reset field orientation??
+		new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
+				new InstantCommand(drivetrain::resetFieldOrientation));
+		// toggle orientation plane between field and relative
+		new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
+				new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+
+		// 4 cardinal directions on arrowpad
+		new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
+				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
+		new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
+				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
+		new JoystickButton(driverController, Driver.rotateFieldRelative180Deg)
+				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
+		new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
+				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+
+		// TODO: 3 cardinal directions on letterpad
+		// new JoystickButton(driverController,
+		// Driver.rotateFieldRelative240Deg).onTrue(new
+		// RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+		// new JoystickButton(driverController,
+		// Driver.rotateFieldRelative120Deg).onTrue(new
+		// RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+		// new JoystickButton(driverController,
+		// Driver.rotateFieldRelative240Deg).onTrue(new
+		// RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+	}
+
+	private void setBindingsManipulator() {
 		// 3 setpositions of elevator on arrowpad
 		// intake/outtake on triggers
 
-    //3 setpositions of arm on letterpad
-    //right joystick used for manual arm control
+		// 3 setpositions of arm on letterpad
+		// right joystick used for manual arm control
 	}
 
-  public Command getAutonomousCommand() {
-    Command autoCommand = null;
+	public Command getAutonomousCommand() {
+		Command autoCommand = null;
 
-
-    //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-     return new PrintCommand("No Auto, this is drivetrain branch");
+		// return autoPath == null ? new PrintCommand("No Autonomous Routine selected")
+		// : autoCommand;
+		return new PrintCommand("No Auto, this is drivetrain branch");
 	}
 
 	/**
-	 * Flips an axis' Y coordinates upside down, but only if the select axis is a joystick axis
+	 * Flips an axis' Y coordinates upside down, but only if the select axis is a
+	 * joystick axis
 	 *
-	 * @param hid The controller/plane joystick the axis is on
+	 * @param hid  The controller/plane joystick the axis is on
 	 * @param axis The processed axis
 	 * @return The processed value.
 	 */
 	private double getStickValue(GenericHID hid, Axis axis) {
 		return hid.getRawAxis(axis.value) * (axis == Axis.kLeftY || axis == Axis.kRightY ? -1 : 1);
 	}
+
 	/**
-	 * Processes an input from the joystick into a value between -1 and 1, sinusoidally instead of linearly
+	 * Processes an input from the joystick into a value between -1 and 1,
+	 * sinusoidally instead of linearly
 	 *
 	 * @param value The value to be processed.
 	 * @return The processed value.
@@ -133,14 +147,16 @@ public class RobotContainer {
 				value);
 		return processedInput;
 	}
+
 	/**
-	 * Combines both getStickValue and inputProcessing into a single function for processing joystick outputs
+	 * Combines both getStickValue and inputProcessing into a single function for
+	 * processing joystick outputs
 	 *
-	 * @param hid The controller/plane joystick the axis is on
+	 * @param hid  The controller/plane joystick the axis is on
 	 * @param axis The processed axis
 	 * @return The processed value.
 	 */
-	private double ProcessedAxisValue(GenericHID hid, Axis axis){
+	private double ProcessedAxisValue(GenericHID hid, Axis axis) {
 		return inputProcessing(getStickValue(hid, axis));
-  }
+	}
 }
