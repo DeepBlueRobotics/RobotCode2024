@@ -4,18 +4,24 @@
 
 package org.carlmontrobotics.commands;
 
+import org.carlmontrobotics.subsystems.Drivetrain;
+import org.carlmontrobotics.subsystems.Limelight;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class HorizontalAlignment extends Command {
-  //private boolean finished;
-  //create limelight and drivetrain instances
-  public HorizontalAlignment() {
-    //set limelight and drivetrain as requirements
+public class RotateToAlign extends Command {
+  private boolean finished;
+  Drivetrain drivetrain;
+  Limelight limelight;
+
+  public RotateToAlign(Drivetrain drivetrain, Limelight limelight) {
+    addRequirements(this.drivetrain = drivetrain);
+    addRequirements(this.limelight = limelight);
   }
 
   @Override
   public void initialize() {
-    //private double distance;
   }
 
   @Override
@@ -32,6 +38,13 @@ public class HorizontalAlignment extends Command {
      *   -put -1 as the adjustment to smartdashboard
      *   -set finished to true
      */
+    if (limelight.getTargetValid()){
+      //make a sequential command group that makes it turn then shoot
+      //new SequentialCommandGroup(new Eject(outtake), new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(limelight.calcAngleOffset()), drivetrain);)
+      new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(limelight.calcAngleOffset()), drivetrain);
+    } else{
+      finished = true;
+    }
   }
 
   @Override
@@ -41,7 +54,6 @@ public class HorizontalAlignment extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
-    //return finished;
+    return finished;
   }
 }
