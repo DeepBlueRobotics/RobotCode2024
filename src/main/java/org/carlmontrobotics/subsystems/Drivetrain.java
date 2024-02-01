@@ -16,6 +16,7 @@ import org.carlmontrobotics.commands.TeleopDrive;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,6 +39,7 @@ public class Drivetrain extends SubsystemBase {
 
    private SwerveDriveKinematics kinematics = null;
    private SwerveDriveOdometry odometry = null;
+   //private SwerveDrivePoseEstimator poseEstimator = null;
    private SwerveModule modules[];
    private boolean fieldOriented = true;
    private double fieldOffset = 0;
@@ -123,6 +125,7 @@ public class Drivetrain extends SubsystemBase {
 
 
        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
+       //poseEstimator = new SwerveDrivePoseEstimator(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
    }
 
    @Override
