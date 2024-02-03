@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
     //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final PIDController armPID = new PIDController(Constants.Arm.pidVals[0], Constants.Arm.pidVals[1], Constants.Arm.pidVals[2]);
+    private final PIDController armPID = new PIDController(Constants.Arm.kP[0], Constants.Arm.kI[0], Constants.Arm.kD[0]);
     public Arm() {
 			//arm 
       /*
@@ -85,6 +85,8 @@ public class Arm extends SubsystemBase {
             (getArmPos() < Constants.Arm.LOWER_ANGLE && state.velocity < 0)) {
             armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
     }
+    double volts = armFeedVolts + armPIDVolts;
+    armMotor1.setVoltage(volts);
   }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
@@ -95,18 +97,4 @@ public class Arm extends SubsystemBase {
     public void periodic() {
   
 		}
-
-    public void driveArm(TrapezoidProfile.State state){
-        // set voltage to armMotor
-        double kgv = getKg();
-        double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
-        double armPIDVolts = armPID.calculate(getArmPos(), state.position);
-        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && state.velocity > 0) || 
-            (getArmPos() < ARM_LOWER_LIMIT_RAD && state.velocity < 0)) {
-              forbFlag = true;  
-            armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
-        }
-        double volts = armFeedVolts + armPIDVolts;
-        armMotor.setVoltage(volts);
-    }
 }

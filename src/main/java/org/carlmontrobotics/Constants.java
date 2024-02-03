@@ -33,8 +33,6 @@ public final class Constants {
 		public static final double UPPER_ANGLE = Math.toRadians(70); 
 		public static final double LOWER_ANGLE = Math.toRadians(0);
 		public static final double ARM_DICONT_RAD = (LOWER_ANGLE + UPPER_ANGLE) /2 - Math.PI;
-		//Motor Controllers: pid, FF
-		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
 		// Feedforward
 		public static final double kS = 0.1;
 		public static final double kG = 0.1;
