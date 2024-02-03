@@ -34,8 +34,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public class Arm extends SubsystemBase {
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT1,MotorConfig.NEO);
-    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.MOTOR_PORT2,MotorConfig.NEO);
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.LEFT_MOTOR_PORT,MotorConfig.NEO);
+    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
     //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -78,23 +78,27 @@ public class Arm extends SubsystemBase {
     }
 
     public void driveArm(TrapezoidProfile.State state) {
+
+      /*
+      ignore this math its wrong as it includes wrist 
         double kgv = getKg();
         double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
         double armPIDVolts = armPID.calculate(getArmPos(), state.position);
-        if ((getArmPos() > Constants.Arm.UPPER_ANGLE && state.velocity > 0) || 
-            (getArmPos() < Constants.Arm.LOWER_ANGLE && state.velocity < 0)) {
+        if ((getArmPos() > Constants.Arm.UPPER_ANGLE_LIMIT && state.velocity > 0) || 
+            (getArmPos() < Constants.Arm.LOWER_ANGLE_LIMIT && state.velocity < 0)) {
             armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
     }
     double volts = armFeedVolts + armPIDVolts;
     armMotor1.setVoltage(volts);
   }
+  */
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
-      return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE, Constants.Arm.UPPER_ANGLE);
+      return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
     }
 
     @Override
     public void periodic() {
-  
+      //run driveArm constantly and pass in 
 		}
 }
