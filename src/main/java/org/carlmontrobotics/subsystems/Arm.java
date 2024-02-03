@@ -40,6 +40,8 @@ public class Arm extends SubsystemBase {
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final PIDController armPID = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(Math.toRadians(43), 0) };
+    private TrapezoidProfile armProfile = new TrapezoidProfile(Constants.Arm.trapConstraints, goalState[0], getCurrentArmState());
     public Arm() {
 			//arm 
       /*
@@ -77,6 +79,10 @@ public class Arm extends SubsystemBase {
       return comOfArm;
     }
 
+    public double getArmVel() {
+      return armEncoder.getVelocity();
+  }
+
     public void driveArm(TrapezoidProfile.State state) {
 
       /*
@@ -98,8 +104,12 @@ public class Arm extends SubsystemBase {
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
     }
 
+    public TrapezoidProfile.State getCurrentArmState() {
+      return new TrapezoidProfile.State(getArmPos(), getArmVel());
+    }
+
     @Override
     public void periodic() {
-      //run driveArm constantly and pass in 
+      
 		}
 }

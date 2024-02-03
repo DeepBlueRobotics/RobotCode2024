@@ -46,7 +46,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
 
-    //arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm(() -> ProcessedAxisValue(driverController, Axis.kLeftY));}));
+    arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm());
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,
