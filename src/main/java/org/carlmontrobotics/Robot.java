@@ -19,33 +19,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private TimeOfFlight distSensor = new TimeOfFlight(10);
-  private double DSdepth = 9.97;
-  private double DSdetectdistance = 14;
-  private CANSparkMax motor = MotorControllerFactory.createSparkMax(9, MotorConfig.NEO);
+  
 
-  public boolean hasGamePiece() {
-    // return false;
-    return getGamePieceDistanceIn() < DSdetectdistance;
-  }
-
-  public double getGamePieceDistanceIn() {
-    return Units.metersToInches((distSensor.getRange() - DSdepth) / 1000 /* Convert mm to m */);
-  }
+  
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    SmartDashboard.putNumber("motor voltage", 0);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("Detect Distance", getGamePieceDistanceIn());
-    SmartDashboard.putBoolean("Has GUM", hasGamePiece());
-    if (hasGamePiece()) motor.set(0);
-    else motor.set(SmartDashboard.getNumber("motor voltage", 0));
+    
   }
 
   @Override
