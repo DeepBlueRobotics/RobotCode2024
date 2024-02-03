@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
     //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final PIDController armPID = new PIDController(Constants.Arm.kP[0], Constants.Arm.kI[0], Constants.Arm.kD[0]);
+    private final PIDController armPID = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
     public Arm() {
 			//arm 
       /*
@@ -90,8 +90,9 @@ public class Arm extends SubsystemBase {
     }
     double volts = armFeedVolts + armPIDVolts;
     armMotor1.setVoltage(volts);
-  }
+  
   */
+    }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
