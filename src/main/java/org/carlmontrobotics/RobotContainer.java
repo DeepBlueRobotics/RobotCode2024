@@ -67,11 +67,11 @@ public class RobotContainer {
 
 	private void setDefaultCommands() {
 		drivetrain.setDefaultCommand(new TeleopDrive(
-				drivetrain,
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-				(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
+			drivetrain,
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+			(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
 	}
 
 	private void setBindingsDriver() {

@@ -11,6 +11,7 @@ import org.carlmontrobotics.subsystems.Drivetrain;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopDrive extends Command {
@@ -44,6 +45,10 @@ public class TeleopDrive extends Command {
   @Override
   public void execute() {
     double[] speeds = getRequestedSpeeds();
+
+    SmartDashboard.putNumber("fwd", speeds[0]);
+    SmartDashboard.putNumber("strafe", speeds[1]);
+    SmartDashboard.putNumber("turn", speeds[2]);
     drivetrain.drive(speeds[0], speeds[1], speeds[2]);
   }
 
@@ -53,6 +58,9 @@ public class TeleopDrive extends Command {
     double forward = fwd.getAsDouble();
     double strafe = str.getAsDouble();
     double rotateClockwise = rcw.getAsDouble();
+    SmartDashboard.putNumber("fwdIN", forward);
+    SmartDashboard.putNumber("strafeIN", strafe);
+    SmartDashboard.putNumber("turnIN", rotateClockwise);
     if (Math.abs(forward) <= Constants.OI.JOY_THRESH) forward = 0.0;
     else forward *= maxForward;
     if (Math.abs(strafe) <= Constants.OI.JOY_THRESH) strafe = 0.0;

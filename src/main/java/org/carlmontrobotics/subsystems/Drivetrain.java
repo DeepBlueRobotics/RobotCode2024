@@ -123,6 +123,10 @@ public class Drivetrain extends SubsystemBase {
             // WPILog with this subsystem's name ("drive")
             this));
 
+   private SwerveModule moduleFL; 
+   private SwerveModule moduleFR;
+   private SwerveModule moduleBL;
+   private SwerveModule moduleBR;
    public Drivetrain() {
         
        // Calibrate Gyro
@@ -171,25 +175,26 @@ public class Drivetrain extends SubsystemBase {
 
            driveMotors = new CANSparkMax[4];
 
-           SwerveModule moduleFL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FL,
+            moduleFL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FL,
                    driveMotors[0] = MotorControllerFactory.createSparkMax(driveFrontLeftPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnFrontLeftPort, MotorConfig.NEO),
                    SensorFactory.createCANCoder(canCoderPortFL), 0,
                    pitchSupplier, rollSupplier);
            // Forward-Right
-           SwerveModule moduleFR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FR,
+           moduleFR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FR,
                    driveMotors[1] = MotorControllerFactory.createSparkMax(driveFrontRightPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnFrontRightPort, MotorConfig.NEO),
                    SensorFactory.createCANCoder(canCoderPortFR), 1,
                    pitchSupplier, rollSupplier);
+                
            // Backward-Left
-           SwerveModule moduleBL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BL,
+           moduleBL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BL,
                    driveMotors[2] = MotorControllerFactory.createSparkMax(driveBackLeftPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnBackLeftPort, MotorConfig.NEO),
                    SensorFactory.createCANCoder(canCoderPortBL), 2,
                    pitchSupplier, rollSupplier);
            // Backward-Right
-           SwerveModule moduleBR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BR,
+           moduleBR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BR,
                    driveMotors[3] = MotorControllerFactory.createSparkMax(driveBackRightPort, MotorConfig.NEO),
                    MotorControllerFactory.createSparkMax(turnBackRightPort, MotorConfig.NEO),
                    SensorFactory.createCANCoder(canCoderPortBR), 3,
@@ -237,6 +242,11 @@ public class Drivetrain extends SubsystemBase {
        // SmartDashboard.putNumber("Compass Offset", compassOffset);
        // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
        // gyro.isMagneticDisturbance());
+       SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+       SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+       SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+       SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+
    }
 
    public void autoCancelDtCommand() {
@@ -289,8 +299,11 @@ public class Drivetrain extends SubsystemBase {
        // Move the modules based on desired (normalized) speed, desired angle, max
        // speed, drive modifier, and whether or not to reverse turning.
        for (int i = 0; i < 4; i++) {
-           moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
-                   Rotation2d.fromDegrees(modules[i].getModuleAngle()));
+            SmartDashboard.putNumber("moduleIn"+Integer.toString(i), moduleStates[i].angle.getDegrees());
+           //moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
+                  // Rotation2d.fromDegrees(modules[i].getModuleAngle()));
+            SmartDashboard.putNumber("moduleOT"+Integer.toString(i), moduleStates[i].angle.getDegrees());
+            
            modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
        }
    }
