@@ -125,10 +125,10 @@ public final class Constants {
 			public static final int turnBackLeftPort = 20;
 			public static final int turnBackRightPort = 19;
 
-			public static final int canCoderPortFL = 1;
-			public static final int canCoderPortFR = 2;
-			public static final int canCoderPortBL = 3;
-			public static final int canCoderPortBR = 4;
+			public static final int canCoderPortFL = 0;
+			public static final int canCoderPortFR = 3;
+			public static final int canCoderPortBL = 2;
+			public static final int canCoderPortBR = 1;
 
 			//#endregion
 
