@@ -15,6 +15,7 @@ import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,14 +25,45 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
+//fuckit
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+// import edu.wpi.first.wpilibj.examples.rapidreactcommandbot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import java.util.function.DoubleSupplier;
 
 public class Drivetrain extends SubsystemBase {
    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
@@ -41,12 +73,66 @@ public class Drivetrain extends SubsystemBase {
    private SwerveModule modules[];
    private boolean fieldOriented = true;
    private double fieldOffset = 0;
+   private CANSparkMax[] driveMotors;
    //gyro
    public final float initPitch;
    public final float initRoll;
 
-   public Drivetrain() {
 
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
+    // Create a new SysId routine for characterizing the drive.
+    private final SysIdRoutine m_sysIdRoutine =
+    new SysIdRoutine(
+        // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            // Tell SysId how to plumb the driving voltage to the motors.
+            (Measure<Voltage> volts) -> {
+                for(CANSparkMax dm: driveMotors){
+                    dm.setVoltage(volts.in(Volts));
+                }
+            },
+            // Tell SysId how to record a frame of data for each motor on the mechanism being
+            // characterized.
+            log -> {
+                // Record a frame for the motor
+                log.motor("fl")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            driveMotors[0].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                log.motor("fr")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            driveMotors[1].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                log.motor("bl")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            driveMotors[2].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                log.motor("br")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            driveMotors[3].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+            },
+            // Tell SysId to make generated commands require this subsystem, suffix test state in
+            // WPILog with this subsystem's name ("drive")
+            this));
+
+   public Drivetrain() {
+        
        // Calibrate Gyro
        {
            double initTimestamp = Timer.getFPGATimestamp();
@@ -91,7 +177,7 @@ public class Drivetrain extends SubsystemBase {
            // Supplier<Float> pitchSupplier = () -> gyro.getPitch();
            // Supplier<Float> rollSupplier = () -> gyro.getRoll();
 
-           CANSparkMax[] driveMotors = new CANSparkMax[4];
+           driveMotors = new CANSparkMax[4];
 
            SwerveModule moduleFL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FL,
                    driveMotors[0] = MotorControllerFactory.createSparkMax(driveFrontLeftPort, MotorConfig.NEO),
@@ -124,6 +210,18 @@ public class Drivetrain extends SubsystemBase {
 
        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
    }
+
+   //PENIS PENIS PENIS
+   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.dynamic(direction);
+  }
+
+
+
 
    @Override
    public void periodic() {
@@ -329,7 +427,7 @@ public class Drivetrain extends SubsystemBase {
        for (SwerveModule module: modules)
            module.coast();
    }
-  
+
    public double[][] getPIDConstants() {
        return new double[][] {
            xPIDController,
