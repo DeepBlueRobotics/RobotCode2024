@@ -103,27 +103,19 @@ public class Drivetrain extends SubsystemBase {
             log -> {
                 // Record a frame for the motor
                 log.motor("fl")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            driveMotors[0].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].get() * RobotController.getBatteryVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
                 log.motor("fr")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            driveMotors[1].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].get() * RobotController.getBatteryVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
                 log.motor("bl")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            driveMotors[2].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].get() * RobotController.getBatteryVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
                 log.motor("br")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            driveMotors[3].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].get() * RobotController.getBatteryVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
             },
