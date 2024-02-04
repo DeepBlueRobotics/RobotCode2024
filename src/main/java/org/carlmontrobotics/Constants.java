@@ -52,8 +52,8 @@ public final class Constants {
 		public static final double intakeSpeed = .7;
 		public static final double outtakeSpeed = 1;
 		
-		public static final int outtakePort = 0;
-		public static final int intakePort = 1;
+		public static final int OuttakePort = 0;
+		public static final int IntakePort = 1;
 
 		public static final int beamBreakPort = 11;
 		public static final int distSensorPort = 12;
