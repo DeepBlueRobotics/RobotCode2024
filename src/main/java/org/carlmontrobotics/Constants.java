@@ -186,10 +186,15 @@ public final class Constants {
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
             public static final int toggleFieldOrientedButton = Button.kStart.value;
 			
-            public static final int rotateFieldRelative0Deg = Button.kY.value;
-            public static final int rotateFieldRelative90Deg = Button.kB.value;
-            public static final int rotateFieldRelative180Deg = Button.kA.value;
-            public static final int rotateFieldRelative270Deg = Button.kX.value;
+			public static final int quasistaticForward = Button.kY.value;
+            public static final int quasistaticBackward = Button.kB.value;
+            public static final int dynamicForward = Button.kA.value;
+            public static final int dynamicBackward = Button.kX.value;
+
+            // public static final int rotateFieldRelative0Deg = Button.kY.value;
+            // public static final int rotateFieldRelative90Deg = Button.kB.value;
+            // public static final int rotateFieldRelative180Deg = Button.kA.value;
+            // public static final int rotateFieldRelative270Deg = Button.kX.value;
         }
         public static final class Manipulator {
             public static final int port = 1;
