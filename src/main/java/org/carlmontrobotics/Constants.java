@@ -62,7 +62,7 @@ public final class Constants {
 			// Determine correct turnZero constants (FL, FR, BL, BR)
 			public static final double[] turnZero = RobotBase.isSimulation() ?
 					new double[] {0, 0, 0, 0} :
-					new double[] {0, 0 , 0, 0};/*real values here*/
+					new double[] {-49.96, 64.91, 97.43, -75.72};/*real values here*/
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
