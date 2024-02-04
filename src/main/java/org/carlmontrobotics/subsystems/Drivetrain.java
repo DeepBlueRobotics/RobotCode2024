@@ -103,21 +103,21 @@ public class Drivetrain extends SubsystemBase {
             log -> {
                 // Record a frame for the motor
                 log.motor("fl")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("fr")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("bl")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("br")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].get() * RobotController.getBatteryVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getPosition()*wheelDiameterMeters*Math.PI, MetersPerSecond));
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getVelocity(), MetersPerSecond));
             },
             // Tell SysId to make generated commands require this subsystem, suffix test state in
             // WPILog with this subsystem's name ("drive")
@@ -200,7 +200,11 @@ public class Drivetrain extends SubsystemBase {
                    SensorFactory.createCANCoder(canCoderPortBR), 3,
                    pitchSupplier, rollSupplier);
            modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
-           for(CANSparkMax driveMotor: driveMotors) driveMotor.setOpenLoopRampRate(secsPer12Volts);
+           for(CANSparkMax driveMotor: driveMotors) {
+                driveMotor.setOpenLoopRampRate(secsPer12Volts);
+                driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI);
+                driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI);
+           }
            //for(CANSparkMax driveMotor : driveMotors) driveMotor.setSmartCurrentLimit(80);
        }
 
