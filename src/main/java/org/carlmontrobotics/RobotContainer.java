@@ -84,14 +84,11 @@ public class RobotContainer {
 				new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
 
 		new JoystickButton(driverController, Driver.quasistaticForward)
-			.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-		new JoystickButton(driverController, Driver.quasistaticBackward)
-			.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-		new JoystickButton(driverController, Driver.dynamicForward)
-			.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-		new JoystickButton(driverController, Driver.dynamicBackward)
-			.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
+			.onTrue(new SequentialCommandGroup(
+				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward), new InstantCommand(drivetrain::stop)),
+				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse), new InstantCommand(drivetrain::stop)),
+				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward), new InstantCommand(drivetrain::stop)),
+				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse), new InstantCommand(drivetrain::stop))));
 		// 4 cardinal directions on arrowpad
 		// new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
 		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));

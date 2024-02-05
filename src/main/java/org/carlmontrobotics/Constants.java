@@ -66,10 +66,12 @@ public final class Constants {
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
-			public static final double[] turnkP = {0.00374, 0.00374, 0.00374, 0.00374};
+			public static final double[] turnkP = {0,0,0,0}; //{0.00374, 0.00374, 0.00374, 0.00374};
 			public static final double[] turnkI = {0, 0, 0, 0};
 			public static final double[] turnkD = {0, 0, 0, 0}; // todo: use d
-			public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
+			//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
+			public static final double[] turnkS = {0, 0, 0, 0};
+
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
 			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
@@ -79,14 +81,16 @@ public final class Constants {
 			// kP is an average of the forward and backward kP values
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
-			public static final double[] drivekP = {1.82, 1.815, 2.015, 1.915};
+			public static final double[] drivekP = turnkS; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {false, false, false, false};
 			public static final boolean[] turnInversion = {false, false, false, false};
 
-			public static final double[] kForwardVolts = {0.129, 0.108, 0.14, 0.125};
-			public static final double[] kBackwardVolts = {0.115, 0.169, 0.13, 0.148};
+			public static final double[] kForwardVolts = drivekI;
+			public static final double[] kBackwardVolts = drivekI;
+			//public static final double[] kForwardVolts = {0.129, 0.108, 0.14, 0.125};
+			//public static final double[] kBackwardVolts = {0.115, 0.169, 0.13, 0.148};
 
 			public static final double[] kForwardVels = {2.910/1.1, 2.970/1.1, 2.890/1.1, 2.930/1.1};
 			public static final double[] kBackwardVels = {2.890/1.1, 2.800/1.1, 2.850/1.1, 2.820/1.1};

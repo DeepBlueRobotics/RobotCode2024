@@ -28,6 +28,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -43,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -90,11 +92,15 @@ public class Drivetrain extends SubsystemBase {
     private final SysIdRoutine m_sysIdRoutine =
     new SysIdRoutine(
         // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-        new SysIdRoutine.Config(),
+        new SysIdRoutine.Config(Volts.of(0.1).per(Seconds.of(0.1)), Volts.of(0.6), Seconds.of(5)),
+        //new SysIdRoutine.Config(m_appliedVoltage.mut_replace(.1,Volts),m_appliedVoltage.mut_replace(.6,Volts)),
         new SysIdRoutine.Mechanism(
             // Tell SysId how to plumb the driving voltage to the motors.
             (Measure<Voltage> volts) -> {
+                // int[] reversed = new int[] {-1,1,-1,1};
+                // for (int i=0;i<4;i++) {
                 for(CANSparkMax dm: driveMotors){
+                    // CANSparkMax dm = driveMotors[i];
                     dm.setVoltage(volts.in(Volts));
                 }
             },
