@@ -95,12 +95,9 @@ public class Drivetrain extends SubsystemBase {
         new SysIdRoutine.Config(Volts.of(0.1).per(Seconds.of(0.1)), Volts.of(0.6), Seconds.of(5)),
         //new SysIdRoutine.Config(m_appliedVoltage.mut_replace(.1,Volts),m_appliedVoltage.mut_replace(.6,Volts)),
         new SysIdRoutine.Mechanism(
-            // Tell SysId how to plumb the driving voltage to the motors.
+            // Tell SysId how to give the driving voltage to the motors.
             (Measure<Voltage> volts) -> {
-                // int[] reversed = new int[] {-1,1,-1,1};
-                // for (int i=0;i<4;i++) {
                 for(CANSparkMax dm: driveMotors){
-                    // CANSparkMax dm = driveMotors[i];
                     dm.setVoltage(volts.in(Volts));
                 }
             },
@@ -109,19 +106,19 @@ public class Drivetrain extends SubsystemBase {
             log -> {
                 // Record a frame for the motor
                 log.motor("fl")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].getBusVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].getBusVoltage()*driveMotors[0].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("fr")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].getBusVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].getBusVoltage()*driveMotors[1].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("bl")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].getBusVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].getBusVoltage()*driveMotors[2].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getVelocity(), MetersPerSecond));
                 log.motor("br")
-                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].getBusVoltage(), Volts))
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].getBusVoltage()*driveMotors[3].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getVelocity(), MetersPerSecond));
             },
