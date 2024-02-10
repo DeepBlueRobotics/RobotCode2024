@@ -50,7 +50,11 @@ public final class Constants {
 		//in set() speed
 		public static final double idleSpeed = 0;
 		public static final double intakeSpeed = .7;
-		public static final double outtakeSpeed = 1;
+
+		public static final double ampRPM = 1;
+		public static final double speakerRPM = 1;
+		//2 different rpms for 2 arm scoring positions (armAmpPos, armSpeakerPos)
+		//change these values as needed later
 		
 		public static final int OuttakePort = 0;
 		public static final int IntakePort = 1;

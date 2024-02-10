@@ -58,6 +58,14 @@ public class IntakeShooter extends SubsystemBase {
 		//does the above comment refer to the location of the robot compared to the speaker?
 		//set rpm for shooting in speaker depending on location
 
+
+		//set rpm for 2 different arm shooting positions - armAmpPos and armSpeakerPos
+		//when right trigger pressed (speaker), set rpm to speakerRPM
+		//when right bumper button pressed (amp), set rpm to ampRPM
+
+		//How shooting will work: arm has buttons/triggers on controller to move it to different positions
+		//there will be a separate button/trigger to shoot a note from the end effector regardless of arm position
+
 	}
 
 	public void setRPMEject(){

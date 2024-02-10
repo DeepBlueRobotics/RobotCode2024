@@ -62,10 +62,11 @@ public class RobotContainer {
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands 
 
-  //Xbox right trigger axis -> Speaker
+  //Xbox right trigger axis -> Speaker (arm position)
   //Xbox left trigger axis -> Intake
-  //Xbox right bumper button -> Amp 
+  //Xbox right bumper button -> Amp (arm position)
   //Xbox A button -> Eject 
+  //Xbox X button -> Shoot
 
 
  
