@@ -66,6 +66,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 
 public class Drivetrain extends SubsystemBase {
    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
@@ -89,23 +90,50 @@ public class Drivetrain extends SubsystemBase {
     private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
 
     // Create a new SysId routine for characterizing the drive.
-    private final SysIdRoutine m_sysIdRoutine =
-    new SysIdRoutine(
+    private Function<Integer, SysIdRoutine> m_sysIdRoutine = (Integer frontOrBack) ->{
+    return new SysIdRoutine(
         // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
         new SysIdRoutine.Config(Volts.of(0.1).per(Seconds.of(0.1)), Volts.of(0.6), Seconds.of(5)),
         //new SysIdRoutine.Config(m_appliedVoltage.mut_replace(.1,Volts),m_appliedVoltage.mut_replace(.6,Volts)),
         new SysIdRoutine.Mechanism(
             // Tell SysId how to give the driving voltage to the motors.
-            (Measure<Voltage> volts) -> {
-                for(CANSparkMax dm: driveMotors){
-                    dm.setVoltage(volts.in(Volts));
-                }
-            },
+            (frontOrBack==0) ? (Measure<Voltage> volts) -> {
+                    driveMotors[0].setVoltage(volts.in(Volts));
+                    driveMotors[1].setVoltage(volts.in(Volts));
+                    modules[2].coast();
+                    modules[3].coast();
+                } : (frontOrBack==1) ? (Measure<Voltage> volts) -> {
+                    modules[0].coast();
+                    modules[1].coast();
+                    driveMotors[2].setVoltage(volts.in(Volts));
+                    driveMotors[3].setVoltage(volts.in(Volts));
+                } : (Measure<Voltage> volts) -> {
+                    for(CANSparkMax dm: driveMotors){
+                        dm.setVoltage(volts.in(Volts));
+                    }
+                },
             // Tell SysId how to record a frame of data for each motor on the mechanism being
             // characterized.
-            log -> {
-                // Record a frame for the motor
+            (frontOrBack==0) ? log -> {//FRONT
                 log.motor("fl")
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[0].getBusVoltage()*driveMotors[0].getAppliedOutput(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getVelocity(), MetersPerSecond));
+                log.motor("fr")
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[1].getBusVoltage()*driveMotors[1].getAppliedOutput(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[1].getEncoder().getVelocity(), MetersPerSecond));
+                } : (frontOrBack==1) ? log -> {//BACK
+                    log.motor("bl")
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[2].getBusVoltage()*driveMotors[2].getAppliedOutput(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[2].getEncoder().getVelocity(), MetersPerSecond));
+                    log.motor("br")
+                    .voltage(m_appliedVoltage.mut_replace(driveMotors[3].getBusVoltage()*driveMotors[3].getAppliedOutput(), Volts))
+                    .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
+                    .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getVelocity(), MetersPerSecond));
+                } : log -> {
+                   log.motor("fl")
                     .voltage(m_appliedVoltage.mut_replace(driveMotors[0].getBusVoltage()*driveMotors[0].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[0].getEncoder().getVelocity(), MetersPerSecond));
@@ -121,10 +149,11 @@ public class Drivetrain extends SubsystemBase {
                     .voltage(m_appliedVoltage.mut_replace(driveMotors[3].getBusVoltage()*driveMotors[3].getAppliedOutput(), Volts))
                     .linearPosition(m_distance.mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
                     .linearVelocity(m_velocity.mut_replace(driveMotors[3].getEncoder().getVelocity(), MetersPerSecond));
-            },
+                },
             // Tell SysId to make generated commands require this subsystem, suffix test state in
             // WPILog with this subsystem's name ("drive")
             this));
+        };
 
    private SwerveModule moduleFL; 
    private SwerveModule moduleFR;
@@ -215,13 +244,13 @@ public class Drivetrain extends SubsystemBase {
        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
    }
 
-   //PENIS PENIS PENIS
-   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.quasistatic(direction);
+   
+   public Command sysIdQuasistatic(SysIdRoutine.Direction direction,int frontorback) {
+    return m_sysIdRoutine.apply(Integer.valueOf(frontorback)).quasistatic(direction);
   }
 
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.dynamic(direction);
+  public Command sysIdDynamic(SysIdRoutine.Direction direction,int frontorback) {
+    return m_sysIdRoutine.apply(Integer.valueOf(frontorback)).dynamic(direction);
   }
 
 
@@ -229,6 +258,8 @@ public class Drivetrain extends SubsystemBase {
 
    @Override
    public void periodic() {
+        //lobotomized to prevent ucontrollabe swerve behavior
+        //FIXME: unlobotomize lib199
        for (SwerveModule module : modules) module.periodic();
 
        // Update the odometry with current heading and encoder position
@@ -237,7 +268,7 @@ public class Drivetrain extends SubsystemBase {
        autoCancelDtCommand();
 
        SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-       SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());;
+       SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
        // SmartDashboard.putNumber("Pitch", gyro.getPitch());
        // SmartDashboard.putNumber("Roll", gyro.getRoll());
        SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());

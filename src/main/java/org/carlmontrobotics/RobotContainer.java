@@ -17,14 +17,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -53,7 +53,7 @@ public class RobotContainer {
 	Drivetrain drivetrain = new Drivetrain();
 
 	private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-			"Penis"
+			"nothing here"
 	};
 
 	public RobotContainer() {
@@ -83,12 +83,25 @@ public class RobotContainer {
 		new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
 				new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
 
-		new JoystickButton(driverController, Driver.quasistaticForward)
-			.onTrue(new SequentialCommandGroup(
-				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward), new InstantCommand(drivetrain::stop)),
-				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse), new InstantCommand(drivetrain::stop)),
-				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward), new InstantCommand(drivetrain::stop)),
-				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse), new InstantCommand(drivetrain::stop))));
+		Supplier stopNwait = ()->new SequentialCommandGroup(new InstantCommand(drivetrain::stop), new WaitCommand(2));
+		
+		SmartDashboard.putData("All sysid tests", new SequentialCommandGroup(
+				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
+				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get()),
+				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
+				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get())));
+		
+		SmartDashboard.putData("All sysid tests - FRONT wheels", new SequentialCommandGroup(
+			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get())));
+		
+		SmartDashboard.putData("All sysid tests - BACK wheels", new SequentialCommandGroup(
+			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
+			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get())));
 		// 4 cardinal directions on arrowpad
 		// new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
 		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
