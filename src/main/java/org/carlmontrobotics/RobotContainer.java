@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
@@ -67,41 +68,27 @@ public class RobotContainer {
 	}
 
 	private void setDefaultCommands() {
-		drivetrain.setDefaultCommand(new TeleopDrive(
-			drivetrain,
-			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-			(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
+		// drivetrain.setDefaultCommand(new TeleopDrive(
+		// 	drivetrain,
+		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+		// 	(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
 	}
 
 	private void setBindingsDriver() {
 		// reset field orientation??
-		new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
-				new InstantCommand(drivetrain::resetFieldOrientation));
-		// toggle orientation plane between field and relative
-		new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
-				new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+		// new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
+		// 		new InstantCommand(drivetrain::resetFieldOrientation));
+		// // toggle orientation plane between field and relative
+		// new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
+		// 		new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+		
+		new JoystickButton(driverController, Button.kY.value).whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    	new JoystickButton(driverController, Button.kA.value).whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    	new JoystickButton(driverController, Button.kB.value).whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    	new JoystickButton(driverController, Button.kX.value).whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-		Supplier stopNwait = ()->new SequentialCommandGroup(new InstantCommand(drivetrain::stop), new WaitCommand(2));
-		
-		SmartDashboard.putData("All sysid tests", new SequentialCommandGroup(
-				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
-				new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get()),
-				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
-				new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get())));
-		
-		SmartDashboard.putData("All sysid tests - FRONT wheels", new SequentialCommandGroup(
-			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get())));
-		
-		SmartDashboard.putData("All sysid tests - BACK wheels", new SequentialCommandGroup(
-			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
-			new SequentialCommandGroup(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get())));
 		// 4 cardinal directions on arrowpad
 		// new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
 		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
