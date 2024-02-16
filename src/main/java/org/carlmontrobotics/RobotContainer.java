@@ -50,6 +50,7 @@ public class RobotContainer {
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
   Drivetrain drivetrain = new Drivetrain();
+  Limelight limelight = new Limelight(drivetrain);
 
   private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
     "Penis"
@@ -75,18 +76,19 @@ public class RobotContainer {
     ));
   }
   private void setBindingsDriver() {
+	new JoystickButton(driverController, 1).onTrue(new RotateToAlign(drivetrain, limelight)); //button A
 		// reset field orientation??
-    new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
-      new InstantCommand(drivetrain::resetFieldOrientation));
-    // toggle orientation plane between field and relative
-    new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
-      new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+    // new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
+    //   new InstantCommand(drivetrain::resetFieldOrientation));
+    // // toggle orientation plane between field and relative
+    // new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
+    //   new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
     
       // 4 cardinal directions on arrowpad
-    new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
+    // new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
     
     //TODO: 3 cardinal directions on letterpad
     // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
