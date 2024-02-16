@@ -6,54 +6,45 @@ package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.Limelight;
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 public class RotateToAlign extends Command {
   private boolean finished;
-  Drivetrain drivetrain;
-  Limelight limelight;
+  private final Drivetrain drivetrain;
+  private final Limelight limelight;
+  //private final Pose2d target;
+  private Rotation2d angle;
 
   public RotateToAlign(Drivetrain drivetrain, Limelight limelight) {
     addRequirements(this.drivetrain = drivetrain);
     addRequirements(this.limelight = limelight);
+    //addRequirements(this.target = target);
   }
 
   @Override
   public void initialize() {
+    angle = Rotation2d.fromDegrees(drivetrain.getHeading()).minus(Rotation2d.fromDegrees(limelight.calcAngleOffset()));
   }
 
   @Override
   public void execute() {
-    /* calls getTargetValid() from limelight
-     * if there is a target: 
-     *   -call calcHorizontalAlignment from limelight
-     *   -rotate by calling the command RotateToFieldRelativeAngle
-     * else if there is a targt and limelight.isAligned is true:
-     *   -put 0 as the adjustment
-     *   -set finished to true
-     * else (no target):
-     *   -do nothing
-     *   -put -1 as the adjustment to smartdashboard
-     *   -set finished to true
-     */
-    if (limelight.getTargetValid()){
-      //make a sequential command group that makes it turn then shoot
+    if (limelight.getTv() == 1.0){
       //new SequentialCommandGroup(new Eject(outtake), new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(limelight.calcAngleOffset()), drivetrain);)
-      new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(limelight.calcAngleOffset()), drivetrain);
-    } else{
-      finished = true;
+      new RotateToFieldRelativeAngle(angle, drivetrain);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    //tell drivetrain to stop
   }
 
   @Override
   public boolean isFinished() {
-    return finished;
+    return limelight.isAligned(limelight.calcAngleOffset());
   }
 }

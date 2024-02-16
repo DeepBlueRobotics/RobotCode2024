@@ -125,7 +125,6 @@ public class Drivetrain extends SubsystemBase {
 
 
        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
-       //poseEstimator = new SwerveDrivePoseEstimator(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
    }
 
    @Override
