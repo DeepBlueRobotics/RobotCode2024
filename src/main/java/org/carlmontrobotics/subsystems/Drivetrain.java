@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -122,6 +123,16 @@ public class Drivetrain extends SubsystemBase {
     //ROUTINES FOR SYSID
     
     //DRIVE
+    private void motorLogShort_drive(SysIdRoutineLog log, int id){
+        String name = new String[] {"fl","fr","bl","br"}[id];
+        log.motor(name)
+            .voltage(m_appliedVoltage[id].mut_replace(
+                    driveMotors[id].getBusVoltage() * driveMotors[id].getAppliedOutput(), Volts))
+            .linearPosition(
+                    m_distance[id].mut_replace(driveMotors[id].getEncoder().getPosition(), Meters))
+            .linearVelocity(m_velocity[id].mut_replace(driveMotors[id].getEncoder().getVelocity(),
+                    MetersPerSecond));
+    }
     // Create a new SysId routine for characterizing the drive.
     private SysIdRoutine frontOnlyDriveRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(),
@@ -134,20 +145,8 @@ public class Drivetrain extends SubsystemBase {
                 modules[3].coast();                                                     
             },
             log -> {// FRONT
-                log.motor("fl")
-                    .voltage(m_appliedVoltage[0].mut_replace(
-                            driveMotors[0].getBusVoltage() * driveMotors[0].getAppliedOutput(), Volts))
-                    .linearPosition(
-                            m_distance[0].mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity[0].mut_replace(driveMotors[0].getEncoder().getVelocity(),
-                            MetersPerSecond));
-                log.motor("fr")
-                    .voltage(m_appliedVoltage[1].mut_replace(
-                            driveMotors[1].getBusVoltage() * driveMotors[1].getAppliedOutput(), Volts))
-                    .linearPosition(
-                            m_distance[1].mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity[1].mut_replace(driveMotors[1].getEncoder().getVelocity(),
-                            MetersPerSecond));
+                motorLogShort_drive(log,0);//fl named automatically
+                motorLogShort_drive(log,1);//fr
             },
             this
         )
@@ -163,20 +162,8 @@ public class Drivetrain extends SubsystemBase {
                 driveMotors[3].setVoltage(volts.in(Volts));
             },
             log -> {// BACK
-                log.motor("bl")
-                    .voltage(m_appliedVoltage[2].mut_replace(
-                            driveMotors[2].getBusVoltage() * driveMotors[2].getAppliedOutput(), Volts))
-                    .linearPosition(
-                            m_distance[2].mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity[2].mut_replace(driveMotors[2].getEncoder().getVelocity(),
-                            MetersPerSecond));
-                log.motor("br")
-                    .voltage(m_appliedVoltage[3].mut_replace(
-                            driveMotors[3].getBusVoltage() * driveMotors[3].getAppliedOutput(), Volts))
-                    .linearPosition(
-                            m_distance[3].mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity[3].mut_replace(driveMotors[3].getEncoder().getVelocity(),
-                            MetersPerSecond));
+                motorLogShort_drive(log,2);//bl
+                motorLogShort_drive(log,3);//br
             },
             this
         )
@@ -191,34 +178,10 @@ public class Drivetrain extends SubsystemBase {
                 }
             }, 
             log -> {
-                log.motor("fl")
-                        .voltage(m_appliedVoltage[0].mut_replace(
-                                driveMotors[0].getBusVoltage() * driveMotors[0].getAppliedOutput(), Volts))
-                        .linearPosition(
-                                m_distance[0].mut_replace(driveMotors[0].getEncoder().getPosition(), Meters))
-                        .linearVelocity(m_velocity[0].mut_replace(driveMotors[0].getEncoder().getVelocity(),
-                                MetersPerSecond));
-                log.motor("fr")
-                        .voltage(m_appliedVoltage[1].mut_replace(
-                                driveMotors[1].getBusVoltage() * driveMotors[1].getAppliedOutput(), Volts))
-                        .linearPosition(
-                                m_distance[1].mut_replace(driveMotors[1].getEncoder().getPosition(), Meters))
-                        .linearVelocity(m_velocity[1].mut_replace(driveMotors[1].getEncoder().getVelocity(),
-                                MetersPerSecond));
-                log.motor("bl")
-                        .voltage(m_appliedVoltage[2].mut_replace(
-                                driveMotors[2].getBusVoltage() * driveMotors[2].getAppliedOutput(), Volts))
-                        .linearPosition(
-                                m_distance[2].mut_replace(driveMotors[2].getEncoder().getPosition(), Meters))
-                        .linearVelocity(m_velocity[2].mut_replace(driveMotors[2].getEncoder().getVelocity(),
-                                MetersPerSecond));
-                log.motor("br")
-                        .voltage(m_appliedVoltage[3].mut_replace(
-                                driveMotors[3].getBusVoltage() * driveMotors[3].getAppliedOutput(), Volts))
-                        .linearPosition(
-                                m_distance[3].mut_replace(driveMotors[3].getEncoder().getPosition(), Meters))
-                        .linearVelocity(m_velocity[3].mut_replace(driveMotors[3].getEncoder().getVelocity(),
-                                MetersPerSecond));
+                motorLogShort_drive(log,0);//fl named automatically
+                motorLogShort_drive(log,1);//fr
+                motorLogShort_drive(log,2);//bl
+                motorLogShort_drive(log,3);//br
             }, 
             this
         )
