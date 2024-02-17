@@ -121,7 +121,7 @@ public class Drivetrain extends SubsystemBase {
     private SendableChooser<SysIdTest> sysIdChooser = new SendableChooser<>();
 
     //ROUTINES FOR SYSID
-    
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
     //DRIVE
     private void motorLogShort_drive(SysIdRoutineLog log, int id){
         String name = new String[] {"fl","fr","bl","br"}[id];
@@ -135,7 +135,7 @@ public class Drivetrain extends SubsystemBase {
     }
     // Create a new SysId routine for characterizing the drive.
     private SysIdRoutine frontOnlyDriveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
+        defaultSysIdConfig,
         new SysIdRoutine.Mechanism(
             // Tell SysId how to give the driving voltage to the motors.
             (Measure<Voltage> volts) -> {
@@ -153,7 +153,7 @@ public class Drivetrain extends SubsystemBase {
     );
 
     private SysIdRoutine backOnlyDriveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(), 
+        defaultSysIdConfig,
         new SysIdRoutine.Mechanism(
             (Measure<Voltage> volts) -> {
                 modules[0].coast();
@@ -170,7 +170,7 @@ public class Drivetrain extends SubsystemBase {
     );
 
     private SysIdRoutine allWheelsDriveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(), 
+        defaultSysIdConfig, 
         new SysIdRoutine.Mechanism(
             (Measure<Voltage> volts) -> {
                 for (CANSparkMax dm : driveMotors) {
@@ -191,7 +191,7 @@ public class Drivetrain extends SubsystemBase {
         //because drivemotors take up the first 4 slots of the unit holders
         
         return new SysIdRoutine(
-            new SysIdRoutine.Config(), 
+            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5)), 
             new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> turnMotors[turnMotorId].setVoltage(volts.in(Volts)),
                 log -> log.motor(logname+"_turn")
@@ -393,6 +393,7 @@ public class Drivetrain extends SubsystemBase {
         System.out.println("Test Selected: " + test);
         return test;
     }
+
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return new SelectCommand<>(
