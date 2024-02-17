@@ -301,8 +301,8 @@ public class Drivetrain extends SubsystemBase {
                 driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
             }
             for (CANSparkMax turnMotor : turnMotors) {
-                turnMotor.getEncoder().setPositionConversionFactor(360);
-                turnMotor.getEncoder().setVelocityConversionFactor(360);
+                turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
+                turnMotor.getEncoder().setVelocityConversionFactor(360 / turnGearing);
             }
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);

@@ -35,6 +35,8 @@ public final class Constants {
 			// The gearing reduction from the drive motor controller to the wheels
 			// Gearing for the Swerve Modules is 6.75 : 1
 			public static final double driveGearing = 6.75;
+			// Turn motor shaft to "module shaft"
+			public static final double turnGearing = 150 / 7;
 
 			public static final double driveModifier = 1;
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
@@ -47,9 +49,6 @@ public final class Constants {
 			public static final double maxStrafe = maxSpeed; // todo: use smart dashboard to figure this out
 		 	// seconds it takes to go from 0 to 12 volts(aka MAX)
 			public static final double secsPer12Volts = 0.1;
-
-
-
 
 			// maxRCW is the angular velocity of the robot.
 			// Calculated by looking at one of the motors and treating it as a point mass moving around in a circle.
