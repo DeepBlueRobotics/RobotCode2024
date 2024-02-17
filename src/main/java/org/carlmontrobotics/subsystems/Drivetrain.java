@@ -34,6 +34,7 @@ import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -55,28 +56,18 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 
-//fuckit
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import edu.wpi.first.wpilibj.examples.rapidreactcommandbot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
@@ -100,10 +91,13 @@ public class Drivetrain extends SubsystemBase {
     
     // Mutable holder for unit-safe linear distance values, persisted to avoid
     // reallocation.
-    private final MutableMeasure<Distance>[] m_distance = new MutableMeasure[8];
+    private final MutableMeasure<Distance>[] m_distance = new MutableMeasure[4];
     // Mutable holder for unit-safe linear velocity values, persisted to avoid
     // reallocation.
-    private final MutableMeasure<Velocity<Distance>>[] m_velocity = new MutableMeasure[8];
+    private final MutableMeasure<Velocity<Distance>>[] m_velocity = new MutableMeasure[4];
+    // edu.wpi.first.math.util.Units.Rotations beans;
+    private final MutableMeasure<Angle>[] m_revs = new MutableMeasure[4];
+    private final MutableMeasure<Velocity<Angle>>[] m_revs_vel = new MutableMeasure[4];
 
     private enum SysIdTest {
         FRONT_DRIVE,
@@ -186,21 +180,17 @@ public class Drivetrain extends SubsystemBase {
             this
         )
     );
-    private SysIdRoutine sysidroutshort_turn(int turnMotorId, String logname){
-        int mID = turnMotorId+4;
-        //because drivemotors take up the first 4 slots of the unit holders
-        
+    private SysIdRoutine sysidroutshort_turn(int id, String logname){
         return new SysIdRoutine(
             new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5)), 
             new SysIdRoutine.Mechanism(
-                (Measure<Voltage> volts) -> turnMotors[turnMotorId].setVoltage(volts.in(Volts)),
+                (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
                 log -> log.motor(logname+"_turn")
-                    .voltage(m_appliedVoltage[mID].mut_replace(
-                            driveMotors[turnMotorId].getBusVoltage() * driveMotors[turnMotorId].getAppliedOutput(), Volts))
-                    .linearPosition(
-                            m_distance[mID].mut_replace(driveMotors[turnMotorId].getEncoder().getPosition(), Meters))
-                    .linearVelocity(m_velocity[mID].mut_replace(driveMotors[turnMotorId].getEncoder().getVelocity(),
-                            MetersPerSecond)), 
+                    .voltage(m_appliedVoltage[id+4].mut_replace(
+                            //^because drivemotors take up the first 4 slots of the unit holders
+                            turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
+                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Rotations))
+                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), RotationsPerSecond)),
                 this
             )
         );
