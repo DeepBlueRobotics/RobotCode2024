@@ -373,6 +373,8 @@ public class Drivetrain extends SubsystemBase {
                 m_revs[i] = mutable(Degrees.of(0));
                 m_revs_vel[i] = mutable(DegreesPerSecond.of(0));
             }
+
+            SmartDashboard.putNumber("Desired Angle", 0);
         }
     }
 
@@ -559,8 +561,11 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
-        for (SwerveModule module : modules)
-            module.periodic();
+        moduleFL.periodic();
+        // for (SwerveModule module : modules)
+        //     module.periodic();
+        double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0);
+        moduleFL.move(0, desiredGoal);
 
         // Update the odometry with current heading and encoder position
         odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
@@ -580,7 +585,7 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Compass Offset", compassOffset);
         // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
         // gyro.isMagneticDisturbance());
-        // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+        SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
         // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
         // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
         // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
