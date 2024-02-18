@@ -56,8 +56,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
@@ -115,8 +115,7 @@ public class Drivetrain extends SubsystemBase {
     private SendableChooser<SysIdTest> sysIdChooser = new SendableChooser<>();
 
     //ROUTINES FOR SYSID
-    //private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(4));
-    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config();
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
     //DRIVE
     private void motorLogShort_drive(SysIdRoutineLog log, int id){
         String name = new String[] {"fl","fr","bl","br"}[id];
@@ -183,16 +182,15 @@ public class Drivetrain extends SubsystemBase {
     );
     private SysIdRoutine sysidroutshort_turn(int id, String logname){
         return new SysIdRoutine(
-            //new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5)), 
-            defaultSysIdConfig,
+            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(3)), 
             new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
                 log -> log.motor(logname+"_turn")
                     .voltage(m_appliedVoltage[id+4].mut_replace(
                             //^because drivemotors take up the first 4 slots of the unit holders
                             turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Degrees))
-                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), DegreesPerSecond)),
+                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Rotations))
+                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), RotationsPerSecond)),
                 this
             )
         );
@@ -295,15 +293,17 @@ public class Drivetrain extends SubsystemBase {
                     SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
+            
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
                 driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
             }
             for (CANSparkMax turnMotor : turnMotors) {
-                turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
-                turnMotor.getEncoder().setVelocityConversionFactor(360 / turnGearing);
+                turnMotor.getEncoder().setPositionConversionFactor(1 / turnGearing);
+                turnMotor.getEncoder().setVelocityConversionFactor(1 / turnGearing);
             }
+
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
         }
@@ -365,13 +365,13 @@ public class Drivetrain extends SubsystemBase {
 
             for (int i = 0; i < 8; i++) {//first four are drive, next 4 are turn motors
                 m_appliedVoltage[i] = mutable(Volts.of(0));
-                
             }
             for (int i = 0; i < 4; i++) {
                 m_distance[i] = mutable(Meters.of(0));
                 m_velocity[i] = mutable(MetersPerSecond.of(0));
-                m_revs[i] = mutable(Degrees.of(0));
-                m_revs_vel[i] = mutable(DegreesPerSecond.of(0));
+
+                m_revs[i] = mutable(Rotations.of(0));
+                m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
             }
 
             SmartDashboard.putNumber("Desired Angle", 0);
