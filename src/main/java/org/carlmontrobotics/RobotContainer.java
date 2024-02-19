@@ -46,7 +46,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
 
-    arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm());
+    arm.setDefaultCommand(new InstantCommand() -> {arm.driveArm();}));
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,

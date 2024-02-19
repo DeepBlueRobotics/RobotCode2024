@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,29 +43,23 @@ public class Arm extends SubsystemBase {
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final PIDController armPID = new PIDController(kP, kI, kD);
     public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(Math.toRadians(43), 0) };
-   
+    private Timer armTimer = new Timer();
     TrapezoidProfile.Constraints constraints =new TrapezoidProfile.Constraints(kMaxV, kMaxA);
 
     TrapezoidProfile profile = new TrapezoidProfile(constraints);
-    
-  
-			//arm 
-      /*
-       have 3 set positions
-       Speaker position 
-       Amp position
-        ground position
-       These set positions would also be conrtolled by buttons
 
-       There will also be a manual control for the arm using the right joystick
-      */
+    public Arm(){
+      armTimer.start();
     }
+    
 	
     public void setArmGoal(double targetPosition, double targetVelocity) {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
       //pass in where scorign and use switch statement to alternate between each angle needed
       targetPosition = getArmClampedGoal(targetPosition);
+      goalState[0].position = targetPosition;
+      goalState[0].velocity = targetVelocity;
 
       
     }
@@ -72,7 +67,7 @@ public class Arm extends SubsystemBase {
     public double getArmPos() {
       return MathUtil.inputModulus(armEncoder.getPosition(), Constants.Arm.ARM_DICONT_RAD,
               Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI);
-  }
+    } 
 
     public double getKg() {
       return 17; //This is a placeholder number
@@ -87,9 +82,11 @@ public class Arm extends SubsystemBase {
 
     public double getArmVel() {
       return armEncoder.getVelocity();
-  }
+    }
 
     public void driveArm(TrapezoidProfile.State state) {
+      double kgv = getKg();
+      
 
       /*
       ignore this math its wrong as it includes wrist 
@@ -102,8 +99,16 @@ public class Arm extends SubsystemBase {
     }
     double volts = armFeedVolts + armPIDVolts;
     armMotor1.setVoltage(volts);
+      
   
   */
+      double armFeedVolts = 0; //<-- similar math to above to get this
+      double armPIDVolts = 0;//<--similar math to 
+      SmartDashboard.putNumber("ArmFeedVolts", armFeedVolts);
+      SmartDashboard.putNumber("ArmPIDVolts", armPIDVolts);
+      double volts = armFeedVolts + armPIDVolts;
+      SmartDashboard.putNumber("ArmTotalVolts", volts);
+      armMotor1.setVoltage(volts);
     }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
@@ -114,8 +119,27 @@ public class Arm extends SubsystemBase {
       return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
 
+    public boolean armAtSetPoint(){
+      return(armPID.atSetpoint()&& profile.isFinished(armTimer.get()));
+    }
+
+  
     @Override
     public void periodic() {
+      armPID.setP(kP);
+      armPID.setI(kI);
+      armPID.setD(kD);
+      if (armPID.getP() != kP) {
+        armPID.setP(kP);
+      }
+      if (armPID.getD() != kD) {
+        armPID.setD(kD);
+      }
+      if (armPID.getI() != kI) {
+        armPID.setI(kI);
+      }
+
+      
       
 		}
 }
