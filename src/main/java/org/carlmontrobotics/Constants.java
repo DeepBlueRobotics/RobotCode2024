@@ -59,7 +59,7 @@ public final class Constants {
 			public static final boolean[] reversed = {false, false, false, false};
 			// public static final boolean[] reversed = {true, true, true, true};
 			// Determine correct turnZero constants (FL, FR, BL, BR)
-			public static final double[] turnZero = RobotBase.isSimulation() ?
+			public static final double[] turnZeroDeg = RobotBase.isSimulation() ?
 					new double[] {0, 0, 0, 0} :
 					new double[] {-49.96, 64.91, 97.43, -75.72};/*real values here*/
 
@@ -110,7 +110,7 @@ public final class Constants {
 			public static final double[] yPIDController = {4, 0.0, 0.0};
 			public static final double[] thetaPIDController = {0.10, 0.0, 0.001};
 
-			public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZero, driveInversion, reversed, driveModifier, turnInversion);
+			public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZeroDeg, driveInversion, reversed, driveModifier, turnInversion);
 
 			public static final Limelight.Transform limelightTransformForPoseEstimation = Transform.BOTPOSE_WPIBLUE;
 
