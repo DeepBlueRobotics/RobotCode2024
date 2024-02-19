@@ -43,11 +43,14 @@ public final class Constants {
 	public static final class IntakeShooter {
 		//PID values
 		public final double[] shooterPID = new double[] {.1,0,0};
-		//public final int kBeamBreak = 10;
-		//public static double[] kS = {0,0};
-		//public static double[] kA = {0,0};
-		//public static double [] kV = {0,0};
-		//in set() speed
+		//PID/FeedForward values
+		public final static double kS = 1.0851;
+            public static final double kV = 0.066742;
+            public static final double kA = 0.0076259;
+            
+            public static final int dsPort1 = 10;
+            public static final int dsPort2 = 0;
+
 		public static final double idleSpeed = 0;
 		public static final double intakeSpeed = .7;
 
@@ -55,10 +58,12 @@ public final class Constants {
 		public static final double speakerRPM = 1;
 		//2 different rpms for 2 arm scoring positions (armAmpPos, armSpeakerPos)
 		//change these values as needed later
-		
-		public static final int OuttakePort = 0;
+		public static final double intakeRPM = 4000;
+		public static final int OuttakePort = 17;
 		public static final int IntakePort = 1;
-
+		public static final double kP = 0.00014312;
+    	public static final double kD = 0;
+    	public static final double kI = 0;
 		public static final int beamBreakPort = 11;
 		public static final int distSensorPort = 12;
 	}

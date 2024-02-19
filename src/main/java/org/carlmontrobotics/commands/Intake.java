@@ -24,11 +24,14 @@ public class Intake extends Command {
   @Override
   public void initialize() {
     //calls the setRPMIntake method in the IntakeShooter subsystem when method is ran
+    InShoot.intake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,7 +41,7 @@ public class Intake extends Command {
   @Override
   public boolean isFinished() {
     //placeholder
-    return true;
+    return InShoot.checkNote();
     //will check if the is holding note boolean is true
   }
 }
