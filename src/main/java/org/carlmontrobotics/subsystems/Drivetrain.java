@@ -297,7 +297,7 @@ public class Drivetrain extends SubsystemBase {
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
-                driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
+                driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing / 60);
             }
             for (CANSparkMax turnMotor : turnMotors) {
                 turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
