@@ -56,8 +56,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
@@ -189,8 +189,8 @@ public class Drivetrain extends SubsystemBase {
                     .voltage(m_appliedVoltage[id+4].mut_replace(
                             //^because drivemotors take up the first 4 slots of the unit holders
                             turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Rotations))
-                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), RotationsPerSecond)),
+                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Degrees))
+                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), DegreesPerSecond)),
                 this
             )
         );
@@ -300,8 +300,8 @@ public class Drivetrain extends SubsystemBase {
                 driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
             }
             for (CANSparkMax turnMotor : turnMotors) {
-                turnMotor.getEncoder().setPositionConversionFactor(1 / turnGearing);
-                turnMotor.getEncoder().setVelocityConversionFactor(1 / turnGearing);
+                turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
+                turnMotor.getEncoder().setVelocityConversionFactor(360 / turnGearing / 60);
             }
 
             // for(CANSparkMax driveMotor : driveMotors)
@@ -370,8 +370,8 @@ public class Drivetrain extends SubsystemBase {
                 m_distance[i] = mutable(Meters.of(0));
                 m_velocity[i] = mutable(MetersPerSecond.of(0));
 
-                m_revs[i] = mutable(Rotations.of(0));
-                m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
+                m_revs[i] = mutable(Degrees.of(0));
+                m_revs_vel[i] = mutable(DegreesPerSecond.of(0));
             }
 
             SmartDashboard.putNumber("Desired Angle", 0);
