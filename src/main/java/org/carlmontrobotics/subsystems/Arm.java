@@ -7,7 +7,7 @@ package org.carlmontrobotics.subsystems;
 import java.util.function.DoubleSupplier;
 
 import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.Constants.Arm.*;
+import static org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
@@ -33,16 +33,21 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
+
 public class Arm extends SubsystemBase {
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.LEFT_MOTOR_PORT,MotorConfig.NEO);
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(LEFT_MOTOR_PORT,MotorConfig.NEO);
     //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
     //there is only one arm motor. 
-    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
+    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final PIDController armPID = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    private final PIDController armPID = new PIDController(kP, kI, kD);
     public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(Math.toRadians(43), 0) };
-    private TrapezoidProfile armProfile = new TrapezoidProfile(Constants.Arm.trapConstraints, goalState[0], getCurrentArmState());
-    public Arm() {
+   
+    TrapezoidProfile.Constraints constraints =new TrapezoidProfile.Constraints(kMaxV, kMaxA);
+
+    TrapezoidProfile profile = new TrapezoidProfile(constraints);
+    
+  
 			//arm 
       /*
        have 3 set positions
@@ -60,6 +65,7 @@ public class Arm extends SubsystemBase {
       //these values are in constants
       //pass in where scorign and use switch statement to alternate between each angle needed
       targetPosition = getArmClampedGoal(targetPosition);
+
       
     }
 

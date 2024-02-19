@@ -54,6 +54,10 @@ public final class Constants {
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
+
+		//trapezoid profile numbers
+		public static final double kMaxV = 0;
+		public static final double kMaxA = 0;
 		
 	}
 	public static final class IntakeShooter {
