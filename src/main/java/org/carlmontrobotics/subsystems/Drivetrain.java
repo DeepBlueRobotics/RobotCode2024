@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
@@ -27,11 +28,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Time;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.units.Angle;
@@ -80,8 +81,9 @@ public class Drivetrain extends SubsystemBase {
     private boolean fieldOriented = true;
     private double fieldOffset = 0;
     //FIXME not for permanent use!!
-    private CANSparkMax[] driveMotors;
+    private CANSparkMax[] driveMotors = new CANSparkMax[] {null, null, null, null};
     private CANSparkMax[] turnMotors = new CANSparkMax[] {null,null,null,null};
+    private CANcoder[] turnEncoders = new CANcoder[] {null, null, null, null};
     // gyro
     public final float initPitch;
     public final float initRoll;
@@ -189,8 +191,8 @@ public class Drivetrain extends SubsystemBase {
                     .voltage(m_appliedVoltage[id+4].mut_replace(
                             //^because drivemotors take up the first 4 slots of the unit holders
                             turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(turnMotors[id].getEncoder().getPosition(), Degrees))
-                    .angularVelocity(m_revs_vel[id].mut_replace(turnMotors[id].getEncoder().getVelocity(), DegreesPerSecond)),
+                    .angularPosition(m_revs[id].mut_replace(Units.rotationsToDegrees(turnEncoders[id].getPositionSinceBoot().getValue()), Degrees))
+                    .angularVelocity(m_revs_vel[id].mut_replace(Units.rotationsToDegrees(turnEncoders[id].getVelocity().getValueAsDouble()), DegreesPerSecond)),
                 this
             )
         );
@@ -266,31 +268,29 @@ public class Drivetrain extends SubsystemBase {
             // Supplier<Float> pitchSupplier = () -> gyro.getPitch();
             // Supplier<Float> rollSupplier = () -> gyro.getRoll();
 
-            driveMotors = new CANSparkMax[4];
-
             moduleFL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FL,
                     driveMotors[0] = MotorControllerFactory.createSparkMax(driveFrontLeftPort, MotorConfig.NEO),
                     turnMotors[0] = MotorControllerFactory.createSparkMax(turnFrontLeftPort, MotorConfig.NEO),
-                    SensorFactory.createCANCoder(canCoderPortFL), 0,
+                    turnEncoders[0] = SensorFactory.createCANCoder(canCoderPortFL), 0,
                     pitchSupplier, rollSupplier);
             // Forward-Right
             moduleFR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.FR,
                     driveMotors[1] = MotorControllerFactory.createSparkMax(driveFrontRightPort, MotorConfig.NEO),
                     turnMotors[1] = MotorControllerFactory.createSparkMax(turnFrontRightPort, MotorConfig.NEO),
-                    SensorFactory.createCANCoder(canCoderPortFR), 1,
+                    turnEncoders[1] = SensorFactory.createCANCoder(canCoderPortFR), 1,
                     pitchSupplier, rollSupplier);
 
             // Backward-Left
             moduleBL = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BL,
                     driveMotors[2] = MotorControllerFactory.createSparkMax(driveBackLeftPort, MotorConfig.NEO),
                     turnMotors[2] = MotorControllerFactory.createSparkMax(turnBackLeftPort, MotorConfig.NEO),
-                    SensorFactory.createCANCoder(canCoderPortBL), 2,
+                    turnEncoders[2] = SensorFactory.createCANCoder(canCoderPortBL), 2,
                     pitchSupplier, rollSupplier);
             // Backward-Right
             moduleBR = new SwerveModule(swerveConfig, SwerveModule.ModuleType.BR,
                     driveMotors[3] = MotorControllerFactory.createSparkMax(driveBackRightPort, MotorConfig.NEO),
                     turnMotors[3] = MotorControllerFactory.createSparkMax(turnBackRightPort, MotorConfig.NEO),
-                    SensorFactory.createCANCoder(canCoderPortBR), 3,
+                    turnEncoders[3] = SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
             
