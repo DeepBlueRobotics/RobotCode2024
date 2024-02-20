@@ -27,6 +27,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -94,7 +95,7 @@ public class Arm extends SubsystemBase {
     public double getArmPos() {
       return MathUtil.inputModulus(armEncoder.getPosition(), Constants.Arm.ARM_DICONT_RAD,
               Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI);
-  }
+    } 
 
 
     public void cancelArmCommand() {
@@ -111,9 +112,10 @@ public class Arm extends SubsystemBase {
 
     public double getArmVel() {
       return armEncoder.getVelocity();
-  }
+    }
 
     public void driveArm(TrapezoidProfile.State state) {
+      
 
       /*
       ignore this math its wrong as it includes wrist 
@@ -126,8 +128,16 @@ public class Arm extends SubsystemBase {
     }
     double volts = armFeedVolts + armPIDVolts;
     armMotor1.setVoltage(volts);
+      
   
   */
+      double armFeedVolts = 0; //<-- similar math to above to get this
+      double armPIDVolts = 0;//<--similar math to 
+      SmartDashboard.putNumber("ArmFeedVolts", armFeedVolts);
+      SmartDashboard.putNumber("ArmPIDVolts", armPIDVolts);
+      double volts = armFeedVolts + armPIDVolts;
+      SmartDashboard.putNumber("ArmTotalVolts", volts);
+      armMotor1.setVoltage(volts);
     }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
