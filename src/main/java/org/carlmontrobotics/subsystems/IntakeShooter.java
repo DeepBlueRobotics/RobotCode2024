@@ -5,8 +5,10 @@ import static org.mockito.ArgumentMatchers.matches;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.subsystems.Arm;
 
 import com.playingwithfusion.TimeOfFlight;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -117,12 +119,21 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public double calculateDistanceForRPM() {
-        // returns specific rpm based off of the distance and angle it is in
-        double angleInDegrees = outakeEncoder.getPosition();
+        // returns specific angle + rpm given distance from speaker
         double distance = 20; // Add limelight return distance thingy here
-        double surfaceVelocity = 17;
+        double aprilTagToSpeaker = 21;
+        double hypotenuse = Math.sqrt(Math.pow(distance,2) + Math.pow(aprilTagToSpeaker, 2));
         return 17; // super cool mathy stuff after tests and distances
         // Based off of distance it
     }
-
+    
+    public double calculateOffsetAndAngle(){
+        //returns optimal offest and shooting angle given the distance from the april tag
+        double distance = 20; //Karena, do cool limelight stuff here or something
+        double currentAngle; // = 180 + (armEncoder.getPostion()*360) - 115
+        double currentOffset; // Gotta find the equation for this, should depend on angle, just need my calculator to work and not give me an r^2 of .4
+        //GEt data from outtake testing to find the function of distance to angle to find the optimal angle and offset for the endeffector for the best shot
+        
+        return 15; //Cool stuff after calcs
+    }
 }
