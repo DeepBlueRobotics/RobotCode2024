@@ -1,6 +1,6 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.Shooter.*;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.mockito.ArgumentMatchers.matches;
 
 import org.carlmontrobotics.lib199.MotorConfig;
@@ -16,6 +16,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,6 +24,7 @@ public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
+    private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
@@ -32,8 +34,10 @@ public class IntakeShooter extends SubsystemBase {
     private double detectDistance = 13;
 
     public IntakeShooter() {
-        pidControllerOutake.setP(kP);
-        pidControllerOutake.setD(kD);
+        pidControllerOutake.setP(kP[0]);
+        pidControllerOutake.setD(kD[0]);
+        pidControllerIntake.setP(kP[1]);
+        pidControllerIntake.setD(kD[1]);
         outakeEncoder.setPositionConversionFactor(Math.PI / 360);
     }
 
@@ -93,7 +97,12 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+        SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
+        SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
+        SmartDashboard.putNumber("distance sensor 1", getGamePieceDistance1());
+        SmartDashboard.putNumber("distance sensor 2", getGamePieceDistance2());
+        SmartDashboard.putBoolean("DS1 Sees piece", gameDistanceSees1st());
+        SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSees2nd());
         senseGamePieceStop();
     }
 

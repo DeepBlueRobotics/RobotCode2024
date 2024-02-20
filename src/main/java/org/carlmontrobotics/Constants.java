@@ -40,11 +40,12 @@ public final class Constants {
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 		
 	}
-	public static final class Shooter {
+	public static final class IntakeShoot {
 		//PID values
-		public static final double kP = 0.0001;
+
+		public static final double[] kP = {0.0001,0};
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double[] kD = {0,0};
         public static final double kS = 0.29753;
         public static final double kV = 0.077913;
         public static final double kA = 0.05289;

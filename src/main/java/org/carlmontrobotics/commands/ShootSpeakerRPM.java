@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.Constants.Shooter;
+import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +12,7 @@ public class ShootSpeakerRPM extends Command {
     }
     @Override
     public void initialize() {
-        shooter.setRPMOutake(6500);
+      shooter.setRPMOutake(6000);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
