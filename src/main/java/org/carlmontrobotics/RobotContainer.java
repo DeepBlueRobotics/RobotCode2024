@@ -72,7 +72,7 @@ public class RobotContainer {
   //Xbox X button -> Shoot
     new JoystickButton(driverController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
     new JoystickButton(driverController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
-    new JoystickButton(driverController, Button.kRightBumper.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
+    new JoystickButton(driverController, Button.kX.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
     new JoystickButton(driverController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake(4000)));
  
   }
