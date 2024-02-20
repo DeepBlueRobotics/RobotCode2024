@@ -77,6 +77,18 @@ public class IntakeShooter extends SubsystemBase {
         // return 1.2;
     }
 
+    public double calculateIntakeAmount(){
+        //Literatly just calcDIstanceSensorNotes but instead of solving for k, we are solving for h
+        double d1 = getGamePieceDistance1();
+        double d2 = getGamePieceDistance2();
+        double r = 7;
+
+        double xm = (distanceBetweenSensors)/2;
+
+        double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r; 
+        return h;
+    }
+
     @Override
     public void periodic() {
         senseGamePieceStop();
