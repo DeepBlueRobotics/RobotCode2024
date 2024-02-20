@@ -40,7 +40,7 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    setDefaultCommands();
+    //TODO: setDefaultCommands();
     setBindingsDriver();
     setBindingsManipulator();
     new JoystickButton(manipulatorController, Button.kY.value).whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -51,7 +51,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
 
-    arm.setDefaultCommand(new InstantCommand() -> {arm.driveArm();}));
+    //TODO: arm.setDefaultCommand(new InstantCommand() -> {arm.driveArm();}));
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,
