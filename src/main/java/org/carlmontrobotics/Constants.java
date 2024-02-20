@@ -9,6 +9,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units.*;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -28,9 +29,11 @@ public final class Constants {
 		public final static int RIGHT_MOTOR_PORT = 8;
 		//all angles in rot here
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
-		public static final double intakeAngle = Math.toDegrees(-0.1);
-		public static final double ampAngle = Math.toDegrees(0.3);
-		public static final double speakerAngle = Math.toDegrees(0.4);
+
+		// USE RADIANS FOR THE ARM
+		public static final double intakeAngle = Math.toRadians(0);
+		public static final double ampAngle = Math.toRadians(103);
+		public static final double speakerAngle = Math.toRadians(24);
 		//if needed
 		public static final double UPPER_ANGLE_LIMIT = Math.toRadians(70); 
 		public static final double LOWER_ANGLE_LIMIT = Math.toRadians(0);
@@ -55,10 +58,10 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
-		//trapezoid profile numbers
-		public static final double kMaxV = 0;
-		public static final double kMaxA = 0;
-		
+		//Arm buttons
+		public static final int raiseToSpeakerButton = Button.kY.value;
+		public static final int raiseToAmpButton = Button.kB.value;
+		public static final int raiseToGroundButton = Button.kA.value;
 	}
 	public static final class IntakeShooter {
 		//in set() speed

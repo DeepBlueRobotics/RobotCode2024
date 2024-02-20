@@ -12,7 +12,11 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,6 +24,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
@@ -40,14 +45,21 @@ public class Arm extends SubsystemBase {
     //there is only one arm motor. 
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final PIDController armPID = new PIDController(kP, kI, kD);
-    public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(Math.toRadians(43), 0) };
+    private final SparkPIDController armPID = armMotor1.getPIDController();
+    public static TrapezoidProfile.State[] goalState = { 
+      new TrapezoidProfile.State(Constants.Arm.intakeAngle, 0), 
+      new TrapezoidProfile.State(Constants.Arm.ampAngle, 0),  
+      new TrapezoidProfile.State(Constants.Arm.speakerAngle, 0),
+    };
    
-    TrapezoidProfile.Constraints constraints =new TrapezoidProfile.Constraints(kMaxV, kMaxA);
-
-    TrapezoidProfile profile = new TrapezoidProfile(constraints);
+    TrapezoidProfile profile = new TrapezoidProfile(Constants.Arm.trapConstraints);
     
-  
+    public Arm() {
+      armPID.setP(Constants.Arm.kP);
+      armPID.setI(Constants.Arm.kI);
+      armPID.setD(Constants.Arm.kD);
+    }
+
 			//arm 
       /*
        have 3 set positions
@@ -58,8 +70,12 @@ public class Arm extends SubsystemBase {
 
        There will also be a manual control for the arm using the right joystick
       */
-    }
 	
+
+    public TrapezoidProfile.State calculateSetPoint(double elapsedSeconds,TrapezoidProfile.State setPoint, int goalStateIndex) {
+      return profile.calculate(elapsedSeconds, setPoint, goalState[goalStateIndex]);
+    }
+
     public void setArmGoal(double targetPosition, double targetVelocity) {
       //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
       //these values are in constants
@@ -69,13 +85,21 @@ public class Arm extends SubsystemBase {
       
     }
 
+    public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
+      // feed forward still needs the math part
+      double armFeedVolts = armFeed.calculate(setPoint.velocity, 0);
+      armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition,0, armFeedVolts);
+    }
+
     public double getArmPos() {
       return MathUtil.inputModulus(armEncoder.getPosition(), Constants.Arm.ARM_DICONT_RAD,
               Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI);
   }
 
-    public double getKg() {
-      return 17; //This is a placeholder number
+
+    public void cancelArmCommand() {
+      Command currentArmCommand = getCurrentCommand();
+      currentArmCommand.cancel();
     }
 
     public Translation2d getCoM() {
@@ -114,8 +138,8 @@ public class Arm extends SubsystemBase {
       return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
 
+
     @Override
     public void periodic() {
-      
 		}
 }

@@ -9,6 +9,9 @@ package org.carlmontrobotics;
 import static org.carlmontrobotics.Constants.OI;
 
 import org.carlmontrobotics.commands.ArmTeleop;
+import org.carlmontrobotics.commands.armAmpPos;
+import org.carlmontrobotics.commands.armGroundPos;
+import org.carlmontrobotics.commands.armSpeakerPos;
 import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -46,7 +49,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
 
-    arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm());
+    //arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm());
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,
@@ -67,6 +70,9 @@ public class RobotContainer {
     //3 setpositions of arm on letterpad
     //Up is Speaker, down is ground, right is Amp
     //right joystick used for manual arm control
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armSpeakerPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armAmpPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToGroundButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armGroundPos(arm);}));
   }
 
   public Command getAutonomousCommand() {
