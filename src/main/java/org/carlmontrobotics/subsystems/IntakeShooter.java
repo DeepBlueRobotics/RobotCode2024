@@ -53,11 +53,12 @@ public class IntakeShooter extends SubsystemBase {
 }
     //TODO: this shit is complicated as fuck
     public double calculateDistanceSensorNotes() {
-        double a = 4 * Math.pow(distanceBetweenSensors,2);
-        return 1.2;
+        //aw hell no
+            return Integer.MIN_VALUE;
     }
     @Override
     public void periodic() {
+        
         senseGamePieceStop();
     }
     public void setRPMOutake(double rpm) {
@@ -81,11 +82,21 @@ public class IntakeShooter extends SubsystemBase {
 
     public double calculateDistanceForRPM() {
         //returns specific rpm based off of the distance and angle it is in
-        double angleInDegrees = outakeEncoder.getPosition();
-        double distance = 20; //Add limelight return distance thingy here
-        double surfaceVelocity = 17;
-        return 17; //super cool mathy stuff after tests and distances
-        //Based off of distance it
+        double distance = 30; //This will be the x value returned from lime light
+        
+        double SpeakerHeight = 40; //Use limelight to return y for Speaker Height  Not a constant since the height will change when farther away 
+        double minRPM = Integer.MAX_VALUE;
+        for(int i = 0; i<= 360; i++) {
+            double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
+            double rpm = distance/Math.cos(i)*t;
+            if(rpm<minRPM) {
+                minRPM = rpm;
+            }
+        }
+        if(minRPM == Integer.MAX_VALUE) {
+            System.err.println("FAILURE");
+        }
+        return minRPM;
     }
 
 }

@@ -51,6 +51,7 @@ public final class Constants {
 		public static final int dsPort1 = 10;
          public static final int dsPort2 = 0;
 		 public static final double distanceBetweenSensors = 8.189; //inches
+		 public static final double OFFSETFROMGROUND = 21;
 	}
 
 	public static class ManipulatorButtons{
