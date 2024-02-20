@@ -8,13 +8,16 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
+
+import org.carlmontrobotics.Constants.OI;
 //subsystems
-import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Arm;
 //import org.carlmontrobotics.subsystems.Drivetrain;
+import org.carlmontrobotics.subsystems.IntakeShooter;
 
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 
 //commands
@@ -30,8 +33,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  private final IntakeShooter intakeShooter = new IntakeShooter();
   private final Arm arm = new Arm(); 
+  IntakeShooter intakeShooter = new IntakeShooter();
   //private final Drivetrain drivetrain = new Drivetrain();  
 
   //1. using GenericHID allows us to use different kinds of controllers
@@ -67,8 +70,10 @@ public class RobotContainer {
   //Xbox right bumper button -> Amp (arm position)
   //Xbox A button -> Eject 
   //Xbox X button -> Shoot
-
-
+    new JoystickButton(driverController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
+    new JoystickButton(driverController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
+    new JoystickButton(driverController, Button.kRightBumper.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
+    new JoystickButton(driverController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake(4000)));
  
   }
 

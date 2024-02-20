@@ -40,32 +40,17 @@ public final class Constants {
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 		
 	}
-	public static final class IntakeShooter {
+	public static final class Shooter {
 		//PID values
-		public final double[] shooterPID = new double[] {.1,0,0};
-		//PID/FeedForward values
-		public final static double kS = 1.0851;
-            public static final double kV = 0.066742;
-            public static final double kA = 0.0076259;
-            
-            public static final int dsPort1 = 10;
-            public static final int dsPort2 = 0;
-
-		public static final double idleSpeed = 0;
-		public static final double intakeSpeed = .7;
-
-		public static final double ampRPM = 1;
-		public static final double speakerRPM = 1;
-		//2 different rpms for 2 arm scoring positions (armAmpPos, armSpeakerPos)
-		//change these values as needed later
-		public static final double intakeRPM = 4000;
-		public static final int OuttakePort = 17;
-		public static final int IntakePort = 1;
-		public static final double kP = 0.00014312;
-    	public static final double kD = 0;
-    	public static final double kI = 0;
-		public static final int beamBreakPort = 11;
-		public static final int distSensorPort = 12;
+		public static final double kP = 0.0001;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kS = 0.29753;
+        public static final double kV = 0.077913;
+        public static final double kA = 0.05289;
+		public static final int dsPort1 = 10;
+         public static final int dsPort2 = 0;
+		 public static final double distanceBetweenSensors = 8.189; //inches
 	}
 
 	public static class ManipulatorButtons{
