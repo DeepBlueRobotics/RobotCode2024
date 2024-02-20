@@ -43,7 +43,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(LEFT_MOTOR_PORT,MotorConfig.NEO);
     //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
-    //there is only one arm motor. 
+    //there is only one arm motor
+    //test
+
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final SparkPIDController armPID = armMotor1.getPIDController();
@@ -52,7 +54,7 @@ public class Arm extends SubsystemBase {
       new TrapezoidProfile.State(Constants.Arm.ampAngle, 0),  
       new TrapezoidProfile.State(Constants.Arm.speakerAngle, 0),
     };
-   
+    
     TrapezoidProfile profile = new TrapezoidProfile(Constants.Arm.trapConstraints);
     
     public Arm() {
