@@ -13,6 +13,7 @@ import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,31 +21,96 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import static edu.wpi.first.units.MutableMeasure.mutable;
 
 
 
-public class Arm extends SubsystemBase {
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(LEFT_MOTOR_PORT,MotorConfig.NEO);
-    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
-    //there is only one arm motor. 
-    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
-    private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+
+public class Arm extends SubsystemBase { 
     private final PIDController armPID = new PIDController(kP, kI, kD);
     public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(Math.toRadians(43), 0) };
     private Timer armTimer = new Timer();
     TrapezoidProfile.Constraints constraints =new TrapezoidProfile.Constraints(kMaxV, kMaxA);
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(Constants.Arm.LEFT_MOTOR_PORT,MotorConfig.NEO);
+    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
+    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(Constants.Arm.kS, Constants.Arm.kV);
+    private final SparkAbsoluteEncoder armEncoder1 = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final SparkAbsoluteEncoder armEncoder2 = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+
+    private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
+    private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
+      
+    public void driveMotor(Measure<Voltage> volts) {
+        armMotor1.setVoltage(volts.in(Volts));
+        armMotor2.setVoltage(volts.in(Volts));
+    }
+
+    public void logMotor(SysIdRoutineLog log) {
+        log.motor("Arm1-motor")
+        //log.motor("Arm2-motor")
+                .voltage(voltage.mut_replace(
+                       armMotor1.getBusVoltage() * armMotor1.getAppliedOutput(),
+                        Volts))
+                .angularVelocity(velocity.mut_replace(
+                        armEncoder1.getVelocity() / 60,
+                        RotationsPerSecond))
+                .angularPosition(distance.mut_replace(
+                        armEncoder1.getPosition(),
+                        Rotations));
+    }
+    public void logMotor2(SysIdRoutineLog log) {
+      log.motor("Arm2-motor")
+              .voltage(voltage.mut_replace(
+                     armMotor2.getBusVoltage() * armMotor2.getAppliedOutput(),
+                      Volts))
+              .angularVelocity(velocity.mut_replace(
+                      armEncoder2.getVelocity() / 60,
+                      RotationsPerSecond))
+              .angularPosition(distance.mut_replace(
+                      armEncoder2.getPosition(),
+                      Rotations));
+  }
+
+    private final SysIdRoutine routine = new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                    this::driveMotor,
+                    this::logMotor,
+                    //this::logMotor2,
+                    this));
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return routine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return routine.dynamic(direction);
+    }
+
 
     TrapezoidProfile profile = new TrapezoidProfile(constraints);
 
@@ -65,7 +131,7 @@ public class Arm extends SubsystemBase {
     }
 
     public double getArmPos() {
-      return MathUtil.inputModulus(armEncoder.getPosition(), Constants.Arm.ARM_DICONT_RAD,
+      return MathUtil.inputModulus(armEncoder1.getPosition(), Constants.Arm.ARM_DICONT_RAD,
               Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI);
     } 
 
@@ -81,7 +147,7 @@ public class Arm extends SubsystemBase {
     }
 
     public double getArmVel() {
-      return armEncoder.getVelocity();
+      return armEncoder1.getVelocity();
     }
 
     public void driveArm(TrapezoidProfile.State state) {

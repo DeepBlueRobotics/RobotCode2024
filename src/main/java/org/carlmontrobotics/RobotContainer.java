@@ -8,12 +8,13 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
+import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class RobotContainer {
   //defaultCommands: elevator, dt
@@ -34,7 +36,6 @@ public class RobotContainer {
   //2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(OI.Driver.port);
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
-
 	public Arm arm = new Arm();
 
   public RobotContainer() {
@@ -42,6 +43,10 @@ public class RobotContainer {
     setDefaultCommands();
     setBindingsDriver();
     setBindingsManipulator();
+    new JoystickButton(manipulatorController, Button.kY.value).whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    new JoystickButton(manipulatorController, Button.kA.value).whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    new JoystickButton(manipulatorController, Button.kB.value).whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    new JoystickButton(manipulatorController, Button.kX.value).whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void setDefaultCommands() {
