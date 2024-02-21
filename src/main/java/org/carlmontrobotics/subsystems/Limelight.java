@@ -40,14 +40,17 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
     //tracking();
     SmartDashboard.putNumber("angle offset", calcAngleOffset());
-    for(double value:botPose){
-      System.out.println(value);
+    // for(double value:botPose){
+    //   System.out.println(value);
+    // }
+    for(int i=0; i<7; i++){
+      System.out.println(botPose[i]);
     }
-    for(double value:targetPose){
-      System.out.println(value);
-    }
-    System.out.println(LimelightHelpers.getBotPose("limelight"));
-    System.out.println(LimelightHelpers.getTargetPose_RobotSpace("limelight"));
+    // for(double value:targetPose){
+    //   System.out.println(value);
+    // }
+    // System.out.println(LimelightHelpers.getBotPose("limelight"));
+    // System.out.println(LimelightHelpers.getTargetPose_RobotSpace("limelight"));
   }
 
   public double calcAngleOffset(){
