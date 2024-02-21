@@ -193,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
                     .voltage(m_appliedVoltage[id+4].mut_replace(
                             //^because drivemotors take up the first 4 slots of the unit holders
                             turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(turnEncoders[id].getPositionSinceBoot().getValue(), Rotations))
+                    .angularPosition(m_revs[id].mut_replace(turnEncoders[id].getPosition().getValue(), Rotations))
                     .angularVelocity(m_revs_vel[id].mut_replace(turnEncoders[id].getVelocity().getValueAsDouble(), RotationsPerSecond)),
                 this
             )
