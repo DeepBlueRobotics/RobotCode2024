@@ -47,6 +47,7 @@ public class Limelight extends SubsystemBase {
       System.out.println(value);
     }
     System.out.println(LimelightHelpers.getBotPose("limelight"));
+    System.out.println(LimelightHelpers.getTargetPose_RobotSpace("limelight"));
   }
 
   public double calcAngleOffset(){
