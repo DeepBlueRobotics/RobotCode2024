@@ -57,8 +57,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
@@ -117,7 +117,8 @@ public class Drivetrain extends SubsystemBase {
     private SendableChooser<SysIdTest> sysIdChooser = new SendableChooser<>();
 
     //ROUTINES FOR SYSID
-    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
+    //private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config();
     //DRIVE
     private void motorLogShort_drive(SysIdRoutineLog log, int id){
         String name = new String[] {"fl","fr","bl","br"}[id];
@@ -184,15 +185,16 @@ public class Drivetrain extends SubsystemBase {
     );
     private SysIdRoutine sysidroutshort_turn(int id, String logname){
         return new SysIdRoutine(
-            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(3)), 
+            new SysIdRoutine.Config(),
+//            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(3)), 
             new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
                 log -> log.motor(logname+"_turn")
                     .voltage(m_appliedVoltage[id+4].mut_replace(
                             //^because drivemotors take up the first 4 slots of the unit holders
                             turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(Units.rotationsToDegrees(turnEncoders[id].getPositionSinceBoot().getValue()), Degrees))
-                    .angularVelocity(m_revs_vel[id].mut_replace(Units.rotationsToDegrees(turnEncoders[id].getVelocity().getValueAsDouble()), DegreesPerSecond)),
+                    .angularPosition(m_revs[id].mut_replace(turnEncoders[id].getPositionSinceBoot().getValue(), Rotations))
+                    .angularVelocity(m_revs_vel[id].mut_replace(turnEncoders[id].getVelocity().getValueAsDouble(), RotationsPerSecond)),
                 this
             )
         );
@@ -370,8 +372,8 @@ public class Drivetrain extends SubsystemBase {
                 m_distance[i] = mutable(Meters.of(0));
                 m_velocity[i] = mutable(MetersPerSecond.of(0));
 
-                m_revs[i] = mutable(Degrees.of(0));
-                m_revs_vel[i] = mutable(DegreesPerSecond.of(0));
+                m_revs[i] = mutable(Rotations.of(0));
+                m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
             }
 
             SmartDashboard.putNumber("Desired Angle", 0);
@@ -561,11 +563,11 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
-        moduleFL.periodic();
-        // for (SwerveModule module : modules)
-        //     module.periodic();
+        moduleFR.periodic();
+        // // for (SwerveModule module : modules)
+        // //     module.periodic();
         double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0);
-        moduleFL.move(0, desiredGoal);
+        moduleFR.move(0.0000000000000000001, desiredGoal);
 
         // Update the odometry with current heading and encoder position
         odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
@@ -586,9 +588,9 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
         // gyro.isMagneticDisturbance());
         SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-        // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-        // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-        // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+        SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+        SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+        SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 
     }
 
