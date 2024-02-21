@@ -5,7 +5,10 @@ import org.carlmontrobotics.Constants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,23 +17,36 @@ public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
   private final SwerveDrivePoseEstimator poseEstimator;
   private double tv, tx;
+  private double[] botPose = null;
+  private double[] targetPose = null;
 
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
 
   public Limelight(Drivetrain drivetrain) {
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     this.drivetrain = drivetrain;
     poseEstimator = new SwerveDrivePoseEstimator(
       drivetrain.getKinematics(), 
       Rotation2d.fromDegrees(drivetrain.getHeading()), 
       drivetrain.getModulePositions(), 
       new Pose2d());
+    
+    botPose = table.getEntry("botpose_wpiblue").getDoubleArray(new double[7]);
+    targetPose = table.getEntry("targetpose_robotspace").getDoubleArray(new double[7]);
   }
 
   @Override
   public void periodic() {
     //tracking();
     SmartDashboard.putNumber("angle offset", calcAngleOffset());
+    for(double value:botPose){
+      System.out.println(value);
+    }
+    for(double value:targetPose){
+      System.out.println(value);
+    }
+    System.out.println(LimelightHelpers.getBotPose("limelight"));
   }
 
   public double calcAngleOffset(){
@@ -55,4 +71,13 @@ public class Limelight extends SubsystemBase {
     tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     return tx;
   }
+
+  public Pose2d getTargetPose() {
+    double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
+    return LimelightHelpers.toPose2D(poseArray);
+  }
+
+  // public double getDistanceApriltag(){
+  //   return ()/(2*Math.tan((ta)/(2*)));
+  // }
 }

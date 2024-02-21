@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 public class RotateToAlign extends Command {
-  private boolean finished;
+  //private boolean finished;
   private final Drivetrain drivetrain;
   private final Limelight limelight;
   //private final Pose2d target;
