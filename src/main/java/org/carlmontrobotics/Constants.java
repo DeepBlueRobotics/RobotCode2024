@@ -72,6 +72,7 @@ public final class Constants {
 	}
 	
 	public static final class OI {
+		public static final double JOY_THRESH = 0.01;
         public static final class Driver {
             public static final int port = 0;
         }
