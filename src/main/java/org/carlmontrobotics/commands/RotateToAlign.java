@@ -33,7 +33,7 @@ public class RotateToAlign extends Command {
 
   @Override
   public void execute() {
-    if (limelight.getTv() == 1.0){
+    if (LimelightHelpers.getTV("limelight")){
       //new SequentialCommandGroup(new Eject(outtake), new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(limelight.calcAngleOffset()), drivetrain);)
       new RotateToFieldRelativeAngle(angle, drivetrain);
     }
@@ -45,6 +45,7 @@ public class RotateToAlign extends Command {
 
   @Override
   public boolean isFinished() {
+    //is this even necessary??
     return limelight.isAligned(limelight.calcAngleOffset());
   }
 }

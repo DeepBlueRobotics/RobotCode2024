@@ -19,12 +19,12 @@ public class Limelight extends SubsystemBase {
   private double tv, tx;
   private double[] botPose = null;
   private double[] targetPose = null;
+  private Pose3d botpose;
 
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
 
   public Limelight(Drivetrain drivetrain) {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     this.drivetrain = drivetrain;
     poseEstimator = new SwerveDrivePoseEstimator(
       drivetrain.getKinematics(), 
@@ -32,30 +32,23 @@ public class Limelight extends SubsystemBase {
       drivetrain.getModulePositions(), 
       new Pose2d());
     
-    botPose = table.getEntry("botpose_wpiblue").getDoubleArray(new double[7]);
-    targetPose = table.getEntry("targetpose_robotspace").getDoubleArray(new double[7]);
+    botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[7]);
+    //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
   }
 
   @Override
   public void periodic() {
-    //tracking();
-    SmartDashboard.putNumber("angle offset", calcAngleOffset());
-    // for(double value:botPose){
-    //   System.out.println(value);
-    // }
-    for(int i=0; i<7; i++){
-      System.out.println(botPose[i]);
-    }
-    // for(double value:targetPose){
-    //   System.out.println(value);
-    // }
-    // System.out.println(LimelightHelpers.getBotPose("limelight"));
-    // System.out.println(LimelightHelpers.getTargetPose_RobotSpace("limelight"));
+    updateBotPose3d();
   }
 
   public double calcAngleOffset(){
     //-calculates the angle to turn in degrees
-    return getTx() * (Constants.Limelight.horizontalFOV / Constants.Limelight.resolutionWidth);
+    //if it goes wrong uncomment
+    return LimelightHelpers.getTX("limelight"); //* (Constants.Limelight.horizontalFOV / Constants.Limelight.resolutionWidth);
+  }
+
+  public void updateBotPose3d(){
+    botpose = LimelightHelpers.getBotPose3d("limelight");
   }
 
   public boolean isAligned(double distance){
@@ -66,22 +59,41 @@ public class Limelight extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
-  public double getTv(){
-    tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    return tv;
-  }
-
-  public double getTx(){
-    tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    return tx;
-  }
-
-  public Pose2d getTargetPose() {
-    double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
-    return LimelightHelpers.toPose2D(poseArray);
-  }
-
-  // public double getDistanceApriltag(){
-  //   return ()/(2*Math.tan((ta)/(2*)));
+  // public Pose3d getTargetPose() {
+  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
+  //   return LimelightHelpers.toPose3D(poseArray);
   // }
+
+  // public double distanceToTargetmath(Pose3d target){
+  //   return(6.5 inches)/2 x tan(2 * 320 pixels)
+  //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
+  // }
+
+  public double distanceToTargetSpeaker(){
+    if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
+      double angleToGoalRadians = (Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight")) * (Math.PI/180);
+      return (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+    }
+    else return -1;
+  }
+
+    // public double distanceToTargetxyz(){
+  //   if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
+  //     Pose3d target = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+  //     return Math.sqrt(target.getX() * target.getX() + target.getY() * target.getY() + target.getZ() * target.getZ());
+  //   }
+  //   else{
+  //     return 0;
+  //   }
+  // }
+
+  /*TODO
+  constants:
+  horizontalFOV
+
+  functions:
+  test distanceToTargetxyz and distanceToTargetSpeakerCenter
+  getBotpose3d vs getCurrentPose
+
+  */
 }

@@ -179,8 +179,13 @@ public final class Constants {
 	}
 	public static final class Limelight {
 		public static final double errorTolerance = 0.1;
-		public static final double horizontalFOV = 69.69;
+		public static final double horizontalFOV = 0;
 		public static final double resolutionWidth = 320;
+		public static final double mountAngleDeg = 70;
+		public static final double heightFromGroundMeters = 10.323;
+		public static final class Apriltag {
+			public static final double speakerCenterHeightMeters = 1.317625;
+		}
 	}
 
 	public static final class OI {
