@@ -65,17 +65,17 @@ public final class Constants {
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
-			public static final double[] turnkP = {59.719,59.719,0,0}; //{0.00374, 0.00374, 0.00374, 0.00374};
+			public static final double[] turnkP = {54.896,59.719,0,0}; //{0.00374, 0.00374, 0.00374, 0.00374};
 			public static final double[] turnkI = {0, 0, 0, 0};
-			public static final double[] turnkD = {1, 1, 0, 0}; // todo: use d
+			public static final double[] turnkD = {5.176, 1, 0, 0}; // todo: use d
 			//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
-			public static final double[] turnkS = {0, 0.067762, 0, 0};
+			public static final double[] turnkS = {0.148, 0.067762, 0, 0};
 
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
 			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
-			public static final double[] turnkV = {2.5766, 2.6727, 0.00463, 0.00463};
-			public static final double[] turnkA = {0.50617, 0.17318, 0.000115, 0.000115};
+			public static final double[] turnkV = {2.746, 2.6727, 0.00463, 0.00463};
+			public static final double[] turnkA = {0.268, 0.17318, 0.000115, 0.000115};
 
 			// kP is an average of the forward and backward kP values
 			// Forward: 1.72, 1.71, 1.92, 1.94
@@ -118,20 +118,20 @@ public final class Constants {
 
 			//#region Ports
 
-			public static final int driveFrontLeftPort = 11; //correct
-			public static final int driveFrontRightPort = 16; // correct
-			public static final int driveBackLeftPort = 20; //correct
-			public static final int driveBackRightPort = 18; //correct
+			public static final int driveFrontLeftPort = 8; //correct
+			public static final int driveFrontRightPort = 13; // correct	
+			public static final int driveBackLeftPort = 5; //correct
+			public static final int driveBackRightPort = 11; //correct
 
-			public static final int turnFrontLeftPort = 12; //cprrect
+			public static final int turnFrontLeftPort = 7; //cprrect
 			public static final int turnFrontRightPort = 14; //correct
-			public static final int turnBackLeftPort = 1; //correct
-			public static final int turnBackRightPort = 19; //correct
+			public static final int turnBackLeftPort = 6; //correct
+			public static final int turnBackRightPort = 12; //correct
 
-			public static final int canCoderPortFL = 0;
-			public static final int canCoderPortFR = 3;
-			public static final int canCoderPortBL = 2;
-			public static final int canCoderPortBR = 1;
+			public static final int canCoderPortFL = 1;
+			public static final int canCoderPortFR = 2;
+			public static final int canCoderPortBL = 3;
+			public static final int canCoderPortBR = 4;
 
 			//#endregion
 

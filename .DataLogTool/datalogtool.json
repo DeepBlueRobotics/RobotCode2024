@@ -1,5 +1,9 @@
 {
   "download": {
+    "localDir": "C:\\Users\\Deep Blue\\Desktop\\SysID Files",
     "serverTeam": "199"
+  },
+  "output": {
+    "outputFolder": "C:\\Users\\Deep Blue\\Desktop\\SysID Files"
   }
 }

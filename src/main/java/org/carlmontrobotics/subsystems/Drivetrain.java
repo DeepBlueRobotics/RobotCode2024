@@ -563,16 +563,15 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
-        moduleFR.periodic();
+        moduleFL.periodic(); //this
         // // for (SwerveModule module : modules)
         // //     module.periodic();
-        double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0);
-        moduleFR.move(0.0000000000000000001, desiredGoal);
+        double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
+        moduleFL.move(0.0000000000000000001, desiredGoal); //this
 
         // Update the odometry with current heading and encoder position
-        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-
-        autoCancelDtCommand();
+        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
+        autoCancelDtCommand(); //this
 
         // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
         // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
