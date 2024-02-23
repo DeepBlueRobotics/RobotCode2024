@@ -117,7 +117,7 @@ public class IntakeShooter extends SubsystemBase {
     public void shoot(double distance) {
         double rpm = calculateDistanceForRPM();
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
-        // To be implemented
+        //TODO: To be implemented
     }
 
     public void stopOutake() {
@@ -126,6 +126,12 @@ public class IntakeShooter extends SubsystemBase {
 
     public void stopIntake() {
         pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
+    }
+    public void setRPMEjectOutake() {
+        pidControllerOutake.setReference(-3000, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(-3000));
+    }
+    public void setRPMEjectIntake() {
+        pidControllerOutake.setReference(3000, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(3000));
     }
 
     public double calculateDistanceForRPM() {

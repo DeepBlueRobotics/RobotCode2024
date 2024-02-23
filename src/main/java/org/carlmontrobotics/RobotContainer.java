@@ -15,6 +15,8 @@ import org.carlmontrobotics.subsystems.Arm;
 //import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
+
+
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.StadiaController.Button;
@@ -26,6 +28,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import org.carlmontrobotics.commands.IntakeRPM;
+import org.carlmontrobotics.commands.ShootAmpRPM;
+import org.carlmontrobotics.commands.ShootSpeakerRPM;
+import org.carlmontrobotics.commands.EjectRPM;
+
+
+
 
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -64,16 +73,37 @@ public class RobotContainer {
   
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands 
-
+  
+  //old bindings 
   //Xbox right trigger axis -> Speaker (arm position)
   //Xbox left trigger axis -> Intake
   //Xbox right bumper button -> Amp (arm position)
   //Xbox A button -> Eject 
   //Xbox X button -> Shoot
-    new JoystickButton(driverController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
-    new JoystickButton(driverController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
-    new JoystickButton(driverController, Button.kX.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
-    new JoystickButton(driverController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake(4000)));
+
+  //NEW BINDINGS(easier for manipulator)
+  //Xbox right trigger axis -> Shoot
+  //Xbox left trigger axis -> Intake
+  //Xbox right bumper button -> Speaker (arm position)
+  //Xbox left bumper button -> Amp (arm position)
+  //Xbox X button -> Intake(arm position)
+  //Xbox A button -> Eject
+    
+    /*/TODO: look over new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new IntakeRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootAmpRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootSpeakerRPM(intakeShooter));/*/ 
+
+
+
+    //Intake(placeholder)
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
+    //Speaker and amp(placeholder)
+    new JoystickButton(manipulatorController, Button.kRightBumper.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
+    new JoystickButton(manipulatorController, Button.kRightBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopOutake()));    
+    //Eject
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectOutake()));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectIntake()));
  
   }
 
