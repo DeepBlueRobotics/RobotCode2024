@@ -39,6 +39,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     distanceToTargetSpeaker();
+    getCurrentPose();
   }
 
   public double calcAngleOffset(){
@@ -56,6 +57,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public Pose2d getCurrentPose(){
+    System.out.println(poseEstimator.getEstimatedPosition());
     return poseEstimator.getEstimatedPosition();
   }
 
@@ -94,10 +96,10 @@ public class Limelight extends SubsystemBase {
 
   /*TODO
   constants:
-  horizontalFOV
+  done!
+  (CHANGE ALL CONSTANTS IF OTHER CHANGES ARE MADE)
 
   functions:
-  test distanceToTargetxyz and distanceToTargetSpeakerCenter
   getBotpose3d vs getCurrentPose
 
   */
