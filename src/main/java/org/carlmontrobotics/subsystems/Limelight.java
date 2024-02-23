@@ -38,7 +38,7 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updateBotPose3d();
+    distanceToTargetSpeaker();
   }
 
   public double calcAngleOffset(){
@@ -72,9 +72,14 @@ public class Limelight extends SubsystemBase {
   public double distanceToTargetSpeaker(){
     if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
       double angleToGoalRadians = (Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight")) * (Math.PI/180);
-      return (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+      SmartDashboard.putNumber("limelight distance", distance);
+      return distance;
     }
-    else return -1;
+    else{
+      SmartDashboard.putNumber("limelight distance", -1);
+      return -1;
+    }
   }
 
     // public double distanceToTargetxyz(){
