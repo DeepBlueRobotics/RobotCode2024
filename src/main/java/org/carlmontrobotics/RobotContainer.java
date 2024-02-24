@@ -89,9 +89,15 @@ public class RobotContainer {
   //Xbox X button -> Intake(arm position)
   //Xbox A button -> Eject
     
-    /*/TODO: look over new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new IntakeRPM(intakeShooter));
+    /*/TODO: 
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootAmpRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootSpeakerRPM(intakeShooter));/*/ 
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootSpeakerRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter, intakeShooter));
+    /*/ 
+   
+    
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
+    //============================================================================================================
 
 
 
