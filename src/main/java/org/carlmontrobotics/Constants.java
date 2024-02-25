@@ -65,17 +65,17 @@ public final class Constants {
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
-			public static final double[] turnkP = {51,0,0,0}; //{0.00374, 0.00374, 0.00374, 0.00374};
+			public static final double[] turnkP = {51.078,60.885,59.946,51.986}; //{0.00374, 0.00374, 0.00374, 0.00374};
 			public static final double[] turnkI = {0, 0, 0, 0};
-			public static final double[] turnkD = {1.5, 0, 0, 0}; // todo: use d
+			public static final double[] turnkD = {1, 1, 1, 1}; // todo: use d
 			//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
-			public static final double[] turnkS = {0.148, 0.067762, 0, 0};
+			public static final double[] turnkS = {0.13027, 0.17026, 0.2, 0.23262};
 
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
-			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
-			public static final double[] turnkV = {2.746, 2.6727, 0.00463, 0.00463};
-			public static final double[] turnkA = {0.268, 0.17318, 0.000115, 0.000115};
+			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s	
+			public static final double[] turnkV = {2.6532, 2.7597, 2.7445, 2.7698};
+			public static final double[] turnkA = {0.17924, 0.65478, 0.53999, 0.20192};
 
 			// kP is an average of the forward and backward kP values
 			// Forward: 1.72, 1.71, 1.92, 1.94
@@ -84,7 +84,7 @@ public final class Constants {
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {false, false, false, false};
-			public static final boolean[] turnInversion = {true, true, false, false};
+			public static final boolean[] turnInversion = {true, true, true, true};
 
 			public static final double[] kForwardVolts = drivekI;
 			public static final double[] kBackwardVolts = drivekI;

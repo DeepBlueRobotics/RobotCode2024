@@ -312,6 +312,8 @@ public class Drivetrain extends SubsystemBase {
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d());
+        
+        SmartDashboard.putNumber("biggoal", 0);
 
 
         // SysId Setup
@@ -377,6 +379,8 @@ public class Drivetrain extends SubsystemBase {
             }
 
             SmartDashboard.putNumber("Desired Angle", 0);
+
+            SmartDashboard.putNumber("kS", 0);
         }
     }
 
@@ -563,33 +567,44 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
-        moduleFL.periodic(); //this
-        // // for (SwerveModule module : modules)
+        //turnMotors[2].setVoltage(SmartDashboard.getNumber("kS", 0));
+        //moduleFL.periodic();
+        moduleFR.periodic(); //this
+        //moduleBL.periodic();
+        //moduleBR.periodic();
+        // // double goal = SmartDashboard.getNumber("bigoal", 0);
+        // // for (SwerveModule module : modules) {
         // //     module.periodic();
+        // //     module.move(0, goal);
+        // // }
+        
+        
         double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
-        moduleFL.move(0.0000000000000000001, desiredGoal); //this
+        moduleFR.move(0.0000000000000000001, desiredGoal);
+        //moduleFL.move(0.0000000000000000001, desiredGoal);
+        //moduleBL.move(0.0000000000000000001, desiredGoal);
+        //moduleBR.move(0.0000000000000000001, desiredGoal);
+        // // // Update the odometry with current heading and encoder position
+        // odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
+        // autoCancelDtCommand(); //this
 
-        // Update the odometry with current heading and encoder position
-        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
-        autoCancelDtCommand(); //this
-
-        // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-        // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
-        // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
-        // // SmartDashboard.putNumber("Roll", gyro.getRoll());
-        // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
-        // SmartDashboard.putNumber("Robot Heading", getHeading());
-        // // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
-        // // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
-        // SmartDashboard.putBoolean("Field Oriented", fieldOriented);
-        // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
-        // SmartDashboard.putNumber("Compass Offset", compassOffset);
-        // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
-        // gyro.isMagneticDisturbance());
-        SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+        // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
+        // // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
+        // // SmartDashboard.putNumber("Robot Heading", getHeading());
+        // // // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
+        // // // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
+        // // SmartDashboard.putBoolean("Field Oriented", fieldOriented);
+        // // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
+        // // SmartDashboard.putNumber("Compass Offset", compassOffset);
+        // // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
+        // // gyro.isMagneticDisturbance());
+        //SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
         SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-        SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-        SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+         //SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+        // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 
     }
 
