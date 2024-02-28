@@ -52,10 +52,11 @@ public final class Constants {
 		public static final double kD = 0.1;
 		
 		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
-		public static final double COM_ARM_LENGTH_METERS = 1;
-		public static final double ARM_MASS_KG = 1;
+		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
+		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double MAX_FF_VEL = 1; // rot / s
-		public static final double MAX_FF_ACCEL = 1; // rot / s^2
+		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
+		//I assume to max vel and accel are in meters per second
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
 		//Arm buttons
