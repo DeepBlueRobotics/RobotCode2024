@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
@@ -64,6 +65,7 @@ public class Arm extends SubsystemBase {
       SmartDashboard.putNumber("kp", kP);
       SmartDashboard.putNumber("kd", kD);
       SmartDashboard.putNumber("ki", kI);
+      SmartDashboard.putNumber("Shooter RPS", 0);
 
     }
 
@@ -121,8 +123,9 @@ public class Arm extends SubsystemBase {
     }
 
     public void driveArm(TrapezoidProfile.State state) {
-      
 
+      
+      
 
       /*
       ignore this math its wrong as it includes wrist 
@@ -138,8 +141,14 @@ public class Arm extends SubsystemBase {
       
   
   */
-      double armFeedVolts = 0; //<-- similar math to above to get this
-      double armPIDVolts = 0;//<--similar math to 
+      double targetRPS = SmartDashboard.getNumber("Shooter RPS", 0);
+      double feed = armFeed.calculate(targetRPS); 
+      //double armFeedVolts = 0; //<-- similar math to above to get this
+      //double armPIDVolts = 
+      armPID.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
+
+      //pidController.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
+      
       SmartDashboard.putNumber("ArmFeedVolts", armFeedVolts);
       SmartDashboard.putNumber("ArmPIDVolts", armPIDVolts);
       double volts = armFeedVolts + armPIDVolts;
