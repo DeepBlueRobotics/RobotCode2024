@@ -562,28 +562,34 @@ public class Drivetrain extends SubsystemBase {
             this::selector
         );
     }
+    public void keepRotateMotorsAtDegrees(int angle) {
+       for(SwerveModule module : modules) {
+        module.turnPeriodic();
+        module.move(0,angle);
+       }
+    }
 
     @Override
     public void periodic() {
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
         //turnMotors[2].setVoltage(SmartDashboard.getNumber("kS", 0));
-        //moduleFL.periodic();
-        moduleFR.periodic(); //this
-        //moduleBL.periodic();
-        //moduleBR.periodic();
+    //     moduleFL.periodic();
+    // moduleFR.periodic();   
+    //     moduleBL.periodic();
+    //     moduleBR.periodic();
         // // double goal = SmartDashboard.getNumber("bigoal", 0);
         // // for (SwerveModule module : modules) {
-        // //     module.periodic();
+        // //     module.periodic();d
         // //     module.move(0, goal);
         // // }
         
-        
-        double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
-        moduleFR.move(0.0000000000000000001, desiredGoal);
-        //moduleFL.move(0.0000000000000000001, desiredGoal);
-        //moduleBL.move(0.0000000000000000001, desiredGoal);
-        //moduleBR.move(0.0000000000000000001, desiredGoal);
+        keepRotateMotorsAtDegrees(0);
+        // double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
+        // moduleFR.move(0.0000000000000000001, desiredGoal);
+        // moduleFL.move(0.0000000000000000001, desiredGoal);
+        // moduleBL.move(0.0000000000000000001, desiredGoal);
+        // moduleBR.move(0.0000000000000000001, desiredGoal);
         // // // Update the odometry with current heading and encoder position
         // odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
         // autoCancelDtCommand(); //this
@@ -602,7 +608,7 @@ public class Drivetrain extends SubsystemBase {
         // // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
         // // gyro.isMagneticDisturbance());
         //SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-        SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+       // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
          //SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
         // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 

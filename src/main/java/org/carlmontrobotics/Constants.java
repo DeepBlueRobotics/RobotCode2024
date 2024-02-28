@@ -28,8 +28,8 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(16.75);
-			public static final double trackWidth = Units.inchesToMeters(23.75);
+			public static final double wheelBase = Units.inchesToMeters(19.75);
+			public static final double trackWidth = Units.inchesToMeters(28.75);
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
@@ -40,7 +40,7 @@ public final class Constants {
 
 			public static final double driveModifier = 1;
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
-			public static final double mu = 0.7; /* 70/83.2;  */
+			public static final double mu = 0.5; /* 70/83.2;  */
 
 			public static final double NEOFreeSpeed = 5676 * (2 * Math.PI) / 60;    // radians/s
 			// Angular speed to translational speed --> v = omega * r / gearing
@@ -61,13 +61,13 @@ public final class Constants {
 			// Determine correct turnZero constants (FL, FR, BL, BR)
 			public static final double[] turnZeroDeg = RobotBase.isSimulation() ?
 					new double[] {0, 0, 0, 0} :
-					new double[] {-49.96, 64.91, 97.43, -75.72};/*real values here*/
+					new double[] {85.7812, 85.0782 , -96.9433, -162.9492};/*real values here*/
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
-			public static final double[] turnkP = {51.078,60.885,59.946,51.986}; //{0.00374, 0.00374, 0.00374, 0.00374};
+			public static final double[] turnkP = {51.078,60.885,60.946,60.986}; //{0.00374, 0.00374, 0.00374, 0.00374};
 			public static final double[] turnkI = {0, 0, 0, 0};
-			public static final double[] turnkD = {1, 1, 1, 1}; // todo: use d
+			public static final double[] turnkD = {0/*dont edit */, 0.5, 0.42, 1}; // todo: use d
 			//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
 			public static final double[] turnkS = {0.13027, 0.17026, 0.2, 0.23262};
 
@@ -75,7 +75,7 @@ public final class Constants {
 			// 12 = 0.2 + 0.00463 * v
 			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s	
 			public static final double[] turnkV = {2.6532, 2.7597, 2.7445, 2.7698};
-			public static final double[] turnkA = {0.17924, 0.65478, 0.53999, 0.20192};
+			public static final double[] turnkA = {0.17924, 0.17924, 0.17924, 0.17924};
 
 			// kP is an average of the forward and backward kP values
 			// Forward: 1.72, 1.71, 1.92, 1.94

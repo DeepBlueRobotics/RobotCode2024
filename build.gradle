@@ -79,7 +79,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    implementation "com.github.deepbluerobotics:lib199:2024-Beta-SNAPSHOT"
+    implementation "com.github.deepbluerobotics:lib199:3dc0356f5ea971aa24802980371effc7fc2215fc"
 }
 
 test {
