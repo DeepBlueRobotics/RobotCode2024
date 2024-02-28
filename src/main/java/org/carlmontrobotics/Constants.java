@@ -183,6 +183,7 @@ public final class Constants {
 		public static final double resolutionWidth = 320;
 		public static final double mountAngleDeg = 46.2; //70
 		public static final double heightFromGroundMeters = Units.inchesToMeters(9); //10.323
+		public static final double armToOuttakeOffsetDeg= 115;
 		public static final class Apriltag {
 			public static final double speakerCenterHeightMeters = Units.inchesToMeters(56.7); //88.125
 		}
