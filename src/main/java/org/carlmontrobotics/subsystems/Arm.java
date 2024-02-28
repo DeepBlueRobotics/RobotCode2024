@@ -82,18 +82,25 @@ public class Arm extends SubsystemBase {
       */
 	
 
-    public TrapezoidProfile.State calculateSetPoint(double elapsedSeconds,TrapezoidProfile.State setPoint, int goalStateIndex) {
-      return profile.calculate(elapsedSeconds, setPoint, goalState[goalStateIndex]);
+    public TrapezoidProfile.State calculateSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, int goalStateIndex) {
+      return profile.calculate(goalSeconds, currentPoint, goalState[goalStateIndex]);
     }
 
-    public void setArmGoal(double targetPosition, double targetVelocity) {
-      //Sets arm to the optimal angle for amp, speaker and Ground intake | used to score in amp
-      //these values are in constants
-      //pass in where scorign and use switch statement to alternate between each angle needed
+    public void driveArm(double timeToTarget,double targetPosition, double targetVelocity) {
       targetPosition = getArmClampedGoal(targetPosition);
 
-      
+      TrapezoidProfile.State customGoalState = new TrapezoidProfile.State(targetPosition, targetVelocity);
+
+      // customGoalState.calculate(timeToTarget, getCurrentArmState(), customGoalState);
+      profile.calculate(timeToTarget, getCurrentArmState(), customGoalState);
+      //create a custom trapezoidal profile using these
     }
+    public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
+      profile.calculate(timeToTarget, getCurrentArmState(), goalState);
+      //u can use feedforward to find how long it would take to get there
+      //I dont wanna specify it manually :((
+    }
+    
 
     public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
       // feed forward still needs the math part
@@ -123,40 +130,6 @@ public class Arm extends SubsystemBase {
       return armEncoder.getVelocity();
     }
 
-    public void driveArm(TrapezoidProfile.State state) {
-
-      
-      
-
-      /*
-      ignore this math its wrong as it includes wrist 
-        double kgv = getKg();
-        double armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(state.velocity, 0);
-        double armPIDVolts = armPID.calculate(getArmPos(), state.position);
-        if ((getArmPos() > Constants.Arm.UPPER_ANGLE_LIMIT && state.velocity > 0) || 
-            (getArmPos() < Constants.Arm.LOWER_ANGLE_LIMIT && state.velocity < 0)) {
-            armFeedVolts = kgv * getCoM().getAngle().getCos() + armFeed.calculate(0, 0);
-    }
-    double volts = armFeedVolts + armPIDVolts;
-    armMotor1.setVoltage(volts);
-      
-  
-  */
-      double targetRPS = SmartDashboard.getNumber("Shooter RPS", 0);
-      double feed = armFeed.calculate(targetRPS); 
-      
-      //double armFeedVolts = 0; //<-- similar math to above to get this
-      //double armPIDVolts = 
-      armPID.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
-
-      //pidController.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
-      
-      SmartDashboard.putNumber("ArmFeedVolts", armFeedVolts);
-      SmartDashboard.putNumber("ArmPIDVolts", armPIDVolts);
-      double volts =feed + armPIDVolts;
-      SmartDashboard.putNumber("ArmTotalVolts", volts);
-      armMotor1.setVoltage(volts);
-    }
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
       return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DICONT_RAD, Constants.Arm.ARM_DICONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
