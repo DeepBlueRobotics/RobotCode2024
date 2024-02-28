@@ -68,18 +68,18 @@ public class RobotContainer {
 	}
 
 	private void setDefaultCommands() {
-		// drivetrain.setDefaultCommand(new TeleopDrive(
-		// 	drivetrain,
-		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-		// 	(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-		// 	(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
+		drivetrain.setDefaultCommand(new TeleopDrive(
+			drivetrain,
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+			(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
 	}
 
 	private void setBindingsDriver() {
 		// reset field orientation??
-		// new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
-		// 		new InstantCommand(drivetrain::resetFieldOrientation));
+		new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
+				new InstantCommand(drivetrain::resetFieldOrientation));
 		// // toggle orientation plane between field and relative
 		// new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
 		// 		new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
