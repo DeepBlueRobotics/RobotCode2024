@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
-    private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
+    public final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
@@ -32,6 +32,9 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight distanceSenor2 = new TimeOfFlight(dsPort2); // insert
     private double dsDepth = 9.97;
     private double detectDistance = 13;
+	
+	
+	
 
     public IntakeShooter() {
         pidControllerOutake.setP(kP[0]);
@@ -110,9 +113,11 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
     }
 
-    public void setRPMintake() {
-        pidControllerIntake.setReference(-6000, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(-6000));
+    public void setRPMintake(double rpm) {
+        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
     }
+
+
 
     public void shoot(double distance) {
         double rpm = calculateDistanceForRPM();

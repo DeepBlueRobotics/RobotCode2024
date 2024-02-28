@@ -3,24 +3,27 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package org.carlmontrobotics.commands;
+
+import static org.carlmontrobotics.Constants.IntakeShoot.intakeRPM;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class rePosition extends Command {
+public class PassToOutake extends Command {
   private final IntakeShooter intake;
-  public rePosition(IntakeShooter intake) {
+ 
+  public PassToOutake(IntakeShooter intake) {
       this.intake = intake;
-  }
-
-  public rePosition() {
-    this.intake = new IntakeShooter();
-
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
+  public void initialize() 
+  {
+    intake.setRPMintake(intakeRPM);
+  }
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
@@ -32,6 +35,6 @@ public class rePosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !intake.gameDistanceSees1st() && !intake.gameDistanceSees2nd();
   }
 }

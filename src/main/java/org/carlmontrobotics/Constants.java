@@ -4,6 +4,8 @@
 
 package org.carlmontrobotics;
 
+import com.revrobotics.CANSparkBase;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -25,6 +27,7 @@ public final class Constants {
 		public static final double intakeAngle = -.1;
 		public static final double ampAngle = .3;
 		public static final double speakerAngle = .4;
+		
 		//if needed
 		//public static final trapAngle = 80;
 		
@@ -53,6 +56,13 @@ public final class Constants {
          public static final int dsPort2 = 0;
 		 public static final double distanceBetweenSensors = 8.189; //inches
 		 public static final double OFFSETFROMGROUND = 21;
+		 public static final double ampRPM = 1500;
+		 public static final double intakeRPM = -6000;
+		 public
+		 public static final double speakerRPM = 6000;
+		 public static final double outakeRPMtolerance = 10;
+
+		
 	}
 
 	public static class ManipulatorButtons{

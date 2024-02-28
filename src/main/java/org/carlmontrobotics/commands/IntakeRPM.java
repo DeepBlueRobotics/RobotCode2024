@@ -1,5 +1,7 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.IntakeShoot.intakeRPM;
+
 import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
@@ -12,7 +14,7 @@ public class IntakeRPM extends Command {
     }
     @Override
     public void initialize() {
-      intake.setRPMintake();
+      intake.setRPMintake(intakeRPM);
     }
 
   // Called every time the scheduler runs while the command is scheduled.

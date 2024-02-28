@@ -8,6 +8,8 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
+import static org.carlmontrobotics.Constants.IntakeShoot.intakeRPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.speakerRPM;
 
 import org.carlmontrobotics.Constants.OI;
 //subsystems
@@ -15,7 +17,7 @@ import org.carlmontrobotics.subsystems.Arm;
 //import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
-
+import com.revrobotics.CANSparkBase;
 
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
@@ -30,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.carlmontrobotics.commands.IntakeRPM;
 import org.carlmontrobotics.commands.ShootAmpRPM;
-import org.carlmontrobotics.commands.ShootSpeakerRPM;
+import org.carlmontrobotics.commands.ShooterToRPM;
 import org.carlmontrobotics.commands.EjectRPM;
 
 
@@ -42,7 +44,9 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  private final Arm arm = new Arm(); 
+  
+  private final Arm arm = new Arm();
+  
   IntakeShooter intakeShooter = new IntakeShooter();
   //private final Drivetrain drivetrain = new Drivetrain();  
 
@@ -88,11 +92,12 @@ public class RobotContainer {
   //Xbox left bumper button -> Amp (arm position)
   //Xbox X button -> Intake(arm position)
   //Xbox A button -> Eject
+
+  
+  
+    new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new InstantCommand(() -> {intakeShooter.setRPMintake(speakerRPM);}) );
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter, intakeShooter));}
     
-    /*/TODO: 
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootAmpRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new ShootSpeakerRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter, intakeShooter));
     /*/ 
    
     

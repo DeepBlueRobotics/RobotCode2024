@@ -2,17 +2,25 @@ package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
+import org.carlmontrobotics.Constants;
+
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShootSpeakerRPM extends Command {
+public class ShooterToRPM extends Command {
     private final IntakeShooter shooter;
-    public ShootSpeakerRPM(IntakeShooter shooter) {
+    private final RelativeEncoder outakeEncoder;
+    private double outakeRPM;
+    public ShooterToRPM(IntakeShooter shooter, double rpm) {
         this.shooter = shooter;
+        this.outakeEncoder= shooter.outakeEncoder;
+        this.outakeRPM = rpm;
     }
+
     @Override
     public void initialize() {
-      shooter.setRPMOutake(6000);
+      shooter.setRPMOutake(outakeRPM);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,6 +38,7 @@ public class ShootSpeakerRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !shooter.gameDistanceSees1st() && !shooter.gameDistanceSees2nd();
+    return outakeEncoder.getVelocity()<outakeRPM+IntakeShoot.outakeRPMtolerance && outakeRPM-IntakeShoot.outakeRPMtolerance<outakeEncoder.getVelocity();
+    
   }
 }
