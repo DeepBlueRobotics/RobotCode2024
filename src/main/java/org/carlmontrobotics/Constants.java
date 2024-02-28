@@ -58,7 +58,6 @@ public final class Constants {
 		 public static final double OFFSETFROMGROUND = 21;
 		 public static final double ampRPM = 1500;
 		 public static final double intakeRPM = -6000;
-		 public
 		 public static final double speakerRPM = 6000;
 		 public static final double outakeRPMtolerance = 10;
 

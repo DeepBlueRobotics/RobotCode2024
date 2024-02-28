@@ -96,16 +96,15 @@ public class RobotContainer {
   
   
     new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new InstantCommand(() -> {intakeShooter.setRPMintake(speakerRPM);}) );
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter, intakeShooter));}
+    /*/Intake/*/ 
+
+    /*/Shoot/*/ 
+
+    /*/Eject/*/ new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));}
     
+    
+     
     /*/ 
-   
-    
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
-    //============================================================================================================
-
-
-
     //Intake(placeholder)
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
@@ -115,9 +114,8 @@ public class RobotContainer {
     //Eject
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectOutake()));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectIntake()));
- 
-  }
-
+}
+  /*/ 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
@@ -156,4 +154,10 @@ public class RobotContainer {
   private double ProcessedAxisValue(GenericHID hid, Axis axis){
     return inputProcessing(getStickValue(hid, axis));
   }
+
+  // //TODO: delete this after
+  // public Command getAutonomousCommand() {
+  //   // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
+  // }
 }
