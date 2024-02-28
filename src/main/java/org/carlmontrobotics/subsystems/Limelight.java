@@ -96,8 +96,7 @@ public class Limelight extends SubsystemBase {
 
   /*TODO
   constants:
-  done!
-  (CHANGE ALL CONSTANTS IF OTHER CHANGES ARE MADE)
+
 
   functions:
   getBotpose3d vs getCurrentPose
