@@ -61,6 +61,10 @@ public class Arm extends SubsystemBase {
       armPID.setP(Constants.Arm.kP);
       armPID.setI(Constants.Arm.kI);
       armPID.setD(Constants.Arm.kD);
+      SmartDashboard.putNumber("kp", kP);
+      SmartDashboard.putNumber("kd", kD);
+      SmartDashboard.putNumber("ki", kI);
+
     }
 
 			//arm 
@@ -119,6 +123,7 @@ public class Arm extends SubsystemBase {
     public void driveArm(TrapezoidProfile.State state) {
       
 
+
       /*
       ignore this math its wrong as it includes wrist 
         double kgv = getKg();
@@ -153,5 +158,19 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+      kP = SmartDashboard.getNumber("kP", kP);
+      kD = SmartDashboard.getNumber("kD", kD);
+      kI = SmartDashboard.getNumber("kI", kI);
+
+      if (armPID.getP() != kP) {
+          armPID.setP(kP);
+      }
+      if (armPID.getD() != kD) {
+          armPID.setD(kD);
+      }
+      if (armPID.getI() != kI) {
+          armPID.setI(kI);
+      }
+
 		}
 }
