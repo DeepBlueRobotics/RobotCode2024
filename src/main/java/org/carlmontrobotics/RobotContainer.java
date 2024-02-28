@@ -11,7 +11,12 @@ import static org.carlmontrobotics.Constants.OI;
 import static org.carlmontrobotics.Constants.IntakeShoot.intakeRPM;
 import static org.carlmontrobotics.Constants.IntakeShoot.speakerRPM;
 
+import java.util.function.BooleanSupplier;
+
+import org.carlmontrobotics.Constants.IntakeShoot;
+import org.carlmontrobotics.Constants.ManipulatorButtons;
 import org.carlmontrobotics.Constants.OI;
+import org.carlmontrobotics.Constants.OI.Manipulator;
 //subsystems
 import org.carlmontrobotics.subsystems.Arm;
 //import org.carlmontrobotics.subsystems.Drivetrain;
@@ -27,6 +32,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -92,19 +98,34 @@ public class RobotContainer {
   //Xbox left bumper button -> Amp (arm position)
   //Xbox X button -> Intake(arm position)
   //Xbox A button -> Eject
-
+    //BooleanSupplier isIntake = () -> new JoystickButton(manipulatorController, ManipulatorButtons.IntakeButton).getAsBoolean();
+    //BooleanSupplier isShooter = () -> new JoystickButton(manipulatorController, ManipulatorButtons.ShooterButton).getAsBoolean();
   
-  
-    new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new InstantCommand(() -> {intakeShooter.setRPMintake(speakerRPM);}) );
-    /*/Intake/*/ 
+    /*/Intake/*/  
+    /*/axisTrigger(manipulatorController, Axis.kLeftTrigger)
+      .onTrue(new ConditionalCommand(
+        new IntakeRPM(intakeShooter), 
+        isIntake
+      ));/*/ 
 
     /*/Shoot/*/ 
+    /*/axisTrigger(manipulatorController, Axis.kRightTrigger)
+    .onTrue(new ConditionalCommand(
+      new ShooterToRPM(intakeShooter), 
+      isShooter
+    ));/*/ 
 
-    /*/Eject/*/ new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));}
+    /*/Eject/*/ new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
     
-    
+    /*/Amp Shooting/*/ new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new ShootAmpRPM(intakeShooter));}
      
-    /*/ 
+    //private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
+    // TODO Auto-generated method stub
+    //throw new UnsupportedOperationException("Unimplemented method 'axisTrigger'");
+  //}
+
+
+  /*/ 
     //Intake(placeholder)
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
