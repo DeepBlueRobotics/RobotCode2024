@@ -63,6 +63,7 @@ public class Arm extends SubsystemBase {
       armPID.setI(Constants.Arm.kI);
       armPID.setD(Constants.Arm.kD);
       armPID.setFF(kV,0);
+      armPID.setIZone(IZONE); //<-- zero for now
       SmartDashboard.putNumber("kp", kP);
       SmartDashboard.putNumber("kd", kD);
       SmartDashboard.putNumber("ki", kI);
