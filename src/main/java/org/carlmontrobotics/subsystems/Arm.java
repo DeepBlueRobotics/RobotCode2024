@@ -62,6 +62,7 @@ public class Arm extends SubsystemBase {
       armPID.setP(Constants.Arm.kP);
       armPID.setI(Constants.Arm.kI);
       armPID.setD(Constants.Arm.kD);
+      armPID.setFF(kV,0);
       SmartDashboard.putNumber("kp", kP);
       SmartDashboard.putNumber("kd", kD);
       SmartDashboard.putNumber("ki", kI);
@@ -143,6 +144,7 @@ public class Arm extends SubsystemBase {
   */
       double targetRPS = SmartDashboard.getNumber("Shooter RPS", 0);
       double feed = armFeed.calculate(targetRPS); 
+      
       //double armFeedVolts = 0; //<-- similar math to above to get this
       //double armPIDVolts = 
       armPID.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
@@ -151,7 +153,7 @@ public class Arm extends SubsystemBase {
       
       SmartDashboard.putNumber("ArmFeedVolts", armFeedVolts);
       SmartDashboard.putNumber("ArmPIDVolts", armPIDVolts);
-      double volts = armFeedVolts + armPIDVolts;
+      double volts =feed + armPIDVolts;
       SmartDashboard.putNumber("ArmTotalVolts", volts);
       armMotor1.setVoltage(volts);
     }
