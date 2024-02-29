@@ -15,7 +15,6 @@ import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
 import java.util.function.BooleanSupplier;
 
 import org.carlmontrobotics.Constants.IntakeShoot;
-import org.carlmontrobotics.Constants.ManipulatorButtons;
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.Manipulator;
 //subsystems
@@ -27,9 +26,8 @@ import com.revrobotics.CANSparkBase;
 
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -80,13 +78,6 @@ public class RobotContainer {
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands
 
-  //old bindings
-  //Xbox right trigger axis -> Speaker (arm position)
-  //Xbox left trigger axis -> Intake
-  //Xbox right bumper button -> Amp (arm position)
-  //Xbox A button -> Eject
-  //Xbox X button -> Shoot
-
   //NEW BINDINGS(easier for manipulator)
   //Xbox right trigger axis -> Shoot
   //Xbox left trigger axis -> Intake
@@ -94,22 +85,6 @@ public class RobotContainer {
   //Xbox left bumper button -> Amp (arm position)
   //Xbox X button -> Intake(arm position)
   //Xbox A button -> Eject
-    //BooleanSupplier isIntake = () -> new JoystickButton(manipulatorController, ManipulatorButtons.IntakeButton).getAsBoolean();
-    //BooleanSupplier isShooter = () -> new JoystickButton(manipulatorController, ManipulatorButtons.ShooterButton).getAsBoolean();
-
-    /*/Intake/*/
-    /*/axisTrigger(manipulatorController, Axis.kLeftTrigger)
-      .onTrue(new ConditionalCommand(
-        new IntakeRPM(intakeShooter),
-        isIntake
-      ));/*/
-
-    /*/Shoot/*/
-    /*/axisTrigger(manipulatorController, Axis.kRightTrigger)
-    .onTrue(new ConditionalCommand(
-      new ShooterToRPM(intakeShooter),
-      isShooter
-    ));/*/
 
     /*/Eject/*/
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));

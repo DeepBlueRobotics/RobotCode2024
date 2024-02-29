@@ -38,7 +38,7 @@ public class ShooterToRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return outakeEncoder.getVelocity()<outakeRPM+IntakeShoot.outakeRPMtolerance && outakeRPM-IntakeShoot.outakeRPMtolerance<outakeEncoder.getVelocity();
+    return outakeEncoder.getVelocity()<outakeRPM+IntakeShoot.RPM_TOLERANCE && outakeRPM-IntakeShoot.RPM_TOLERANCE<outakeEncoder.getVelocity();
 
   }
 }
