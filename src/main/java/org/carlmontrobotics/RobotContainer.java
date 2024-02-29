@@ -8,8 +8,9 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
-import static org.carlmontrobotics.Constants.IntakeShoot.intakeRPM;
-import static org.carlmontrobotics.Constants.IntakeShoot.speakerRPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.AMP_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
 
 import java.util.function.BooleanSupplier;
 
@@ -36,13 +37,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import org.carlmontrobotics.commands.IntakeRPM;
-import org.carlmontrobotics.commands.ShootAmpRPM;
-import org.carlmontrobotics.commands.ShooterToRPM;
-import org.carlmontrobotics.commands.EjectRPM;
-
-
-
+import org.carlmontrobotics.commands.*;
 
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -54,10 +49,10 @@ public class RobotContainer {
   private final Arm arm = new Arm();
 
   IntakeShooter intakeShooter = new IntakeShooter();
-  //private final Drivetrain drivetrain = new Drivetrain();
+  // private final Drivetrain drivetrain = new Drivetrain();
 
-  //1. using GenericHID allows us to use different kinds of controllers
-  //2. Use absolute paths from constants to reduce confusion
+  // 1. using GenericHID allows us to use different kinds of controllers
+  // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(OI.Driver.port);
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
@@ -70,16 +65,17 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     // drivetrain.setDefaultCommand(new TeleopDrive(
-    //   drivetrain,
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftY)),
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftX)),
-    //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
-    //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
+    // drivetrain,
+    // () -> ProcessedAxisValue(driverController, Axis.kLeftY)),
+    // () -> ProcessedAxisValue(driverController, Axis.kLeftX)),
+    // () -> ProcessedAxisValue(driverController, Axis.kRightX)),
+    // () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
 
-
   }
-  private void setBindingsDriver() {}
+
+  private void setBindingsDriver() {
+  }
 
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands
@@ -120,9 +116,10 @@ public class RobotContainer {
 
     /*/Shooting/*/
     new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new SequentialCommandGroup(
-      new ShooterToRPM(intakeShooter,AMP_RPM),
+      new ShooterToRPM(intakeShooter, AMP_RPM),
       new PassToOutake(intakeShooter)
     ));
+  }
 
     //private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
     // TODO Auto-generated method stub
@@ -147,17 +144,20 @@ public class RobotContainer {
   }
 
   /**
-   * Flips an axis' Y coordinates upside down, but only if the select axis is a joystick axis
+   * Flips an axis' Y coordinates upside down, but only if the select axis is a
+   * joystick axis
    *
-   * @param hid The controller/plane joystick the axis is on
+   * @param hid  The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
    */
   private double getStickValue(GenericHID hid, Axis axis) {
     return hid.getRawAxis(axis.value) * (axis == Axis.kLeftY || axis == Axis.kRightY ? -1 : 1);
   }
+
   /**
-   * Processes an input from the joystick into a value between -1 and 1, sinusoidally instead of linearly
+   * Processes an input from the joystick into a value between -1 and 1,
+   * sinusoidally instead of linearly
    *
    * @param value The value to be processed.
    * @return The processed value.
@@ -170,20 +170,23 @@ public class RobotContainer {
         value);
     return processedInput;
   }
+
   /**
-   * Combines both getStickValue and inputProcessing into a single function for processing joystick outputs
+   * Combines both getStickValue and inputProcessing into a single function for
+   * processing joystick outputs
    *
-   * @param hid The controller/plane joystick the axis is on
+   * @param hid  The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
    */
-  private double ProcessedAxisValue(GenericHID hid, Axis axis){
+  private double ProcessedAxisValue(GenericHID hid, Axis axis) {
     return inputProcessing(getStickValue(hid, axis));
   }
 
   // //TODO: delete this after
   // public Command getAutonomousCommand() {
-  //   // TODO Auto-generated method stub
-  //   throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
+  // // TODO Auto-generated method stub
+  // throw new UnsupportedOperationException("Unimplemented method
+  // 'getAutonomousCommand'");
   // }
 }
