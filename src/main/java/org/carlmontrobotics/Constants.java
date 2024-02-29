@@ -180,7 +180,7 @@ public final class Constants {
 	public static final class Limelight {
 		public static final double errorTolerance = 0.1;
 		public static final double horizontalFOV = 0;
-		public static final double resolutionWidth = 320;
+		public static final double resolutionWidth = 640;
 		public static final double mountAngleDeg = 46.2; //23.228
 		public static final double heightFromGroundMeters = Units.inchesToMeters(9); //16.6
 		public static final double armToOuttakeOffsetDeg= 115;
