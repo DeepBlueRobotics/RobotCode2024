@@ -7,14 +7,10 @@ package org.carlmontrobotics;
 //199 files
 // import org.carlmontrobotics.subsystems.*;
 // import org.carlmontrobotics.commands.*;
-import static org.carlmontrobotics.Constants.OI;
-import static org.carlmontrobotics.Constants.IntakeShoot.AMP_RPM;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
-import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
 import java.util.function.BooleanSupplier;
 
-import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.Manipulator;
 //subsystems

@@ -33,7 +33,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //TODO: see how many distance sensors therre are and modify this
     return intake.gameDistanceSees1st();
   }
 }

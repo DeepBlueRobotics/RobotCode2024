@@ -29,7 +29,7 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private TimeOfFlight distanceSensor = new TimeOfFlight(dsPort1); // make sure id port is correct here
-    private TimeOfFlight distanceSenor2 = new TimeOfFlight(dsPort2); // insert
+    private TimeOfFlight distanceSensor2 = new TimeOfFlight(dsPort2); // insert
     private double dsDepth = 9.97;
     private double detectDistance = 13;
 	
@@ -49,7 +49,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public double getGamePieceDistance2() {
-        return Units.metersToInches((distanceSenor2.getRange() - dsDepth) / 1000);
+        return Units.metersToInches((distanceSensor2.getRange() - dsDepth) / 1000);
     }
 
     public boolean gameDistanceSees1st() {
@@ -115,7 +115,7 @@ public class IntakeShooter extends SubsystemBase {
 
 
     public void shoot(double distance) {
-        double rpm = calculateDistanceForRPM();
+        double rpm = calculateRPMAtDistance();
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
         //TODO: To be implemented
     }
@@ -134,9 +134,9 @@ public class IntakeShooter extends SubsystemBase {
         setRPMintake(3000);
     }
 
-    public double calculateDistanceForRPM() {
+    public double calculateRPMAtDistance() {
         //returns specific rpm based off of the distance and angle it is in
-        double distance = 30; //This will be the x value returned from lime light
+        double distance = 30; //This will be the x value returned from lime light # is place holder for now
         
         double SpeakerHeight = 40; //Use limelight to return y for Speaker Height  Not a constant since the height will change when farther away 
         double minRPM = Integer.MAX_VALUE;
