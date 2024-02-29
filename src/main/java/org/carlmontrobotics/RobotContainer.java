@@ -69,9 +69,9 @@ public class RobotContainer {
 	private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new TeleopDrive(
       drivetrain,
-      (DoubleSupplier) () -> processedAxisValue(driverController, Axis.kLeftY),
-      (DoubleSupplier) () -> processedAxisValue(driverController, Axis.kLeftX),
-      (DoubleSupplier) () -> processedAxisValue(driverController, Axis.kRightX),
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
       (BooleanSupplier)() -> driverController.getRawButton(OI.Driver.slowDriveButton)
     ));
   }
@@ -142,7 +142,7 @@ public class RobotContainer {
 	 * @param axis The processed axis
 	 * @return The processed value.
 	 */
-	private double processedAxisValue(GenericHID hid, Axis axis){
+	private double ProcessedAxisValue(GenericHID hid, Axis axis){
 		return inputProcessing(getStickValue(hid, axis));
   }
 }
