@@ -50,11 +50,11 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  
+
   private final Arm arm = new Arm();
-  
+
   IntakeShooter intakeShooter = new IntakeShooter();
-  //private final Drivetrain drivetrain = new Drivetrain();  
+  //private final Drivetrain drivetrain = new Drivetrain();
 
   //1. using GenericHID allows us to use different kinds of controllers
   //2. Use absolute paths from constants to reduce confusion
@@ -76,19 +76,19 @@ public class RobotContainer {
     //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
     //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
-  
+
 
   }
   private void setBindingsDriver() {}
-  
+
   private void setBindingsManipulator() {
-  //have the trigger and button bindings here call the Intake, Shoot, and Eject commands 
-  
-  //old bindings 
+  //have the trigger and button bindings here call the Intake, Shoot, and Eject commands
+
+  //old bindings
   //Xbox right trigger axis -> Speaker (arm position)
   //Xbox left trigger axis -> Intake
   //Xbox right bumper button -> Amp (arm position)
-  //Xbox A button -> Eject 
+  //Xbox A button -> Eject
   //Xbox X button -> Shoot
 
   //NEW BINDINGS(easier for manipulator)
@@ -100,50 +100,55 @@ public class RobotContainer {
   //Xbox A button -> Eject
     //BooleanSupplier isIntake = () -> new JoystickButton(manipulatorController, ManipulatorButtons.IntakeButton).getAsBoolean();
     //BooleanSupplier isShooter = () -> new JoystickButton(manipulatorController, ManipulatorButtons.ShooterButton).getAsBoolean();
-  
-    /*/Intake/*/  
+
+    /*/Intake/*/
     /*/axisTrigger(manipulatorController, Axis.kLeftTrigger)
       .onTrue(new ConditionalCommand(
-        new IntakeRPM(intakeShooter), 
+        new IntakeRPM(intakeShooter),
         isIntake
-      ));/*/ 
+      ));/*/
 
-    /*/Shoot/*/ 
+    /*/Shoot/*/
     /*/axisTrigger(manipulatorController, Axis.kRightTrigger)
     .onTrue(new ConditionalCommand(
-      new ShooterToRPM(intakeShooter), 
+      new ShooterToRPM(intakeShooter),
       isShooter
-    ));/*/ 
+    ));/*/
 
-    /*/Eject/*/ new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
-    
-    /*/Amp Shooting/*/ new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new ShootAmpRPM(intakeShooter));}
-     
+    /*/Eject/*/
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
+
+    /*/Shooting/*/
+    new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new SequentialCommandGroup(
+      new ShooterToRPM(intakeShooter,AMP_RPM),
+      new PassToOutake(intakeShooter)
+    ));
+
     //private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
     // TODO Auto-generated method stub
     //throw new UnsupportedOperationException("Unimplemented method 'axisTrigger'");
   //}
 
 
-  /*/ 
+  /*/
     //Intake(placeholder)
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
     new JoystickButton(manipulatorController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
     //Speaker and amp(placeholder)
     new JoystickButton(manipulatorController, Button.kRightBumper.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
-    new JoystickButton(manipulatorController, Button.kRightBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopOutake()));    
+    new JoystickButton(manipulatorController, Button.kRightBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopOutake()));
     //Eject
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectOutake()));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectIntake()));
 }
-  /*/ 
+  /*/
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a joystick axis
-   * 
+   *
    * @param hid The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
@@ -153,7 +158,7 @@ public class RobotContainer {
   }
   /**
    * Processes an input from the joystick into a value between -1 and 1, sinusoidally instead of linearly
-   * 
+   *
    * @param value The value to be processed.
    * @return The processed value.
    */
@@ -167,7 +172,7 @@ public class RobotContainer {
   }
   /**
    * Combines both getStickValue and inputProcessing into a single function for processing joystick outputs
-   * 
+   *
    * @param hid The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.

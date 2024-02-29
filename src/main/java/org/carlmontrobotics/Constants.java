@@ -20,48 +20,52 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  */
 public final class Constants {
 	public static final class Drivetrain {}
-	
+
 	public static final class Arm {
-		
+
 		//all angles in rot here
 		public static final double intakeAngle = -.1;
 		public static final double ampAngle = .3;
 		public static final double speakerAngle = .4;
-		
+
 		//if needed
 		//public static final trapAngle = 80;
-		
+
 		//Motor Controllers: pid, FF
 		//PID
 		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
 		//Feed Forward
 		public static final double[] FeedforwardVals = new double[] { /*/kS/*/0.1, /*/kG/*/0.1, /*/kV/*/0.1, /*/kA/*/0.1 };
-	
-		
+
+
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
-		
+
 	}
 	public static final class IntakeShoot {
 		//PID values
 
 		public static final double[] kP = {0.0001,0};
-        public static final double kI = 0;
-        public static final double[] kD = {0,0};
-        public static final double kS = 0.29753;
-        public static final double kV = 0.077913;
-        public static final double kA = 0.05289;
+		public static final double kI = 0;
+		public static final double[] kD = {0,0};
+		public static final double kS = 0.29753;
+		public static final double kV = 0.077913;
+		public static final double kA = 0.05289;
 		public static final int dsPort1 = 10;
-         public static final int dsPort2 = 0;
-		 public static final double distanceBetweenSensors = 8.189; //inches
-		 public static final double OFFSETFROMGROUND = 21;
-		 public static final double ampRPM = 1500;
-		 public static final double intakeRPM = -6000;
-		 public static final double speakerRPM = 6000;
-		 public static final double outakeRPMtolerance = 10;
+		public static final int dsPort2 = 0;
+		public static final double distanceBetweenSensors = 8.189; //inches
+		public static final double OFFSETFROMGROUND = 21;
 
-		
+		public static final double INTAKE_RPM = -6000;
+		public static final double PASS_RPM = 300;
+
+		public static final double AMP_RPM = 1500;
+		public static final double SPEAKER_RPM = 6000;
+
+		public static final double RPM_TOLERANCE = 10;
+
+
 	}
 
 	public static class ManipulatorButtons{
@@ -72,7 +76,7 @@ public final class Constants {
 
 
 	}
-	
+
 	public static final class OI {
         public static final class Driver {
             public static final int port = 0;

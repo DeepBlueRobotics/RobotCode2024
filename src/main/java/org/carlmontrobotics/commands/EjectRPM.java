@@ -6,6 +6,7 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class EjectRPM extends Command {
+    //eject until no more game peice
     private final IntakeShooter intakeShooter;
 
     public EjectRPM(IntakeShooter intakeShooter) {

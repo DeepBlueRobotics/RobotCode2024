@@ -10,11 +10,11 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class PassToOutake extends Command {
-  //pass ring from intake to outtake
+public class PassToIntake extends Command {
+  //pass ring back from outake to intake
   private final IntakeShooter intake;
 
-  public PassToOutake(IntakeShooter intake) {
+  public PassToIntake(IntakeShooter intake) {
       this.intake = intake;
   }
 
@@ -22,8 +22,8 @@ public class PassToOutake extends Command {
   @Override
   public void initialize()
   {
-    intake.setRPMintake(passRPM);
-    intake.setRPMoutake(passRPM);
+    intake.setRPMintake(-passRPM);
+    intake.setRPMoutake(-passRPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +40,6 @@ public class PassToOutake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intake.gameDistanceSees1st() && intake.gameDistanceSees2nd();
+    return intake.gameDistanceSees1st() && !intake.gameDistanceSees2nd();
   }
 }
