@@ -63,27 +63,22 @@ public class IntakeShooter extends SubsystemBase {
     public void senseGamePieceStop() {
         if (gameDistanceSees1st()) {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
-                    feedforward.calculate(-1 / 60));
+                    feedforward.calculate(-1 / 60));//Slows down the motors once the first distance sensor detects the note
             if (gameDistanceSees2nd()) {
-                pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
+                pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));//Stops it when the second distance sensor detects the note
             }
         }
     }
     //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     public double calculateDistanceSensorNotes() {
-        double center = 11.485;
+        double center = 11.485;// center line between the 2 side plates (in)
         double d1 = getGamePieceDistance1();
         double d2 = getGamePieceDistance2();
         double r = 7;
-        //double xm = (0 + distanceBetweenSensors)/2; //X midpoint between 2 points
         double ym = (d1+d2)/2; //Y midpoint between 2 points
-        double m = (0-distanceBetweenSensors)/(d2-d1); // Slope
-        //double h = xm + r * (1/(Math.sqrt(1+Math.pow(m, 2)))); // x cord of center <- currently incorrect, check this link for correct:https://stackoverflow.com/questions/36211171/finding-center-of-a-circle-given-two-points-and-radius 
         double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
         //Take into note that in reality, the 2 points can return 2 possible centers
         return k - center; //<- offset from the center
-        // double a = 4 * Math.pow(distanceBetweenSensors,2); <- for speaker calcs
-        // return 1.2;
     }
 
     public double calculateIntakeAmount(){
@@ -126,17 +121,17 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void stopOutake() {
-        pidControllerOutake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
+        setRPMOutake(0);
     }
 
     public void stopIntake() {
-        pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
+        setRPMintake(0);
     }
     public void setRPMEjectOutake() {
-        pidControllerOutake.setReference(-3000, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(-3000));
+        setRPMOutake(3000);
     }
     public void setRPMEjectIntake() {
-        pidControllerOutake.setReference(3000, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(3000));
+        setRPMintake(3000);
     }
 
     public double calculateDistanceForRPM() {
