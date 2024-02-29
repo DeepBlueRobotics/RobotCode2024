@@ -59,8 +59,8 @@ public final class Constants {
 		public static final double kS = 0.29753;
 		public static final double kV = 0.077913;
 		public static final double kA = 0.05289;
-		public static final int dsPort1 = 10;
-		public static final int dsPort2 = 0;
+		public static final int distanceSensorPort1 = 10;
+		public static final int distanceSensorPort2 = 0;
 		public static final double distanceBetweenSensors = 8.189; // inches
 		public static final double OFFSETFROMGROUND = 21; // in
 

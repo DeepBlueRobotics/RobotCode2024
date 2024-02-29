@@ -28,8 +28,8 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
-    private TimeOfFlight distanceSensor = new TimeOfFlight(dsPort1); // make sure id port is correct here
-    private TimeOfFlight distanceSensor2 = new TimeOfFlight(dsPort2); // insert
+    private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
+    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert
     private double dsDepth = 9.97;
     private double detectDistance = 13;
 	

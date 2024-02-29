@@ -83,19 +83,18 @@ public class RobotContainer {
   //Xbox A button -> Eject
 
     /*/Eject/*/
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new EjectRPM(intakeShooter));
+    new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
 
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, Button.kRightBumper.value).onTrue(new SequentialCommandGroup(
+    //TODO: add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
+    new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).onTrue(new SequentialCommandGroup(
       new ShooterToRPM(intakeShooter, AMP_RPM),
       new PassToOutake(intakeShooter)
     ));
+    // Intake
+    new JoystickButton(manipulatorController, OI.Manipulator.IntakeButton.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
   }
 
-    //private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
-    // TODO Auto-generated method stub
-    //throw new UnsupportedOperationException("Unimplemented method 'axisTrigger'");
-  //}
 
 
   /*/
