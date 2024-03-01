@@ -312,7 +312,7 @@ public class Drivetrain extends SubsystemBase {
                 turnMotor.getEncoder().setAverageDepth(2);
                 turnMotor.getEncoder().setMeasurementPeriod(16);
             }
-            BaseStatusSignal.setUpdateFrequencyForAll(5);
+            BaseStatusSignal.setUpdateFrequencyForAll(4);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
