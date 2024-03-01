@@ -4,11 +4,12 @@ import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 
 public class EjectRPM extends Command {
     //eject until no more game peice
     private final IntakeShooter intakeShooter;
-
+    private final Timer timer = new Timer();
     public EjectRPM(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
     }
@@ -32,6 +33,6 @@ public class EjectRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeShooter.gameDistanceSees1st() && !intakeShooter.gameDistanceSees2nd();
+    return !intakeShooter.gameDistanceSees1st() && !intakeShooter.gameDistanceSees2nd() || timer.hasElapsed(5);
   }
 }
