@@ -12,7 +12,7 @@ import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.commands.armAmpPos;
 import org.carlmontrobotics.commands.armGroundPos;
-import org.carlmontrobotics.commands.armSpeakerPos;
+import org.carlmontrobotics.commands.armPodiumSpeakerPos;
 import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -71,9 +71,17 @@ public class RobotContainer {
     //3 setpositions of arm on letterpad
     //Up is Speaker, down is ground, right is Amp
     //right joystick used for manual arm control
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armSpeakerPos(arm);}));
+
+    // Speaker Buttons
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerPodButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armPodiumSpeakerPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armNextToSpeakerPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armSafeZonePos(arm);}));
+    // Amp and Intake Buttons
     new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armAmpPos(arm);}));
     new JoystickButton(manipulatorController, Constants.Arm.raiseToGroundButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armGroundPos(arm);}));
+    // Cimber Buttons
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToClimberButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armClimberUpPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.lowerToClimberButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armClimberDownPos(arm);}));
   }
 
   public Command getAutonomousCommand() {

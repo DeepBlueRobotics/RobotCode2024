@@ -8,11 +8,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class armSpeakerPos extends Command {
+public class armClimberUpPos extends Command {
   /** Creates a new armPosAmp. */
   private Arm arm;
   private Timer armProfileTimer = new Timer();
-  public armSpeakerPos(Arm arm) {
+  public armClimberUpPos(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
     addRequirements(arm);
@@ -28,7 +28,7 @@ public class armSpeakerPos extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TrapezoidProfile.State setpoint = arm.calculateSetPoint(armProfileTimer.get(), arm.getCurrentArmState(), 2);
+    TrapezoidProfile.State setpoint = arm.calculateSetPoint(armProfileTimer.get(), arm.getCurrentArmState(), 5);
     arm.COMBINE_PID_FF_TRAPEZOID(setpoint);
   }
 

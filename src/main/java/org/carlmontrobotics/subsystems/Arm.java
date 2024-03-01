@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
+
 public class Arm extends SubsystemBase {
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(LEFT_MOTOR_PORT,MotorConfig.NEO);
     //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
@@ -54,7 +55,11 @@ public class Arm extends SubsystemBase {
     public static TrapezoidProfile.State[] goalState = { 
       new TrapezoidProfile.State(Constants.Arm.intakeAngle, 0), 
       new TrapezoidProfile.State(Constants.Arm.ampAngle, 0),  
-      new TrapezoidProfile.State(Constants.Arm.speakerAngle, 0),
+      new TrapezoidProfile.State(Constants.Arm.placeholderSpeakerAngle1, 0),
+      new TrapezoidProfile.State(Constants.Arm.placeholderSpeakerAngle2, 0),
+      new TrapezoidProfile.State(Constants.Arm.placeholderSpeakerAngle3, 0),
+      new TrapezoidProfile.State(Constants.Arm.climberUpAngle, 0),
+      new TrapezoidProfile.State(Constants.Arm.climberDownAngle, 0),
     };
     
     TrapezoidProfile profile = new TrapezoidProfile(Constants.Arm.trapConstraints);
@@ -102,9 +107,8 @@ public class Arm extends SubsystemBase {
 
     public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
       // feed forward still needs the math part
-      double setClampedPointPosition = getArmClampedGoal(setPoint.position);
       double armFeedVolts = armFeed.calculate(setPoint.velocity, 0);
-      armPID.setReference(setClampedPointPosition, CANSparkMax.ControlType.kPosition,0, armFeedVolts);
+      armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition,0, armFeedVolts);
     }
 
     public double getArmPos() {
@@ -131,7 +135,7 @@ public class Arm extends SubsystemBase {
 
     public double getArmClampedGoal(double goal) {
       //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
-      return MathUtil.clamp(goal, Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
+      return MathUtil.clamp(MathUtil.inputModulus(goal, Constants.Arm.ARM_DISCONT_RAD, Constants.Arm.ARM_DISCONT_RAD + 2 * Math.PI), Constants.Arm.LOWER_ANGLE_LIMIT, Constants.Arm.UPPER_ANGLE_LIMIT);
     }
 
     public TrapezoidProfile.State getCurrentArmState() {
@@ -157,9 +161,21 @@ public class Arm extends SubsystemBase {
 
       autoCancelArmCommand();
 
+
+
       // kP = SmartDashboard.getNumber("kP", kP);
       // kD = SmartDashboard.getNumber("kD", kD);
       // kI = SmartDashboard.getNumber("kI", kI);
+
+      if (armPID.getP() != kP) {
+          armPID.setP(kP);
+      }
+      if (armPID.getD() != kD) {
+          armPID.setD(kD);
+      }
+      if (armPID.getI() != kI) {
+          armPID.setI(kI);
+      }
 
 		}
 }

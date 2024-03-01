@@ -33,7 +33,13 @@ public final class Constants {
 		// USE RADIANS FOR THE ARM
 		public static final double intakeAngle = Math.toRadians(0);
 		public static final double ampAngle = Math.toRadians(103);
-		public static final double speakerAngle = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle1 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
+		public static final double climberUpAngle = Math.toRadians(24);
+		public static final double climberDownAngle = Math.toRadians(24);
+
+
 		//if needed
 		public static final double UPPER_ANGLE_LIMIT = Math.toRadians(70); 
 		public static final double LOWER_ANGLE_LIMIT = Math.toRadians(0);
@@ -61,9 +67,13 @@ public final class Constants {
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
 		//Arm buttons
-		public static final int raiseToSpeakerButton = Button.kY.value;
+		public static final int raiseToSpeakerPodButton = Button.kY.value;
 		public static final int raiseToAmpButton = Button.kB.value;
-		public static final int raiseToGroundButton = Button.kA.value;
+		public static final int raiseToSpeakerSafeButton = Button.kA.value;
+		public static final int raiseToSpeakerNextButton = Button.kX.value;
+		public static final int raiseToGroundButton = Button.kStart.value;
+		public static final int raiseToClimberButton = Button.kLeftBumper.value;
+		public static final int lowerToClimberButton = Button.kRightBumper.value;
 	}
 	public static final class IntakeShooter {
 		//in set() speed
