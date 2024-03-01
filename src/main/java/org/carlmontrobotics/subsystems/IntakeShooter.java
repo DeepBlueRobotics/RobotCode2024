@@ -129,10 +129,6 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public double calculateRPMAtDistance() {
-        //returns specific rpm based off of the distance and angle it is in
-        double distance = 30; //This will be the x value returned from lime light # is place holder for now
-        
-        double SpeakerHeight = 40; //Use limelight to return y for Speaker Height  Not a constant since the height will change when farther away 
         double minRPM = Integer.MAX_VALUE;
         for(int i = 0; i<= 360; i++) {
             double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
