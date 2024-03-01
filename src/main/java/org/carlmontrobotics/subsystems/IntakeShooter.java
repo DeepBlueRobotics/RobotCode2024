@@ -30,11 +30,7 @@ public class IntakeShooter extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
     private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert
-    private double dsDepth = 9.97;
-    private double detectDistance = 13;
-	
-	
-	
+
 
     public IntakeShooter() {
         pidControllerOutake.setP(kP[0]);
