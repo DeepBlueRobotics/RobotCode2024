@@ -25,30 +25,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 	public static final class Drivetrain {
 	}
-
-	public static final class Arm {
-
-		// all angles in rot here
-		public static final double intakeAngle = -.1;
-		public static final double ampAngle = .3;
-		public static final double speakerAngle = .4;
-
-		// if needed
-		// public static final trapAngle = 80;
-
-		// Motor Controllers: pid, FF
-		// PID
-		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
-		// Feed Forward
-		public static final double[] FeedforwardVals = new double[] { /* /kS/ */0.1, /* /kG/ */0.1, /* /kV/ */0.1,
-				/* /kA/ */0.1 };
-
-		public static final double MAX_FF_VEL = 1; // rot / s
-		public static final double MAX_FF_ACCEL = 1; // rot / s^2
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL,
-				MAX_FF_ACCEL);
-
-	}
+	
 
 	public static final class IntakeShoot {
 		// PID values
