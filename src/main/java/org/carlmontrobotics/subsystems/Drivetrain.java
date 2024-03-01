@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -84,6 +86,7 @@ public class Drivetrain extends SubsystemBase {
     private CANSparkMax[] driveMotors = new CANSparkMax[] {null, null, null, null};
     private CANSparkMax[] turnMotors = new CANSparkMax[] {null,null,null,null};
     private CANcoder[] turnEncoders = new CANcoder[] {null, null, null, null};
+    
     // gyro
     public final float initPitch;
     public final float initRoll;
@@ -300,10 +303,17 @@ public class Drivetrain extends SubsystemBase {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
                 driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing / 60);
+                driveMotor.getEncoder().setAverageDepth(2);
+                driveMotor.getEncoder().setMeasurementPeriod(16);
             }
             for (CANSparkMax turnMotor : turnMotors) {
                 turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
                 turnMotor.getEncoder().setVelocityConversionFactor(360 / turnGearing / 60);
+                turnMotor.getEncoder().setAverageDepth(2);
+                turnMotor.getEncoder().setMeasurementPeriod(16);
+            }
+            for(CANcoder canCoder : turnEncoders) {
+                //what???
             }
 
             // for(CANSparkMax driveMotor : driveMotors)
