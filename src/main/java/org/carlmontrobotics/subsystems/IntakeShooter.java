@@ -34,8 +34,10 @@ public class IntakeShooter extends SubsystemBase {
 
     public IntakeShooter() {
         pidControllerOutake.setP(kP[0]);
+        pidControllerOutake.setI(kI[0]);
         pidControllerOutake.setD(kD[0]);
         pidControllerIntake.setP(kP[1]);
+        pidControllerIntake.setI(kI[1]);
         pidControllerIntake.setD(kD[1]);
         outakeEncoder.setPositionConversionFactor(Math.PI / 360);
     }

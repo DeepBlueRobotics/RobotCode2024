@@ -161,7 +161,7 @@ public final class Constants {
 		// PID values
 
 		public static final double[] kP = { 0.0001, 0 };
-		public static final double kI = 0;
+		public static final double[] kI = { 0.00001, 0};
 		public static final double[] kD = { 0, 0 };
 		public static final double kS = 0.29753;
 		public static final double kV = 0.077913;
