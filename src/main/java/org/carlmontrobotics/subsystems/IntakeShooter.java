@@ -126,6 +126,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public double calculateRPMAtDistance() {
         double minRPM = Integer.MAX_VALUE;
+        double distance = 30; // placeholder for limelight 
         for(int i = 0; i<= 360; i++) {
             double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
             double rpm = distance/Math.cos(i)*t;
