@@ -84,7 +84,9 @@ public final class Constants {
 			public static final Axis IntakeButton = Axis.kRightTrigger;
 			public static final Axis ShooterButton = Axis.kRightTrigger;
 			public static final int EjectButton = Button.kA.value;
-			public static final int AmpButton = Button.kRightBumper.value;
+			public static final int AmpButton = Button.kLeftBumper.value;
+			public static final int BooleanButton = Button.kRightBumper.value;
+
 		}
 	}
 }

@@ -24,6 +24,8 @@ import com.revrobotics.CANSparkBase;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -78,37 +80,36 @@ public class RobotContainer {
   //Xbox right trigger axis -> Shoot
   //Xbox left trigger axis -> Intake
   //Xbox right bumper button -> Speaker (arm position)
-  //Xbox left bumper button -> Amp (arm position)
+  //Xbox left bumper button -> Amp (arm position and RPM)
   //Xbox X button -> Intake(arm position)
   //Xbox A button -> Eject
 
+
+    //COMBINING BINDINGS WITH ARM
     /*/Eject/*/
     new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
-
-    /*/Shooting/*/
+    
+    /*/Amp Shooting/*/      
     //TODO: add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
     new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).onTrue(new SequentialCommandGroup(
       new ShooterToRPM(intakeShooter, AMP_RPM),
       new PassToOutake(intakeShooter)
     ));
-    // Intake
+    
+    /*/Shooting/*/
+    new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new SequentialCommandGroup(
+      new ShooterToRPM(intakeShooter, SPEAKER_RPM),
+      new PassToOutake(intakeShooter)
+    ));
+
+    /*/Intake/*/ 
     new JoystickButton(manipulatorController, OI.Manipulator.IntakeButton.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
+  
   }
 
 
 
-  /*/
-    //Intake(placeholder)
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMintake()));
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopIntake()));
-    //Speaker and amp(placeholder)
-    new JoystickButton(manipulatorController, Button.kRightBumper.value ).onTrue(new InstantCommand(() -> intakeShooter.setRPMOutake((intakeShooter.calculateDistanceForRPM()))));
-    new JoystickButton(manipulatorController, Button.kRightBumper.value).onFalse(new InstantCommand(() -> intakeShooter.stopOutake()));
-    //Eject
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectOutake()));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new InstantCommand(() -> intakeShooter.setRPMEjectIntake()));
-}
-  /*/
+  
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
@@ -159,4 +160,11 @@ public class RobotContainer {
   // throw new UnsupportedOperationException("Unimplemented method
   // 'getAutonomousCommand'");
   // }
+  private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
+    return axisTrigger(manipulatorController, krighttrigger);
+  }
+  private Trigger axisTrigger2(GenericHID manipulatorController, Axis klefttrigger) {
+    return axisTrigger(manipulatorController, klefttrigger);
+  }
+
 }
