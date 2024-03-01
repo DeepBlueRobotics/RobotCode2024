@@ -8,6 +8,7 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
+import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.commands.armAmpPos;
 import org.carlmontrobotics.commands.armGroundPos;
@@ -58,6 +59,8 @@ public class RobotContainer {
     //   () -> ProcessedAxisValue(driverController, Axis.kRightX)),
     //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
+
+    arm.setDefaultCommand(new ArmTeleop(arm, () -> inputProcessing(getStickValue(manipulatorController, Axis.kLeftY))));
   }
   private void setBindingsDriver() {
     // 4 cardinal directions on arrowpad

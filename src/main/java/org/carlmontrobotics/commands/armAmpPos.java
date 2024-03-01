@@ -14,7 +14,7 @@ public class armAmpPos extends Command {
   private Timer armProfileTimer = new Timer();
   public armAmpPos(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    arm = this.arm;
+    this.arm = arm;
     addRequirements(arm);
   }
 

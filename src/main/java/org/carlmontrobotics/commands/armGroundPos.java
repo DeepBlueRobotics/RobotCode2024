@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package org.carlmontrobotics.commands;
-import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.Arm;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,7 +14,7 @@ public class armGroundPos extends Command {
   private Timer armProfileTimer = new Timer();
   public armGroundPos(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    arm = this.arm;
+    this.arm = arm;
     addRequirements(arm);
   }
 

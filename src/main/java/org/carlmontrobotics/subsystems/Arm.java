@@ -7,6 +7,8 @@ package org.carlmontrobotics.subsystems;
 import java.util.function.DoubleSupplier;
 
 import org.carlmontrobotics.Constants;
+import org.carlmontrobotics.commands.ArmTeleop;
+
 import static org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
@@ -87,20 +89,16 @@ public class Arm extends SubsystemBase {
       return profile.calculate(goalSeconds, currentPoint, goalState[goalStateIndex]);
     }
 
-    public void driveArm(double timeToTarget,double targetPosition, double targetVelocity) {
-      targetPosition = getArmClampedGoal(targetPosition);
-
-      TrapezoidProfile.State customGoalState = new TrapezoidProfile.State(targetPosition, targetVelocity);
-
-      // customGoalState.calculate(timeToTarget, getCurrentArmState(), customGoalState);
-      profile.calculate(timeToTarget, getCurrentArmState(), customGoalState);
-      //create a custom trapezoidal profile using these
+    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
+      return profile.calculate(goalSeconds, currentPoint, goalState);
     }
-    public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
-      profile.calculate(timeToTarget, getCurrentArmState(), goalState);
-      //u can use feedforward to find how long it would take to get there
-      //I dont wanna specify it manually :((
-    }
+
+    // public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
+    //   TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
+    //   double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+    //   armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
+
+    // }
     
 
     public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
@@ -140,12 +138,28 @@ public class Arm extends SubsystemBase {
       return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
 
+     public void autoCancelArmCommand() {
+        if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
+
+        double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
+
+        if(requestedSpeeds != 0) {
+            Command currentArmCommand = getCurrentCommand();
+            if(currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
+                currentArmCommand.cancel();
+            }
+        }
+    }
+
 
     @Override
     public void periodic() {
-      kP = SmartDashboard.getNumber("kP", kP);
-      kD = SmartDashboard.getNumber("kD", kD);
-      kI = SmartDashboard.getNumber("kI", kI);
+
+      autoCancelArmCommand();
+
+      // kP = SmartDashboard.getNumber("kP", kP);
+      // kD = SmartDashboard.getNumber("kD", kD);
+      // kI = SmartDashboard.getNumber("kI", kI);
 
       if (armPID.getP() != kP) {
           armPID.setP(kP);

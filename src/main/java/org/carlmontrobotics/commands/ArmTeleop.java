@@ -18,13 +18,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public class ArmTeleop extends Command {
   private final DoubleSupplier joystick; 
   private final Arm armSubsystem;
   private double lastTime = 0;
-
+  private Timer armTimer = new Timer();
+  TrapezoidProfile.State goalState;
   /** Creates a new ArmTeleop. */
   public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -35,23 +37,23 @@ public class ArmTeleop extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armSubsystem.setArmGoal(armSubsystem.getArmPos(), 0);
+    goalState = new TrapezoidProfile.State(armSubsystem.getArmPos(), armSubsystem.getArmVel());
     lastTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double value = joystick.getAsDouble();
     // use trapazoid math and controllerMoveArm method from arm subsytem to apply voltage to the motor
     double speeds = getRequestedSpeeds();
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
 
-    double goalArmRad = armSubsystem.getCurrentArmGoal().position + speeds * deltaT; // fix later
-    
+    double goalArmRad = goalState.position + speeds * deltaT; 
     goalArmRad = MathUtil.clamp(goalArmRad, LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
-
+    goalState = new TrapezoidProfile.State(goalArmRad, 0);
+    TrapezoidProfile.State setpoint = armSubsystem.calculateCustomSetPoint(armTimer.get(), armSubsystem.getCurrentArmState(), goalState);
+    armSubsystem.COMBINE_PID_FF_TRAPEZOID(setpoint);
     lastTime = currTime;
   }
 
@@ -68,7 +70,10 @@ public class ArmTeleop extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    armTimer.stop();
+    armTimer.reset();
+  }
 
   // Returns true when the command should end.
   @Override
