@@ -127,12 +127,6 @@ public class IntakeShooter extends SubsystemBase {
     public void stopIntake() {
         setRPMintake(0);
     }
-    public void setRPMEjectOutake() {
-        setRPMOutake(3000);
-    }
-    public void setRPMEjectIntake() {
-        setRPMintake(3000);
-    }
 
     public double calculateRPMAtDistance() {
         //returns specific rpm based off of the distance and angle it is in

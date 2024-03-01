@@ -14,8 +14,8 @@ public class EjectRPM extends Command {
     }
     @Override
     public void initialize() {
-      intakeShooter.setRPMEjectIntake();
-      intakeShooter.setRPMEjectOutake();
+      intakeShooter.setRPMintake(-3000);;
+      intakeShooter.setRPMOutake(3000);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
