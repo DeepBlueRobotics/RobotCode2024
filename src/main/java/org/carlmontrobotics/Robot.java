@@ -12,11 +12,13 @@ import org.carlmontrobotics.RobotContainer;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  public static Robot robot;
 
   private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
+    robot = this;
     m_robotContainer = new RobotContainer();
   }
 

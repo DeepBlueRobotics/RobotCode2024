@@ -8,7 +8,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-def ROBOT_MAIN_CLASS = "frc.robot.Main"
+def ROBOT_MAIN_CLASS = "org.carlmontrobotics.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -79,7 +79,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-     implementation "com.github.deepbluerobotics:lib199:2024-SNAPSHOT"
+    implementation "com.github.deepbluerobotics:lib199:2024-SNAPSHOT"
 }
 
 test {
