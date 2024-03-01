@@ -51,7 +51,7 @@ public final class Constants {
 		public static final double SPEAKER_RPM = 6000;
 
 		public static final double RPM_TOLERANCE = 10;
-		public static final double SpeakerHeight = 21; // inches 
+		public static final double SpeakerHeight = 83; // inches 
 
 	}
 
