@@ -71,8 +71,8 @@ public class RobotContainer {
   public final GenericHID driverController = new GenericHID(OI.Driver.port);
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
-  Drivetrain drivetrain = new Drivetrain();
-  Limelight limelight = new Limelight(drivetrain);
+  //Drivetrain drivetrain = new Drivetrain();
+  //Limelight limelight = new Limelight(drivetrain);
 
   private final String[] autoNames = new String[] {/*These are assumed to be equal to the file names*/
     "Penis"
@@ -89,16 +89,15 @@ public class RobotContainer {
   }
   
 	private void setDefaultCommands() {
-    drivetrain.setDefaultCommand(new TeleopDrive(
-      drivetrain,
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-      (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-      (BooleanSupplier)() -> driverController.getRawButton(OI.Driver.slowDriveButton)
-    ));
+    // drivetrain.setDefaultCommand(new TeleopDrive(
+    //   drivetrain,
+    //   (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+    //   (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+    //   (DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+    //   (BooleanSupplier)() -> driverController.getRawButton(OI.Driver.slowDriveButton)
+    // ));
   }
   private void setBindingsDriver() {
-	new JoystickButton(driverController, 1).onTrue(new AlignToApriltag(drivetrain, limelight)); //button A
 		// reset field orientation??
     // new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
     //   new InstantCommand(drivetrain::resetFieldOrientation));

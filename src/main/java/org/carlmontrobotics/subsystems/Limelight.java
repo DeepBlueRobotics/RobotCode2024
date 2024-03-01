@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-  private final Drivetrain drivetrain;
-  private final SwerveDrivePoseEstimator poseEstimator;
+  //private final Drivetrain drivetrain;
+  //private final SwerveDrivePoseEstimator poseEstimator;
   private double tv, tx;
   private double[] botPose = null;
   private double[] targetPose = null;
@@ -24,13 +24,13 @@ public class Limelight extends SubsystemBase {
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
 
-  public Limelight(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
-    poseEstimator = new SwerveDrivePoseEstimator(
-      drivetrain.getKinematics(), 
-      Rotation2d.fromDegrees(drivetrain.getHeading()), 
-      drivetrain.getModulePositions(), 
-      new Pose2d());
+  public Limelight() {
+    // this.drivetrain = drivetrain;
+    // poseEstimator = new SwerveDrivePoseEstimator(
+    //   drivetrain.getKinematics(), 
+    //   Rotation2d.fromDegrees(drivetrain.getHeading()), 
+    //   drivetrain.getModulePositions(), 
+    //   new Pose2d());
     
     botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[7]);
     //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
@@ -39,7 +39,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     distanceToTargetSpeaker();
-    getCurrentPose();
+    //getCurrentPose();
   }
 
   public double calcAngleOffset(){
@@ -56,10 +56,10 @@ public class Limelight extends SubsystemBase {
     return MathUtil.applyDeadband(distance, Constants.Limelight.errorTolerance) == 0; //if it's within 0.1 of the center
   }
 
-  public Pose2d getCurrentPose(){
-    System.out.println(poseEstimator.getEstimatedPosition());
-    return poseEstimator.getEstimatedPosition();
-  }
+  // public Pose2d getCurrentPose(){
+  //   System.out.println(poseEstimator.getEstimatedPosition());
+  //   return poseEstimator.getEstimatedPosition();
+  // }
 
   // public Pose3d getTargetPose() {
   //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
