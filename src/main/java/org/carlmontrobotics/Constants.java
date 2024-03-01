@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 	public static final class Drivetrain {
 	}
-	
+	public static final class Arm{}
 
 	public static final class IntakeShoot {
 		// PID values
@@ -49,8 +49,6 @@ public final class Constants {
 
 		public static final double RPM_TOLERANCE = 10;
 
-		public static final double distance = 30; //This will be the x value returned from lime light # is place holder for now
-        public static  final double SpeakerHeight = 40; //Use limelight to return y for Speaker Height  Not a constant since the height will change when farther away 
 	}
 
 	public static final class OI {
