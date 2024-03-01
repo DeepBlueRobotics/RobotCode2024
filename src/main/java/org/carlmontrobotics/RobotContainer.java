@@ -5,7 +5,7 @@
 package org.carlmontrobotics;
 //199 files
 // import org.carlmontrobotics.subsystems.*;
-// import org.carlmontrobotics.commands.*;
+import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 
 import org.carlmontrobotics.Constants.OI;
@@ -49,8 +49,6 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
-
-    //arm.setDefaultCommand(new InstantCommand(() -> {arm.driveArm());
 
     // drivetrain.setDefaultCommand(new TeleopDrive(
     //   drivetrain,
