@@ -5,10 +5,12 @@ import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
 import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
+    private final Timer timer = new Timer();
     private final IntakeShooter intake;
     public Intake(IntakeShooter intake) {
         this.intake = intake;
@@ -16,6 +18,7 @@ public class Intake extends Command {
     @Override
     public void initialize() {
       intake.setRPMintake(INTAKE_RPM);
+      timer.start();
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,6 +36,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.gameDistanceSees1st();
+    return intake.gameDistanceSees1st() || timer.hasElapsed(4);
   }
 }
