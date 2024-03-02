@@ -81,7 +81,6 @@ public class Arm extends SubsystemBase {
         setArmTarget(goalState.position);
 
         // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
-        // SmartDashboard.putNumber("Wrist Max Vel", MAX_FF_VEL[WRIST]);
         SmartDashboard.putNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         SmartDashboard.putNumber("Arm Tolerance Pos", posToleranceRad);
         SmartDashboard.putNumber("Arm Tolerance Vel", velToleranceRadPSec);
@@ -93,7 +92,6 @@ public class Arm extends SubsystemBase {
         if(DriverStation.isDisabled()) resetGoal();
 
         //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-        // wristConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL[WRIST], MAX_FF_ACCEL[WRIST]);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
         armPID1.setP(kP);
         armPID1.setI(kI);
@@ -121,11 +119,7 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
     }
 
-    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
-        return armProfile.calculate(goalSeconds, currentPoint, goalState);
-    }
-
-    public void autoCancelArmCommand() {
+  public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
 
         double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
@@ -187,7 +181,7 @@ public class Arm extends SubsystemBase {
 
    
     public TrapezoidProfile.State getCurrentArmGoal() {
-        return goalState ;
+        return goalState;
     }
 
    
