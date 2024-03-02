@@ -129,7 +129,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public void shoot(double distance) {
         double rpm = calculateRPMAtDistance();
-        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
+        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
     }
 
     public void stopOutake() {
