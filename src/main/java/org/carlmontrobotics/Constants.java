@@ -86,13 +86,13 @@ public final class Constants {
             public static final int port = 1;
 
 			// Arm commands
-			public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
-			public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
-			public static final int RAISE_TO_SPEAKER_SAFE_BUTTON = Button.kA.value;
-			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
-			public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
-			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
-			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
+			public static final int raiseToSpeakerPodButton = Button.kY.value;
+			public static final int raiseToAmpButton = Button.kB.value;
+			public static final int raiseToSpeakerSafeButton = Button.kA.value;
+			public static final int raiseToSpeakerNextButton = Button.kX.value;
+			public static final int raiseToGroundButton = Button.kStart.value;
+			public static final int raiseToClimberButton = Button.kLeftBumper.value;
+			public static final int lowerToClimberButton = Button.kRightBumper.value;
         }
     }
 }

@@ -14,18 +14,19 @@ import org.carlmontrobotics.subsystems.Arm;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
-public class ArmTeleop extends Command {
-  private final DoubleSupplier joystick;
-  private final Arm armSubsystem;
-  private final double kDt = 0.02;
-  TrapezoidProfile.State goalState;
 
+public class ArmTeleop extends Command {
+  private final DoubleSupplier joystick; 
+  private final Arm armSubsystem;
+  private double lastTime = 0;
+  private Timer armTimer = new Timer();
+  TrapezoidProfile.State goalState;
   /** Creates a new ArmTeleop. */
   public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,24 +37,24 @@ public class ArmTeleop extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    goalState = armSubsystem.getCurrentArmState();
+    goalState = new TrapezoidProfile.State(armSubsystem.getArmPos(), armSubsystem.getArmVel());
+    lastTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // use trapazoid math and controllerMoveArm method from arm subsytem to apply
-    // voltage to the motor
-    double speed = getRequestedSpeeds();
+    // use trapazoid math and controllerMoveArm method from arm subsytem to apply voltage to the motor
+    double speeds = getRequestedSpeeds();
+    double currTime = Timer.getFPGATimestamp();
+    double deltaT = currTime - lastTime;
 
-    double goalArmRad = goalState.position + speed * kDt;
-    goalArmRad = MathUtil.clamp(goalArmRad, ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
-    goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos() - ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD,
-        armSubsystem.getArmPos() + ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-
-    if ((speed != 0) && !DriverStation.isAutonomous()) {
-      armSubsystem.setArmTarget(goalArmRad);
-    }
+    double goalArmRad = goalState.position + speeds * deltaT; 
+    goalArmRad = MathUtil.clamp(goalArmRad, LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
+    goalState = new TrapezoidProfile.State(goalArmRad, 0);
+    TrapezoidProfile.State setpoint = armSubsystem.calculateCustomSetPoint(armTimer.get(), armSubsystem.getCurrentArmState(), goalState);
+    armSubsystem.driveArm(setpoint.position);
+    lastTime = currTime;
   }
 
   public double getRequestedSpeeds() {
@@ -70,6 +71,8 @@ public class ArmTeleop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    armTimer.stop();
+    armTimer.reset();
   }
 
   // Returns true when the command should end.
