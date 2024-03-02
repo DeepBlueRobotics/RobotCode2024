@@ -121,7 +121,11 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
     }
 
-  public void autoCancelArmCommand() {
+    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
+        return armProfile.calculate(goalSeconds, currentPoint, goalState);
+    }
+
+    public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
 
         double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
@@ -135,7 +139,7 @@ public class Arm extends SubsystemBase {
     }
 
     //#region Drive Methods
-    public void driveArm(double goalAngle ){
+    public void driveArm(double goalAngle){
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
