@@ -33,6 +33,6 @@ public class EjectRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeShooter.noteNotIntook()|| timer.hasElapsed(5);
+    return intakeShooter.noNote()|| timer.hasElapsed(5);
   }
 }

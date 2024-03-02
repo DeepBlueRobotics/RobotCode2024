@@ -69,20 +69,17 @@ public class IntakeShooter extends SubsystemBase {
             }
         }
     }
-    public boolean noteNotIntook(){
+    public boolean noNote(){
         return ( !gameDistanceSees1st() && !gameDistanceSees2nd() );
     }
-    public boolean noteIntook(){
+    public boolean noteInMiddle(){
         return gameDistanceSees1st() && gameDistanceSees2nd();
     }
-    public boolean PassToIntake(){
+    public boolean noteInIntake(){
         return gameDistanceSees1st() && !gameDistanceSees2nd();
     }    
-    public boolean PassToOutake(){    
+    public boolean noteInOutake(){    
         return !gameDistanceSees1st() && gameDistanceSees2nd();
-    }
-    public boolean IntakeDistanceSensor(){    
-        return  gameDistanceSees2nd();
     }
     //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     public double calculateDistanceSensorNotes() {
