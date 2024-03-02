@@ -170,6 +170,7 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 	}
+	
 	public static final class IntakeShooter {
 		//in set() speed
 		public static final double idleSpeed = 0;

@@ -7,6 +7,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -38,27 +39,32 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    distanceToTargetSpeaker();
+    getDistanceToTargetSpeaker();
     getCurrentPose();
-  }
-
-  public double calcAngleOffset(){
-    //-calculates the angle to turn in degrees
-    //if it goes wrong uncomment
-    return LimelightHelpers.getTX("limelight"); //* (Constants.Limelight.horizontalFOV / Constants.Limelight.resolutionWidth);
   }
 
   public void updateBotPose3d(){
     botpose = LimelightHelpers.getBotPose3d("limelight");
   }
 
-  public boolean isAligned(double distance){
-    return MathUtil.applyDeadband(distance, Constants.Limelight.errorTolerance) == 0; //if it's within 0.1 of the center
-  }
 
   public Pose2d getCurrentPose(){
     System.out.println(poseEstimator.getEstimatedPosition());
     return poseEstimator.getEstimatedPosition();
+  }
+
+
+  public double getDistanceToTargetSpeaker(){
+    if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
+      double angleToGoalRadians = Units.degreesToRadians(Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight"));
+      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+      SmartDashboard.putNumber("limelight distance", distance);
+      return distance;
+    }
+    else{
+      SmartDashboard.putNumber("limelight distance", -1);
+      return -1;
+    }
   }
 
   // public Pose3d getTargetPose() {
@@ -71,35 +77,4 @@ public class Limelight extends SubsystemBase {
   //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
   // }
 
-  public double distanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
-      double angleToGoalRadians = (Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight")) * (Math.PI/180);
-      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
-      SmartDashboard.putNumber("limelight distance", distance);
-      return distance;
-    }
-    else{
-      SmartDashboard.putNumber("limelight distance", -1);
-      return -1;
-    }
-  }
-
-    // public double distanceToTargetxyz(){
-  //   if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
-  //     Pose3d target = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
-  //     return Math.sqrt(target.getX() * target.getX() + target.getY() * target.getY() + target.getZ() * target.getZ());
-  //   }
-  //   else{
-  //     return 0;
-  //   }
-  // }
-
-  /*TODO
-  constants:
-
-
-  functions:
-  getBotpose3d vs getCurrentPose
-
-  */
 }
