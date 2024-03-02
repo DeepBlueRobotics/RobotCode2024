@@ -314,14 +314,18 @@ public class Drivetrain extends SubsystemBase {
                 turnMotor.getEncoder().setMeasurementPeriod(16);
             }
             for(CANcoder coder : turnEncoders) {
-                coder.getAbsolutePosition().setUpdateFrequency(1000);
-                coder.getPosition().setUpdateFrequency(1000);
-                coder.getVelocity().setUpdateFrequency(1000);
+                 coder.getAbsolutePosition().setUpdateFrequency(50);
+                 coder.getPosition().setUpdateFrequency(50);
+                 coder.getVelocity().setUpdateFrequency(50);
+                SignalLogger.writeDouble("Regular position " + coder.toString(), coder.getPosition().getValue());
+                SignalLogger.writeDouble("Velocity " + coder.toString(), coder.getVelocity().getValue());
+                SignalLogger.writeDouble("Absolute position " + coder.toString(), coder.getAbsolutePosition().getValue());
             }
             
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
+           
         }
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
@@ -589,19 +593,20 @@ public class Drivetrain extends SubsystemBase {
         // FIXME: unlobotomize lib199
         //turnMotors[2].setVoltage(SmartDashboard.getNumber("kS", 0));
     //     moduleFL.periodic();
-    // moduleFR.periodic();   
+            //moduleFR.periodic();   
     //     moduleBL.periodic();
     //     moduleBR.periodic();
-        // // double goal = SmartDashboard.getNumber("bigoal", 0);
+        //double goal = SmartDashboard.getNumber("bigoal", 0);
+        
         for (SwerveModule module : modules) {
             module.periodic();
-            //module.move(0, goal);
+           // module.move(0, goal);
         }
         brake();
         
         //keepRotateMotorsAtDegrees(0);
-        // double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
-        // moduleFR.move(0.0000000000000000001, desiredGoal);
+        //  double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
+        //  moduleFR.move(0.0000000000000000001, desiredGoal);
         // moduleFL.move(0.0000000000000000001, desiredGoal);
         // moduleBL.move(0.0000000000000000001, desiredGoal);
         // moduleBR.move(0.0000000000000000001, desiredGoal);
