@@ -51,7 +51,7 @@ public class Arm extends SubsystemBase {
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
     private final SparkPIDController armPID1 = armMotor1.getPIDController();
     private final SparkPIDController armPID2 = armMotor2.getPIDController();
-    private TrapezoidProfile armProfile = new TrapezoidProfile(armConstraints);
+    private TrapezoidProfile armProfile = new TrapezoidProfile(trapConstraints);
     private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
 
@@ -149,7 +149,7 @@ public class Arm extends SubsystemBase {
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
 
-        armProfile = new TrapezoidProfile(armConstraints)
+        armProfile = new TrapezoidProfile(trapConstraints);
         armProfileTimer.reset();
 
         goalState.position = targetPos;

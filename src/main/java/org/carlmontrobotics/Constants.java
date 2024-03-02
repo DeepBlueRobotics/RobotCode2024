@@ -76,12 +76,18 @@ public final class Constants {
 		public static final int raiseToClimberButton = Button.kLeftBumper.value;
 		public static final int lowerToClimberButton = Button.kRightBumper.value;
 		//other
-		public static final boolean motorInverted = true; //Todo: find all these
+		public static final boolean motorInverted = true; //Todo: find all these (they are definetely wrong)
 		public static final double rotationToRad = 2 * Math.PI;
 		public static final boolean encoderInverted = false;
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
 		public static final double posToleranceRad = 0;
 		public static final double velToleranceRadPSec = 0;
+
+		public static final double MARGIN_OF_ERROR = Math.PI/18;
+		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
+		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
+
+		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
 
 	}
 	public static final class IntakeShooter {
