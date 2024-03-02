@@ -131,8 +131,10 @@ public class IntakeShooter extends SubsystemBase {
     * 
     * @param distance  The flat distance, in X meters, to the apriltag.
     */
-    public double calculateRPMAtDistance(distance) {
+    public double calculateRPMAtDistance() {
         double minRPM = 11000;//set to the max acheivable rpm of a free-load NEO550 Brushless
+        double distance = 30;
+        double SpeakerHeight = Units.inchesToMeters(82.875);
         for(int i = 0; i<= 360; i++) {
             double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
             double rpm = distance/Math.cos(i)*t;
