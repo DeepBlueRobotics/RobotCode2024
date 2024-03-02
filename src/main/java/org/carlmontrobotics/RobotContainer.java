@@ -107,7 +107,7 @@ public class RobotContainer {
     // new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
     // new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
     
-    //TODO: 3 cardinal directions on letterpad
+    //3 cardinal directions on letterpad
     // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
     // new JoystickButton(driverController, Driver.rotateFieldRelative120Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
     // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
@@ -130,7 +130,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
     
     /*/Amp Shooting/*/      
-    //TODO: add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
+    //add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
     new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).onTrue(new SequentialCommandGroup(
       new ShooterToRPM(intakeShooter, AMP_RPM),
       new PassToOutake(intakeShooter)

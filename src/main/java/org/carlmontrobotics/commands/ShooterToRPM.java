@@ -11,11 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShooterToRPM extends Command {
     //ramp the shooter up to a specific rpm
     private final IntakeShooter shooter;
-    private final RelativeEncoder outakeEncoder;
     private double outakeRPM;
     public ShooterToRPM(IntakeShooter shooter, double rpm) {
         this.shooter = shooter;
-        this.outakeEncoder= shooter.outakeEncoder;
         this.outakeRPM = rpm;
     }
 
@@ -38,7 +36,6 @@ public class ShooterToRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return outakeEncoder.getVelocity()<outakeRPM+IntakeShoot.RPM_TOLERANCE && outakeRPM-IntakeShoot.RPM_TOLERANCE<outakeEncoder.getVelocity();
-
+    return shooter.isWithenTolerance(outakeRPM);
   }
 }

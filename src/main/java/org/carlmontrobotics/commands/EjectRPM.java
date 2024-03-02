@@ -15,7 +15,7 @@ public class EjectRPM extends Command {
     }
     @Override
     public void initialize() {
-      intakeShooter.setRPMintake(-3000);;
+      intakeShooter.setRPMintake(-3000);
       intakeShooter.setRPMOutake(3000);
     }
 
@@ -33,6 +33,7 @@ public class EjectRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //TODO put this in method in intake shooter that determines if the distance sensor sees note
     return ( !intakeShooter.gameDistanceSees1st() && !intakeShooter.gameDistanceSees2nd() ) || timer.hasElapsed(5);
   }
 }

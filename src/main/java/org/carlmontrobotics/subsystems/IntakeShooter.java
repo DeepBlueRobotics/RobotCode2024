@@ -22,13 +22,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(outakePort, MotorConfig.NEO_550);
-    public final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
+    private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
     private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
-    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert
+    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\
+    //TODO set motor inverted for encoders
+    //intakeMotor.setInverted(false);
+    //outakeMotor.setInverted(true);  
 
 
     public IntakeShooter() {
@@ -38,9 +41,11 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[1]);
         pidControllerIntake.setI(kI[1]);
         pidControllerIntake.setD(kD[1]);
-        outakeEncoder.setPositionConversionFactor(Math.PI / 360);
     }
-
+    public boolean isWithenTolerance(double outakeRPM){
+        return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
+    }
+    //TODO rename methods and distance sensors to intake and outake distance sensor
     public double getGamePieceDistance1() {
         return Units.metersToInches((distanceSensor.getRange() - dsDepth) / 1000);
     }
@@ -56,7 +61,7 @@ public class IntakeShooter extends SubsystemBase {
     public boolean gameDistanceSees2nd() {
         return getGamePieceDistance2() < detectDistance;
     }
-
+    //TODO: use this method to calculate RPS
     public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
         if (gameDistanceSees1st()) {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
@@ -100,13 +105,12 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSees2nd());
         senseGamePieceStop();// slows down when sensed by the first Sensor and stops upon being sensed by the second
     }
-
     public void setRPMOutake(double rpm) {
-        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
+        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
     }
 
     public void setRPMintake(double rpm) {
-        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
+        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
     }
 
 
@@ -114,7 +118,6 @@ public class IntakeShooter extends SubsystemBase {
     public void shoot(double distance) {
         double rpm = calculateRPMAtDistance();
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm));
-        //TODO: To be implemented
     }
 
     public void stopOutake() {

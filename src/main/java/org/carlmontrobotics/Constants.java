@@ -160,9 +160,9 @@ public final class Constants {
 	public static final class IntakeShoot {
 		// PID values
 
-		public static final double[] kP = { 0.0001, 0 };
-		public static final double[] kI = { 0.00001, 0};
-		public static final double[] kD = { 0, 0 };
+		public static final double[] kP = {/*/Intake/*/ 0.0001, /*/Outake/*/0};
+		public static final double[] kI = {/*/Intake/*/0.00001, /*/Outake/*/0};
+		public static final double[] kD = {/*/Intake/*/0, /*/Outake/*/0 };
 		public static final double kS = 0.29753;
 		public static final double kV = 0.077913;
 		public static final double kA = 0.05289;
