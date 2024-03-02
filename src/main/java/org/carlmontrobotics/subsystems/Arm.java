@@ -4,7 +4,6 @@ import static org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
-
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
