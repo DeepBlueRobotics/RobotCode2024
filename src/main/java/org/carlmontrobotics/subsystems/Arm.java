@@ -98,9 +98,36 @@ public class Arm extends SubsystemBase {
       
     }
 
-    public void maxacceleration(){
-      armFeed.maxAchievableAcceleration(MAX_VOLTAGE, armEncoder.getVelocity()); 
+    
+    //public void maxacceleration(){
+      //armFeed.maxAchievableAcceleration(MAX_VOLTAGE, armEncoder.getVelocity()); 
+    //}
+
+    double currentVelocity = armEncoder.getVelocity();
+
+    public double maxacceleration(){
+      double maxAccel = armFeed.maxAchievableAcceleration(MAX_VOLTAGE, currentVelocity); 
+      return maxAccel;
     }
+
+    //public void maxvelocity(){
+      //armFeed.maxAchievableVelocity(MAX_VOLTAGE, );
+    //}
+
+    public double calculateTrapTime(double goalAngle, double currentAngle){
+      double distToCover = goalAngle - currentAngle;
+      double maxAccel = maxacceleration();
+
+      double timeOfAccelTriangle = MAX_FF_VEL / maxAccel;
+      double distCovrdTriangle = maxAccel / 2 * timeOfAccelTriangle;
+
+      double distLeft = distToCover - (2 * distCovrdTriangle);
+      double timeOfRect = distLeft / MAX_FF_VEL;
+
+      double answer = timeOfAccelTriangle*2 + timeOfRect;
+      return answer;
+    }
+    
 
     // public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
     //   TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
