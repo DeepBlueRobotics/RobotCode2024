@@ -80,8 +80,8 @@ public class IntakeShooter extends SubsystemBase {
         }
     }
     public Level getNoteDistance() {
-        boolean sees1st = gameDistanceSees1st();
-        boolean sees2nd = gameDistanceSees2nd();
+        boolean sees1st = gameDistanceSeesIntake();
+        boolean sees2nd = gameDistanceSeesOutake();
     
         if (!sees1st && !sees2nd) {
             return Level.OUT;
