@@ -1,4 +1,5 @@
 package org.carlmontrobotics.subsystems;
+
 import static org.carlmontrobotics.Constants.Arm.*;
 
 import org.carlmontrobotics.commands.ArmTeleop;
@@ -29,20 +30,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // TODO: FIGURE OUT ANGLES
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between __ and __
 public class Arm extends SubsystemBase {
-    
+
     private final CANSparkMax masterArmMotor = MotorControllerFactory.createSparkMax(MASTER_ARM_MOTOR, MotorConfig.NEO);
     private final CANSparkMax followArmMotor = MotorControllerFactory.createSparkMax(FOLLOW_ARM_MOTOR, MotorConfig.NEO);
-    private final SparkAbsoluteEncoder armEncoder = masterArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final SparkAbsoluteEncoder armEncoder = masterArmMotor
+            .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
     private static double kDt = 0.02;
-   
-    //PID, feedforward, trap profile
+
+    // PID, feedforward, trap profile
     private final ArmFeedforward armFeed = new ArmFeedforward(kG, kS, kV, kA);
     private final SparkPIDController armPID = masterArmMotor.getPIDController();
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(armConstraints);
-    
-    //TODO: put in correct initial position
+
+    // TODO: put in correct initial position
     // rad, rad/s
     private static TrapezoidProfile.State goalState;
     private static TrapezoidProfile.State setpointState;
@@ -56,7 +58,7 @@ public class Arm extends SubsystemBase {
         armEncoder.setVelocityConversionFactor(rotationToRad);
         armEncoder.setInverted(encoderInverted);
         followArmMotor.follow(masterArmMotor);
-     
+
         armEncoder.setZeroOffset(ENCODER_OFFSET);
         armPID.setFeedbackDevice(armEncoder);
         armPID.setPositionPIDWrappingEnabled(true);
@@ -66,7 +68,7 @@ public class Arm extends SubsystemBase {
         armPID.setP(kP);
         armPID.setI(kI);
         armPID.setD(kD);
-      
+
         SmartDashboard.putData("Arm", this);
 
         setpointState = getCurrentArmState();
@@ -77,19 +79,21 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(DriverStation.isDisabled()) resetGoal();
+        if (DriverStation.isDisabled())
+            resetGoal();
         driveArm();
         autoCancelArmCommand();
     }
 
-  public void autoCancelArmCommand() {
-        if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
+    public void autoCancelArmCommand() {
+        if (!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous())
+            return;
 
         double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
 
-        if(requestedSpeeds != 0) {
+        if (requestedSpeeds != 0) {
             Command currentArmCommand = getCurrentCommand();
-            if(currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
+            if (currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
                 currentArmCommand.cancel();
             }
         }
@@ -99,19 +103,23 @@ public class Arm extends SubsystemBase {
     // uses trapezoid profiles which supplies goal states to pid controller
     // feedforward controller is used to supply additional voltage to keep it
     // at its current position
-    public void driveArm(){
+    // YOU DO NOT HAVE TO WORRY ABOUT HOW THE ARM DRIVES OUTSIDE OF SUBSYSTEM
+    public void driveArm() {
         setpointState = armProfile.calculate(kDt, setpointState, goalState);
         var currentPosition = getCurrentArmState();
         double armFeedVolts = armFeed.calculate(currentPosition.position, currentPosition.velocity);
 
         // code to stop arm from moving past certain bounds
-        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && currentPosition.velocity > 0) || 
-            (getArmPos() < ARM_LOWER_LIMIT_RAD && currentPosition.velocity < 0)) {
+        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && currentPosition.velocity > 0) ||
+                (getArmPos() < ARM_LOWER_LIMIT_RAD && currentPosition.velocity < 0)) {
             armFeedVolts = armFeed.calculate(currentPosition.position, 0);
         }
         armPID.setReference(setpointState.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
     }
 
+    // sets target arm position
+    // automatically clamps target positions such that they do not exceed lower and
+    // upper limit
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
         goalState.position = targetPos;
@@ -123,9 +131,9 @@ public class Arm extends SubsystemBase {
         setArmTarget(armPos);
     }
 
-    //#endregion
+    // #endregion
 
-    //#region Getters
+    // #region Getters
 
     public double getArmPos() {
         return MathUtil.inputModulus(armEncoder.getPosition(), ARM_DISCONTINUITY_RAD,
@@ -135,21 +143,22 @@ public class Arm extends SubsystemBase {
     public double getArmVel() {
         return armEncoder.getVelocity();
     }
-   
+
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
-   
+
     public TrapezoidProfile.State getCurrentArmGoal() {
         return goalState;
     }
-   
+
     public boolean armAtGoal() {
         return Math.abs(getArmPos() - goalState.position) < posToleranceRad &&
-            Math.abs(getArmVel() - goalState.velocity) < velToleranceRadPSec;
+                Math.abs(getArmVel() - goalState.velocity) < velToleranceRadPSec;
     }
 
     public double getArmClampedGoal(double goal) {
-        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI), ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
+        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI),
+                ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
     }
 }
