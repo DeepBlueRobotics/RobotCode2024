@@ -25,6 +25,6 @@ public class SpeakerShootRPM extends Command {
     }
     @Override
     public boolean isFinished() {
-      return shooter.getNoteDistance() == Level.OUT;
+      return true;
     }
 }
