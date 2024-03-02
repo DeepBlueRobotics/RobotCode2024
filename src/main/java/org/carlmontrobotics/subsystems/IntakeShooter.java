@@ -28,13 +28,12 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
     private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
-    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\
-    //TODO set motor inverted for encoders
-    //intakeMotor.setInverted(false);
-    //outakeMotor.setInverted(true);  
-
+    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\    
 
     public IntakeShooter() {
+        //Figure out which ones to set inverted 
+        intakeMotor.setInverted(false);
+        outakeMotor.setInverted(true); 
         pidControllerOutake.setP(kP[0]);
         pidControllerOutake.setI(kI[0]);
         pidControllerOutake.setD(kD[0]);
@@ -45,23 +44,21 @@ public class IntakeShooter extends SubsystemBase {
     public boolean isWithenTolerance(double outakeRPM){
         return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
-    //TODO rename methods and distance sensors to intake and outake distance sensor
-    public double getGamePieceDistance1() {
+    public double getGamePieceDistanceIntake() {
         return Units.metersToInches((distanceSensor.getRange() - dsDepth) / 1000);
     }
 
-    public double getGamePieceDistance2() {
+    public double getGamePieceDistanceOutake() {
         return Units.metersToInches((distanceSensor2.getRange() - dsDepth) / 1000);
     }
 
     public boolean gameDistanceSees1st() {
-        return getGamePieceDistance1() < detectDistance;
+        return getGamePieceDistanceIntake() < detectDistance;
     }
 
     public boolean gameDistanceSees2nd() {
-        return getGamePieceDistance2() < detectDistance;
+        return getGamePieceDistanceOutake() < detectDistance;
     }
-    //TODO: use this method to calculate RPS
     public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
         if (gameDistanceSees1st()) {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
@@ -71,11 +68,26 @@ public class IntakeShooter extends SubsystemBase {
             }
         }
     }
+    public boolean noteNotIntook(){
+        return ( !gameDistanceSees1st() && !gameDistanceSees2nd() );
+    }
+    public boolean noteIntook(){
+        return gameDistanceSees1st() && gameDistanceSees2nd();
+    }
+    public boolean PassToIntake(){
+        return gameDistanceSees1st() && !gameDistanceSees2nd();
+    }    
+    public boolean PassToOutake(){    
+        return !gameDistanceSees1st() && gameDistanceSees2nd();
+    }
+    public boolean IntakeDistanceSensor(){    
+        return  gameDistanceSees2nd();
+    }
     //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     public double calculateDistanceSensorNotes() {
         double center = 11.485;// center line between the 2 side plates (in)
-        double d1 = getGamePieceDistance1();
-        double d2 = getGamePieceDistance2();
+        double d1 = getGamePieceDistanceIntake();
+        double d2 = getGamePieceDistanceOutake();
         double r = 7;
         double ym = (d1+d2)/2; //Y midpoint between 2 points
         double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
@@ -85,8 +97,8 @@ public class IntakeShooter extends SubsystemBase {
 
     public double calculateIntakeAmount(){
         //Literatly just calcDIstanceSensorNotes but instead of solving for k, we are solving for h
-        double d1 = getGamePieceDistance1();
-        double d2 = getGamePieceDistance2();
+        double d1 = getGamePieceDistanceIntake();
+        double d2 = getGamePieceDistanceOutake();
         double r = 7;
 
         double xm = (distanceBetweenSensors)/2;
@@ -99,8 +111,8 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor 1", getGamePieceDistance1());
-        SmartDashboard.putNumber("distance sensor 2", getGamePieceDistance2());
+        SmartDashboard.putNumber("distance sensor 1", getGamePieceDistanceIntake());
+        SmartDashboard.putNumber("distance sensor 2", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DS1 Sees piece", gameDistanceSees1st());
         SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSees2nd());
         senseGamePieceStop();// slows down when sensed by the first Sensor and stops upon being sensed by the second

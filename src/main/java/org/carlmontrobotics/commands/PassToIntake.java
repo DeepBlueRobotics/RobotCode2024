@@ -41,6 +41,6 @@ public class PassToIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.gameDistanceSees1st() && !intake.gameDistanceSees2nd();
+    return intake.PassToIntake();
   }
 }

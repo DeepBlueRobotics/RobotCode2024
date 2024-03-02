@@ -36,6 +36,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.gameDistanceSees2nd() || timer.hasElapsed(4);
+    return intake.IntakeDistanceSensor() || timer.hasElapsed(4);
   }
 }
