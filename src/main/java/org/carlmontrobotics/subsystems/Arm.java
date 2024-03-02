@@ -29,8 +29,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
-
-
   ///GOALS
   /*
    * public static final double intakeAngle = Math.toRadians(0);
@@ -81,7 +79,7 @@ public class Arm extends SubsystemBase {
 
         //armProfileTimer.start(); <-- don't neeed timer anymore
 
-        setArmTarget(goalState.position, 0);
+        setArmTarget(goalState.position);
 
         // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
         // SmartDashboard.putNumber("Wrist Max Vel", MAX_FF_VEL[WRIST]);

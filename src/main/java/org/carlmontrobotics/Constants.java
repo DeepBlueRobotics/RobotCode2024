@@ -25,8 +25,8 @@ public final class Constants {
 	
 	public static final class Arm {
 		//Motor port
-		public static final int LEFT_MOTOR_PORT = 7;
-		public final static int RIGHT_MOTOR_PORT = 8;
+		public static final int ARM_MOTOR_PORT_1 = 7;
+		public final static int ARM_MOTOR_PORT_2 = 8;
 		//all angles in rot here
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
@@ -75,6 +75,14 @@ public final class Constants {
 		public static final int raiseToGroundButton = Button.kStart.value;
 		public static final int raiseToClimberButton = Button.kLeftBumper.value;
 		public static final int lowerToClimberButton = Button.kRightBumper.value;
+		//other
+		public static final boolean motorInverted = true; //Todo: find all these
+		public static final double rotationToRad = 2 * Math.PI;
+		public static final boolean encoderInverted = false;
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
+		public static final double posToleranceRad = 0;
+		public static final double velToleranceRadPSec = 0;
+
 	}
 	public static final class IntakeShooter {
 		//in set() speed
