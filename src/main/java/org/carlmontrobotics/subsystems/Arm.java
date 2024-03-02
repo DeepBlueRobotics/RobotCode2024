@@ -37,15 +37,15 @@ public class Arm extends SubsystemBase {
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
-    private final ArmFeedforward armFeed = new ArmFeedforward(kG, kS, kV, kA);
+    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
     private final SparkPIDController armPID = masterArmMotor.getPIDController();
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(armConstraints);
     
     //TODO: put in correct initial position
     // rad, rad/s
-    private static TrapezoidProfile.State goalState;
-    private static TrapezoidProfile.State setpointState;
+    private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);
+
 
     public Arm() {
         masterArmMotor.setInverted(motorInverted[MASTER]);
@@ -69,16 +69,30 @@ public class Arm extends SubsystemBase {
       
         SmartDashboard.putData("Arm", this);
 
-        setpointState = getCurrentArmState();
-        goalState = getCurrentArmState();
-
         setArmTarget(goalState.position);
     }
 
     @Override
     public void periodic() {
+
         if(DriverStation.isDisabled()) resetGoal();
-        driveArm();
+
+        //smart dahsboard stuff
+        //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
+        SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
+        //posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
+        //velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
+
+       // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
+        //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
+        SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
+        SmartDashboard.putNumber("InternalArmVelocity", armEncoder.getVelocity());
+        //SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
+
+       // SmartDashboard.putNumber("ArmPos", getArmPos());
+
+        //driveArm(armProfile.calculate(armProfileTimer.get()));
+
         autoCancelArmCommand();
     }
 
@@ -95,32 +109,32 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    // run in periodic, code that drives arm to desired goal
-    // uses trapezoid profiles which supplies goal states to pid controller
-    // feedforward controller is used to supply additional voltage to keep it
-    // at its current position
-    public void driveArm(){
-        setpointState = armProfile.calculate(kDt, setpointState, goalState);
-        var currentPosition = getCurrentArmState();
-        double armFeedVolts = armFeed.calculate(currentPosition.position, currentPosition.velocity);
-
-        // code to stop arm from moving past certain bounds
-        if ((getArmPos() > ARM_UPPER_LIMIT_RAD && currentPosition.velocity > 0) || 
-            (getArmPos() < ARM_LOWER_LIMIT_RAD && currentPosition.velocity < 0)) {
-            armFeedVolts = armFeed.calculate(currentPosition.position, 0);
-        }
-        armPID.setReference(setpointState.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+    //#region Drive Methods
+    public void driveArm(double goalAngle){
+      TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
+      TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
+      double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+    
+      armPID.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
 
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
+
+        armProfile = new TrapezoidProfile(armConstraints);
+        armProfileTimer.reset();
+
         goalState.position = targetPos;
         goalState.velocity = 0;
     }
 
+    
+
     public void resetGoal() {
         double armPos = getArmPos();
-        setArmTarget(armPos);
+      
+        armProfile = new TrapezoidProfile(armConstraints);
+
     }
 
     //#endregion
@@ -132,24 +146,41 @@ public class Arm extends SubsystemBase {
                 ARM_DISCONTINUITY_RAD + 2 * Math.PI);
     }
 
+
     public double getArmVel() {
         return armEncoder.getVelocity();
     }
+
    
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
+
    
     public TrapezoidProfile.State getCurrentArmGoal() {
         return goalState;
     }
+
    
-    public boolean armAtGoal() {
-        return Math.abs(getArmPos() - goalState.position) < posToleranceRad &&
-            Math.abs(getArmVel() - goalState.velocity) < velToleranceRadPSec;
+    public boolean armAtSetpoint() {
+        return armProfile.isFinished(armProfileTimer.get());
     }
+
+
 
     public double getArmClampedGoal(double goal) {
         return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI), ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
     }
+
+    
+
+    public Translation2d getCoM() {
+        Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
+                .times(ARM_MASS_KG);
+        
+        return comOfArm.plus(comOfArm);
+        //this math is prob wront
+    }
+
+   
 }

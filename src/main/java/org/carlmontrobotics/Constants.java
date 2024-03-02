@@ -46,8 +46,8 @@ public final class Constants {
 		public static final double CLIMB_ANGLE = Units.degreesToRadians(24);
 		
 		// Feedforward
-		public static final double kG = 0;
 		public static final double kS = 0;
+		public static final double kG = 0;
 		public static final double kV = 0;
 		public static final double kA = 0;
 
@@ -72,7 +72,6 @@ public final class Constants {
 		// TODO: Determine actual values
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
-		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
 
 		//#endregion
 	}
