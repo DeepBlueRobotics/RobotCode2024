@@ -195,6 +195,13 @@ public final class Constants {
 		public static final double camToArmJointYMeters = Units.inchesToMeters(-3.241);
 		public static final double camToArmJointXMeters = Units.inchesToMeters(-2.812);
 
+		public static final double maxRPM = 11000;
+		public static final double MAX_ARM_ANGLE = 106.293;
+		public static final double MIN_ARM_ANGLE = 0;
+		public static final double ARM_LENGTH_METERS = Units.inchesToMeters(18.82); //find
+		public static final double speakerHeight = Units.inchesToMeters(82.875);
+		public static final double ROLLER_CIRCUMFERENCE = 2 * Math.PI;
+
 		public static final double armToOuttakeOffsetDeg= 115;
 		public static final class Apriltag {
 			public static final double speakerCenterHeightMeters = Units.inchesToMeters(56.7); //88.125

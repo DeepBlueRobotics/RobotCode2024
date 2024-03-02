@@ -1,5 +1,7 @@
 package org.carlmontrobotics.subsystems;
 
+import static org.carlmontrobotics.Constants.Limelight.*;
+
 import org.carlmontrobotics.Constants;
 
 import edu.wpi.first.math.MathUtil;
@@ -60,7 +62,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public boolean isAligned(double distance){
-    return MathUtil.applyDeadband(distance, Constants.Limelight.errorTolerance) == 0; //if it's within 0.1 of the center
+    return MathUtil.applyDeadband(distance, errorTolerance) == 0; //if it's within 0.1 of the center
   }
 
   // public Pose2d getCurrentPose(){
@@ -93,15 +95,8 @@ public class Limelight extends SubsystemBase {
 
   public double[] getFiringAngleRPM() {
       //consts
-      double maxRPM = 11000;//set to the max acheivable rpm of a free-load NEO550 Brushless
+      //set to the max acheivable rpm of a free-load NEO550 Brushless
       //double maxRPM = 11000;
-      double MAX_ARM_ANGLE = 106.293;
-      double MIN_ARM_ANGLE = 0;
-      double camToArmJointXMeters = Units.inchesToMeters(-6.8);
-      double camToArmJointYMeters = Units.inchesToMeters(1.936);
-      double ARM_LENGTH_METERS = Units.inchesToMeters(18.82); //find
-      double speakerHeight = Units.inchesToMeters(82.875);
-      double ROLLER_CIRCUMFERENCE = 2 * Math.PI;
 
       //not constant constants
       // double armAngle = arm.getArmPos();//flat to ground is zero
