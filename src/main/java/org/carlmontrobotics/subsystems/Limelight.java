@@ -93,54 +93,39 @@ public class Limelight extends SubsystemBase {
   public double[] getFiringAngleRPM() {
       //consts
       double minRPM = 11000;//set to the max acheivable rpm of a free-load NEO550 Brushless
+      double maxRPM = 11000;
+
       //not constant constants
       // double armAngle = arm.getArmPos();//flat to ground is zero
       double flatDist = distanceToTargetSpeaker() + camToArmJointXMeters;
 
-      for (int i=MIN_ARM_ANGLE*5; i<MAX_ARM_ANGLE*5; i++){
-        armAngle = i/5
-        /*
-        Fa (firing angle) = arm angle + shooter angle offset
-        Fa = arm angle + 60 + 180 = ArmAngle + 240˚
-                        ^ arm:intake angle is 120deg
-        */double Fa = armAngle + 240/*
-
-        Fo (firing offsetY) = (ArmJoint:limelight offsetY) + sin(armAngle)*armLength + sin(120˚)*EEffectorDepth/2
-                                    ^ where arm starts        ^ where arm ends           ^ where shooter ends
-        */double Fo_y = camToArmJointYMeters + Math.sin(armAngle)*ARM_LENGTH_METERS + Math.sin(Math.toRadians(120))/*
-
-        PARAMETRIC:
-        x,y of ring
-        x = time*Fv*cos(Fa)
-        y = speakerHeight = Fo_y + time*Fv*sin(Fa) - gravity*time^2   (gravity is 9.8m/s^2)
-
-        or rather, time = flatDist / (Fv*cos(Fa))
-        */double time = flatDist / (Fv*Math.cos(Fa))/*
-        */double Fv = (speakerHeight - Fo_y + 9.8*time*time)/(time*Math.sin(Fa))/*
-
-        Fv (firing velocity of surface of roller, per sec)
-        Fv = circumfrence * rpm/60
-        rpm = 60* Fv/circumfrence
-        */double rpm = 60 * Fv/ROLLER_CIRCUMFRENCE;/*
+      for (int i=0; i<maxRPM/10; i++){
+        double rpm = 10*i;
+        for (int i=MIN_ARM_ANGLE*5; i<MAX_ARM_ANGLE*5; i++){
+          double armAngle = i/5
 
 
-        OUTPUTS
-        kD is kDrag
-        rpm = kD*t^2 + rpm
-        */
+          /*
+          PARAMETRIC:
+          x,y of ring
+          x = time*Fv*cos(Fa)
+          y = speakerHeight = Fo_y + time*Fv*sin(Fa) - gravity*time^2   (gravity is 9.8m/s^2)
+          */double fvConst = 2*Math.PI*Units.inchesToMeters(1)/60/*
+          */double Fv = rpm * fvConst/*
+
+          Fa (firing angle) = arm angle + shooter angle offset
+          Fa = arm angle + 60 + 180 = ArmAngle + 240˚
+                          ^ arm:intake angle is 120deg
+          */double Fa = armAngle + 240/*
+
+
+          */double time = flatDist / (Fv*Math.cos(Fa))/*
+          time*Fv*sin(Fa) = speakerHeight - Fo_y + gravity*time^2
+          *//*
+          */
+          minRPM = Math.min(minRPM,rpm);
+        }
       }
-
-      for(int i = 0; i<= 360; i++) {
-          double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
-          double rpm = distance/Math.cos(i)*t;
-          if(rpm<minRPM) {
-              minRPM = rpm;
-          }
-      }
-      if(minRPM == Integer.MAX_VALUE) {
-          System.err.println("FAILURE");
-      }
-      return minRPM;
   }
 
     // public double distanceToTargetxyz(){
