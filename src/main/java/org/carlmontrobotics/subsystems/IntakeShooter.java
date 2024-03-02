@@ -99,7 +99,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor 2", getGamePieceDistance2());
         SmartDashboard.putBoolean("DS1 Sees piece", gameDistanceSees1st());
         SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSees2nd());
-        senseGamePieceStop();
+        senseGamePieceStop(); // slows down when sensed by the first Sensor and stops upon being sensed by the second
     }
 
     public void setRPMOutake(double rpm) {

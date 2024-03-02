@@ -170,7 +170,7 @@ public final class Constants {
 		public static final int distanceSensorPort2 = 0; //port
 		public static final double distanceBetweenSensors = 8.189; // inches
 		public static final double OFFSETFROMGROUND = 21; // in
-		public static final double dsDepth = 9.97;
+		public static final double dsDepth = 9.97; // Distance sensor Depth
 		public static final double detectDistance = 13;
 
 
