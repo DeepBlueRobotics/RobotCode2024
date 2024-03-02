@@ -112,7 +112,7 @@ public class RobotContainer {
     // new JoystickButton(driverController, Driver.rotateFieldRelative120Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
     // new JoystickButton(driverController, Driver.rotateFieldRelative240Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
 	}
-
+  
   private void setBindingsManipulator() {
   //have the trigger and button bindings here call the Intake, Shoot, and Eject commands
 
@@ -131,16 +131,22 @@ public class RobotContainer {
     
     /*/Amp Shooting/*/      
     //add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
-    new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).onTrue(new SequentialCommandGroup(
-      new ShooterToRPM(intakeShooter, AMP_RPM),
-      new PassToOutake(intakeShooter)
-    ));
+    //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new InstantCommand (()-> intakeShooter.setRPMOutake(AMP_RPM)));
+    //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new PassToOutake(intakeShooter));
     
+    new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).toggleOnTrue(new SequentialCommandGroup(
+      new InstantCommand (()-> intakeShooter.setRPMOutake(AMP_RPM))));
+      new PassToOutake(intakeShooter);
+    ;
+
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new SequentialCommandGroup(
-      new ShooterToRPM(intakeShooter, SPEAKER_RPM),
-      new PassToOutake(intakeShooter)
-    ));
+    //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new InstantCommand (()-> intakeShooter.setRPMOutake(OUTAKE_RPM)));
+    //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new PassToOutake(intakeShooter));
+
+    new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).toggleOnTrue(new SequentialCommandGroup(
+      new InstantCommand (()-> intakeShooter.setRPMOutake(OUTAKE_RPM))));
+      new PassToOutake(intakeShooter);
+    ;
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, OI.Manipulator.IntakeButton.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
