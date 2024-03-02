@@ -87,7 +87,7 @@ public class IntakeShooter extends SubsystemBase {
 
         double xm = (distanceBetweenSensors)/2;
 
-        double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r; 
+        double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r;
         return h;
     }
 
@@ -126,9 +126,13 @@ public class IntakeShooter extends SubsystemBase {
         setRPMintake(0);
     }
 
-    public double calculateRPMAtDistance() {
-        double minRPM = Integer.MAX_VALUE;
-        double distance = 30; // placeholder for limelight 
+    /**
+    * wow
+    * 
+    * @param distance  The flat distance, in X meters, to the apriltag.
+    */
+    public double calculateRPMAtDistance(distance) {
+        double minRPM = 11000;//set to the max acheivable rpm of a free-load NEO550 Brushless
         for(int i = 0; i<= 360; i++) {
             double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
             double rpm = distance/Math.cos(i)*t;

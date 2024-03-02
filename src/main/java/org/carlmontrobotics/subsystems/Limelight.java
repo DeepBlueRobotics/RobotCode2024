@@ -21,17 +21,23 @@ public class Limelight extends SubsystemBase {
   private double[] targetPose = null;
   private Pose3d botpose;
 
+  private Arm arm;
+  private IntakeShooter endEffector;
+
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
 
-  public Limelight() {
+  public Limelight(Arm arm, IntakeShooter endEffector) {
+    this.arm = arm;
+    this.endEffector = endEffector;//needed for calculating rpm and firing angle
+
     // this.drivetrain = drivetrain;
     // poseEstimator = new SwerveDrivePoseEstimator(
-    //   drivetrain.getKinematics(), 
-    //   Rotation2d.fromDegrees(drivetrain.getHeading()), 
-    //   drivetrain.getModulePositions(), 
+    //   drivetrain.getKinematics(),
+    //   Rotation2d.fromDegrees(drivetrain.getHeading()),
+    //   drivetrain.getModulePositions(),
     //   new Pose2d());
-    
+
     botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[7]);
     //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
   }
@@ -74,7 +80,7 @@ public class Limelight extends SubsystemBase {
   public double distanceToTargetSpeaker(){
     if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
       double angleToGoalRadians = (Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight")) * (Math.PI/180);
-      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.groundToCamYMeters) / Math.tan(angleToGoalRadians);
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
@@ -82,6 +88,59 @@ public class Limelight extends SubsystemBase {
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
+  }
+
+  public double[] getFiringAngleRPM() {
+      //consts
+      double minRPM = 11000;//set to the max acheivable rpm of a free-load NEO550 Brushless
+      //not constant constants
+      // double armAngle = arm.getArmPos();//flat to ground is zero
+      double flatDist = distanceToTargetSpeaker() + camToArmJointXMeters;
+
+      for (int i=MIN_ARM_ANGLE*5; i<MAX_ARM_ANGLE*5; i++){
+        armAngle = i/5
+        /*
+        Fa (firing angle) = arm angle + shooter angle offset
+        Fa = arm angle + 60 + 180 = ArmAngle + 240˚
+                        ^ arm:intake angle is 120deg
+        */double Fa = armAngle + 240/*
+
+        Fo (firing offsetY) = (ArmJoint:limelight offsetY) + sin(armAngle)*armLength + sin(120˚)*EEffectorDepth/2
+                                    ^ where arm starts        ^ where arm ends           ^ where shooter ends
+        */double Fo_y = camToArmJointYMeters + Math.sin(armAngle)*ARM_LENGTH_METERS + Math.sin(Math.toRadians(120))/*
+
+        PARAMETRIC:
+        x,y of ring
+        x = time*Fv*cos(Fa)
+        y = speakerHeight = Fo_y + time*Fv*sin(Fa) - gravity*time^2   (gravity is 9.8m/s^2)
+
+        or rather, time = flatDist / (Fv*cos(Fa))
+        */double time = flatDist / (Fv*Math.cos(Fa))/*
+        */double Fv = (speakerHeight - Fo_y + 9.8*time*time)/(time*Math.sin(Fa))/*
+
+        Fv (firing velocity of surface of roller, per sec)
+        Fv = circumfrence * rpm/60
+        rpm = 60* Fv/circumfrence
+        */double rpm = 60 * Fv/ROLLER_CIRCUMFRENCE;/*
+
+
+        OUTPUTS
+        kD is kDrag
+        rpm = kD*t^2 + rpm
+        */
+      }
+
+      for(int i = 0; i<= 360; i++) {
+          double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
+          double rpm = distance/Math.cos(i)*t;
+          if(rpm<minRPM) {
+              minRPM = rpm;
+          }
+      }
+      if(minRPM == Integer.MAX_VALUE) {
+          System.err.println("FAILURE");
+      }
+      return minRPM;
   }
 
     // public double distanceToTargetxyz(){

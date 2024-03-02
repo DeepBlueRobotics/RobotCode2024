@@ -181,7 +181,8 @@ public final class Constants {
 		public static final double SPEAKER_RPM = 6000;
 
 		public static final double RPM_TOLERANCE = 10;
-		public static final double SpeakerHeight = 83; // inches 
+		public static final double ARM_LENGTH_METERS = Units.inchesToMeters(13.2);
+		public static final double speakerHeight = 83; // inches
 
 	}
 	public static final class Limelight {
@@ -189,7 +190,11 @@ public final class Constants {
 		public static final double horizontalFOV = 0;
 		public static final double resolutionWidth = 640;
 		public static final double mountAngleDeg = 46.2; //23.228
-		public static final double heightFromGroundMeters = Units.inchesToMeters(9); //16.6
+		public static final double groundToCamYMeters = Units.inchesToMeters(9); //16.6
+
+		public static final double camToArmJointYMeters = Units.inchesToMeters(-3.241);
+		public static final double camToArmJointXMeters = Units.inchesToMeters(-2.812);
+
 		public static final double armToOuttakeOffsetDeg= 115;
 		public static final class Apriltag {
 			public static final double speakerCenterHeightMeters = Units.inchesToMeters(56.7); //88.125
@@ -203,7 +208,7 @@ public final class Constants {
 			public static final int slowDriveButton = Button.kLeftBumper.value;
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
             public static final int toggleFieldOrientedButton = Button.kStart.value;
-			
+
             public static final int rotateFieldRelative0Deg = Button.kY.value;
             public static final int rotateFieldRelative90Deg = Button.kB.value;
             public static final int rotateFieldRelative180Deg = Button.kA.value;
