@@ -28,12 +28,12 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
     private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
-    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\    
-
+    private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\
+    
     public IntakeShooter() {
         //Figure out which ones to set inverted 
         intakeMotor.setInverted(false);
-        outakeMotor.setInverted(true); 
+        outakeMotor.setInverted(true);         
         pidControllerOutake.setP(kP[0]);
         pidControllerOutake.setI(kI[0]);
         pidControllerOutake.setD(kD[0]);
@@ -41,7 +41,7 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[1]);
         pidControllerIntake.setD(kD[1]);
     }
-    public boolean isWithenTolerance(double outakeRPM){
+    public boolean isWithinTolerance(double outakeRPM){
         return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
     public double getGamePieceDistanceIntake() {
@@ -64,7 +64,8 @@ public class IntakeShooter extends SubsystemBase {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
                     feedforward.calculate(-1 / 60));//Slows down the motors once the first distance sensor detects the note
             if (gameDistanceSees2nd()) {
-                pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));//Stops it when the second distance sensor detects the note
+                pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, 
+                        feedforward.calculate(0));//Stops it when the second distance sensor detects the note
             }
         }
     }
@@ -96,7 +97,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public double calculateIntakeAmount(){
-        //Literatly just calcDIstanceSensorNotes but instead of solving for k, we are solving for h
+        //Literatly just calcDistanceSensorNotes but instead of solving for k, we are solving for h
         double d1 = getGamePieceDistanceIntake();
         double d2 = getGamePieceDistanceOutake();
         double r = 7;
