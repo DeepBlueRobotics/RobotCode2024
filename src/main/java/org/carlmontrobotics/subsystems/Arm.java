@@ -44,7 +44,7 @@ public class Arm extends SubsystemBase {
     // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
     
     private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
-    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO)
+    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
     private final RelativeEncoder armEncoder = armMotor1.getEncoder();
 
 
@@ -71,6 +71,9 @@ public class Arm extends SubsystemBase {
         armEncoder.setVelocityConversionFactor(rotationToRad);
         armEncoder.setInverted(encoderInverted);
 
+        armMotor2.follow(armMotor1);
+     
+        //armEncoder1.setZeroOffset(offsetRad);
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
