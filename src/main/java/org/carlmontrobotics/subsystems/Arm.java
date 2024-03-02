@@ -123,19 +123,19 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
     }
 
-   /*  public void autoCancelArmCommand() {
+  public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
 
-        double[] requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
+        double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
 
-        if(requestedSpeeds[0] != 0 || requestedSpeeds[1] != 0) {
+        if(requestedSpeeds != 0) {
             Command currentArmCommand = getCurrentCommand();
             if(currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
                 currentArmCommand.cancel();
             }
         }
     }
-*/
+
     //#region Drive Methods
 
     public void driveArm(double goalAngle) {
