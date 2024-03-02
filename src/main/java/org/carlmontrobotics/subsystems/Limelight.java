@@ -7,6 +7,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -101,13 +102,13 @@ public class Limelight extends SubsystemBase {
         armAngle = i/5
         /*
         Fa (firing angle) = arm angle + shooter angle offset
-        Fa = arm angle + 60 + 180 = ArmAngle + 240˚
+        Fa = arm angle + 65 + 180 = ArmAngle + 240˚
                         ^ arm:intake angle is 120deg
-        */double Fa = armAngle + 240/*
+        */double Fa = armAngle + 245/*
 
         Fo (firing offsetY) = (ArmJoint:limelight offsetY) + sin(armAngle)*armLength + sin(120˚)*EEffectorDepth/2
                                     ^ where arm starts        ^ where arm ends           ^ where shooter ends
-        */double Fo_y = camToArmJointYMeters + Math.sin(armAngle)*ARM_LENGTH_METERS + Math.sin(Math.toRadians(120))/*
+        */double Fo_y = camToArmJointYMeters + Math.sin(armAngle)*ARM_LENGTH_METERS + Units.inchesToMeters(4)*Math.sin(Math.toRadians(205))/*
 
         PARAMETRIC:
         x,y of ring
@@ -130,17 +131,6 @@ public class Limelight extends SubsystemBase {
         */
       }
 
-      for(int i = 0; i<= 360; i++) {
-          double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
-          double rpm = distance/Math.cos(i)*t;
-          if(rpm<minRPM) {
-              minRPM = rpm;
-          }
-      }
-      if(minRPM == Integer.MAX_VALUE) {
-          System.err.println("FAILURE");
-      }
-      return minRPM;
   }
 
     // public double distanceToTargetxyz(){
