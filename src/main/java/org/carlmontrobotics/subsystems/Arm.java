@@ -52,15 +52,6 @@ public class Arm extends SubsystemBase {
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
     private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final SparkPIDController armPID = armMotor1.getPIDController();
-    public static TrapezoidProfile.State[] goalState = { 
-      new TrapezoidProfile.State(intakeAngle, 0), 
-      new TrapezoidProfile.State(ampAngle, 0),  
-      new TrapezoidProfile.State(placeholderSpeakerAngle1, 0),
-      new TrapezoidProfile.State(placeholderSpeakerAngle2, 0),
-      new TrapezoidProfile.State(placeholderSpeakerAngle3, 0),
-      new TrapezoidProfile.State(climberUpAngle, 0),
-      new TrapezoidProfile.State(climberDownAngle, 0),
-    };
     
     TrapezoidProfile profile = new TrapezoidProfile(Constants.Arm.trapConstraints);
     
@@ -89,10 +80,6 @@ public class Arm extends SubsystemBase {
       */
 	
 
-    public TrapezoidProfile.State calculateSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, int goalStateIndex) {
-      return profile.calculate(goalSeconds, currentPoint, goalState[goalStateIndex]);
-    }
-
     public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
       return profile.calculate(goalSeconds, currentPoint, goalState);
       
@@ -114,8 +101,8 @@ public class Arm extends SubsystemBase {
       //armFeed.maxAchievableVelocity(MAX_VOLTAGE, );
     //}
 
-    public double calculateTrapTime(double goalAngle, double currentAngle){
-      double distToCover = goalAngle - currentAngle;
+    public double calculateTrapTime(double goalAngle){
+      double distToCover = goalAngle - armEncoder.getPosition() * 360;
       double maxAccel = maxacceleration();
 
       double timeOfAccelTriangle = MAX_FF_VEL / maxAccel;
@@ -129,13 +116,17 @@ public class Arm extends SubsystemBase {
     }
     
 
-    // public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
-    //   TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
-    //   double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
-    //   armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
+    public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
+      TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
+      double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+      armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
+     }
 
-    // }
-    
+     public void driveArm(double angle) {
+      double timeToTarget = calculateTrapTime(angle);
+      TrapezoidProfile.State goalState = new TrapezoidProfile.State(angle, 0);
+      driveArm(timeToTarget, goalState); 
+     }
 
     public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
       // feed forward still needs the math part

@@ -7,6 +7,7 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
+import static org.carlmontrobotics.Constants.Arm.speakerPodiumAngle;
 
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
@@ -73,15 +74,23 @@ public class RobotContainer {
     //right joystick used for manual arm control
 
     // Speaker Buttons
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerPodButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armPodiumSpeakerPos(arm);}));
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armNextToSpeakerPos(arm);}));
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armSafeZonePos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerPodButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
+      //we don't know what these are for
+    // new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {
+    //   arm.cancelArmCommand(); new armNextToSpeakerPos(arm);}));
+    // new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {
+    //   arm.cancelArmCommand(); new armSafeZonePos(arm);}));
     // Amp and Intake Buttons
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armAmpPos(arm);}));
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToGroundButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armGroundPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToGroundButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
     // Cimber Buttons
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToClimberButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armClimberUpPos(arm);}));
-    new JoystickButton(manipulatorController, Constants.Arm.lowerToClimberButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armClimberDownPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToClimberButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
+    new JoystickButton(manipulatorController, Constants.Arm.lowerToClimberButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
   }
 
   public Command getAutonomousCommand() {

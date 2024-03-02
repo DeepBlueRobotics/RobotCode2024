@@ -33,9 +33,9 @@ public final class Constants {
 		// USE RADIANS FOR THE ARM
 		public static final double intakeAngle = Math.toRadians(0);
 		public static final double ampAngle = Math.toRadians(103);
-		public static final double placeholderSpeakerAngle1 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
+		public static final double speakerPodiumAngle = Math.toRadians(24);
+		//public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
+		//public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
 		public static final double climberUpAngle = Math.toRadians(24);
 		public static final double climberDownAngle = Math.toRadians(24);
 
