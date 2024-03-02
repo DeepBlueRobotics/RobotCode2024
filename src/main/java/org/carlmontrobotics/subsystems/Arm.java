@@ -40,33 +40,35 @@ public class Arm extends SubsystemBase {
    */
     // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
     
-    private final CANSparkMax masterArmMotor = MotorControllerFactory.createSparkMax(MASTER_ARM_MOTOR, MotorConfig.NEO);
-    private final CANSparkMax followArmMotor = MotorControllerFactory.createSparkMax(FOLLOW_ARM_MOTOR, MotorConfig.NEO);
-    private final RelativeEncoder armEncoder = masterArmMotor.getEncoder();
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
+    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
+    private final RelativeEncoder armEncoder = armMotor1.getEncoder();
+
 
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
-    private final SparkPIDController armPID = masterArmMotor.getPIDController();
-
-    private TrapezoidProfile armProfile = new TrapezoidProfile(armConstraints);
-    
-    private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
+    private final SparkPIDController armPID1 = armMotor1.getPIDController();
+    private final SparkPIDController armPID2 = armMotor2.getPIDController();
+    private TrapezoidProfile armProfile = new TrapezoidProfile(trapConstraints);
+    private Timer armProfileTimer = new Timer();
+    TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
 
     // rad, rad/s
     //public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
 
     public Arm() {
       // weird math stuff
-        masterArmMotor.setInverted(motorInverted);
-        masterArmMotor.setIdleMode(IdleMode.kBrake);
-        followArmMotor.setInverted(motorInverted);
-        followArmMotor.setIdleMode(IdleMode.kBrake);
+        armMotor1.setInverted(motorInverted);
+        armMotor1.setIdleMode(IdleMode.kBrake);
+        armMotor2.setInverted(motorInverted);
+        armMotor2.setIdleMode(IdleMode.kBrake);
         armEncoder.setPositionConversionFactor(rotationToRad);
         armEncoder.setVelocityConversionFactor(rotationToRad);
         armEncoder.setInverted(encoderInverted);
-        followArmMotor.follow(masterArmMotor);
+
+        armMotor2.follow(armMotor1);
      
         //armEncoder1.setZeroOffset(offsetRad);
       
@@ -91,9 +93,12 @@ public class Arm extends SubsystemBase {
 
         //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
-        armPID.setP(kP);
-        armPID.setI(kI);
-        armPID.setD(kD);
+        armPID1.setP(kP);
+        armPID1.setI(kI);
+        armPID1.setD(kD);
+        armPID2.setP(kP);
+        armPID2.setI(kI);
+        armPID2.setD(kD);
 
         //smart dahsboard stuff
         //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
@@ -133,13 +138,13 @@ public class Arm extends SubsystemBase {
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
     
-      armPID.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+      armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
 
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
 
-        armProfile = new TrapezoidProfile(armConstraints);
+        armProfile = new TrapezoidProfile(trapConstraints);
         armProfileTimer.reset();
 
         goalState.position = targetPos;
@@ -151,7 +156,7 @@ public class Arm extends SubsystemBase {
     public void resetGoal() {
         double armPos = getArmPos();
       
-        armProfile = new TrapezoidProfile(armConstraints);
+        armProfile = new TrapezoidProfile(trapConstraints);
 
     }
 
