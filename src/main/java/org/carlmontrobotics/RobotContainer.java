@@ -125,7 +125,7 @@ public class RobotContainer {
   //Xbox A button -> Eject
 
 
-    //COMBINING BINDINGS WITH ARM
+    //TODO: IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
     /*/Eject/*/
     new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
     

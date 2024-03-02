@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.matches;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
+import org.carlmontrobotics.subsystems.Limelight;
 import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
@@ -31,7 +32,9 @@ public class IntakeShooter extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
     private TimeOfFlight distanceSensor = new TimeOfFlight(distanceSensorPort1); // make sure id port is correct here
     private TimeOfFlight distanceSensor2 = new TimeOfFlight(distanceSensorPort2); // insert\
-    
+    private final Limelight limelight = new Limelight();
+
+
     public IntakeShooter() {
         //Figure out which ones to set inverted 
         intakeMotor.setInverted(false);
@@ -43,9 +46,11 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[1]);
         pidControllerIntake.setD(kD[1]);
     }
+    //---------------------------------------------------------------------------------------------------
     public boolean isWithinTolerance(double outakeRPM){
         return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
+    //---------------------------------------------------------------------------------------------------
     public double getGamePieceDistanceIntake() {
         return Units.metersToInches((distanceSensor.getRange() - dsDepth) / 1000);
     }
@@ -142,7 +147,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public double calculateRPMAtDistance() {
         double minRPM = Integer.MAX_VALUE;
-        double distance = 30; // placeholder for limelight 
+        double distance = limelight.distanceToTargetSpeaker(); // placeholder for limelight 
         for(int i = 0; i<= 360; i++) {
             double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
             double rpm = distance/Math.cos(i)*t;
