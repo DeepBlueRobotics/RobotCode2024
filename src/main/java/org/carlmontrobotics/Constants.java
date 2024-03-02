@@ -26,18 +26,14 @@ public final class Constants {
 	
 	public static final class Arm {
 		//#region subsytem constants
-		
+
 		// ports
 		public static final int MASTER_ARM_MOTOR = 7;
 		public static final int FOLLOW_ARM_MOTOR = 8;
 
 		// config
-		public static final int MASTER = 0;
-		public static final int FOLLOWER = 1;
 		public static final boolean[] motorInverted = {true, true}; //Todo: find all these (they are definetely wrong)
 		public static final boolean encoderInverted = false;
-		// TODO: Figure out offset
-		public static final double ENCODER_OFFSET = 0;
 		
 		// goal positions
 		public static final double INTAKE_ANGLE = Units.degreesToRadians(0);
