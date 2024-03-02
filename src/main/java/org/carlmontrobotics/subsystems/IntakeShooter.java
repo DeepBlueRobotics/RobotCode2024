@@ -5,6 +5,7 @@ import static org.carlmontrobotics.Constants.IntakeShoot;
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.mockito.ArgumentMatchers.matches;
 
+import org.carlmontrobotics.Constants.IntakeShoot.Level;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
@@ -101,11 +102,23 @@ public class IntakeShooter extends SubsystemBase {
         double d2 = getGamePieceDistanceOutake();
         double r = 7;
         double ym = (d1+d2)/2; //Y midpoint between 2 points
-        double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
+        double m = (0-distanceBetweenSensors)/(d2-d1); // Slope
+        //double h = xm + r * (1/(Math.sqrt(1+Math.pow(m, 2)))); // x cord of center <- currently incorrect, check this link for correct:https://stackoverflow.com/questions/36211171/finding-center-of-a-circle-given-two-points-and-radius 
+        double k1 = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
+        double k2 = ym - (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
         //Take into note that in reality, the 2 points can return 2 possible centers
-        return k - center; //<- offset from the center
+        double ti = 13;
+        if(ti>k1+7 && 0<k1-7) {
+            return k1;
+        }
+        else { if(ti>k2+7 && 0<k2-7){
+            return k2;
+        } else {
+            System.err.println("BROKEN VALUE");
+            return 0.0;
+        }
     }
-    //find out what this means
+
     public double calculateIntakeAmount(){
         //Literatly just calcDistanceSensorNotes but instead of solving for k, we are solving for h
         double d1 = getGamePieceDistanceIntake();
@@ -147,6 +160,7 @@ public class IntakeShooter extends SubsystemBase {
         //use method created for setReference
         //pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
         return rpm;
+
     }
 
     public void stopOutake() {
@@ -155,7 +169,7 @@ public class IntakeShooter extends SubsystemBase {
     
 
     public void stopIntake() {
-        setRPMintake(0);
+        pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
     }
     //THEORTICAL DOES NOT COUNT FOR ARM ANGLE PRETENDS THE SHOOTER IS A SINGLE JOINT ERGO NO ANGLE OFFSET || ALSO NOT DONE LMAO
     public double calcSpecificAngle() {
@@ -173,7 +187,7 @@ public class IntakeShooter extends SubsystemBase {
             if(rpm<minRPM) {
                 minRPM = rpm;
             }
-        }
+        }   
         if(minRPM == Integer.MAX_VALUE) {
             System.err.println("FAILURE");
         }
