@@ -135,16 +135,13 @@ public class Arm extends SubsystemBase {
     }
 
     //#region Drive Methods
-
-    public void driveArm(double goalAngle) {
-        double targetRPS = SmartDashboard.getNumber("Shooter RPS", 0);
-        TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
-        double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
-        double feed = armFeed.calculate(targetRPS);
-        armPID1.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
-        armPID2.setReference(targetRPS * 60, CANSparkBase.ControlType.kVelocity, 0, feed);
+    public void driveArm(double goalAngle ){
+      TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
+      TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
+      double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+    
+      armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
-
 
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
@@ -161,7 +158,7 @@ public class Arm extends SubsystemBase {
     public void resetGoal() {
         double armPos = getArmPos();
       
-        armProfile = new TrapezoidProfile(trapConstraints, );
+        armProfile = new TrapezoidProfile(trapConstraints);
 
     }
 
