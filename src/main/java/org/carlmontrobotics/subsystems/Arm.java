@@ -92,7 +92,7 @@ public class Arm extends SubsystemBase {
 
         if(DriverStation.isDisabled()) resetGoal();
 
-        ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
+        //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // wristConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL[WRIST], MAX_FF_ACCEL[WRIST]);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
         armPID1.setP(kP);
@@ -105,8 +105,8 @@ public class Arm extends SubsystemBase {
         //smart dahsboard stuff
         //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
         SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
-        posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
-        velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
+        //posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
+        //velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
 
        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
         //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
@@ -116,7 +116,7 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("ArmPos", getArmPos());
 
-        driveArm(armProfile.calculate(armProfileTimer.get()));
+        //driveArm(armProfile.calculate(armProfileTimer.get()));
 
         autoCancelArmCommand();
     }
@@ -188,21 +188,16 @@ public class Arm extends SubsystemBase {
 
    
     public boolean armAtSetpoint() {
-        return armPID1.atSetpoint() && armProfile.isFinished(armProfileTimer.get());
+        return armProfile.isFinished(armProfileTimer.get());
     }
 
-    
 
-    //#endregion
-
-    //#region Util Methods
 
     public double getArmClampedGoal(double goal) {
         return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI), ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
     }
 
-    public double getWristClampedGoal(double goal) {
-    }
+    
 
     public Translation2d getCoM() {
         Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
@@ -212,58 +207,5 @@ public class Arm extends SubsystemBase {
         //this math is prob wront
     }
 
-    /*public double maxHoldingTorqueNM() {
-        return (ARM_MASS_KG + ROLLER_MASS_KG) * g * getCoM().getNorm();
-    }
-    */
-
-   /*  public static double getV_PER_NM() {
-        double kg = kG ;
-        double phi = 2.638;
-        double Ma = ARM_MASS_KG;
-        double Mr = ROLLER_MASS_KG;
-        double Ra = ARM_LENGTH_METERS;
-        double Rr = COM_ROLLER_LENGTH_METERS;
-        double PaRa = COM_ARM_LENGTH_METERS;
-        double g = 9.80;
-
-        double c = (kg) / (g * Math.sqrt(Math.pow(Ma * PaRa + Mr * Ra, 2) + Math.pow(Mr * Rr, 2) + 2 * (Ma * PaRa + Mr * Ra) * (Mr * Rr) * Math.cos(phi)));
-        return c;
-    }*/
-
-    /*public double getKg() {
-        return getV_PER_NM() * maxHoldingTorqueNM();
-    }*/
-
    
-
-    
-   
-   /*  public boolean getForbFlag()
-    {
-        boolean output = forbFlag;
-        forbFlag = false;//default: if it wasn't set to true, it's false
-        return output;
-    }*/
-   
-
-    
-
-   
-    //#endregion
-
-    //#region SmartDashboard Methods
-
-
-
-
-    // In the scenario that initSendable method does not work like last time
-   
-   
-    
-
-   
-
-    //#endregion
-
 }
