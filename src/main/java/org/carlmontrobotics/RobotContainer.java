@@ -17,7 +17,6 @@ import java.util.function.BooleanSupplier;
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.Manipulator;
 //subsystems
-import org.carlmontrobotics.subsystems.Arm;
 //import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
@@ -60,9 +59,6 @@ import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
-
-  private final Arm arm = new Arm();
-
   IntakeShooter intakeShooter = new IntakeShooter();
   // private final Drivetrain drivetrain = new Drivetrain();
 

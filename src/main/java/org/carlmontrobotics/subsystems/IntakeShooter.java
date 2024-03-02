@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.matches;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
-import org.carlmontrobotics.subsystems.Arm;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.AbsoluteEncoder;
