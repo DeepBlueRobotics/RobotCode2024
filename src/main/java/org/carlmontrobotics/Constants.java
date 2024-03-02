@@ -60,7 +60,7 @@ public final class Constants {
 		
 		
 		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
-		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
+		public static final double COM_ARM_LENGTH_METERS = 0.31242;
 		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
