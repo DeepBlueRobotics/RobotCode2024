@@ -1,184 +1,115 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
-package org.carlmontrobotics.subsystems;
-
-import java.util.function.DoubleSupplier;
-
-import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.commands.ArmTeleop;
 
 import static org.carlmontrobotics.Constants.Arm.*;
+
+import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
-import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController.AccelStrategy;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
-
-
+// Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
+// Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(LEFT_MOTOR_PORT,MotorConfig.NEO);
-    //private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(Constants.Arm.RIGHT_MOTOR_PORT,MotorConfig.NEO);
-    //there is only one arm motor
-    //test
+    // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
+    private static boolean forbFlag;
+    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
+    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO)
+    private final RelativeEncoder armEncoder = armMotor1.getEncoder();
+   
 
-    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV);
-    private final SparkAbsoluteEncoder armEncoder = armMotor1.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final SparkPIDController armPID = armMotor1.getPIDController();
-    public static TrapezoidProfile.State[] goalState = { 
-      new TrapezoidProfile.State(intakeAngle, 0), 
-      new TrapezoidProfile.State(ampAngle, 0),  
-      new TrapezoidProfile.State(placeholderSpeakerAngle1, 0),
-      new TrapezoidProfile.State(placeholderSpeakerAngle2, 0),
-      new TrapezoidProfile.State(placeholderSpeakerAngle3, 0),
-      new TrapezoidProfile.State(climberUpAngle, 0),
-      new TrapezoidProfile.State(climberDownAngle, 0),
-    };
-    
-    TrapezoidProfile profile = new TrapezoidProfile(Constants.Arm.trapConstraints);
-    
+    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
+
+    private final PIDController armPID = new PIDController(kP, kI, kD);
+
+    private TrapezoidProfile armProfile = new TrapezoidProfile(armConstraints);
+    private Timer armProfileTimer = new Timer();
+
+    // rad, rad/s
+    //public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
+
     public Arm() {
-      armPID.setP(kP);
-      armPID.setI(kI);
-      armPID.setD(kD);
-      armPID.setFF(kV,0);
-      armPID.setIZone(IZONE); //<-- zero for now
-      SmartDashboard.putNumber("kp", kP);
-      SmartDashboard.putNumber("kd", kD);
-      SmartDashboard.putNumber("ki", kI);
-      SmartDashboard.putNumber("Shooter RPS", 0);
+        armMotor1.setInverted(motorInverted);
+        armMotor1.setIdleMode(IdleMode.kBrake);
+        armMotor2.setInverted(motorInverted);
+        armMotor2.setIdleMode(IdleMode.kBrake);
 
-    }
 
-			//arm 
-      /*
-       have 3 set positions
-       Speaker position 
-       Amp position
-        ground position
-       These set positions would also be conrtolled by buttons
-
-       There will also be a manual control for the arm using the right joystick
-      */
-	
-
-    public TrapezoidProfile.State calculateSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, int goalStateIndex) {
-      return profile.calculate(goalSeconds, currentPoint, goalState[goalStateIndex]);
-    }
-
-    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
-      return profile.calculate(goalSeconds, currentPoint, goalState);
+        armEncoder.setPositionConversionFactor(rotationToRad);
+        armEncoder.setVelocityConversionFactor(rotationToRad);
+        armEncoder.setInverted(encoderInverted);
+     
+        //armEncoder1.setZeroOffset(offsetRad);
       
+        armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
+
+        SmartDashboard.putData("Arm", this);
+
+        armProfileTimer.start();
+
+        setArmTarget(goalState.position, 0);
+
+        // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
+        // SmartDashboard.putNumber("Wrist Max Vel", MAX_FF_VEL[WRIST]);
+        SmartDashboard.putNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
+        SmartDashboard.putNumber("Arm Tolerance Pos", posToleranceRad);
+        SmartDashboard.putNumber("Arm Tolerance Vel", velToleranceRadPSec);
     }
 
-    
-    //public void maxacceleration(){
-      //armFeed.maxAchievableAcceleration(MAX_VOLTAGE, armEncoder.getVelocity()); 
-    //}
+    @Override
+    public void periodic() {
 
-    double currentVelocity = armEncoder.getVelocity();
+        if(DriverStation.isDisabled()) resetGoal();
 
-    public double maxacceleration(){
-      double maxAccel = armFeed.maxAchievableAcceleration(MAX_VOLTAGE, currentVelocity); 
-      return maxAccel;
+        ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
+        // wristConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL[WRIST], MAX_FF_ACCEL[WRIST]);
+        // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
+        armPID.setP(kP);
+        armPID.setI(kI);
+        armPID.setD(kD);
+        SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID.atSetpoint());
+        SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
+        posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
+        velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
+       
+
+        SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
+        SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
+        SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
+        SmartDashboard.putNumber("InternalArmVelocity", armRelEncoder.getVelocity());
+        SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
+
+        SmartDashboard.putNumber("ArmPos", getArmPos());
+
+        driveArm(armProfile.calculate(armProfileTimer.get()));
+
+        autoCancelArmCommand();
     }
 
-    //public void maxvelocity(){
-      //armFeed.maxAchievableVelocity(MAX_VOLTAGE, );
-    //}
-
-    public double calculateTrapTime(double goalAngle, double currentAngle){
-      double distToCover = goalAngle - currentAngle;
-      double maxAccel = maxacceleration();
-
-      double timeOfAccelTriangle = MAX_FF_VEL / maxAccel;
-      double distCovrdTriangle = maxAccel / 2 * timeOfAccelTriangle;
-
-      double distLeft = distToCover - (2 * distCovrdTriangle);
-      double timeOfRect = distLeft / MAX_FF_VEL;
-
-      double answer = timeOfAccelTriangle*2 + timeOfRect;
-      return answer;
-    }
-    
-
-    // public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
-    //   TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
-    //   double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
-    //   armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
-
-    // }
-    
-
-    public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
-      // feed forward still needs the math part
-      double armFeedVolts = armFeed.calculate(setPoint.velocity, 0);
-      armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition,0, armFeedVolts);
-    }
-
-    public double getArmPos() {
-      return MathUtil.inputModulus(armEncoder.getPosition(), ARM_DISCONT_RAD,
-              ARM_DISCONT_RAD + 2 * Math.PI);
-    } 
-
-    public void cancelArmCommand() {
-      Command currentArmCommand = getCurrentCommand();
-      currentArmCommand.cancel();
-    }
-
-    public Translation2d getCoM() {
-      // the constants are placeholders
-      Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
-                .times(ARM_MASS_KG);
-      return comOfArm;
-    }
-
-    public double getArmVel() {
-      return armEncoder.getVelocity();
-    }
-
-    public double getArmClampedGoal(double goal) {
-      //Find the limits of the arm. Used to move it and ensure that the arm does not move past the amount
-      return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
-    }
-
-    public TrapezoidProfile.State getCurrentArmState() {
-      return new TrapezoidProfile.State(getArmPos(), getArmVel());
-    }
-
-     public void autoCancelArmCommand() {
+    public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
 
-        double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
+        double[] requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
 
-        if(requestedSpeeds != 0) {
+        if(requestedSpeeds[0] != 0 || requestedSpeeds[1] != 0) {
             Command currentArmCommand = getCurrentCommand();
             if(currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
                 currentArmCommand.cancel();
@@ -186,27 +117,138 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    //#region Drive Methods
+
+    private void driveArm(TrapezoidProfile.State state) {
+       TrapezoidProfile.State setPoint = armProfile.calculate(timeToTarget, getCurrentArmState(), goalState);
+        double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+        armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
+    }
+
+
+    public void setArmTarget(double targetPos) {
+        targetPos = getArmClampedGoal(targetPos);
+
+     
+
+        armProfile = new TrapezoidProfile(armConstraints, new TrapezoidProfile.State(targetPos, 0), armProfile.calculate(armProfileTimer.get()));
+        armProfileTimer.reset();
+
+        goalState.position = targetPos;
+        goalState.velocity = 0;
+    }
+
+    
+
+    public void resetGoal() {
+        double armPos = getArmPos();
+      
+        armProfile = new TrapezoidProfile(armPos, 0);
+
+    }
+
+    //#endregion
+
+    //#region Getters
+
+    public double getArmPos() {
+        return MathUtil.inputModulus(armEncoder.getPosition(), ARM_DISCONTINUITY_RAD,
+                ARM_DISCONTINUITY_RAD + 2 * Math.PI);
+    }
+
+
+    public double getArmVel() {
+        return armEncoder.getVelocity();
+    }
+
+   
+    public TrapezoidProfile.State getCurrentArmState() {
+        return new TrapezoidProfile.State(getArmPos(), getArmVel());
+    }
+
+   
+    public TrapezoidProfile.State getCurrentArmGoal() {
+        return goalState ;
+    }
+
+   
+    public boolean armAtSetpoint() {
+        return armPID.atSetpoint() && armProfile.isFinished(armProfileTimer.get());
+    }
+
+    
+
+    //#endregion
+
+    //#region Util Methods
+
+    public double getArmClampedGoal(double goal) {
+        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI), ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
+    }
+
+    public double getWristClampedGoal(double goal) {
+    }
+
+    public Translation2d getCoM() {
+        Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
+                .times(ARM_MASS_KG);
+        
+        return comOfArm.plus(comOfArm);
+        //this math is prob wront
+    }
+
+    /*public double maxHoldingTorqueNM() {
+        return (ARM_MASS_KG + ROLLER_MASS_KG) * g * getCoM().getNorm();
+    }
+    */
+
+   /*  public static double getV_PER_NM() {
+        double kg = kG ;
+        double phi = 2.638;
+        double Ma = ARM_MASS_KG;
+        double Mr = ROLLER_MASS_KG;
+        double Ra = ARM_LENGTH_METERS;
+        double Rr = COM_ROLLER_LENGTH_METERS;
+        double PaRa = COM_ARM_LENGTH_METERS;
+        double g = 9.80;
+
+        double c = (kg) / (g * Math.sqrt(Math.pow(Ma * PaRa + Mr * Ra, 2) + Math.pow(Mr * Rr, 2) + 2 * (Ma * PaRa + Mr * Ra) * (Mr * Rr) * Math.cos(phi)));
+        return c;
+    }*/
+
+    /*public double getKg() {
+        return getV_PER_NM() * maxHoldingTorqueNM();
+    }*/
+
+   
+
+    
+   
+   /*  public boolean getForbFlag()
+    {
+        boolean output = forbFlag;
+        forbFlag = false;//default: if it wasn't set to true, it's false
+        return output;
+    }*/
+   
+
+    
+
+   
+    //#endregion
+
+    //#region SmartDashboard Methods
 
     @Override
-    public void periodic() {
-
-      autoCancelArmCommand();
 
 
+    // In the scenario that initSendable method does not work like last time
+   
+   
+    
 
-      // kP = SmartDashboard.getNumber("kP", kP);
-      // kD = SmartDashboard.getNumber("kD", kD);
-      // kI = SmartDashboard.getNumber("kI", kI);
+   
 
-      if (armPID.getP() != kP) {
-          armPID.setP(kP);
-      }
-      if (armPID.getD() != kD) {
-          armPID.setD(kD);
-      }
-      if (armPID.getI() != kI) {
-          armPID.setI(kI);
-      }
+    //#endregion
 
-		}
 }

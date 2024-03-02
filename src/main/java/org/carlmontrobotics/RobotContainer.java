@@ -7,6 +7,7 @@ package org.carlmontrobotics;
 // import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
+import static org.carlmontrobotics.Constants.Arm.ampAngle;
 
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
@@ -77,7 +78,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armNextToSpeakerPos(arm);}));
     new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armSafeZonePos(arm);}));
     // Amp and Intake Buttons
-    new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armAmpPos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {arm.driveArm(ampAngle)));
     new JoystickButton(manipulatorController, Constants.Arm.raiseToGroundButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armGroundPos(arm);}));
     // Cimber Buttons
     new JoystickButton(manipulatorController, Constants.Arm.raiseToClimberButton).onTrue(new InstantCommand(() -> {arm.cancelArmCommand(); new armClimberUpPos(arm);}));
