@@ -4,7 +4,7 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.carlmontrobotics.Constants.IntakeShoot.PASS_RPM;
 import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
 
@@ -42,6 +42,6 @@ public class PassToOutake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.noteInOutake();
+    return intake.getNoteDistance() == Level.IN_OUTAKE;
   }
 }

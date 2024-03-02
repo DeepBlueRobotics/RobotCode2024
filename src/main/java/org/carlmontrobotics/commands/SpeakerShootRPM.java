@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.IntakeShoot;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_RPM;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
@@ -22,5 +22,9 @@ public class SpeakerShootRPM extends Command {
     @Override
     public void initialize() {
       shooter.setRPMOutake(OUTAKE_RPM);
+    }
+    @Override
+    public boolean isFinished() {
+      return shooter.getNoteDistance() == Level.OUT;
     }
 }

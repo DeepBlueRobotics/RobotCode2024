@@ -174,7 +174,7 @@ public final class Constants {
 		public static final double OFFSETFROMGROUND = 21; // in
 		public static final double dsDepth = 9.97; // Distance sensor Depth
 		public static final double detectDistance = 13;
-
+		public static final double SPEAKER_HEIGHT = 2.08; //MEASURED IN METERS
 		public static final double OUTAKE_RPM = 6000;
 		public static final double INTAKE_RPM = -6000;
 		public static final double PASS_RPM = 300;
@@ -188,6 +188,12 @@ public final class Constants {
 
 		public static final double RPM_TOLERANCE = 10;
 		public static final double SpeakerHeight = 83; // inches 
+		public static enum Level {
+			IN_INTAKE,
+			IN_OUTAKE,
+			INBETWEEN,
+			OUT
+		  }
 
 		public static final boolean intakeMotorInversion = false;
 		public static final boolean outakeMotorInversion = true;

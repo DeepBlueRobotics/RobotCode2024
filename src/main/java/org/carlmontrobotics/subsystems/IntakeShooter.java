@@ -33,8 +33,8 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(intakeDistanceSensorPort); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(outakeDistanceSensorPort); // insert\
     private final Limelight limelight = new Limelight();
-
-
+    
+    
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(intakeMotorInversion);
@@ -68,6 +68,7 @@ public class IntakeShooter extends SubsystemBase {
         return getGamePieceDistanceOutake() < detectDistance;
     }
     //TODO replace pidControllerIntake.setReference with the new method
+    
     public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
         if (gameDistanceSeesIntake()) {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
@@ -78,18 +79,19 @@ public class IntakeShooter extends SubsystemBase {
             }
         }
     }
-    //Aaron will work on this
-    public boolean noNote(){
-        return ( !gameDistanceSeesIntake() && !gameDistanceSeesOutake() );
-    }
-    public boolean noteInMiddle(){
-        return gameDistanceSeesIntake() && gameDistanceSeesOutake();
-    }
-    public boolean noteInIntake(){
-        return gameDistanceSeesIntake() && !gameDistanceSeesOutake();
-    }    
-    public boolean noteInOutake(){    
-        return !gameDistanceSeesIntake() && gameDistanceSeesOutake();
+    public Level getNoteDistance() {
+        boolean sees1st = gameDistanceSees1st();
+        boolean sees2nd = gameDistanceSees2nd();
+    
+        if (!sees1st && !sees2nd) {
+            return Level.OUT;
+        } else if (sees1st && sees2nd) {
+            return Level.INBETWEEN;
+        } else if (sees1st && !sees2nd) {
+            return Level.IN_INTAKE;
+        } else { 
+            return Level.IN_OUTAKE;
+        }
     }
     //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     //find out what this means
@@ -150,12 +152,19 @@ public class IntakeShooter extends SubsystemBase {
     public void stopOutake() {
         setRPMOutake(0);
     }
+    
 
     public void stopIntake() {
         setRPMintake(0);
     }
-
+    //THEORTICAL DOES NOT COUNT FOR ARM ANGLE PRETENDS THE SHOOTER IS A SINGLE JOINT ERGO NO ANGLE OFFSET || ALSO NOT DONE LMAO
+    public double calcSpecificAngle() {
+        double distance  = limelight.distanceToTargetSpeaker();
+        double angleFromShooterFrontToSpeaker = Math.atan2(distance,SPEAKER_HEIGHT);
+        return angleFromShooterFrontToSpeaker;
+    }
     public double calculateRPMAtDistance() {
+
         double minRPM = Integer.MAX_VALUE;
         double distance = limelight.distanceToTargetSpeaker(); // placeholder for limelight 
         for(int i = 0; i<= 360; i++) {
