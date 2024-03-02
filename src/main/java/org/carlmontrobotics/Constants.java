@@ -6,7 +6,6 @@ package org.carlmontrobotics;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units.*;
@@ -25,51 +24,78 @@ public final class Constants {
 	}
 	
 	public static final class Arm {
-		//#region subsytem constants
-
-		// ports
+		//Motor port
 		public static final int MASTER_ARM_MOTOR = 7;
-		public static final int FOLLOW_ARM_MOTOR = 8;
+		public final static int FOLLOW_ARM_MOTOR = 8;
+		//all angles in rot here
+		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
-		// config
-		public static final boolean[] motorInverted = {true, true}; //Todo: find all these (they are definetely wrong)
-		public static final boolean encoderInverted = false;
-		
-		// goal positions
-		public static final double INTAKE_ANGLE = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE = Units.degreesToRadians(103);
-		public static final double SPEAKER_ANGLE = Units.degreesToRadians(24);
-		public static final double CLIMB_ANGLE = Units.degreesToRadians(24);
-		
+		// USE RADIANS FOR THE ARM
+		public static final double intakeAngle = Math.toRadians(0);
+		public static final double ampAngle = Math.toRadians(103);
+		public static final double placeholderSpeakerAngle1 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
+		public static final double climberUpAngle = Math.toRadians(24);
+		public static final double climberDownAngle = Math.toRadians(24);
+
+
+		//if needed
+		public static final double UPPER_ANGLE_LIMIT = Math.toRadians(70); 
+		public static final double LOWER_ANGLE_LIMIT = Math.toRadians(0);
+		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
 		// Feedforward
-		public static final double kS = 0;
-		public static final double kG = 0;
-		public static final double kV = 0;
-		public static final double kA = 0;
-
+		public static final double kS = 0.1;
+		public static final double kG = 0.1;
+		public static final double kV = 0.1;
+		public static final double kA = 0.1;
+		public static final double IZONE = 4;
 		// PID Constants
-        public static final double kP = 0;
-		public static final double kI = 0;
-		public static final double kD = 0;
+		// placeholder numbers for now
+        public static final double kP = 0.1;
+		public static final double kI = 0.1;
+		public static final double kD = 0.1;
 
-		// Trapezoid Profile and others
 		public static final int MAX_VOLTAGE = 12;
-		public static final double rotationToRad = 2 * Math.PI;
+		
+		
+		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
+		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
+		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
 		//I assume to max vel and accel are in meters per second
 		public static TrapezoidProfile.Constraints armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
-		// Bounds
+		//Arm buttons
+		public static final int raiseToSpeakerPodButton = Button.kY.value;
+		public static final int raiseToAmpButton = Button.kB.value;
+		public static final int raiseToSpeakerSafeButton = Button.kA.value;
+		public static final int raiseToSpeakerNextButton = Button.kX.value;
+		public static final int raiseToGroundButton = Button.kStart.value;
+		public static final int raiseToClimberButton = Button.kLeftBumper.value;
+		public static final int lowerToClimberButton = Button.kRightBumper.value;
+		//other
+		public static final boolean motorInverted = true; //Todo: find all these (they are definetely wrong)
+		public static final double rotationToRad = 2 * Math.PI;
+		public static final boolean encoderInverted = false;
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
+		public static final double posToleranceRad = 0;
+		public static final double velToleranceRadPSec = 0;
+
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
-		public static double posToleranceRad = .07;
-		public static double velToleranceRadPSec = 1;
-		// TODO: Determine actual values
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
 
-		//#endregion
+		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
+
+	}
+	public static final class IntakeShooter {
+		//in set() speed
+		public static final double idleSpeed = 0;
+		public static final double intakeSpeed = .7;
+		public static final double outtakeSpeed = 1;
+
 	}
 	
 	public static final class OI {
@@ -79,15 +105,6 @@ public final class Constants {
         }
         public static final class Manipulator {
             public static final int port = 1;
-
-			// Arm commands
-			public static final int raiseToSpeakerPodButton = Button.kY.value;
-			public static final int raiseToAmpButton = Button.kB.value;
-			public static final int raiseToSpeakerSafeButton = Button.kA.value;
-			public static final int raiseToSpeakerNextButton = Button.kX.value;
-			public static final int raiseToGroundButton = Button.kStart.value;
-			public static final int raiseToClimberButton = Button.kLeftBumper.value;
-			public static final int lowerToClimberButton = Button.kRightBumper.value;
         }
     }
 }
