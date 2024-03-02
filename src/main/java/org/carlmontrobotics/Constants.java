@@ -175,12 +175,16 @@ public final class Constants {
 		public static final double dsDepth = 9.97; // Distance sensor Depth
 		public static final double detectDistance = 13;
 
-
+		public static final double OUTAKE_RPM = 6000;
 		public static final double INTAKE_RPM = -6000;
 		public static final double PASS_RPM = 300;
 
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 6000;
+
+		public static final double EJECT_RPM_INTAKE = -3000;
+		public static final double EJECT_RPM_OUTAKE = 3000;
+
 
 		public static final double RPM_TOLERANCE = 10;
 		public static final double SpeakerHeight = 83; // inches 

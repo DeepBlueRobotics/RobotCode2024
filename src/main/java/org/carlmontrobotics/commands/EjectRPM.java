@@ -1,6 +1,8 @@
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.Constants.IntakeShoot;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
+//import org.carlmontrobotics.Constants.IntakeShoot.EJECT_RPM_INTAKE;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,8 +17,8 @@ public class EjectRPM extends Command {
     }
     @Override
     public void initialize() {
-      intakeShooter.setRPMintake(-3000);
-      intakeShooter.setRPMOutake(3000);
+      intakeShooter.setRPMintake(EJECT_RPM_INTAKE);
+      intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
     }
 
   // Called every time the scheduler runs while the command is scheduled.

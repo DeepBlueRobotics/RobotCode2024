@@ -1,5 +1,7 @@
 package org.carlmontrobotics.subsystems;
 
+import static org.carlmontrobotics.Constants.IntakeShoot;
+
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.mockito.ArgumentMatchers.matches;
 

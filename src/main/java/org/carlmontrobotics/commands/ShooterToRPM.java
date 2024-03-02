@@ -1,6 +1,8 @@
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.Constants.IntakeShoot;
+import static org.carlmontrobotics.Constants.IntakeShoot;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_RPM;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.Constants;
 
@@ -19,7 +21,7 @@ public class ShooterToRPM extends Command {
 
     @Override
     public void initialize() {
-      shooter.setRPMOutake(outakeRPM);
+      shooter.setRPMOutake(OUTAKE_RPM);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,6 +38,7 @@ public class ShooterToRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooter.isWithenTolerance(outakeRPM);
+    //TODO INSTANT COMMAND OR FIX
+    return shooter.isWithinTolerance(outakeRPM);
   }
 }
