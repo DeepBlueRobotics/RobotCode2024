@@ -1,10 +1,6 @@
 package org.carlmontrobotics.subsystems;
 
 import static org.carlmontrobotics.Constants.Arm.*;
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.lib199.MotorConfig;
@@ -24,19 +20,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // TODO: FIGURE OUT ANGLES
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between __ and __
@@ -60,23 +49,13 @@ public class Arm extends SubsystemBase {
     private static TrapezoidProfile.State goalState;
     private static TrapezoidProfile.State setpointState;
 
-    // SysID
-    private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
-    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
-    private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
-
-    private final static boolean runningSysID = true;
-
     public Arm() {
         masterArmMotor.setInverted(motorInverted[MASTER]);
         masterArmMotor.setIdleMode(IdleMode.kBrake);
         followArmMotor.setInverted(motorInverted[FOLLOWER]);
         followArmMotor.setIdleMode(IdleMode.kBrake);
-        // comment out when running sysid
-        if (!runningSysID) {
-            armEncoder.setPositionConversionFactor(rotationToRad);
-            armEncoder.setVelocityConversionFactor(rotationToRad);
-        }
+        armEncoder.setPositionConversionFactor(rotationToRad);
+        armEncoder.setVelocityConversionFactor(rotationToRad);
         armEncoder.setInverted(encoderInverted);
         followArmMotor.follow(masterArmMotor);
 
@@ -100,12 +79,10 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!runningSysID) {
-            if (DriverStation.isDisabled())
-                resetGoal();
-            driveArm();
-            autoCancelArmCommand();
-        }
+        if (DriverStation.isDisabled())
+            resetGoal();
+        driveArm();
+        autoCancelArmCommand();
     }
 
     public void autoCancelArmCommand() {
@@ -183,38 +160,5 @@ public class Arm extends SubsystemBase {
     public double getArmClampedGoal(double goal) {
         return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI),
                 ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
-    }
-
-    // SysID
-    private final SysIdRoutine routine = new SysIdRoutine(
-            new SysIdRoutine.Config(),
-            new SysIdRoutine.Mechanism(
-                    this::driveMotor,
-                    this::logMotor,
-                    this));
-                
-    private void driveMotor(Measure<Voltage> volts) {
-        masterArmMotor.setVoltage(volts.in(Volts));
-    }
-
-    private void logMotor(SysIdRoutineLog log) {
-        log.motor("arm-motor")
-                .voltage(voltage.mut_replace(
-                        masterArmMotor.getBusVoltage() * masterArmMotor.getAppliedOutput(),
-                        Volts))
-                .angularVelocity(velocity.mut_replace(
-                        armEncoder.getVelocity() / 60,
-                        RotationsPerSecond))
-                .angularPosition(distance.mut_replace(
-                        masterArmMotor.getEncoder().getPosition(),
-                        Rotations));
-    }
-
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return routine.quasistatic(direction);
-    }
-
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return routine.dynamic(direction);
     }
 }
