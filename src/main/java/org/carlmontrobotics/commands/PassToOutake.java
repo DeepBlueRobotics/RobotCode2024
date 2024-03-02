@@ -6,6 +6,7 @@ package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
 import static org.carlmontrobotics.Constants.IntakeShoot.PASS_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
@@ -18,18 +19,18 @@ public class PassToOutake extends Command {
   public PassToOutake(IntakeShooter intake) {
       this.intake = intake;
   }
-
   // Called when the command is initially scheduled.
   @Override
-  public void initialize()
-  {
-    intake.setRPMintake(PASS_RPM);
-    intake.setRPMOutake(PASS_RPM);
-  }
+  public void initialize(){}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    //TODO figure out how to implement this for speaker and amp
+    if(intake.getOutakeRPM() == SPEAKER_RPM){
+      intake.setRPMintake(PASS_RPM);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

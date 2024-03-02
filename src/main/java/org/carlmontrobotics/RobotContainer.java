@@ -125,7 +125,7 @@ public class RobotContainer {
   //Xbox A button -> Eject
 
 
-    //TODO: IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
+    //IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
     /*/Eject/*/
     new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
     
@@ -135,18 +135,18 @@ public class RobotContainer {
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new PassToOutake(intakeShooter));
     
     new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).toggleOnTrue(new SequentialCommandGroup(
-      new InstantCommand (()-> intakeShooter.setRPMOutake(AMP_RPM))));
-      new PassToOutake(intakeShooter);
-    ;
+      new InstantCommand(()-> intakeShooter.setRPMOutake(AMP_RPM)),
+      new PassToOutake(intakeShooter)
+    ));
 
     /*/Shooting/*/
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new InstantCommand (()-> intakeShooter.setRPMOutake(OUTAKE_RPM)));
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new PassToOutake(intakeShooter));
 
     new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).toggleOnTrue(new SequentialCommandGroup(
-      new InstantCommand (()-> intakeShooter.setRPMOutake(OUTAKE_RPM))));
-      new PassToOutake(intakeShooter);
-    ;
+      new InstantCommand(()-> intakeShooter.setRPMOutake(SPEAKER_RPM)),
+      new PassToOutake(intakeShooter)
+    ));
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, OI.Manipulator.IntakeButton.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
@@ -197,13 +197,6 @@ public class RobotContainer {
 	 */
 	private double ProcessedAxisValue(GenericHID hid, Axis axis){
 		return inputProcessing(getStickValue(hid, axis));
-  }
-
-  private Trigger axisTrigger(GenericHID manipulatorController, Axis krighttrigger) {
-    return axisTrigger(manipulatorController, krighttrigger);
-  }
-  private Trigger axisTrigger2(GenericHID manipulatorController, Axis klefttrigger) {
-    return axisTrigger(manipulatorController, klefttrigger);
   }
 
 }

@@ -168,8 +168,8 @@ public final class Constants {
 		public static final double kA = 0.05289;
 		public static final int intakePort = 0; //port
 		public static final int outakePort = 1; //port
-		public static final int distanceSensorPort1 = 10; //port
-		public static final int distanceSensorPort2 = 11; //port
+		public static final int intakeDistanceSensorPort = 10; //port
+		public static final int outakeDistanceSensorPort = 11; //port
 		public static final double distanceBetweenSensors = 8.189; // inches
 		public static final double OFFSETFROMGROUND = 21; // in
 		public static final double dsDepth = 9.97; // Distance sensor Depth
@@ -189,6 +189,8 @@ public final class Constants {
 		public static final double RPM_TOLERANCE = 10;
 		public static final double SpeakerHeight = 83; // inches 
 
+		public static final boolean intakeMotorInversion = false;
+		public static final boolean outakeMotorInversion = true;
 	}
 	public static final class Limelight {
 		public static final double errorTolerance = 0.1;

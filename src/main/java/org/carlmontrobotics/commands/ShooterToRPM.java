@@ -38,7 +38,6 @@ public class ShooterToRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //TODO INSTANT COMMAND OR FIX
     return shooter.isWithinTolerance(outakeRPM);
   }
 }

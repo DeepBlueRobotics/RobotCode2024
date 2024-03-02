@@ -7,7 +7,7 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-
+//TODO consider merging eject and intake
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
@@ -18,6 +18,7 @@ public class Intake extends Command {
     @Override
     public void initialize() {
       intake.setRPMintake(INTAKE_RPM);
+      timer.reset();
       timer.start();
     }
 
@@ -36,6 +37,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.gameDistanceSees2nd() || timer.hasElapsed(4);
+    return intake.gameDistanceSeesOutake() || timer.hasElapsed(4);
   }
 }
