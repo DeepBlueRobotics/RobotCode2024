@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO_550);
+    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
+    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(outakePort, MotorConfig.NEO_550);
     public final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -58,7 +58,7 @@ public class IntakeShooter extends SubsystemBase {
         return getGamePieceDistance2() < detectDistance;
     }
 
-    public void senseGamePieceStop() {
+    public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
         if (gameDistanceSees1st()) {
             pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
                     feedforward.calculate(-1 / 60));//Slows down the motors once the first distance sensor detects the note
@@ -99,7 +99,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor 2", getGamePieceDistance2());
         SmartDashboard.putBoolean("DS1 Sees piece", gameDistanceSees1st());
         SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSees2nd());
-        senseGamePieceStop(); // slows down when sensed by the first Sensor and stops upon being sensed by the second
+        senseGamePieceStop();// slows down when sensed by the first Sensor and stops upon being sensed by the second
     }
 
     public void setRPMOutake(double rpm) {

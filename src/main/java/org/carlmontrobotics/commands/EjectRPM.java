@@ -33,6 +33,6 @@ public class EjectRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeShooter.gameDistanceSees1st() && !intakeShooter.gameDistanceSees2nd() || timer.hasElapsed(5);
+    return ( !intakeShooter.gameDistanceSees1st() && !intakeShooter.gameDistanceSees2nd() ) || timer.hasElapsed(5);
   }
 }
