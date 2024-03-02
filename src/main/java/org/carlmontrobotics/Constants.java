@@ -25,8 +25,8 @@ public final class Constants {
 	
 	public static final class Arm {
 		//Motor port
-		public static final int ARM_MOTOR_PORT_1 = 7;
-		public final static int ARM_MOTOR_PORT_2 = 8;
+		public static final int MASTER_ARM_MOTOR = 7;
+		public final static int FOLLOW_ARM_MOTOR = 8;
 		//all angles in rot here
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
@@ -65,7 +65,7 @@ public final class Constants {
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
 		//I assume to max vel and accel are in meters per second
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
+		public static TrapezoidProfile.Constraints armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
 		//Arm buttons
 		public static final int raiseToSpeakerPodButton = Button.kY.value;
