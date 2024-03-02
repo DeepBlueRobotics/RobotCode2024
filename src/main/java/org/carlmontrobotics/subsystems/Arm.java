@@ -95,6 +95,11 @@ public class Arm extends SubsystemBase {
 
     public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
       return profile.calculate(goalSeconds, currentPoint, goalState);
+      
+    }
+
+    public void maxacceleration(){
+      armFeed.maxAchievableAcceleration(MAX_VOLTAGE, armEncoder.getVelocity()); 
     }
 
     // public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
