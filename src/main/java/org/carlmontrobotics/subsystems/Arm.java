@@ -90,10 +90,9 @@ public class Arm extends SubsystemBase {
       //armFeed.maxAchievableAcceleration(MAX_VOLTAGE, armEncoder.getVelocity()); 
     //}
 
-    double currentVelocity = armEncoder.getVelocity();
 
     public double maxacceleration(){
-      double maxAccel = armFeed.maxAchievableAcceleration(MAX_VOLTAGE, currentVelocity); 
+      double maxAccel = armFeed.maxAchievableAcceleration(MAX_VOLTAGE, getArmVel()); 
       return maxAccel;
     }
 
@@ -116,7 +115,7 @@ public class Arm extends SubsystemBase {
     }
     
 
-    public void driveArm(double timeToTarget, TrapezoidProfile.State goalState) {
+    public void COMBINE_PID_FF_TRAPEZOID(double timeToTarget, TrapezoidProfile.State goalState) {
       TrapezoidProfile.State setPoint = profile.calculate(timeToTarget, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
       armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition, 0, armFeedVolts);
@@ -125,14 +124,8 @@ public class Arm extends SubsystemBase {
      public void driveArm(double angle) {
       double timeToTarget = calculateTrapTime(angle);
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(angle, 0);
-      driveArm(timeToTarget, goalState); 
+      COMBINE_PID_FF_TRAPEZOID(timeToTarget, goalState); 
      }
-
-    public void COMBINE_PID_FF_TRAPEZOID(TrapezoidProfile.State setPoint) {
-      // feed forward still needs the math part
-      double armFeedVolts = armFeed.calculate(setPoint.velocity, 0);
-      armPID.setReference(setPoint.position, CANSparkMax.ControlType.kPosition,0, armFeedVolts);
-    }
 
     public double getArmPos() {
       return MathUtil.inputModulus(armEncoder.getPosition(), ARM_DISCONT_RAD,

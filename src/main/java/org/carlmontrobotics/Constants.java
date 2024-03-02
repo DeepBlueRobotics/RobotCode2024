@@ -34,8 +34,8 @@ public final class Constants {
 		public static final double intakeAngle = Math.toRadians(0);
 		public static final double ampAngle = Math.toRadians(103);
 		public static final double speakerPodiumAngle = Math.toRadians(24);
-		//public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
-		//public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
+		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
 		public static final double climberUpAngle = Math.toRadians(24);
 		public static final double climberDownAngle = Math.toRadians(24);
 
@@ -61,6 +61,7 @@ public final class Constants {
 		
 		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
 		public static final double COM_ARM_LENGTH_METERS = 0.31242;
+		public static final double ARM_LENGTH_METERS = 0.33528;
 		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 

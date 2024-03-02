@@ -11,9 +11,6 @@ import static org.carlmontrobotics.Constants.Arm.speakerPodiumAngle;
 
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.commands.ArmTeleop;
-import org.carlmontrobotics.commands.armAmpPos;
-import org.carlmontrobotics.commands.armGroundPos;
-import org.carlmontrobotics.commands.armPodiumSpeakerPos;
 import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -76,11 +73,10 @@ public class RobotContainer {
     // Speaker Buttons
     new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerPodButton).onTrue(new InstantCommand(() -> {
       arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
-      //we don't know what these are for
-    // new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {
-    //   arm.cancelArmCommand(); new armNextToSpeakerPos(arm);}));
-    // new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {
-    //   arm.cancelArmCommand(); new armSafeZonePos(arm);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerNextButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); arm.driveArm(Constants.Arm.placeholderSpeakerAngle2);}));
+    new JoystickButton(manipulatorController, Constants.Arm.raiseToSpeakerSafeButton).onTrue(new InstantCommand(() -> {
+      arm.cancelArmCommand(); arm.driveArm(Constants.Arm.placeholderSpeakerAngle3);}));
     // Amp and Intake Buttons
     new JoystickButton(manipulatorController, Constants.Arm.raiseToAmpButton).onTrue(new InstantCommand(() -> {
       arm.cancelArmCommand(); new InstantCommand(() -> arm.driveArm(Constants.Arm.speakerPodiumAngle));}));
