@@ -166,37 +166,31 @@ public final class Constants {
 		public static final double kS = 0.29753;
 		public static final double kV = 0.077913;
 		public static final double kA = 0.05289;
-		public static final int intakePort = 0; //port
-		public static final int outakePort = 1; //port
-		public static final int intakeDistanceSensorPort = 10; //port
-		public static final int outakeDistanceSensorPort = 11; //port
-		public static final double distanceBetweenSensors = 8.189; // inches
+		public static final int INTAKE_PORT = 0; //port
+		public static final int OUTAKE_PORT = 1; //port
+		public static final int INTAKE_DISTANCE_SENSOR_PORT = 10; //port
+		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 11; //port
+		public static final double DISTANCE_BETWEEN_SENSORS = 8.189; // inches
 		public static final double OFFSETFROMGROUND = 21; // in
-		public static final double dsDepth = 9.97; // Distance sensor Depth
-		public static final double detectDistance = 13;
-		public static final double SPEAKER_HEIGHT = 2.08; //MEASURED IN METERS
+		public static final double DS_DEPTH = 9.97; // Distance sensor Depth
+		public static final double DETECT_DISTANCE = 13;
+
 		public static final double OUTAKE_RPM = 6000;
 		public static final double INTAKE_RPM = -6000;
-		public static final double PASS_RPM = 300;
+		public static final double PASS_RPM = 3000;
 
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 6000;
 
-		public static final double EJECT_RPM_INTAKE = -3000;
-		public static final double EJECT_RPM_OUTAKE = 3000;
+		public static final double EJECT_RPM_INTAKE = 3000;
+		public static final double EJECT_RPM_OUTAKE = -3000;
 
 
 		public static final double RPM_TOLERANCE = 10;
-		public static final double SpeakerHeight = 83; // inches 
-		public static enum Level {
-			IN_INTAKE,
-			IN_OUTAKE,
-			INBETWEEN,
-			OUT
-		  }
+		public static final double SPEAKER_HEIGHT = 83; // inches 
 
-		public static final boolean intakeMotorInversion = false;
-		public static final boolean outakeMotorInversion = true;
+		public static final boolean INTAKE_MOTOR_INVERSION = false;
+		public static final boolean OUTAKE_MOTOR_INVERSION = true;
 	}
 	public static final class Limelight {
 		public static final double errorTolerance = 0.1;

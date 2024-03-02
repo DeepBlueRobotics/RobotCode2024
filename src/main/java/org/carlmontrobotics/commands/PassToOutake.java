@@ -21,15 +21,18 @@ public class PassToOutake extends Command {
   }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize(){}
+  public void initialize(){
+    intake.stopIntake();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO figure out how to implement this for speaker and amp
-    if(intake.getOutakeRPM() == SPEAKER_RPM){
-      intake.setRPMintake(PASS_RPM);
+    //TODO replace with that method
+    if(intake.isWithinTolerance(SPEAKER_RPM)){
+      intake.setRPMIntake(PASS_RPM);
     }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +45,6 @@ public class PassToOutake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getNoteDistance() == Level.IN_OUTAKE;
+    return !intake.noteInIntake();
   }
 }

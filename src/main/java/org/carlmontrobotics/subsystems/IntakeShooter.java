@@ -5,7 +5,6 @@ import static org.carlmontrobotics.Constants.IntakeShoot;
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.mockito.ArgumentMatchers.matches;
 
-import org.carlmontrobotics.Constants.IntakeShoot.Level;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
@@ -24,22 +23,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(intakePort, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(outakePort, MotorConfig.NEO_550);
+    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
+    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
-    private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(intakeDistanceSensorPort); // make sure id port is correct here
-    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(outakeDistanceSensorPort); // insert\
+    private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
+    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert\
     private final Limelight limelight = new Limelight();
     
     
     public IntakeShooter() {
         //Figure out which ones to set inverted
-        intakeMotor.setInverted(intakeMotorInversion);
-        outakeMotor.setInverted(outakeMotorInversion);         
+        intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
+        outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);         
         pidControllerOutake.setP(kP[0]);
         pidControllerOutake.setI(kI[0]);
         pidControllerOutake.setD(kD[0]);
@@ -53,83 +52,60 @@ public class IntakeShooter extends SubsystemBase {
         return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
     //---------------------------------------------------------------------------------------------------
-    public double getGamePieceDistanceIntake() {
-        return Units.metersToInches((intakeDistanceSensor.getRange() - dsDepth) / 1000);
+    private double getGamePieceDistanceIntake() {
+        return Units.metersToInches((intakeDistanceSensor.getRange() - DS_DEPTH) / 1000);
     }
 
-    public double getGamePieceDistanceOutake() {
-        return Units.metersToInches((OutakeDistanceSensor.getRange() - dsDepth) / 1000);
+    private double getGamePieceDistanceOutake() {
+        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH) / 1000);
     }
 
-    public boolean gameDistanceSeesIntake() {
-        return getGamePieceDistanceIntake() < detectDistance;
+    private boolean intakeDetectsNote() {
+        return getGamePieceDistanceIntake() < DETECT_DISTANCE;
     }
 
-    public boolean gameDistanceSeesOutake() {
-        return getGamePieceDistanceOutake() < detectDistance;
+    private boolean outakeDetectsNote() {
+        return getGamePieceDistanceOutake() < DETECT_DISTANCE;
     }
     //TODO replace pidControllerIntake.setReference with the new method
     
     public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
-        if (gameDistanceSeesIntake()) {
-            pidControllerIntake.setReference((-1), CANSparkBase.ControlType.kVelocity, 0,
-                    feedforward.calculate(-1 / 60));//Slows down the motors once the first distance sensor detects the note
-            if (gameDistanceSeesOutake()) {
-                pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, 
-                        feedforward.calculate(0));//Stops it when the second distance sensor detects the note
+        if (intakeDetectsNote() && !outakeDetectsNote() ) {
+            setRPMIntake(-1.0);
+        }
+        if (outakeDetectsNote() ) {
+            setRPMIntake(0.0);
             }
         }
-    }
-    public Level getNoteDistance() {
-        boolean sees1st = gameDistanceSeesIntake();
-        boolean sees2nd = gameDistanceSeesOutake();
-    
-        if (!sees1st && !sees2nd) {
-            return Level.OUT;
-        } else if (sees1st && sees2nd) {
-            return Level.INBETWEEN;
-        } else if (sees1st && !sees2nd) {
-            return Level.IN_INTAKE;
-        } else { 
-            return Level.IN_OUTAKE;
-        }
-    }
-    //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
-    //find out what this means
-    public double calculateDistanceSensorNotes() {
-        double center = 11.485;// center line between the 2 side plates (in)
-        double d1 = getGamePieceDistanceIntake();
-        double d2 = getGamePieceDistanceOutake();
-        double r = 7;
-        double ym = (d1+d2)/2; //Y midpoint between 2 points
-        double m = (0-distanceBetweenSensors)/(d2-d1); // Slope
-        //double h = xm + r * (1/(Math.sqrt(1+Math.pow(m, 2)))); // x cord of center <- currently incorrect, check this link for correct:https://stackoverflow.com/questions/36211171/finding-center-of-a-circle-given-two-points-and-radius 
-        double k1 = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
-        double k2 = ym - (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (distanceBetweenSensors))/r;// y cord of center
-        //Take into note that in reality, the 2 points can return 2 possible centers
-        double ti = 13;
-        if(ti>k1+7 && 0<k1-7) {
-            return k1;
-        }
-        else { if(ti>k2+7 && 0<k2-7){
-            return k2;
-        } else {
-            System.err.println("BROKEN VALUE");
-            return 0.0;
-        }
-    }
 
-    public double calculateIntakeAmount(){
-        //Literatly just calcDistanceSensorNotes but instead of solving for k, we are solving for h
-        double d1 = getGamePieceDistanceIntake();
-        double d2 = getGamePieceDistanceOutake();
-        double r = 7;
+    //Aaron will work on this
+    public boolean noteInIntake(){
+        return intakeDetectsNote() && outakeDetectsNote();
+    }    
+    // //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
+    // //find out what this means
+    // public double calculateDistanceSensorNotes() {
+    //     double center = 11.485;// center line between the 2 side plates (in)
+    //     double d1 = getGamePieceDistanceIntake();
+    //     double d2 = getGamePieceDistanceOutake();
+    //     double r = 7;
+    //     double ym = (d1+d2)/2; //Y midpoint between 2 points
+    //     double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (DISTANCE_BETWEEN_SENSORS))/r;// y cord of center
+    //     //Take into note that in reality, the 2 points can return 2 possible centers
+    //     return k - center; //<- offset from the center
+    // }
+    // //find out what this means
+    // public double calculateIntakeAmount(){
+    //     //Literatly just calcDistanceSensorNotes but instead of solving for k, we are solving for h
+    //     double d1 = getGamePieceDistanceIntake();
+    //     double d2 = getGamePieceDistanceOutake();
+    //     double r = 7;
 
-        double xm = (distanceBetweenSensors)/2;
+    //     double xm = (DISTANCE_BETWEEN_SENSORS)/2;
 
-        double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r; 
-        return h;
-    }
+    //     double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r; 
+    //     return h;
+    // }
 
     @Override
     public void periodic() {
@@ -137,16 +113,14 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
         SmartDashboard.putNumber("distance sensor 1", getGamePieceDistanceIntake());
         SmartDashboard.putNumber("distance sensor 2", getGamePieceDistanceOutake());
-        SmartDashboard.putBoolean("DS1 Sees piece", gameDistanceSeesIntake());
-        SmartDashboard.putBoolean("DS2 Sees piece", gameDistanceSeesOutake());
+        SmartDashboard.putBoolean("DS1 Sees piece", intakeDetectsNote());
+        SmartDashboard.putBoolean("DS2 Sees piece", outakeDetectsNote());
         senseGamePieceStop();// slows down when sensed by the first Sensor and stops upon being sensed by the second
     }
-    //TODO: replace pid set reference with
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
     }
-    //TODO: replace pid set reference
-    public void setRPMintake(double rpm) {
+    public void setRPMIntake(double rpm) {
         pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
     }
     //TODO create a method that checks if the shooting rpm is high enough and commands can use
@@ -154,35 +128,21 @@ public class IntakeShooter extends SubsystemBase {
         double RPM = outakeEncoder.getVelocity();
         return RPM;
     }
-
-    public double setRPM(double distance) {
-        double rpm = calculateRPMAtDistance();
-        //use method created for setReference
-        //pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
-        return rpm;
-
-    }
-
     public void stopOutake() {
         setRPMOutake(0);
     }
     
 
     public void stopIntake() {
-        pidControllerIntake.setReference(0, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(0));
+        setRPMIntake(0);
     }
-    //THEORTICAL DOES NOT COUNT FOR ARM ANGLE PRETENDS THE SHOOTER IS A SINGLE JOINT ERGO NO ANGLE OFFSET || ALSO NOT DONE LMAO
-    public double calcSpecificAngle() {
-        double distance  = limelight.distanceToTargetSpeaker();
-        double angleFromShooterFrontToSpeaker = Math.atan2(distance,SPEAKER_HEIGHT);
-        return angleFromShooterFrontToSpeaker;
-    }
+    /* 
     public double calculateRPMAtDistance() {
 
         double minRPM = Integer.MAX_VALUE;
         double distance = limelight.distanceToTargetSpeaker(); // placeholder for limelight 
         for(int i = 0; i<= 360; i++) {
-            double t = Math.sqrt((OFFSETFROMGROUND-SpeakerHeight+distance*Math.tan(i)));
+            double t = Math.sqrt((OFFSETFROMGROUND-SPEAKER_HEIGHT+distance*Math.tan(i)));
             double rpm = distance/Math.cos(i)*t;
             if(rpm<minRPM) {
                 minRPM = rpm;
@@ -193,5 +153,5 @@ public class IntakeShooter extends SubsystemBase {
         }
         return minRPM;
     }
-
+*/
 }

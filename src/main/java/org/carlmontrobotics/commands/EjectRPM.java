@@ -17,7 +17,7 @@ public class EjectRPM extends Command {
     }
     @Override
     public void initialize() {
-      intakeShooter.setRPMintake(EJECT_RPM_INTAKE);
+      intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
       intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
     }
 
@@ -35,6 +35,6 @@ public class EjectRPM extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeShooter.getNoteDistance() == Level.OUT|| timer.hasElapsed(5);
+    return !intakeShooter.noteInIntake()|| timer.hasElapsed(5);
   }
 }

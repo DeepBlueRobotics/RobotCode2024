@@ -42,34 +42,6 @@ public class Limelight extends SubsystemBase {
     //getCurrentPose();
   }
 
-  public double calcAngleOffset(){
-    //-calculates the angle to turn in degrees
-    //if it goes wrong uncomment
-    return LimelightHelpers.getTX("limelight"); //* (Constants.Limelight.horizontalFOV / Constants.Limelight.resolutionWidth);
-  }
-
-  public void updateBotPose3d(){
-    botpose = LimelightHelpers.getBotPose3d("limelight");
-  }
-
-  public boolean isAligned(double distance){
-    return MathUtil.applyDeadband(distance, Constants.Limelight.errorTolerance) == 0; //if it's within 0.1 of the center
-  }
-
-  // public Pose2d getCurrentPose(){
-  //   System.out.println(poseEstimator.getEstimatedPosition());
-  //   return poseEstimator.getEstimatedPosition();
-  // }
-
-  // public Pose3d getTargetPose() {
-  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
-  //   return LimelightHelpers.toPose3D(poseArray);
-  // }
-
-  // public double distanceToTargetmath(Pose3d target){
-  //   return(6.5 inches)/2 x tan(2 * 320 pixels)
-  //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
-  // }
 
   public double distanceToTargetSpeaker(){
     if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
@@ -84,15 +56,6 @@ public class Limelight extends SubsystemBase {
     }
   }
 
-    // public double distanceToTargetxyz(){
-  //   if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
-  //     Pose3d target = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
-  //     return Math.sqrt(target.getX() * target.getX() + target.getY() * target.getY() + target.getZ() * target.getZ());
-  //   }
-  //   else{
-  //     return 0;
-  //   }
-  // }
 
   /*
   constants:

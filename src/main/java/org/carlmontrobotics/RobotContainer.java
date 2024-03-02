@@ -126,18 +126,17 @@ public class RobotContainer {
 
 
     //IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
-    /*/Eject/*/
-    new JoystickButton(manipulatorController, OI.Manipulator.EjectButton).onTrue(new EjectRPM(intakeShooter));
+    /*/Eject also for AMP/*/
+    new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).onTrue(new EjectRPM(intakeShooter));
     
     /*/Amp Shooting/*/      
     //add the three buttons for the 3 spots we want to shoot from (safe zone, podium, subwoffer)
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new InstantCommand (()-> intakeShooter.setRPMOutake(AMP_RPM)));
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new PassToOutake(intakeShooter));
     
-    new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).toggleOnTrue(new SequentialCommandGroup(
-      new InstantCommand(()-> intakeShooter.setRPMOutake(AMP_RPM)),
-      new PassToOutake(intakeShooter)
-    ));
+    //new JoystickButton(manipulatorController, OI.Manipulator.AmpButton).toggleOnTrue(new SequentialCommandGroup(
+      //new EjectRPM(intakeShooter)
+    //));
 
     /*/Shooting/*/
     //new JoystickButton(manipulatorController, OI.Manipulator.ShooterButton.value).onTrue(new InstantCommand (()-> intakeShooter.setRPMOutake(OUTAKE_RPM)));
