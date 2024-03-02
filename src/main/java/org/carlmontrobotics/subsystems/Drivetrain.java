@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -103,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
     // edu.wpi.first.math.util.Units.Rotations beans;
     private final MutableMeasure<Angle>[] m_revs = new MutableMeasure[4];
     private final MutableMeasure<Velocity<Angle>>[] m_revs_vel = new MutableMeasure[4];
-
+    
     private enum SysIdTest {
         FRONT_DRIVE,
         BACK_DRIVE,
@@ -298,7 +299,7 @@ public class Drivetrain extends SubsystemBase {
                     turnEncoders[3] = SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
-            
+            SignalLogger.start();
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
@@ -312,7 +313,12 @@ public class Drivetrain extends SubsystemBase {
                 turnMotor.getEncoder().setAverageDepth(2);
                 turnMotor.getEncoder().setMeasurementPeriod(16);
             }
-            BaseStatusSignal.setUpdateFrequencyForAll(4);
+            for(CANcoder coder : turnEncoders) {
+                coder.getAbsolutePosition().setUpdateFrequency(1000);
+                coder.getPosition().setUpdateFrequency(1000);
+                coder.getVelocity().setUpdateFrequency(1000);
+            }
+            
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
