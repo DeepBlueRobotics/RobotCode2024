@@ -52,7 +52,7 @@ public class Arm extends SubsystemBase {
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
-    private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
+    private final ArmFeedforward armFeed = new ArmFeedforward(kS, kV, kA);
     private final SparkPIDController armPID1 = armMotorMaster.getPIDController();
     private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
