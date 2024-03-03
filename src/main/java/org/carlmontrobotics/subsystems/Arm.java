@@ -64,7 +64,6 @@ public class Arm extends SubsystemBase {
     private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-    private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
 
     // rad, rad/s
@@ -125,7 +124,7 @@ public class Arm extends SubsystemBase {
 
         //smart dahsboard stuff
         //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
-        SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
+       // SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
         //posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
         //velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
 
