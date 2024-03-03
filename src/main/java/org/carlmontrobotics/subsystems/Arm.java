@@ -63,7 +63,6 @@ public class Arm extends SubsystemBase {
     // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
-    private final SparkPIDController armPIDFollower = armMotorFollower.getPIDController();
     private static TrapezoidProfile.State setPoint;
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
@@ -90,9 +89,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setP(kP);
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
-        armPIDFollower.setP(kP);
-        armPIDFollower.setI(kI);
-        armPIDFollower.setD(kD);
+   
      
         armFollowEncoder.setPosition(armMasterEncoder.getPosition());
       
@@ -103,10 +100,8 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
         //two PIDs?
-        armPIDFollower.setFeedbackDevice(armMotorFollower.getEncoder());
-        // armPIDFollower.setPositionPIDWrappingEnabled(true);
-        // armPIDFollower.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT - Math.PI); //Wierd math, im not sure it this works but basically
-        // armPIDFollower.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT - Math.PI);// since absolute is between -180 and 180 and relative is between 0 and 360(correct me if im wrong) so if we subract 180, then its the same
+        
+       
 
         SmartDashboard.putData("Arm", this);
 
@@ -170,7 +165,7 @@ public class Arm extends SubsystemBase {
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
       armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
-      armPIDFollower.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+      
     }
 
     public void setArmTarget(double targetPos) {
