@@ -51,7 +51,7 @@ public class Arm extends SubsystemBase {
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
     private final SparkPIDController armPID1 = armMotor1.getPIDController();
     private final SparkPIDController armPID2 = armMotor2.getPIDController();
-    private TrapezoidProfile armProfile = new TrapezoidProfile(trapConstraints);
+    private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
 
@@ -60,13 +60,13 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       // weird math stuff
-        armMotor1.setInverted(motorInverted);
+        armMotor1.setInverted(MOTOR_INVERTED);
         armMotor1.setIdleMode(IdleMode.kBrake);
-        armMotor2.setInverted(motorInverted);
+        armMotor2.setInverted(MOTOR_INVERTED);
         armMotor2.setIdleMode(IdleMode.kBrake);
-        armEncoder.setPositionConversionFactor(rotationToRad);
-        armEncoder.setVelocityConversionFactor(rotationToRad);
-        armEncoder.setInverted(encoderInverted);
+        armEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
+        armEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
+        armEncoder.setInverted(ENCODER_INVERTED);
 
         armMotor2.follow(armMotor1);
      
@@ -82,8 +82,8 @@ public class Arm extends SubsystemBase {
 
         // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
         SmartDashboard.putNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-        SmartDashboard.putNumber("Arm Tolerance Pos", posToleranceRad);
-        SmartDashboard.putNumber("Arm Tolerance Vel", velToleranceRadPSec);
+        SmartDashboard.putNumber("Arm Tolerance Pos", POS_TOLERANCE_RAD);
+        SmartDashboard.putNumber("Arm Tolerance Vel", VEL_TOLERANCE_RAD_PER_SEC);
     }
 
     @Override
@@ -119,6 +119,11 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
     }
 
+    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
+        return armProfile.calculate(goalSeconds, currentPoint, goalState);
+        
+      }
+
   public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
 
@@ -144,7 +149,7 @@ public class Arm extends SubsystemBase {
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
 
-        armProfile = new TrapezoidProfile(trapConstraints);
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         armProfileTimer.reset();
 
         goalState.position = targetPos;
@@ -156,7 +161,7 @@ public class Arm extends SubsystemBase {
     public void resetGoal() {
         double armPos = getArmPos();
       
-        armProfile = new TrapezoidProfile(trapConstraints);
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
     }
 
