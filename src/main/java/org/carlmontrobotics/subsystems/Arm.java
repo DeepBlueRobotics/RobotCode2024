@@ -44,19 +44,25 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
 
-    private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
-    private final CANSparkMax armMotorFollower = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
-    private final SparkAbsoluteEncoder armEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final CANSparkMax armMotorMaster/*left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
+    private final CANSparkMax armMotorFollower/*right */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
+    private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final RelativeEncoder armFollowEncoder = armMotorFollower.getEncoder();
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
     private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
 
+
+    
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
+
+    // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPID1 = armMotorMaster.getPIDController();
     private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
+
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
@@ -71,11 +77,13 @@ public class Arm extends SubsystemBase {
         armMotorFollower.setInverted(MOTOR_INVERTED);
         armMotorFollower.setIdleMode(IdleMode.kBrake);
         
-        armEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
-        armEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
-        armEncoder.setInverted(ENCODER_INVERTED);
+        armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
+        armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
+        armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster);
+        
+        armFollowEncoder.setPosition(armMasterEncoder.getPosition());
         armPID1.setP(kP);
         armPID1.setI(kI);
         armPID1.setD(kD);
@@ -83,7 +91,7 @@ public class Arm extends SubsystemBase {
         armPID2.setI(kI);
         armPID2.setD(kD);
      
-        armEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
+        armFollowEncoder.setPosition(armMasterEncoder.getPosition());
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
@@ -124,7 +132,7 @@ public class Arm extends SubsystemBase {
        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
         //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
        // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
-        SmartDashboard.putNumber("InternalArmVelocity", armEncoder.getVelocity());
+        SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
         //SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
        // SmartDashboard.putNumber("ArmPos", getArmPos());
@@ -193,10 +201,10 @@ public class Arm extends SubsystemBase {
                         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
                         Volts))
                 .angularVelocity(velocity.mut_replace(
-                        armEncoder.getVelocity() / 60,
+                        armMasterEncoder.getVelocity() / 60,
                         RotationsPerSecond))
                 .angularPosition(distance.mut_replace(
-                        armEncoder.getPosition(),
+                        armMasterEncoder.getPosition(),
                         Rotations));
     }
 
@@ -219,13 +227,13 @@ public class Arm extends SubsystemBase {
     //#region Getters
 
     public double getArmPos() {
-        return MathUtil.inputModulus(armEncoder.getPosition(), ARM_DISCONTINUITY_RAD,
+        return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONTINUITY_RAD,
                 ARM_DISCONTINUITY_RAD + 2 * Math.PI);
     }
 
 
     public double getArmVel() {
-        return armEncoder.getVelocity();
+        return armMasterEncoder.getVelocity();
     }
 
    
