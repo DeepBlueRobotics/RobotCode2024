@@ -71,9 +71,9 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       // weird math stuff
-        armMotorMaster.setInverted(MOTOR_INVERTED);
+        armMotorMaster.setInverted(MOTOR_INVERTED_1);
         armMotorMaster.setIdleMode(IdleMode.kBrake);
-        armMotorFollower.setInverted(MOTOR_INVERTED);
+        armMotorFollower.setInverted(MOTOR_INVERTED_2);
         armMotorFollower.setIdleMode(IdleMode.kBrake);
         
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
