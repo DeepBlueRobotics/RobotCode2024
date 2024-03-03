@@ -47,14 +47,15 @@ public final class Constants {
 		
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
-		// Goal Positions
+		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE = Units.degreesToRadians(103);
-		public static final double SPEAKER_ANGLE_1 =Units.degreesToRadians(24);
-		public static final double SPEAKER_ANGLE_2 = Units.degreesToRadians(24);
-		public static final double SPEAKER_ANGLE_3 = Units.degreesToRotations(24);
+		public static final double AMP_ANGLE = Units.degreesToRadians(105);
+		public static final double SUBWOFFER_ANGLE = Units.degreesToRadians(24);
+		public static final double SAFE_ZONE_ANGLE = Units.degreesToRadians(24);
+		public static final double PODIUM_ANGLE = Units.degreesToRadians(24);
 		public static final double CLIMBER_UP_ANGLE = Units.degreesToRadians(24);
 		public static final double CLIMBER_DOWN_ANGLE = Units.degreesToRadians(24);
+
 
 		//PID, Feedforward, Trapezoid
 		public static final double kP = 0.1;
@@ -73,28 +74,21 @@ public final class Constants {
 		public static final double LOWER_ANGLE_LIMIT = Units.degreesToRadians(0);
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
-		
-		//boundaries
+		//other0;
+
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
 
 		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
-        
-
-		
-		
-		
-
-		
-
 		//Arm buttons
-		
-		//other
-		
-
-		
-
+		public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
+		public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
+		public static final int RAISE_TO_SPEAKER_SAFE_ZONE_BUTTON = Button.kA.value;
+		public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
+		public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
+		public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
+		public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
 	}
 	public static final class IntakeShooter {
 		//in set() speed
