@@ -163,7 +163,7 @@ public class Arm extends SubsystemBase {
     private void driveArm(double goalAngle){
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
-      double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
+      double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
       if ((getArmPos() < ARM_LOWER_LIMIT_RAD && getCurrentArmGoal().velocity > 0) || (getArmPos() > ARM_UPPER_LIMIT_RAD && getCurrentArmGoal().velocity > 0)){
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
