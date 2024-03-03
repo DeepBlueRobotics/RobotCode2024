@@ -117,15 +117,15 @@ public final class Constants {
 
 			//#region Ports
 
-			public static final int driveFrontLeftPort = 8; //correct
-			public static final int driveFrontRightPort = 13; // correct	
-			public static final int driveBackLeftPort = 5; //correct
-			public static final int driveBackRightPort = 11; //correct
+			public static final int driveFrontLeftPort = 11; //
+			public static final int driveFrontRightPort = 19; // 	
+			public static final int driveBackLeftPort = 14; //
+			public static final int driveBackRightPort = 17; //correct
 
-			public static final int turnFrontLeftPort = 7; //cprrect
-			public static final int turnFrontRightPort = 14; //correct
-			public static final int turnBackLeftPort = 6; //correct
-			public static final int turnBackRightPort = 12; //correct
+			public static final int turnFrontLeftPort = 12; //
+			public static final int turnFrontRightPort = 20; // 
+			public static final int turnBackLeftPort = 15; // 
+			public static final int turnBackRightPort = 16; //correct
 
 			public static final int canCoderPortFL = 1;
 			public static final int canCoderPortFR = 2;
