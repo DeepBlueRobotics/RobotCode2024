@@ -100,7 +100,7 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putData("Arm", this);
 
-        //armProfileTimer.start(); <-- don't neeed timer anymore
+        
         
         goalState = getCurrentArmState();
 
@@ -130,7 +130,7 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("ArmPos", getArmPos());
 
-        //driveArm(armProfile.calculate(armProfileTimer.get()));
+
 
         autoCancelArmCommand();
     }
@@ -166,7 +166,7 @@ public class Arm extends SubsystemBase {
         targetPos = getArmClampedGoal(targetPos);
 
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-        armProfileTimer.reset();
+       
 
         goalState.position = targetPos;
         goalState.velocity = 0;
