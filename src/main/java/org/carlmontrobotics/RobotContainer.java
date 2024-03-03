@@ -16,7 +16,7 @@ import org.carlmontrobotics.Constants;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class RobotContainer {
   //defaultCommands: elevator, dt
@@ -60,6 +61,10 @@ public class RobotContainer {
     arm.setDefaultCommand(new ArmTeleop(arm, () -> inputProcessing(getStickValue(manipulatorController, Axis.kLeftY))));
   }
   private void setBindingsDriver() {
+    new JoystickButton(driverController, Button.kX.value).whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    new JoystickButton(driverController, Button.kY.value).whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    new JoystickButton(driverController, Button.kB.value).whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    new JoystickButton(driverController, Button.kA.value).whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     // 4 cardinal directions on arrowpad
 		// slowmode toggle on trigger
 		// 3 cardinal directions on letterpad
