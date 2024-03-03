@@ -101,14 +101,10 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
         //two PIDs?
         
-       
-
         SmartDashboard.putData("Arm", this);
 
         setPoint = getCurrentArmState();
-        
         goalState = getCurrentArmState();
-
         setArmTarget(goalState.position);
     }
 
@@ -135,13 +131,9 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("ArmPos", getArmPos());
 
-
-
         autoCancelArmCommand();
         driveArm();
     }
-
-
 
   public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
@@ -175,8 +167,6 @@ public class Arm extends SubsystemBase {
         goalState.position = targetPos;
         goalState.velocity = 0;
     }
-
-    
 
     public void resetGoal() {
         double armPos = getArmPos();
@@ -222,37 +212,24 @@ public class Arm extends SubsystemBase {
                 ARM_DISCONT_RAD + 2 * Math.PI);
     }
 
-
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }
-
    
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
-
    
     public TrapezoidProfile.State getCurrentArmGoal() {
         return goalState;
     }
-
    
     public boolean armAtSetpoint() {
         return Math.abs(getArmPos() - goalState.position) < POS_TOLERANCE_RAD &&
                 Math.abs(getArmVel() - goalState.velocity) < VEL_TOLERANCE_RAD_P_SEC;
     }
 
-
-
     public double getArmClampedGoal(double goal) {
         return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
-    }
-
-    
-
-    
-
-
-   
+    } 
 }
