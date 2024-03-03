@@ -81,13 +81,7 @@ public final class Constants {
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
 		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
 		//Arm buttons
-		public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
-		public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
-		public static final int RAISE_TO_SPEAKER_SAFE_ZONE_BUTTON = Button.kA.value;
-		public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
-		public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
-		public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
-		public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
+		
 	}
 	
 	public static final class IntakeShooter {
