@@ -44,8 +44,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
 
-    private final CANSparkMax armMotorMaster/*left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
-    private final CANSparkMax armMotorFollower/*right */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
+    private final CANSparkMax armMotorMaster/*left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER, MotorConfig.NEO);
+    private final CANSparkMax armMotorFollower/*right */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_FOLLOWER, MotorConfig.NEO);
     private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final RelativeEncoder armFollowEncoder = armMotorFollower.getEncoder();
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));

@@ -34,8 +34,8 @@ public final class Constants {
 //Controller buttons should go in OI not Arm
 
 		//Motor port
-		public static final int ARM_MOTOR_PORT_1 = 7;
-		public final static int ARM_MOTOR_PORT_2 = 8;
+		public static final int ARM_MOTOR_PORT_MASTER = 7;
+		public final static int ARM_MOTOR_PORT_FOLLOWER = 8;
 		//Config for motors
 		public static final boolean MOTOR_INVERTED = true; //Todo: find all these (they are definetely wrong)
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
