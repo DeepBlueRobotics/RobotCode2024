@@ -41,9 +41,9 @@ public final class Constants {
 		public static final boolean MOTOR_INVERTED_2 = false;
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
-		public static final double POS_TOLERANCE_RAD = 0;
-		public static final double VEL_TOLERANCE_RAD_P_SEC = 0;
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; //placeholder
+		public static final double POS_TOLERANCE_RAD = 0; //placeholder
+		public static final double VEL_TOLERANCE_RAD_P_SEC = 0; //placeholder
 		public static final int MAX_VOLTAGE = 12;
 		public static final double ENCODER_OFFSET_RAD = 0;
 		
