@@ -87,6 +87,12 @@ public class Arm extends SubsystemBase {
         armEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster);
+        armPID1.setP(kP);
+        armPID1.setI(kI);
+        armPID1.setD(kD);
+        armPID2.setP(kP);
+        armPID2.setI(kI);
+        armPID2.setD(kD);
      
         //armEncoder1.setZeroOffset(offsetRad);
       
@@ -108,12 +114,7 @@ public class Arm extends SubsystemBase {
 
         //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
-        armPID1.setP(kP);
-        armPID1.setI(kI);
-        armPID1.setD(kD);
-        armPID2.setP(kP);
-        armPID2.setI(kI);
-        armPID2.setD(kD);
+        
 
         //smart dahsboard stuff
         //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
