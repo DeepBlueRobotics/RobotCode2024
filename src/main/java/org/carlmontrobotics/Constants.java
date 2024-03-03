@@ -36,6 +36,8 @@ public final class Constants {
 		public static final boolean MOTOR_INVERTED_FOLLOWER = false;
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
+		
+		
 		public static final int MAX_VOLTAGE = 12;
 		public static final double ENCODER_OFFSET_RAD = 0;
 		
@@ -66,6 +68,8 @@ public final class Constants {
 		//if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
 		public static final double ARM_MASS_KG = 9.59302503;
+		
+		
 		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 		//other0;
 
