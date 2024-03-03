@@ -95,6 +95,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("Arm", this);
 
         //armProfileTimer.start(); <-- don't neeed timer anymore
+        
+        goalState = getCurrentArmState();
 
         setArmTarget(goalState.position);
     }
