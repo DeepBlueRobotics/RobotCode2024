@@ -28,6 +28,8 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -201,7 +203,7 @@ public class Arm extends SubsystemBase {
                         Volts))
                 .angularVelocity(velocity.mut_replace(
                         armMasterEncoder.getVelocity() / 60,
-                        RotationsPerSecond))
+                        DegreesPerSecond))
                 .angularPosition(distance.mut_replace(
                         armMasterEncoder.getPosition(),
                         Rotations));
