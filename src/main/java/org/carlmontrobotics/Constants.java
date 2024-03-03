@@ -76,6 +76,7 @@ public final class Constants {
 		//other0;
 
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
+		//Boundaries
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
 		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
