@@ -64,6 +64,7 @@ public class Arm extends SubsystemBase {
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
     private final SparkPIDController armPIDFollower = armMotorFollower.getPIDController();
+    private static TrapezoidProfile.State setPoint;
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
@@ -162,7 +163,7 @@ public class Arm extends SubsystemBase {
     //#region Drive Methods
     private void driveArm(){
       
-      TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
+      setPoint = armProfile.calculate(kDt, setPoint, goalState);
       double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
       if ((getArmPos() < LOWER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0)){
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
