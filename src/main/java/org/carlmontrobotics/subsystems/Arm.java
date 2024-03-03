@@ -180,6 +180,7 @@ public class Arm extends SubsystemBase {
     }
     public void driveMotor(Measure<Voltage> volts) {
        armMotorMaster.setVoltage(volts.in(Volts));
+       armMotorFollower.setVoltage(volts.in(Volts));
     }
     public void logMotor(SysIdRoutineLog log) {
         log.motor("armMotorMaster")
