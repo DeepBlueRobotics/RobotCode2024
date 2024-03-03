@@ -53,8 +53,8 @@ public final class Constants {
 		public static final double SUBWOFFER_ANGLE = Math.toRadians(24);
 		public static final double SAFE_ZONE_ANGLE = Math.toRadians(24);
 		public static final double PODIUM_ANGLE = Math.toRadians(24);
-		public static final double climberUpAngle = Math.toRadians(24);
-		public static final double climberDownAngle = Math.toRadians(24);
+		public static final double CLIMBER_UP_ANGLE = Math.toRadians(24);
+		public static final double CLIMBER_DOWN_ANGLE = Math.toRadians(24);
 
 
 		//PID, Feedforward, Trapezoid
