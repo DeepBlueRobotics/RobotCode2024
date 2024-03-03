@@ -62,8 +62,8 @@ public class Arm extends SubsystemBase {
 
     // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
-    private final SparkPIDController armPID1 = armMotorMaster.getPIDController();
-    private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
+    private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
+    private final SparkPIDController armPIDFollower = armMotorFollower.getPIDController();
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
@@ -85,26 +85,26 @@ public class Arm extends SubsystemBase {
         armMotorFollower.follow(armMotorMaster);
         
         armFollowEncoder.setPosition(armMasterEncoder.getPosition());
-        armPID1.setP(kP);
-        armPID1.setI(kI);
-        armPID1.setD(kD);
-        armPID2.setP(kP);
-        armPID2.setI(kI);
-        armPID2.setD(kD);
+        armPIDMaster.setP(kP);
+        armPIDMaster.setI(kI);
+        armPIDMaster.setD(kD);
+        armPIDFollower.setP(kP);
+        armPIDFollower.setI(kI);
+        armPIDFollower.setD(kD);
      
         armFollowEncoder.setPosition(armMasterEncoder.getPosition());
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
-        armPID1.setFeedbackDevice(armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle));
-        armPID1.setPositionPIDWrappingEnabled(true);
-        armPID1.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
-        armPID1.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
+        armPIDMaster.setFeedbackDevice(armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle));
+        armPIDMaster.setPositionPIDWrappingEnabled(true);
+        armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
+        armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
         //two PIDs?
-        armPID2.setFeedbackDevice(armMotorFollower.getEncoder());
-        armPID2.setPositionPIDWrappingEnabled(true);
-        armPID2.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
-        armPID2.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
+        armPIDFollower.setFeedbackDevice(armMotorFollower.getEncoder());
+        armPIDFollower.setPositionPIDWrappingEnabled(true);
+        armPIDFollower.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
+        armPIDFollower.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
 
         SmartDashboard.putData("Arm", this);
 
@@ -167,8 +167,8 @@ public class Arm extends SubsystemBase {
       if ((getArmPos() < LOWER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0)){
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
-      armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
-      armPID2.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+      armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+      armPIDFollower.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
 
     public void setArmTarget(double targetPos) {
