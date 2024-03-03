@@ -65,7 +65,7 @@ public class Arm extends SubsystemBase {
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
-    private final ArmFeedforward armFeed = new ArmFeedforward(kS, kV, kA);
+    private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPID1 = armMotorMaster.getPIDController();
     private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
@@ -95,6 +95,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("Arm", this);
 
         //armProfileTimer.start(); <-- don't neeed timer anymore
+        
+        goalState = getCurrentArmState();
 
         setArmTarget(goalState.position);
     }
@@ -234,7 +236,8 @@ public class Arm extends SubsystemBase {
 
    
     public boolean armAtSetpoint() {
-        return armProfile.isFinished(armProfileTimer.get());
+        return Math.abs(getArmPos() - goalState.position) < POS_TOLERANCE_RAD &&
+                Math.abs(getArmVel() - goalState.velocity) < VEL_TOLERANCE_RAD_P_SEC;
     }
 
 
