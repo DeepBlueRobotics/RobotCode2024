@@ -141,6 +141,7 @@ public class Arm extends SubsystemBase {
 
 
         autoCancelArmCommand();
+        driveArm(goalState.position);
     }
 
     public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
