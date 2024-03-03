@@ -25,7 +25,7 @@ public class ArmTeleop extends Command {
   private final DoubleSupplier joystick; 
   private final Arm armSubsystem;
   private double lastTime = 0;
-  private Timer armTimer = new Timer();
+  
   TrapezoidProfile.State goalState;
   /** Creates a new ArmTeleop. */
   public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
@@ -52,7 +52,7 @@ public class ArmTeleop extends Command {
     double goalArmRad = goalState.position + speeds * deltaT; 
     goalArmRad = MathUtil.clamp(goalArmRad, LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
     goalState = new TrapezoidProfile.State(goalArmRad, 0);
-    TrapezoidProfile.State setpoint = armSubsystem.calculateCustomSetPoint(armTimer.get(), armSubsystem.getCurrentArmState(), goalState);
+    TrapezoidProfile.State setpoint = armSubsystem.calculateCustomSetPoint(0.02, armSubsystem.getCurrentArmState(), goalState);
     armSubsystem.driveArm(setpoint.position);
     lastTime = currTime;
   }
@@ -71,8 +71,6 @@ public class ArmTeleop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    armTimer.stop();
-    armTimer.reset();
   }
 
   // Returns true when the command should end.

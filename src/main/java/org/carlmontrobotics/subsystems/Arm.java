@@ -97,11 +97,6 @@ public class Arm extends SubsystemBase {
         //armProfileTimer.start(); <-- don't neeed timer anymore
 
         setArmTarget(goalState.position);
-
-        // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
-        SmartDashboard.putNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-        SmartDashboard.putNumber("Arm Tolerance Pos", POS_TOLERANCE_RAD);
-        SmartDashboard.putNumber("Arm Tolerance Vel", VEL_TOLERANCE_RAD_P_SEC);
     }
 
     @Override
