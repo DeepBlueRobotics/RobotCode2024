@@ -1,6 +1,8 @@
 package org.carlmontrobotics.subsystems;
 
-import org.carlmontrobotics.Constants;
+import static org.carlmontrobotics.Constants.Limelight.*;
+import static org.carlmontrobotics.Constants.Limelight.Apriltag.*;
+
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -55,9 +57,9 @@ public class Limelight extends SubsystemBase {
 
 
   public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID("limelight") == 4 || LimelightHelpers.getFiducialID("limelight") == 7){
-      double angleToGoalRadians = Units.degreesToRadians(Constants.Limelight.mountAngleDeg + LimelightHelpers.getTY("limelight"));
-      double distance = (Constants.Limelight.Apriltag.speakerCenterHeightMeters - Constants.Limelight.heightFromGroundMeters) / Math.tan(angleToGoalRadians);
+    if (LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_1 || LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_2){
+      double angleToGoalRadians = Units.degreesToRadians(MOUNT_ANGLE_DEG + LimelightHelpers.getTY("limelight"));
+      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / Math.tan(angleToGoalRadians);
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
@@ -76,5 +78,4 @@ public class Limelight extends SubsystemBase {
   //   return(6.5 inches)/2 x tan(2 * 320 pixels)
   //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
   // }
-
 }
