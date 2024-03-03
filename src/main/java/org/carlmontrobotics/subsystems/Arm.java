@@ -60,13 +60,13 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       // weird math stuff
-        armMotor1.setInverted(motorInverted);
+        armMotor1.setInverted(MOTOR_INVERTED);
         armMotor1.setIdleMode(IdleMode.kBrake);
-        armMotor2.setInverted(motorInverted);
+        armMotor2.setInverted(MOTOR_INVERTED);
         armMotor2.setIdleMode(IdleMode.kBrake);
-        armEncoder.setPositionConversionFactor(rotationToRad);
-        armEncoder.setVelocityConversionFactor(rotationToRad);
-        armEncoder.setInverted(encoderInverted);
+        armEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
+        armEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
+        armEncoder.setInverted(ENCODER_INVERTED);
 
         armMotor2.follow(armMotor1);
      
@@ -82,8 +82,8 @@ public class Arm extends SubsystemBase {
 
         // SmartDashboard.putNumber("Arm Max Vel", MAX_FF_VEL );
         SmartDashboard.putNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-        SmartDashboard.putNumber("Arm Tolerance Pos", posToleranceRad);
-        SmartDashboard.putNumber("Arm Tolerance Vel", velToleranceRadPSec);
+        SmartDashboard.putNumber("Arm Tolerance Pos", POS_TOLERANCE_RAD);
+        SmartDashboard.putNumber("Arm Tolerance Vel", VEL_TOLERANCE_RAD_P_SEC);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
         //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
-        SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
+       // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
         SmartDashboard.putNumber("InternalArmVelocity", armEncoder.getVelocity());
         //SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
@@ -197,13 +197,8 @@ public class Arm extends SubsystemBase {
 
     
 
-    public Translation2d getCoM() {
-        Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
-                .times(ARM_MASS_KG);
-        
-        return comOfArm.plus(comOfArm);
-        //this math is prob wront
-    }
+    
+
 
    
 }
