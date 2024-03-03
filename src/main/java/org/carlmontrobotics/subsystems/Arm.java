@@ -182,10 +182,8 @@ public class Arm extends SubsystemBase {
     
 
     public void resetGoal() {
-      
-        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-
-
+        double armPos = getArmPos();
+        setArmTarget(armPos);
     }
     public void driveMotor(Measure<Voltage> volts) {
        armMotorMaster.setVoltage(volts.in(Volts));
