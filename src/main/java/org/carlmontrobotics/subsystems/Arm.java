@@ -203,7 +203,7 @@ public class Arm extends SubsystemBase {
                         Volts))
                 .angularVelocity(velocity.mut_replace(
                         armMasterEncoder.getVelocity() / 60,
-                        DegreesPerSecond))
+                        RotationsPerSecond))
                 .angularPosition(distance.mut_replace(
                         armMasterEncoder.getPosition(),
                         Rotations));
