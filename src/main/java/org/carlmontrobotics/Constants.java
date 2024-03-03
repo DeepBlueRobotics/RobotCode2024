@@ -26,19 +26,14 @@ public final class Constants {
 	
 	public static final class Arm {
 
-		//ports
-//config for motors (inverted, encoder offset, etc)
-//goal positions
-//feedforward, pid, trapezoid constants
-//Boundaries (arm cannot go beyond certain angles)
-//Controller buttons should go in OI not Arm
+	
 
 		//Motor port
 		public static final int ARM_MOTOR_PORT_MASTER = 7;
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 8;
 		//Config for motors
-		public static final boolean MOTOR_INVERTED_1 = true; //Todo: find all these (they are definetely wrong)
-		public static final boolean MOTOR_INVERTED_2 = false;
+		public static final boolean MOTOR_INVERTED_MASTER = true; //Todo: find all these (they are definetely wrong)
+		public static final boolean MOTOR_INVERTED_FOLLOWER = false;
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; //placeholder
