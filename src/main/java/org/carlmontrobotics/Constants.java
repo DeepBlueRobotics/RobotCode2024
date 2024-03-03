@@ -31,11 +31,11 @@ public final class Constants {
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
 		// USE RADIANS FOR THE ARM
-		public static final double intakeAngle = Math.toRadians(0);
-		public static final double ampAngle = Math.toRadians(103);
-		public static final double placeholderSpeakerAngle1 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
+		public static final double INTAKE_ANGLE = Math.toRadians(0);
+		public static final double AMP_ANGLE = Math.toRadians(105);
+		public static final double SUBWOFFER_ANGLE = Math.toRadians(24);
+		public static final double SAFE_ZONE_ANGLE = Math.toRadians(24);
+		public static final double PODIUM_ANGLE = Math.toRadians(24);
 		public static final double climberUpAngle = Math.toRadians(24);
 		public static final double climberDownAngle = Math.toRadians(24);
 
@@ -68,20 +68,20 @@ public final class Constants {
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
 		//Arm buttons
-		public static final int raiseToSpeakerPodButton = Button.kY.value;
-		public static final int raiseToAmpButton = Button.kB.value;
-		public static final int raiseToSpeakerSafeButton = Button.kA.value;
-		public static final int raiseToSpeakerNextButton = Button.kX.value;
-		public static final int raiseToGroundButton = Button.kStart.value;
-		public static final int raiseToClimberButton = Button.kLeftBumper.value;
-		public static final int lowerToClimberButton = Button.kRightBumper.value;
+		public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
+		public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
+		public static final int RAISE_TO_SPEAKER_SAFE_ZONE_BUTTON = Button.kA.value;
+		public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
+		public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
+		public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
+		public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
 		//other
-		public static final boolean motorInverted = true; //Todo: find all these (they are definetely wrong)
-		public static final double rotationToRad = 2 * Math.PI;
-		public static final boolean encoderInverted = false;
+		public static final boolean MOTOR_INVERTED = true; //Todo: find all these (they are definetely wrong)
+		public static final double ROTATION_TO_RAD = 2 * Math.PI;
+		public static final boolean ENCODER_INVERTED = false;
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
-		public static final double posToleranceRad = 0;
-		public static final double velToleranceRadPSec = 0;
+		public static final double POS_TOLERANCE_RAD = 0;
+		public static final double VEL_TOLERANCE_RAD_P_SEC = 0;
 
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
