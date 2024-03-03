@@ -70,6 +70,8 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
 
 		//if needed
+		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
+		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double UPPER_ANGLE_LIMIT = Units.degreesToRadians(70); 
 		public static final double LOWER_ANGLE_LIMIT = Units.degreesToRadians(0);
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
