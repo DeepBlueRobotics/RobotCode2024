@@ -83,13 +83,7 @@ public final class Constants {
 		public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
 		public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
 		public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
-		//other
-		public static final boolean MOTOR_INVERTED = true; //Todo: find all these (they are definetely wrong)
-		public static final double ROTATION_TO_RAD = 2 * Math.PI;
-		public static final boolean ENCODER_INVERTED = false;
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
-		public static final double POS_TOLERANCE_RAD = 0;
-		public static final double VEL_TOLERANCE_RAD_P_SEC = 0;
+		//other0;
 
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
 		public static final double ARM_LOWER_LIMIT_RAD = -3.569 + MARGIN_OF_ERROR;
