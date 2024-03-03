@@ -108,7 +108,7 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
         //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
-        SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
+       // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
         SmartDashboard.putNumber("InternalArmVelocity", armEncoder.getVelocity());
         //SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
@@ -197,13 +197,8 @@ public class Arm extends SubsystemBase {
 
     
 
-    public Translation2d getCoM() {
-        Translation2d comOfArm = new Translation2d(COM_ARM_LENGTH_METERS, Rotation2d.fromRadians(getArmPos()))
-                .times(ARM_MASS_KG);
-        
-        return comOfArm.plus(comOfArm);
-        //this math is prob wront
-    }
+    
+
 
    
 }

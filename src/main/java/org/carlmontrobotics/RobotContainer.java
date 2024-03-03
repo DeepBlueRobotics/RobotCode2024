@@ -79,8 +79,8 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, Constants.Arm.RAISE_TO_AMP_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.AMP_ANGLE);}));
     new JoystickButton(manipulatorController, Constants.Arm.RAISE_TO_GROUND_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.INTAKE_ANGLE);}));
     // Cimber Buttons
-    new JoystickButton(manipulatorController, Constants.Arm.RAISE_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.climberUpAngle);}));
-    new JoystickButton(manipulatorController, Constants.Arm.LOWER_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.climberDownAngle);}));
+    new JoystickButton(manipulatorController, Constants.Arm.RAISE_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.CLIMBER_UP_ANGLE);}));
+    new JoystickButton(manipulatorController, Constants.Arm.LOWER_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.driveArm(Constants.Arm.CLIMBER_DOWN_ANGLE);}));
   }
 
   public Command getAutonomousCommand() {

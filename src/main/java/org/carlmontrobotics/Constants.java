@@ -6,6 +6,7 @@ package org.carlmontrobotics;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units.*;
@@ -24,10 +25,26 @@ public final class Constants {
 	}
 	
 	public static final class Arm {
+
+		//ports
+//config for motors (inverted, encoder offset, etc)
+//goal positions
+//feedforward, pid, trapezoid constants
+//Boundaries (arm cannot go beyond certain angles)
+//Controller buttons should go in OI not Arm
+
 		//Motor port
 		public static final int ARM_MOTOR_PORT_1 = 7;
 		public final static int ARM_MOTOR_PORT_2 = 8;
-		//all angles in rot here
+		//Config for motors
+		public static final boolean MOTOR_INVERTED = true; //Todo: find all these (they are definetely wrong)
+		public static final double ROTATION_TO_RAD = 2 * Math.PI;
+		public static final boolean ENCODER_INVERTED = false;
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
+		public static final double POS_TOLERANCE_RAD = 0;
+		public static final double VEL_TOLERANCE_RAD_P_SEC = 0;
+		public static final int MAX_VOLTAGE = 12;
+		
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
 		// USE RADIANS FOR THE ARM
@@ -40,31 +57,22 @@ public final class Constants {
 		public static final double climberDownAngle = Math.toRadians(24);
 
 
-		//if needed
-		public static final double UPPER_ANGLE_LIMIT = Math.toRadians(70); 
-		public static final double LOWER_ANGLE_LIMIT = Math.toRadians(0);
-		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
-		// Feedforward
+		//PID, Feedforward, Trapezoid
+		public static final double kP = 0.1;
+		public static final double kI = 0.1;
+		public static final double kD = 0.1;
 		public static final double kS = 0.1;
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
 		public static final double IZONE = 4;
-		// PID Constants
-		// placeholder numbers for now
-        public static final double kP = 0.1;
-		public static final double kI = 0.1;
-		public static final double kD = 0.1;
-
-		public static final int MAX_VOLTAGE = 12;
-		
-		
-		//Arm measurements - ALL OF THEM ARE PLACEHOLDERS THE NUMBERS MEAN NOTHING
-		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
-		public static final double ARM_MASS_KG = 9.59302503;
 		public static final double MAX_FF_VEL = 1; // rot / s
 		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
-		//I assume to max vel and accel are in meters per second
+
+		//if needed
+		public static final double UPPER_ANGLE_LIMIT = Units.degreesToRadians(70); 
+		public static final double LOWER_ANGLE_LIMIT = Units.degreesToRadians(0);
+		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT + UPPER_ANGLE_LIMIT) /2 - Math.PI;
 		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 
 		//Arm buttons
@@ -88,6 +96,20 @@ public final class Constants {
 		public static final double ARM_UPPER_LIMIT_RAD = .36 - MARGIN_OF_ERROR;
 
 		public static final double ARM_DISCONTINUITY_RAD = (ARM_LOWER_LIMIT_RAD + ARM_UPPER_LIMIT_RAD) / 2 - Math.PI;
+        
+
+		
+		
+		
+
+		
+
+		//Arm buttons
+		
+		//other
+		
+
+		
 
 	}
 	public static final class IntakeShooter {
@@ -105,6 +127,13 @@ public final class Constants {
         }
         public static final class Manipulator {
             public static final int port = 1;
+			public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
+			public static final int RAISE_TO_AMP_BUTTON= Button.kB.value;
+			public static final int RAISE_TO_SPEAKER_SAFE_BUTTON = Button.kA.value;
+			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
+			public static final int RAISE_TO_GROUND_BUTTON= Button.kStart.value;
+			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
+			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
         }
     }
 }
