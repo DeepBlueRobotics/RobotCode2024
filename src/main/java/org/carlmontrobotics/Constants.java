@@ -44,6 +44,7 @@ public final class Constants {
 		public static final double POS_TOLERANCE_RAD = 0;
 		public static final double VEL_TOLERANCE_RAD_P_SEC = 0;
 		public static final int MAX_VOLTAGE = 12;
+		public static final double ENCODER_OFFSET_RAD = 0;
 		
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 

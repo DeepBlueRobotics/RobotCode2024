@@ -83,9 +83,19 @@ public class Arm extends SubsystemBase {
         armPID2.setI(kI);
         armPID2.setD(kD);
      
-        //armEncoder1.setZeroOffset(offsetRad);
+        armEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
+
+        armPID1.setFeedbackDevice(armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle));
+        armPID1.setPositionPIDWrappingEnabled(true);
+        armPID1.setPositionPIDWrappingMinInput(ARM_LOWER_LIMIT_RAD);
+        armPID1.setPositionPIDWrappingMaxInput(ARM_UPPER_LIMIT_RAD);
+        //two PIDs?
+        armPID2.setFeedbackDevice(armMotorFollower.getEncoder());
+        armPID2.setPositionPIDWrappingEnabled(true);
+        armPID2.setPositionPIDWrappingMinInput(ARM_LOWER_LIMIT_RAD);
+        armPID2.setPositionPIDWrappingMaxInput(ARM_UPPER_LIMIT_RAD);
 
         SmartDashboard.putData("Arm", this);
 
