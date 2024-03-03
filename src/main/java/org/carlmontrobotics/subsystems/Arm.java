@@ -78,9 +78,10 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setIdleMode(IdleMode.kBrake);
         armMotorFollower.setInverted(MOTOR_INVERTED_FOLLOWER);
         armMotorFollower.setIdleMode(IdleMode.kBrake);
-        
+        // Comment out when running sysid
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
+        // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster);
@@ -97,10 +98,10 @@ public class Arm extends SubsystemBase {
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
-        armPIDMaster.setFeedbackDevice(armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle));
+        armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
-        armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
-        armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
+        armPIDMaster.setPositionPIDWrappingMinInput(MathUtil.angleModulus(LOWER_ANGLE_LIMIT));
+        armPIDMaster.setPositionPIDWrappingMaxInput(MathUtil.angleModulus(LOWER_ANGLE_LIMIT));
         //two PIDs?
         armPIDFollower.setFeedbackDevice(armMotorFollower.getEncoder());
         armPIDFollower.setPositionPIDWrappingEnabled(true);
@@ -109,7 +110,7 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putData("Arm", this);
 
-        
+        setPoint = getCurrentArmState();
         
         goalState = getCurrentArmState();
 
