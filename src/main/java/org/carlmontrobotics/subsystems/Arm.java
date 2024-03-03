@@ -101,7 +101,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
         armPIDMaster.setPositionPIDWrappingMinInput(MathUtil.angleModulus(LOWER_ANGLE_LIMIT));
-        armPIDMaster.setPositionPIDWrappingMaxInput(MathUtil.angleModulus(LOWER_ANGLE_LIMIT));
+        armPIDMaster.setPositionPIDWrappingMaxInput(MathUtil.angleModulus(UPPER_ANGLE_LIMIT));
         //two PIDs?
         armPIDFollower.setFeedbackDevice(armMotorFollower.getEncoder());
         armPIDFollower.setPositionPIDWrappingEnabled(true);
