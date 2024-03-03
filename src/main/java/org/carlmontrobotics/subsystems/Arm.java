@@ -233,7 +233,8 @@ public class Arm extends SubsystemBase {
 
    
     public boolean armAtSetpoint() {
-        return armProfile.isFinished(armProfileTimer.get());
+        return Math.abs(getArmPos() - goalState.position) < POS_TOLERANCE_RAD &&
+                Math.abs(getArmVel() - goalState.velocity) < VEL_TOLERANCE_RAD_P_SEC;
     }
 
 
