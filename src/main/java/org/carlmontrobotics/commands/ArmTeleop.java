@@ -25,7 +25,7 @@ public class ArmTeleop extends Command {
   private final DoubleSupplier joystick; 
   private final Arm armSubsystem;
   private double lastTime = 0;
-  private Timer armTimer = new Timer();
+  
   TrapezoidProfile.State goalState;
   /** Creates a new ArmTeleop. */
   public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
