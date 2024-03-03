@@ -76,6 +76,12 @@ public class Arm extends SubsystemBase {
         armEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster);
+        armPID1.setP(kP);
+        armPID1.setI(kI);
+        armPID1.setD(kD);
+        armPID2.setP(kP);
+        armPID2.setI(kI);
+        armPID2.setD(kD);
      
         //armEncoder1.setZeroOffset(offsetRad);
       
@@ -83,7 +89,9 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putData("Arm", this);
 
-        //armProfileTimer.start(); <-- don't neeed timer anymore
+        
+        
+        goalState = getCurrentArmState();
 
         setArmTarget(goalState.position);
     }
@@ -95,12 +103,7 @@ public class Arm extends SubsystemBase {
 
         //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
-        armPID1.setP(kP);
-        armPID1.setI(kI);
-        armPID1.setD(kD);
-        armPID2.setP(kP);
-        armPID2.setI(kI);
-        armPID2.setD(kD);
+        
 
         //smart dahsboard stuff
         //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
@@ -116,7 +119,7 @@ public class Arm extends SubsystemBase {
 
        // SmartDashboard.putNumber("ArmPos", getArmPos());
 
-        //driveArm(armProfile.calculate(armProfileTimer.get()));
+
 
         autoCancelArmCommand();
     }
@@ -152,7 +155,7 @@ public class Arm extends SubsystemBase {
         targetPos = getArmClampedGoal(targetPos);
 
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-        armProfileTimer.reset();
+       
 
         goalState.position = targetPos;
         goalState.velocity = 0;
@@ -169,6 +172,7 @@ public class Arm extends SubsystemBase {
     }
     public void driveMotor(Measure<Voltage> volts) {
        armMotorMaster.setVoltage(volts.in(Volts));
+       armMotorFollower.setVoltage(volts.in(Volts));
     }
     public void logMotor(SysIdRoutineLog log) {
         log.motor("armMotorMaster")
