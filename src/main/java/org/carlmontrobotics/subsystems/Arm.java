@@ -144,10 +144,7 @@ public class Arm extends SubsystemBase {
         driveArm(goalState.position);
     }
 
-    public TrapezoidProfile.State calculateCustomSetPoint(double goalSeconds, TrapezoidProfile.State currentPoint, TrapezoidProfile.State goalState) {
-        return armProfile.calculate(goalSeconds, currentPoint, goalState);
-        
-      }
+
 
   public void autoCancelArmCommand() {
         if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
