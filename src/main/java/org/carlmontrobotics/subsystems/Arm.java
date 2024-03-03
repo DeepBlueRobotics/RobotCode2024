@@ -40,17 +40,17 @@ public class Arm extends SubsystemBase {
    */
     // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
     
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
-    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
-    private final RelativeEncoder armEncoder = armMotor1.getEncoder();
+    private final CANSparkMax masterMotor = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
+    private final CANSparkMax followerMotor = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
+    private final RelativeEncoder armEncoder = masterMotor.getEncoder();
 
 
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
-    private final SparkPIDController armPID1 = armMotor1.getPIDController();
-    private final SparkPIDController armPID2 = armMotor2.getPIDController();
+    private final SparkPIDController armPID1 = masterMotor.getPIDController();
+    private final SparkPIDController armPID2 = followerMotor.getPIDController();
     private TrapezoidProfile armProfile = new TrapezoidProfile(trapConstraints);
     private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
@@ -60,15 +60,15 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       // weird math stuff
-        armMotor1.setInverted(MOTOR_INVERTED);
-        armMotor1.setIdleMode(IdleMode.kBrake);
-        armMotor2.setInverted(MOTOR_INVERTED);
-        armMotor2.setIdleMode(IdleMode.kBrake);
+        masterMotor.setInverted(MOTOR_INVERTED);
+        masterMotor.setIdleMode(IdleMode.kBrake);
+        followerMotor.setInverted(MOTOR_INVERTED);
+        followerMotor.setIdleMode(IdleMode.kBrake);
         armEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
         armEncoder.setInverted(ENCODER_INVERTED);
 
-        armMotor2.follow(armMotor1);
+        followerMotor.follow(masterMotor);
      
         //armEncoder1.setZeroOffset(offsetRad);
       
