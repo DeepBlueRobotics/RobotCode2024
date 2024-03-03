@@ -141,7 +141,7 @@ public class Arm extends SubsystemBase {
 
 
         autoCancelArmCommand();
-        driveArm(goalState.position);
+        driveArm();
     }
 
 
@@ -160,8 +160,8 @@ public class Arm extends SubsystemBase {
     }
 
     //#region Drive Methods
-    private void driveArm(double goalAngle){
-      TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
+    private void driveArm(){
+      
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
       if ((getArmPos() < LOWER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0)){
