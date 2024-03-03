@@ -43,7 +43,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
-    
+
     private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
     private final CANSparkMax armMotorFollower = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
     private final SparkAbsoluteEncoder armEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -147,7 +147,9 @@ public class Arm extends SubsystemBase {
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
-    
+      if ((getArmPos() < ARM_LOWER_LIMIT_RAD && getCurrentArmGoal().velocity > 0) || (getArmPos() > ARM_UPPER_LIMIT_RAD && getCurrentArmGoal().velocity > 0)){
+        armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
+      }
       armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
 
