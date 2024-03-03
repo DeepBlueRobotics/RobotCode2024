@@ -29,8 +29,8 @@ public final class Constants {
 	
 
 		//Motor port
-		public static final int ARM_MOTOR_PORT_MASTER = 7;
-		public final static int ARM_MOTOR_PORT_FOLLOWER = 8;
+		public static final int ARM_MOTOR_PORT_MASTER = 13;
+		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
 		//Config for motors
 		public static final boolean MOTOR_INVERTED_MASTER = true; //Todo: find all these (they are definetely wrong)
 		public static final boolean MOTOR_INVERTED_FOLLOWER = false;
