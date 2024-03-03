@@ -185,7 +185,6 @@ public class Arm extends SubsystemBase {
     
 
     public void resetGoal() {
-        double armPos = getArmPos();
       
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
