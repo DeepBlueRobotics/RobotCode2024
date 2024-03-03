@@ -5,8 +5,6 @@
 package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
-import static org.carlmontrobotics.Constants.IntakeShoot.PASS_RPM;
-import static org.carlmontrobotics.Constants.IntakeShoot.SPEAKER_RPM;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
@@ -28,8 +26,7 @@ public class PassToOutake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO replace with that method
-    if(intake.isWithinTolerance(SPEAKER_RPM)){
+    if(intake.isWithinTolerance()){
       intake.setRPMIntake(PASS_RPM);
     }
     

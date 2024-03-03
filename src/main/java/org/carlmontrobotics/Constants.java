@@ -4,13 +4,10 @@
 
 package org.carlmontrobotics;
 
-import org.carlmontrobotics.lib199.Limelight;
 import org.carlmontrobotics.lib199.Limelight.Transform;
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
 
-import com.revrobotics.CANSparkBase;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -159,13 +156,15 @@ public final class Constants {
 
 	public static final class IntakeShoot {
 		// PID values
+		public static final int INTAKE = 0;
+		public static final int OUTTAKE = 1;
 
 		public static final double[] kP = {/*/Intake/*/ 0.0001, /*/Outake/*/0};
 		public static final double[] kI = {/*/Intake/*/0.00001, /*/Outake/*/0};
 		public static final double[] kD = {/*/Intake/*/0, /*/Outake/*/0 };
-		public static final double kS = 0.29753;
-		public static final double kV = 0.077913;
-		public static final double kA = 0.05289;
+		public static final double[] kS = {/*/Intake/*/0.29753, /*/Outake/*/0.29753};
+		public static final double[] kV = {/*/Intake/*/0.077913, /*/Outake/*/0.077913};
+		public static final double[] kA = {/*/Intake/*/0.05289, /*/Outake/*/0.05289};
 		public static final int INTAKE_PORT = 0; //port
 		public static final int OUTAKE_PORT = 1; //port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 10; //port
@@ -177,13 +176,15 @@ public final class Constants {
 
 		public static final double OUTAKE_RPM = 6000;
 		public static final double INTAKE_RPM = -6000;
+		public static final double INTAKE_SLOWDOWN_RPM = -1.0;
+
 		public static final double PASS_RPM = 3000;
 
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 6000;
 
 		public static final double EJECT_RPM_INTAKE = 3000;
-		public static final double EJECT_RPM_OUTAKE = -3000;
+		public static final double EJECT_RPM_OUTAKE = 3000;
 
 
 		public static final double RPM_TOLERANCE = 10;
@@ -191,6 +192,10 @@ public final class Constants {
 
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
 		public static final boolean OUTAKE_MOTOR_INVERSION = true;
+
+		public static final int EJECT_TIME = 5;
+		public static final int INTAKE_TIME = 4;
+
 	}
 	public static final class Limelight {
 		public static final double errorTolerance = 0.1;
@@ -220,11 +225,11 @@ public final class Constants {
 
 		public static final class Manipulator {
 			public static final int port = 1;
-			public static final Axis IntakeButton = Axis.kRightTrigger;
-			public static final Axis ShooterButton = Axis.kRightTrigger;
-			public static final int EjectButton = Button.kA.value;
-			public static final int AmpButton = Button.kLeftBumper.value;
-			public static final int BooleanButton = Button.kRightBumper.value;
+			public static final Axis INTAKE_BUTTON = Axis.kRightTrigger;
+			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
+			public static final int EJECT_BUTTON = Button.kA.value;
+			public static final int AMP_BUTTON = Button.kLeftBumper.value;
+			public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
 
 		}
 		public static final double JOY_THRESH = 0.01;

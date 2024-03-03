@@ -1,16 +1,12 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.IntakeShoot;
 
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
-import static org.mockito.ArgumentMatchers.matches;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
-import org.carlmontrobotics.subsystems.Limelight;
 import com.playingwithfusion.TimeOfFlight;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -19,8 +15,9 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
@@ -29,27 +26,27 @@ public class IntakeShooter extends SubsystemBase {
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);//for both intake and outtake 
+    private final SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE], kA[INTAKE]);//for both intake and outtake 
+    private final SimpleMotorFeedforward outakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE], kA[OUTTAKE]);//for both intake and outtake 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert\
-    private final Limelight limelight = new Limelight();
-    
+    private double goalOutakeRPM = outakeEncoder.getVelocity();
     
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
         outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);         
-        pidControllerOutake.setP(kP[0]);
-        pidControllerOutake.setI(kI[0]);
-        pidControllerOutake.setD(kD[0]);
-        pidControllerIntake.setP(kP[1]);
-        pidControllerIntake.setI(kI[1]);
-        pidControllerIntake.setD(kD[1]);
+        pidControllerOutake.setP(kP[OUTTAKE]);
+        pidControllerOutake.setI(kI[OUTTAKE]);
+        pidControllerOutake.setD(kD[OUTTAKE]);
+        pidControllerIntake.setP(kP[INTAKE]);
+        pidControllerIntake.setI(kI[INTAKE]);
+        pidControllerIntake.setD(kD[INTAKE]);
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
-    public boolean isWithinTolerance(double outakeRPM){
-        return outakeEncoder.getVelocity()<outakeRPM+RPM_TOLERANCE && outakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
+    public boolean isWithinTolerance(){
+        return outakeEncoder.getVelocity()<goalOutakeRPM+RPM_TOLERANCE && goalOutakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
     //---------------------------------------------------------------------------------------------------
     private double getGamePieceDistanceIntake() {
@@ -60,23 +57,13 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH) / 1000);
     }
 
-    private boolean intakeDetectsNote() {
+    public boolean intakeDetectsNote() {
         return getGamePieceDistanceIntake() < DETECT_DISTANCE;
     }
 
-    private boolean outakeDetectsNote() {
+    public boolean outakeDetectsNote() {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE;
     }
-    //TODO replace pidControllerIntake.setReference with the new method
-    
-    public void senseGamePieceStop() {//This slows and stops the motors when the distance sensor detects the notes
-        if (intakeDetectsNote() && !outakeDetectsNote() ) {
-            setRPMIntake(-1.0);
-        }
-        if (outakeDetectsNote() ) {
-            setRPMIntake(0.0);
-            }
-        }
 
     //Aaron will work on this
     public boolean noteInIntake(){
@@ -111,22 +98,19 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor 1", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor 2", getGamePieceDistanceOutake());
-        SmartDashboard.putBoolean("DS1 Sees piece", intakeDetectsNote());
-        SmartDashboard.putBoolean("DS2 Sees piece", outakeDetectsNote());
-        senseGamePieceStop();// slows down when sensed by the first Sensor and stops upon being sensed by the second
+        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
+        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
+        SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
+        SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
     }
     public void setRPMOutake(double rpm) {
-        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
+        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, outakeFeedforward.calculate(rpm/60));
     }
     public void setRPMIntake(double rpm) {
-        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, feedforward.calculate(rpm/60));
+        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, intakeFeedforward.calculate(rpm/60));
     }
-    //TODO create a method that checks if the shooting rpm is high enough and commands can use
     public double getOutakeRPM(){
-        double RPM = outakeEncoder.getVelocity();
-        return RPM;
+        return outakeEncoder.getVelocity();
     }
     public void stopOutake() {
         setRPMOutake(0);

@@ -1,8 +1,7 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_RPM;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
-import org.carlmontrobotics.Constants.IntakeShoot;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -13,29 +12,37 @@ public class Intake extends Command {
     private final IntakeShooter intake;
     public Intake(IntakeShooter intake) {
         this.intake = intake;
-    }
+    }    
+    
     @Override
     public void initialize() {
       intake.setRPMIntake(INTAKE_RPM);
       timer.reset();
       timer.start();
     }
+      
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
     public void execute() {
-    // use trapazoid math and controllerMoveArm method from arm subsytem to apply voltage to the motor
-  }
+      if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
+        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
+      }
+      if (intake.outakeDetectsNote() ) {
+        intake.setRPMIntake(0.0);
+      }  
+    }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
+    timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.noteInIntake() || timer.hasElapsed(4);
+    return intake.noteInIntake() || timer.hasElapsed(INTAKE_TIME);
   }
 }
