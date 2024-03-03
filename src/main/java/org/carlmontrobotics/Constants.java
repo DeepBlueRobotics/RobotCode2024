@@ -37,8 +37,8 @@ public final class Constants {
 		public static final int ARM_MOTOR_PORT_MASTER = 7;
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 8;
 		//Config for motors
-		public static final boolean MOTOR_INVERTED_1 = true; //Todo: find all these (they are definetely wrong)
-		public static final boolean MOTOR_INVERTED_2 = false;
+		public static final boolean MOTOR_INVERTED_MASTER = true; //Todo: find all these (they are definetely wrong)
+		public static final boolean MOTOR_INVERTED_FOLLOWER = false;
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0;
