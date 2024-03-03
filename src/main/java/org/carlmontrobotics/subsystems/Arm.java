@@ -22,12 +22,23 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import edu.wpi.first.units.Velocity;
+import static edu.wpi.first.units.MutableMeasure.mutable;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
@@ -47,7 +58,9 @@ public class Arm extends SubsystemBase {
     private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
     private final CANSparkMax armMotorFollower = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
     private final SparkAbsoluteEncoder armEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-
+    private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
+    private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
 
     private static double kDt = 0.02;
    
@@ -168,8 +181,37 @@ public class Arm extends SubsystemBase {
       
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
+
+    }
+    public void driveMotor(Measure<Voltage> volts) {
+       armMotorMaster.setVoltage(volts.in(Volts));
+    }
+    public void logMotor(SysIdRoutineLog log) {
+        log.motor("armMotorMaster")
+                .voltage(voltage.mut_replace(
+                        armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
+                        Volts))
+                .angularVelocity(velocity.mut_replace(
+                        armEncoder.getVelocity() / 60,
+                        RotationsPerSecond))
+                .angularPosition(distance.mut_replace(
+                        armEncoder.getPosition(),
+                        Rotations));
+    }
+    private final SysIdRoutine routine = new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                    this::driveMotor,
+                    this::logMotor,
+                    this));
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return routine.quasistatic(direction);
     }
 
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return routine.dynamic(direction);
+    }
     //#endregion
 
     //#region Getters
