@@ -28,6 +28,8 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -96,13 +98,13 @@ public class Arm extends SubsystemBase {
 
         armPID1.setFeedbackDevice(armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle));
         armPID1.setPositionPIDWrappingEnabled(true);
-        armPID1.setPositionPIDWrappingMinInput(ARM_LOWER_LIMIT_RAD);
-        armPID1.setPositionPIDWrappingMaxInput(ARM_UPPER_LIMIT_RAD);
+        armPID1.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
+        armPID1.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
         //two PIDs?
         armPID2.setFeedbackDevice(armMotorFollower.getEncoder());
         armPID2.setPositionPIDWrappingEnabled(true);
-        armPID2.setPositionPIDWrappingMinInput(ARM_LOWER_LIMIT_RAD);
-        armPID2.setPositionPIDWrappingMaxInput(ARM_UPPER_LIMIT_RAD);
+        armPID2.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
+        armPID2.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
 
         SmartDashboard.putData("Arm", this);
 
@@ -164,7 +166,7 @@ public class Arm extends SubsystemBase {
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
-      if ((getArmPos() < ARM_LOWER_LIMIT_RAD && getCurrentArmGoal().velocity > 0) || (getArmPos() > ARM_UPPER_LIMIT_RAD && getCurrentArmGoal().velocity > 0)){
+      if ((getArmPos() < LOWER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0)){
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
       armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
@@ -226,8 +228,8 @@ public class Arm extends SubsystemBase {
     //#region Getters
 
     public double getArmPos() {
-        return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONTINUITY_RAD,
-                ARM_DISCONTINUITY_RAD + 2 * Math.PI);
+        return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONT_RAD,
+                ARM_DISCONT_RAD + 2 * Math.PI);
     }
 
 
@@ -254,7 +256,7 @@ public class Arm extends SubsystemBase {
 
 
     public double getArmClampedGoal(double goal) {
-        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONTINUITY_RAD, ARM_DISCONTINUITY_RAD + 2 * Math.PI), ARM_LOWER_LIMIT_RAD, ARM_UPPER_LIMIT_RAD);
+        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
     }
 
     
