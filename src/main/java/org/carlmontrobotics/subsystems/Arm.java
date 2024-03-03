@@ -104,9 +104,9 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
         //two PIDs?
         armPIDFollower.setFeedbackDevice(armMotorFollower.getEncoder());
-        armPIDFollower.setPositionPIDWrappingEnabled(true);
-        armPIDFollower.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT - Math.PI); //Wierd math, im not sure it this works but basically
-        armPIDFollower.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT - Math.PI);// since absolute is between -180 and 180 and relative is between 0 and 360(correct me if im wrong) so if we subract 180, then its the same
+        // armPIDFollower.setPositionPIDWrappingEnabled(true);
+        // armPIDFollower.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT - Math.PI); //Wierd math, im not sure it this works but basically
+        // armPIDFollower.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT - Math.PI);// since absolute is between -180 and 180 and relative is between 0 and 360(correct me if im wrong) so if we subract 180, then its the same
 
         SmartDashboard.putData("Arm", this);
 
