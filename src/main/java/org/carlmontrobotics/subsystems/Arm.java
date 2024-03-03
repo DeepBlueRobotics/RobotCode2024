@@ -4,10 +4,14 @@ import static org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
+
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.MathUtil;
@@ -40,17 +44,17 @@ public class Arm extends SubsystemBase {
    */
     // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
     
-    private final CANSparkMax armMotor1 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
-    private final CANSparkMax armMotor2 = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
-    private final RelativeEncoder armEncoder = armMotor1.getEncoder();
+    private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
+    private final CANSparkMax armMotorFollower = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
+    private final SparkAbsoluteEncoder armEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
 
     private static double kDt = 0.02;
    
     //PID, feedforward, trap profile
     private final SimpleMotorFeedforward armFeed = new SimpleMotorFeedforward(kS, kV, kA);
-    private final SparkPIDController armPID1 = armMotor1.getPIDController();
-    private final SparkPIDController armPID2 = armMotor2.getPIDController();
+    private final SparkPIDController armPID1 = armMotorMaster.getPIDController();
+    private final SparkPIDController armPID2 = armMotorFollower.getPIDController();
     private TrapezoidProfile armProfile = new TrapezoidProfile(trapConstraints);
     private Timer armProfileTimer = new Timer();
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
@@ -60,15 +64,16 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       // weird math stuff
-        armMotor1.setInverted(MOTOR_INVERTED);
-        armMotor1.setIdleMode(IdleMode.kBrake);
-        armMotor2.setInverted(MOTOR_INVERTED);
-        armMotor2.setIdleMode(IdleMode.kBrake);
+        armMotorMaster.setInverted(MOTOR_INVERTED);
+        armMotorMaster.setIdleMode(IdleMode.kBrake);
+        armMotorFollower.setInverted(MOTOR_INVERTED);
+        armMotorFollower.setIdleMode(IdleMode.kBrake);
+        
         armEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
         armEncoder.setInverted(ENCODER_INVERTED);
 
-        armMotor2.follow(armMotor1);
+        armMotorFollower.follow(armMotorMaster);
      
         //armEncoder1.setZeroOffset(offsetRad);
       
