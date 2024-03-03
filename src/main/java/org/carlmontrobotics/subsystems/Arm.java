@@ -143,7 +143,7 @@ public class Arm extends SubsystemBase {
     }
 
     //#region Drive Methods
-    private void driveArm(double goalAngle){
+    public void driveArm(double goalAngle){
       TrapezoidProfile.State goalState = new TrapezoidProfile.State(goalAngle, 0);
       TrapezoidProfile.State setPoint = armProfile.calculate(kDt, getCurrentArmState(), goalState);
       double armFeedVolts = armFeed.calculate(goalState.velocity, 0);
