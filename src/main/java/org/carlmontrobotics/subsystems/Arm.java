@@ -176,8 +176,6 @@ public class Arm extends SubsystemBase {
 
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
-
-        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
        
 
         goalState.position = targetPos;
