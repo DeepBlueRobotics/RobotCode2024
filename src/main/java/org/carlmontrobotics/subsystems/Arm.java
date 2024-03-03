@@ -43,17 +43,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
-  ///GOALS
-  /*
-   * public static final double intakeAngle = Math.toRadians(0);
-		public static final double ampAngle = Math.toRadians(103);
-		public static final double placeholderSpeakerAngle1 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle2 = Math.toRadians(24);
-		public static final double placeholderSpeakerAngle3 = Math.toRadians(24);
-		public static final double climberUpAngle = Math.toRadians(24);
-		public static final double climberDownAngle = Math.toRadians(24);
-   */
-    // a boolean meant to tell if the arm is in a forbidden posistion AKA FORBIDDEN FLAG
     
     private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_1, MotorConfig.NEO);
     private final CANSparkMax armMotorFollower = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_2, MotorConfig.NEO);
@@ -197,6 +186,7 @@ public class Arm extends SubsystemBase {
                         armEncoder.getPosition(),
                         Rotations));
     }
+
     private final SysIdRoutine routine = new SysIdRoutine(
             new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(
