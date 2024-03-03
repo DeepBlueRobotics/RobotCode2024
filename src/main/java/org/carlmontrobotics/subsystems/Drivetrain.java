@@ -122,7 +122,7 @@ public class Drivetrain extends SubsystemBase {
 
     //ROUTINES FOR SYSID
     //private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
-    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config();
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(2.891), Seconds.of(10));
     //DRIVE
     private void motorLogShort_drive(SysIdRoutineLog log, int id){
         String name = new String[] {"fl","fr","bl","br"}[id];
@@ -159,6 +159,8 @@ public class Drivetrain extends SubsystemBase {
             (Measure<Voltage> volts) -> {
                 modules[0].coast();
                 modules[1].coast();
+                modules[2].brake();
+                modules[3].brake();
                 driveMotors[2].setVoltage(volts.in(Volts));
                 driveMotors[3].setVoltage(volts.in(Volts));
             },
@@ -189,7 +191,7 @@ public class Drivetrain extends SubsystemBase {
     );
     private SysIdRoutine sysidroutshort_turn(int id, String logname){
         return new SysIdRoutine(
-            new SysIdRoutine.Config(),
+            defaultSysIdConfig,
 //            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(3)), 
             new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
@@ -299,7 +301,6 @@ public class Drivetrain extends SubsystemBase {
                     turnEncoders[3] = SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
-            SignalLogger.start();
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
@@ -314,12 +315,10 @@ public class Drivetrain extends SubsystemBase {
                 turnMotor.getEncoder().setMeasurementPeriod(16);
             }
             for(CANcoder coder : turnEncoders) {
-                 coder.getAbsolutePosition().setUpdateFrequency(50);
-                 coder.getPosition().setUpdateFrequency(50);
-                 coder.getVelocity().setUpdateFrequency(50);
-                SignalLogger.writeDouble("Regular position " + coder.toString(), coder.getPosition().getValue());
-                SignalLogger.writeDouble("Velocity " + coder.toString(), coder.getVelocity().getValue());
-                SignalLogger.writeDouble("Absolute position " + coder.toString(), coder.getAbsolutePosition().getValue());
+                 coder.getAbsolutePosition().setUpdateFrequency(500);
+                 coder.getPosition().setUpdateFrequency(500);
+                 coder.getVelocity().setUpdateFrequency(500);
+                
             }
             
 
@@ -589,6 +588,11 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // for (CANcoder coder : turnEncoders) {
+        // SignalLogger.writeDouble("Regular position " + coder.toString(), coder.getPosition().getValue());
+        //         SignalLogger.writeDouble("Velocity " + coder.toString(), coder.getVelocity().getValue());
+        //         SignalLogger.writeDouble("Absolute position " + coder.toString(), coder.getAbsolutePosition().getValue());
+        // }
         // lobotomized to prevent ucontrollabe swerve behavior
         // FIXME: unlobotomize lib199
         //turnMotors[2].setVoltage(SmartDashboard.getNumber("kS", 0));
@@ -612,7 +616,7 @@ public class Drivetrain extends SubsystemBase {
         // moduleBR.move(0.0000000000000000001, desiredGoal);
         // // // Update the odometry with current heading and encoder position
         // odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
-        autoCancelDtCommand(); //this
+//        autoCancelDtCommand(); //this
 
         // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
         // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
@@ -690,8 +694,8 @@ public class Drivetrain extends SubsystemBase {
         // speed, drive modifier, and whether or not to reverse turning.
         for (int i = 0; i < 4; i++) {
             SmartDashboard.putNumber("moduleIn" + Integer.toString(i), moduleStates[i].angle.getDegrees());
-            // moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
-            // Rotation2d.fromDegrees(modules[i].getModuleAngle()));
+            moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
+            Rotation2d.fromDegrees(modules[i].getModuleAngle()));
             SmartDashboard.putNumber("moduleOT" + Integer.toString(i), moduleStates[i].angle.getDegrees());
 
             modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());

@@ -81,18 +81,18 @@ public final class Constants {
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
 			// Order of modules: (FL, FR, BL, BR)
-			public static final double[] drivekP = {0.39184, 0.13831, 0.50555, 0.052012}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
+			public static final double[] drivekP = {2, 2.863, 2.722, 2}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {false, false, false, false};
 			public static final boolean[] turnInversion = {true, true, true, true};
 
-			public static final double[] kForwardVolts = {0.26744, 0.31897, 0.27967, 0.2461};
+			public static final double[] kForwardVolts = {0.16516, 0.24714, 0.18998, 0.11448};
 			public static final double[] kBackwardVolts = kForwardVolts;
 
-			public static final double[] kForwardVels = {2.81, 2.9098, 2.8378, 2.7391};
+			public static final double[] kForwardVels = {2.864, 2.8492, 2.869, 2.8201};
 			public static final double[] kBackwardVels = kForwardVels;
-			public static final double[] kForwardAccels = {1.1047/2, 0.79422/2, 0.77114/2, 1.1003/2};
+			public static final double[] kForwardAccels = {0.74608/2, 0.64091/2, 0.60114/2, 0.72046/2};
 			public static final double[] kBackwardAccels = kForwardAccels;
 
 			public static final double autoMaxSpeedMps = 0.35 * 4.4;  // Meters / second
@@ -184,7 +184,8 @@ public final class Constants {
         public static final class Driver {
             public static final int port = 0;
 
-			public static final int slowDriveButton = Button.kLeftBumper.value;
+			public static final int 
+			slowDriveButton = Button.kLeftBumper.value;
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
             public static final int toggleFieldOrientedButton = Button.kStart.value;
 			
