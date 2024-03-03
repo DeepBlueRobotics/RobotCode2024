@@ -26,12 +26,7 @@ public final class Constants {
 	
 	public static final class Arm {
 
-		//ports
-//config for motors (inverted, encoder offset, etc)
-//goal positions
-//feedforward, pid, trapezoid constants
-//Boundaries (arm cannot go beyond certain angles)
-//Controller buttons should go in OI not Arm
+	
 
 		//Motor port
 		public static final int ARM_MOTOR_PORT_MASTER = 7;
