@@ -161,6 +161,7 @@ public class Arm extends SubsystemBase {
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
       armPID1.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+      armPID2.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
     }
 
     public void setArmTarget(double targetPos) {
