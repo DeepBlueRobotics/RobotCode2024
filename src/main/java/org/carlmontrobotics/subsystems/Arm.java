@@ -89,9 +89,6 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setP(kP);
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
-   
-     
-        armFollowEncoder.setPosition(armMasterEncoder.getPosition());
       
         //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
