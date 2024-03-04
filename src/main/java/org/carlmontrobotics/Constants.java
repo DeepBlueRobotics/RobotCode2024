@@ -26,8 +26,6 @@ public final class Constants {
 	
 	public static final class Arm {
 
-	
-
 		//Motor port
 		public static final int ARM_MOTOR_PORT_MASTER = 13;
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
@@ -62,15 +60,15 @@ public final class Constants {
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
 		public static final double IZONE = 4;
-		public static final double MAX_FF_VEL = 1; // rot / s
-		public static final double MAX_FF_ACCEL = 1; // rot / s^2 
+		public static final double MAX_FF_VEL_RAD_P_S = 1; // rad / s
+		public static final double MAX_FF_ACCEL_RAD_P_S = 1; // rad / s^2 
 
 		//if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381 ;
 		public static final double ARM_MASS_KG = 9.59302503;
 		
 		
-		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
+		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_FF_VEL_RAD_P_S, MAX_FF_ACCEL_RAD_P_S);
 		//other0;
 
 		public static final double MARGIN_OF_ERROR = Math.PI/18;
