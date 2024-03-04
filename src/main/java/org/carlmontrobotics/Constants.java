@@ -44,13 +44,13 @@ public final class Constants {
 		//TODO: finish understand why this is broken public static final Measure<Angle> INTAKE_ANGLE = Degrees.to(-1);
 
 		// USE RADIANS FOR THE ARM
-		public static final double INTAKE_ANGLE = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE = Units.degreesToRadians(105);
-		public static final double SUBWOFFER_ANGLE = Units.degreesToRadians(24);
-		public static final double SAFE_ZONE_ANGLE = Units.degreesToRadians(24);
-		public static final double PODIUM_ANGLE = Units.degreesToRadians(24);
-		public static final double CLIMBER_UP_ANGLE = Units.degreesToRadians(24);
-		public static final double CLIMBER_DOWN_ANGLE = Units.degreesToRadians(24);
+		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
+		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(105);
+		public static final double SUBWOFFER_ANGLE_RAD = Units.degreesToRadians(24);
+		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(24);
+		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(24);
+		public static final double CLIMBER_UP_ANGLE_RAD = Units.degreesToRadians(24);
+		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
 
 
 		//PID, Feedforward, Trapezoid

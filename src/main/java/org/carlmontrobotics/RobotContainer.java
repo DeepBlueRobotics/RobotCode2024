@@ -77,15 +77,15 @@ public class RobotContainer {
     //right joystick used for manual arm control
 
     // Speaker Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(PODIUM_ANGLE);}));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(SUBWOFFER_ANGLE);}));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_SAFE_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(SAFE_ZONE_ANGLE);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(PODIUM_ANGLE_RAD);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(SUBWOFFER_ANGLE_RAD);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_SAFE_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);}));
     // Amp and Intake Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_AMP_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(AMP_ANGLE);}));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_GROUND_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(INTAKE_ANGLE);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_AMP_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(AMP_ANGLE_RAD);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_GROUND_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(INTAKE_ANGLE_RAD);}));
     // Cimber Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(CLIMBER_UP_ANGLE);}));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.LOWER_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(CLIMBER_DOWN_ANGLE);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(CLIMBER_UP_ANGLE_RAD);}));
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.LOWER_TO_CLIMBER_BUTTON).onTrue(new InstantCommand(() -> {arm.setArmTarget(CLIMBER_DOWN_ANGLE_RAD);}));
   }
 
   public Command getAutonomousCommand() {
