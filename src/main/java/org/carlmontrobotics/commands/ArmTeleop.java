@@ -50,7 +50,7 @@ public class ArmTeleop extends Command {
     double deltaT = currTime - lastTime;
 
     double goalArmRad = goalState.position + speeds * deltaT; 
-    goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT, LOWER_ANGLE_LIMIT);
+    goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT_RAD, LOWER_ANGLE_LIMIT_RAD);
     goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos()+ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD, armSubsystem.getArmPos()-ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
     goalState = new TrapezoidProfile.State(goalArmRad, 0);
     armSubsystem.setArmTarget(goalState.position);

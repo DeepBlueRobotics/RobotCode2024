@@ -94,8 +94,8 @@ public class Arm extends SubsystemBase {
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
-        armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT);
-        armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT);
+        armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
+        armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
         //two PIDs?
         
         SmartDashboard.putData("Arm", this);
@@ -150,7 +150,7 @@ public class Arm extends SubsystemBase {
       
       setPoint = armProfile.calculate(kDt, setPoint, goalState);
       double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
-      if ((getArmPos() < LOWER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT && getCurrentArmGoal().velocity > 0)){
+      if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)){
         armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
       }
       armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
@@ -227,6 +227,6 @@ public class Arm extends SubsystemBase {
     }
 
     public double getArmClampedGoal(double goal) {
-        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT, UPPER_ANGLE_LIMIT);
+        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD);
     } 
 }
