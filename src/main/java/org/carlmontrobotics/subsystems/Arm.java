@@ -38,6 +38,8 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -75,6 +77,9 @@ public class Arm extends SubsystemBase {
     // public static TrapezoidProfile.State[] goalState = { new
     // TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
 
+    
+    private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
+
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
@@ -107,6 +112,12 @@ public class Arm extends SubsystemBase {
         setPoint = getCurrentArmState();
         goalState = getCurrentArmState();
         setArmTarget(goalState.position);
+
+        //sysid buttons on smartdashbaord
+        sysIdTab.add("quasistatic forward", sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
+        sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     @Override
