@@ -15,7 +15,8 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 
 //controllers
 import edu.wpi.first.wpilibj.GenericHID;
-
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController.Button;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -76,7 +77,8 @@ public class RobotContainer {
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_BUTTON.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
-  
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
+    //TODO: ask charles if passing in controller is okay
   }
 
   public Command getAutonomousCommand() {
