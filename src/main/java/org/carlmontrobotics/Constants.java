@@ -74,7 +74,7 @@ public final class Constants {
 				MAX_FF_VEL_RAD_P_S, MAX_FF_ACCEL_RAD_P_S);
 		// other0;
 
-		public static final double MARGIN_OF_ERROR = Math.PI / 18;
+		//public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
