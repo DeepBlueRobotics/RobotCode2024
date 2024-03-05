@@ -103,20 +103,23 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
     }
+
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, outakeFeedforward.calculate(rpm/60));
     }
+
     public void setRPMIntake(double rpm) {
         pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, intakeFeedforward.calculate(rpm/60));
     }
+
     public double getOutakeRPM(){
         return outakeEncoder.getVelocity();
     }
+
     public void stopOutake() {
         setRPMOutake(0);
     }
     
-
     public void stopIntake() {
         setRPMIntake(0);
     }

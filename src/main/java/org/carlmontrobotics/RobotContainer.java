@@ -7,7 +7,6 @@ package org.carlmontrobotics;
 import org.carlmontrobotics.Constants.OI;
 //199 files
 import org.carlmontrobotics.commands.*;
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 
 //subsystems
@@ -22,7 +21,6 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -72,10 +70,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
 
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new SequentialCommandGroup(
-      new InstantCommand(()-> intakeShooter.setRPMOutake(SPEAKER_RPM)),
-      new PassToOutake(intakeShooter)
-    ));
+    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter));
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
