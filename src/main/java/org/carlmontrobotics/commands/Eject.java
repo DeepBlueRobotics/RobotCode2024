@@ -37,6 +37,6 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeShooter.noteInIntake()|| timer.hasElapsed(EJECT_TIME);
+    return !intakeShooter.noteInIntake()|| timer.hasElapsed(EJECT_TIME_SECS);
   }
 }

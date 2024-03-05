@@ -72,8 +72,8 @@ public final class Constants {
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
 		public static final boolean OUTAKE_MOTOR_INVERSION = true;
 
-		public static final int EJECT_TIME = 5;
-		public static final int INTAKE_TIME = 4;
+		public static final int EJECT_TIME_SECS = 5;
+		public static final int INTAKE_TIME_SECS = 4;
 
 	}
 
