@@ -68,7 +68,7 @@ public class Arm extends SubsystemBase {
     // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
-    private static TrapezoidProfile.State setPoint;
+    private static TrapezoidProfile.State setpoint;
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
@@ -77,7 +77,7 @@ public class Arm extends SubsystemBase {
     // public static TrapezoidProfile.State[] goalState = { new
     // TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
 
-    
+
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
     public Arm() {
@@ -109,11 +109,11 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putData("Arm", this);
 
-        setPoint = getCurrentArmState();
+        setpoint = getCurrentArmState();
         goalState = getCurrentArmState();
         setArmTarget(goalState.position);
 
-        //sysid buttons on smartdashbaord
+        //sysid buttons on smartdashbaord; sysid tab name is arm sysid
         sysIdTab.add("quasistatic forward", sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
@@ -170,14 +170,14 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
 
-        setPoint = armProfile.calculate(kDt, setPoint, goalState);
-        double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
+        setpoint = armProfile.calculate(kDt, setpoint, goalState);
+        double armFeedVolts = armFeed.calculate(getArmPos(), setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)) {
             armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
         }
-        armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
-        if (armAtSetpoint() || getArmPos() > setPoint.position) {
+        armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        if (armAtSetpoint() || getArmPos() > setpoint.position) {
             armPIDMaster.setIZone(Double.POSITIVE_INFINITY);// turns off pid once it reaches the setpoint
         } else {
             armPIDMaster.setIZone(IZONE);
