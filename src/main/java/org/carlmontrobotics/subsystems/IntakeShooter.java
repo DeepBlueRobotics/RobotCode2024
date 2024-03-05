@@ -14,6 +14,9 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,10 +32,10 @@ public class IntakeShooter extends SubsystemBase {
     private final SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE], kA[INTAKE]);//for both intake and outtake 
     private final SimpleMotorFeedforward outakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE], kA[OUTTAKE]);//for both intake and outtake 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
-    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert\
+    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
-    
-    public IntakeShooter() {
+    private GenericHID controller;
+    public IntakeShooter(GenericHID manipulatorController) {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
         outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);         
@@ -42,6 +45,7 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[INTAKE]);
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
+        this.controller = manipulatorController;
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -64,7 +68,13 @@ public class IntakeShooter extends SubsystemBase {
     public boolean outakeDetectsNote() {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
-
+    private void rumbleWithNote() {
+        if(intakeDetectsNote()) {
+            controller.setRumble(RumbleType.kBothRumble, 0.5);
+        } else {
+            controller.setRumble(RumbleType.kBothRumble, 0);
+        }
+    }
     //Aaron will work on this
     public boolean noteInIntake(){
         return intakeDetectsNote() && outakeDetectsNote();
@@ -102,6 +112,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
+        this.rumbleWithNote();
     }
 
     public void setRPMOutake(double rpm) {
