@@ -150,37 +150,13 @@ public final class Constants {
 	}
 
 	public static final class Arm {
-
-		//all angles in rot here
-		public static final double intakeAngle = -.1;
-		public static final double ampAngle = .3;
-		public static final double speakerAngle = .4;
-		//if needed
-//		public static final trapAngle = 80;
-
-		//Motor Controllers: pid, FF
-		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
-		// Feedforward
-		public static final double kS = 0.1;
-		public static final double kG = 0.1;
-		public static final double kV = 0.1;
-		public static final double kA = 0.1;
-
-		public static final double MAX_FF_VEL = 1; // rot / s
-		public static final double MAX_FF_ACCEL = 1; // rot / s^2
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
 	}
 	
 	public static final class IntakeShooter {
-		//in set() speed
-		public static final double idleSpeed = 0;
-		public static final double intakeSpeed = .7;
-		public static final double outtakeSpeed = 1;
-
 	}
 	public static final class Limelight {
 		public static final double ERROR_TOLERANCE = 0.1;
-		public static final double HORIZONTAL_FOV = 0;
+		public static final double HORIZONTAL_FOV_DEG = 0;
 		public static final double RESOLUTION_WIDTH = 640;
 		public static final double MOUNT_ANGLE_DEG = 46.2; //23.228
 		public static final double HEIGHT_FROM_GROUND_METERS = Units.inchesToMeters(9); //16.6
@@ -204,6 +180,8 @@ public final class Constants {
             public static final int rotateFieldRelative90Deg = Button.kB.value;
             public static final int rotateFieldRelative180Deg = Button.kA.value;
             public static final int rotateFieldRelative270Deg = Button.kX.value;
+
+			
         }
         public static final class Manipulator {
             public static final int port = 1;
