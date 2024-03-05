@@ -1,4 +1,5 @@
 package org.carlmontrobotics.subsystems;
+
 import static org.carlmontrobotics.Constants.Arm.*;
 
 import org.carlmontrobotics.commands.ArmTeleop;
@@ -46,19 +47,20 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
 
-    private final CANSparkMax armMotorMaster/*left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER, MotorConfig.NEO);
-    private final CANSparkMax armMotorFollower/*right */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_FOLLOWER, MotorConfig.NEO);
-    private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
+            MotorConfig.NEO);
+    private final CANSparkMax armMotorFollower/* right */ = MotorControllerFactory
+            .createSparkMax(ARM_MOTOR_PORT_FOLLOWER, MotorConfig.NEO);
+    private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster
+            .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final RelativeEncoder armFollowEncoder = armMotorFollower.getEncoder();
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
     private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
 
-
-    
     private static double kDt = 0.02;
-   
-    //PID, feedforward, trap profile
+
+    // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
@@ -66,13 +68,14 @@ public class Arm extends SubsystemBase {
     private static TrapezoidProfile.State setPoint;
 
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-    TrapezoidProfile.State goalState = new TrapezoidProfile.State(0,0);//TODO: update pos later
+    TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
 
     // rad, rad/s
-    //public static TrapezoidProfile.State[] goalState = { new TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
+    // public static TrapezoidProfile.State[] goalState = { new
+    // TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
 
     public Arm() {
-      // weird math stuff
+        // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
         armMotorMaster.setIdleMode(IdleMode.kBrake);
         armMotorFollower.setInverted(MOTOR_INVERTED_FOLLOWER);
@@ -84,20 +87,20 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster);
-        
+
         armFollowEncoder.setPosition(armMasterEncoder.getPosition());
         armPIDMaster.setP(kP);
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
-      
-        //armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
+
+        // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
         armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
-        //two PIDs?
-        
+        // two PIDs?
+
         SmartDashboard.putData("Arm", this);
 
         setPoint = getCurrentArmState();
@@ -108,58 +111,65 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
 
-        if(DriverStation.isDisabled()) resetGoal();
+        if (DriverStation.isDisabled())
+            resetGoal();
 
-        //ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD", ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
-        // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL );
-        
+        // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD =
+        // SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD",
+        // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
+        // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL
+        // );
 
-        //smart dahsboard stuff
-        //SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
-       // SmartDashboard.putBoolean("ArmProfileFinished", armProfile.isFinished(armProfileTimer.get()));
-        //posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos", posToleranceRad);
-        //velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel", velToleranceRadPSec);
+        // smart dahsboard stuff
+        // SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
+        // SmartDashboard.putBoolean("ArmProfileFinished",
+        // armProfile.isFinished(armProfileTimer.get()));
+        // posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos",
+        // posToleranceRad);
+        // velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel",
+        // velToleranceRadPSec);
 
-       // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
-        //SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
-       // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
+        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
+        // SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
+        // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
         SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
-        //SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
-       // SmartDashboard.putNumber("ArmPos", getArmPos());
+        // SmartDashboard.putNumber("ArmPos", getArmPos());
 
         autoCancelArmCommand();
         driveArm();
     }
 
-  public void autoCancelArmCommand() {
-        if(!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous()) return;
+    public void autoCancelArmCommand() {
+        if (!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous())
+            return;
 
         double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
 
-        if(requestedSpeeds != 0) {
+        if (requestedSpeeds != 0) {
             Command currentArmCommand = getCurrentCommand();
-            if(currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
+            if (currentArmCommand != getDefaultCommand() && currentArmCommand != null) {
                 currentArmCommand.cancel();
             }
         }
     }
 
-    //#region Drive Methods
-    private void driveArm(){
-      
-      setPoint = armProfile.calculate(kDt, setPoint, goalState);
-      double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
-      if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0) || (getArmPos() > UPPER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)){
-        armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
-      }
-      armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
-      
+    // #region Drive Methods
+    private void driveArm() {
+
+        setPoint = armProfile.calculate(kDt, setPoint, goalState);
+        double armFeedVolts = armFeed.calculate(goalState.position, goalState.velocity);
+        if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)
+                || (getArmPos() > UPPER_ANGLE_LIMIT_RAD && getCurrentArmGoal().velocity > 0)) {
+            armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
+        }
+        armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+
     }
 
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
-       
 
         goalState.position = targetPos;
         goalState.velocity = 0;
@@ -169,10 +179,12 @@ public class Arm extends SubsystemBase {
         double armPos = getArmPos();
         setArmTarget(armPos);
     }
+
     public void driveMotor(Measure<Voltage> volts) {
-       armMotorMaster.setVoltage(volts.in(Volts));
-       
+        armMotorMaster.setVoltage(volts.in(Volts));
+
     }
+
     public void logMotor(SysIdRoutineLog log) {
         log.motor("armMotorMaster")
                 .voltage(voltage.mut_replace(
@@ -200,9 +212,9 @@ public class Arm extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return routine.dynamic(direction);
     }
-    //#endregion
+    // #endregion
 
-    //#region Getters
+    // #region Getters
 
     public double getArmPos() {
         return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONT_RAD,
@@ -212,21 +224,22 @@ public class Arm extends SubsystemBase {
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }
-   
+
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
-   
+
     public TrapezoidProfile.State getCurrentArmGoal() {
         return goalState;
     }
-   
+
     public boolean armAtSetpoint() {
         return Math.abs(getArmPos() - goalState.position) < POS_TOLERANCE_RAD &&
                 Math.abs(getArmVel() - goalState.velocity) < VEL_TOLERANCE_RAD_P_SEC;
     }
 
     public double getArmClampedGoal(double goal) {
-        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI), LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD);
-    } 
+        return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI),
+                LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD);
+    }
 }

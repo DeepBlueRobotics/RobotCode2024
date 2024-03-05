@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
-
 public class ArmTeleop extends Command {
-  private final DoubleSupplier joystick; 
+  private final DoubleSupplier joystick;
   private final Arm armSubsystem;
   private double lastTime = 0;
-  
+
   private TrapezoidProfile.State goalState;
+
   /** Creates a new ArmTeleop. */
   public ArmTeleop(Arm armSubsystem, DoubleSupplier joystickSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -44,14 +44,16 @@ public class ArmTeleop extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // use trapazoid math and controllerMoveArm method from arm subsytem to apply voltage to the motor
+    // use trapazoid math and controllerMoveArm method from arm subsytem to apply
+    // voltage to the motor
     double speeds = getRequestedSpeeds();
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
 
-    double goalArmRad = goalState.position + speeds * deltaT; 
+    double goalArmRad = goalState.position + speeds * deltaT;
     goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT_RAD, LOWER_ANGLE_LIMIT_RAD);
-    goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos()+ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD, armSubsystem.getArmPos()-ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
+    goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos() + ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD,
+        armSubsystem.getArmPos() - ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
     goalState = new TrapezoidProfile.State(goalArmRad, 0);
     armSubsystem.setArmTarget(goalState.position);
     lastTime = currTime;
