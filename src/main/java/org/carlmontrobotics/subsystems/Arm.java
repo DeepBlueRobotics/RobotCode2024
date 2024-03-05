@@ -169,6 +169,9 @@ public class Arm extends SubsystemBase {
         if (armAtSetpoint()){
             armPIDMaster.setIZone(Double.POSITIVE_INFINITY);//turns off pid once it reaches the setpoint
         }
+        else {
+            armPIDMaster.setIZone(IZONE);
+        }
 
     }
 
