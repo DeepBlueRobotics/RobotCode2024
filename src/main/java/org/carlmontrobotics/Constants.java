@@ -78,10 +78,10 @@ public final class Constants {
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
-		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(195); // placeholder //Whether or not this is the actual account
+		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(42); // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
-		public static final double VEL_TOLERANCE_RAD_P_SEC = 0; // placeholder
+		public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD/0.02); // 20ms per robot loop
 		public static final double UPPER_ANGLE_LIMIT_RAD = Units.degreesToRadians(70);
 		public static final double LOWER_ANGLE_LIMIT_RAD = Units.degreesToRadians(0);
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
