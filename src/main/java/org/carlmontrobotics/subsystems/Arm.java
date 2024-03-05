@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.MutableMeasure.mutable;
@@ -200,6 +201,7 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setVoltage(volts.in(Volts));
 
     }
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(2), Seconds.of(10));
 
     public void logMotor(SysIdRoutineLog log) {
         log.motor("armMotorMaster")
@@ -215,7 +217,7 @@ public class Arm extends SubsystemBase {
     }
 
     private final SysIdRoutine routine = new SysIdRoutine(
-            new SysIdRoutine.Config(),
+            defaultSysIdConfig,
             new SysIdRoutine.Mechanism(
                     this::driveMotor,
                     this::logMotor,
