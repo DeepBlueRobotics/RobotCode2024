@@ -74,11 +74,13 @@ public final class Constants {
 				MAX_FF_VEL_RAD_P_S, MAX_FF_ACCEL_RAD_P_S);
 		// other0;
 
-		//public static final double MARGIN_OF_ERROR = Math.PI / 18;
+		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
-		public static final double POS_TOLERANCE_RAD = 0; // placeholder
+		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(195); // placeholder //Whether or not this is the actual account
+															// idk TODO: test on actual encoder without a conversion
+															// factor
 		public static final double VEL_TOLERANCE_RAD_P_SEC = 0; // placeholder
 		public static final double UPPER_ANGLE_LIMIT_RAD = Units.degreesToRadians(70);
 		public static final double LOWER_ANGLE_LIMIT_RAD = Units.degreesToRadians(0);

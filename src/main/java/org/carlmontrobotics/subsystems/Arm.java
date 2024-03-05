@@ -166,10 +166,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
         }
         armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
-        if (armAtSetpoint() || getArmPos() > setPoint.position){
-            armPIDMaster.setIZone(Double.POSITIVE_INFINITY);//turns off pid once it reaches the setpoint
-        }
-        else {
+        if (armAtSetpoint() || getArmPos() > setPoint.position) {
+            armPIDMaster.setIZone(Double.POSITIVE_INFINITY);// turns off pid once it reaches the setpoint
+        } else {
             armPIDMaster.setIZone(IZONE);
         }
 

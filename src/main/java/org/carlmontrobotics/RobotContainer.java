@@ -80,7 +80,7 @@ public class RobotContainer {
     // 3 setpositions of arm on letterpad
     // Up is Speaker, down is ground, right is Amp
     // right joystick used for manual arm control
-    //COMMENT THESE OUT DURING SYSID TESTING
+    // COMMENT THESE OUT DURING SYSID TESTING
     // Speaker Buttons
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON)
         .onTrue(new InstantCommand(() -> {
@@ -112,7 +112,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(CLIMBER_DOWN_ANGLE_RAD);
         }));
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
   }
 
   public Command getAutonomousCommand() {
