@@ -57,7 +57,6 @@ public class Arm extends SubsystemBase {
             .createSparkMax(ARM_MOTOR_PORT_FOLLOWER, MotorConfig.NEO);
     private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    private final RelativeEncoder armFollowEncoder = armMotorFollower.getEncoder();
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
     private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
