@@ -5,6 +5,7 @@ import static org.carlmontrobotics.Constants.Arm.*;
 import org.carlmontrobotics.commands.ArmTeleop;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.opencv.core.Mat;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
@@ -165,6 +166,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
         }
         armPIDMaster.setReference(setPoint.position, CANSparkBase.ControlType.kVelocity, 0, armFeedVolts);
+        if (armAtSetpoint()){
+            armPIDMaster.setIZone(Double.POSITIVE_INFINITY);//turns off pid once it reaches the setpoint
+        }
 
     }
 
