@@ -8,6 +8,7 @@ import org.carlmontrobotics.Constants.OI;
 //199 files
 import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 
 //subsystems
 //import org.carlmontrobotics.subsystems.Drivetrain;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 //control bindings
@@ -66,21 +68,23 @@ public class RobotContainer {
 
     //IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
     /*/Eject also for AMP/*/
-    new JoystickButton(manipulatorController, OI.Manipulator.AMP_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
 
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, OI.Manipulator.SHOOTER_BUTTON.value).onTrue(new SequentialCommandGroup(
+    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new SequentialCommandGroup(
       new InstantCommand(()-> intakeShooter.setRPMOutake(SPEAKER_RPM)),
       new PassToOutake(intakeShooter)
     ));
 
     /*/Intake/*/ 
-    new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_BUTTON.value).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
+    new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
   
   }
 
   public Command getAutonomousCommand() {
     //Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
+	return new PrintCommand("No auto, intakeshooter branch");
+    //throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
   }
+
 }

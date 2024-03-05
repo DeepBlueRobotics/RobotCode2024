@@ -50,19 +50,19 @@ public class IntakeShooter extends SubsystemBase {
     }
     //---------------------------------------------------------------------------------------------------
     private double getGamePieceDistanceIntake() {
-        return Units.metersToInches((intakeDistanceSensor.getRange() - DS_DEPTH) / 1000);
+        return Units.metersToInches((intakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
     }
 
     private double getGamePieceDistanceOutake() {
-        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH) / 1000);
+        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
     }
 
     public boolean intakeDetectsNote() {
-        return getGamePieceDistanceIntake() < DETECT_DISTANCE;
+        return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
     }
 
     public boolean outakeDetectsNote() {
-        return getGamePieceDistanceOutake() < DETECT_DISTANCE;
+        return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
 
     //Aaron will work on this
