@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -12,8 +13,8 @@ public class RobotContainer {
 	
 	public final DigitalInput[] autoSelectors;
 	
-	autoSelectors = new DigitalInput[Math.min(/*amount-of-autos*/, 26)];
-	for(int i = 0; i < autoSelectors.length; i++) autoSelectors[i] = new DigitalInput(i);
+	//autoSelectors = new DigitalInput[Math.min(/*amount-of-autos*/, 26)];
+	//for(int i = 0; i < autoSelectors.length; i++) autoSelectors[i] = new DigitalInput(i);
 	
 	
   public RobotContainer() {
@@ -58,12 +59,12 @@ public class RobotContainer {
     for(int i = 0; i < autoSelectors.length; i++) {
       if(!autoSelectors[i].get()) {
         System.out.println("Using Path: " + i);
-        autoPath = autoPaths[i];
+        //autoPath = autoPaths[i];
         break;
       }
     }
 
     //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-     return autoPath == null ? new PrintCommand("null :(") : autoPath; 
+    // return autoPath == null ? new PrintCommand("null :(") : autoPath; 
   }
 }
