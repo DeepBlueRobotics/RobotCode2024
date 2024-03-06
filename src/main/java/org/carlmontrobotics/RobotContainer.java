@@ -33,7 +33,7 @@ public class RobotContainer {
   // 2. Use absolute paths from constants to reduce confusion
   //private final GenericHID driverController = new GenericHID(OI.Driver.port);
   private final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
-  private final IntakeShooter intakeShooter = new IntakeShooter(manipulatorController);
+  private final IntakeShooter intakeShooter = new IntakeShooter();
   public RobotContainer() {
 		//defaultCommands: elevator, dt
 		//(pass in controller!)
@@ -76,6 +76,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onFalse(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 0);}));
+    intakeShooter.setDefaultCommand(new RumbleNote(intakeShooter, manipulatorController));
     //TODO: ask charles if passing in controller is okay
   }
 

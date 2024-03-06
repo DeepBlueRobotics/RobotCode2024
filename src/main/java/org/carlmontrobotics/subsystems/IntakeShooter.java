@@ -34,8 +34,7 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
-    private GenericHID controller;
-    public IntakeShooter(GenericHID manipulatorController) {
+    public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
         outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);         
@@ -45,7 +44,6 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[INTAKE]);
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
-        this.controller = manipulatorController;
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -68,13 +66,7 @@ public class IntakeShooter extends SubsystemBase {
     public boolean outakeDetectsNote() {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
-    private void rumbleWithNote() {
-        if(intakeDetectsNote()) {
-            controller.setRumble(RumbleType.kBothRumble, 0.5);
-        } else {
-            controller.setRumble(RumbleType.kBothRumble, 0);
-        }
-    }
+    
     //Aaron will work on this
     public boolean noteInIntake(){
         return intakeDetectsNote() && outakeDetectsNote();
@@ -112,7 +104,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
-        this.rumbleWithNote();
+    
     }
 
     public void setRPMOutake(double rpm) {
