@@ -34,6 +34,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.Velocity;
@@ -58,8 +60,8 @@ public class Arm extends SubsystemBase {
     private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
-    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
-    private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RadiansPerSecond.of(0));
+    private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
 
     private static double kDt = 0.02;
 
@@ -201,10 +203,10 @@ public class Arm extends SubsystemBase {
                         Volts))
                 .angularVelocity(velocity.mut_replace(
                         armMasterEncoder.getVelocity() / 60,
-                        RotationsPerSecond))
+                        RadiansPerSecond))
                 .angularPosition(distance.mut_replace(
                         armMasterEncoder.getPosition(),
-                        Rotations));
+                        Radians));
     }
 
     private final SysIdRoutine routine = new SysIdRoutine(
