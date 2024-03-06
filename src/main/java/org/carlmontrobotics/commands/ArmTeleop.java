@@ -49,7 +49,9 @@ public class ArmTeleop extends Command {
     double speeds = getRequestedSpeeds();
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
-
+    if (speeds == 0){
+      return;
+    }
     double goalArmRad = goalState.position + speeds * deltaT;
     goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT_RAD, LOWER_ANGLE_LIMIT_RAD);
     goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos() + ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD,
