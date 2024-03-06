@@ -59,7 +59,8 @@ public class RobotContainer {
     // () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
 
-    arm.setDefaultCommand(new ArmTeleop(arm, () -> inputProcessing(getStickValue(manipulatorController, Axis.kLeftY))));
+    arm.setDefaultCommand(new ArmTeleop(arm, 
+      () -> DeadzonedAxis(inputProcessing(getStickValue(manipulatorController, Axis.kLeftY)))));
   }
 
   private void setBindingsDriver() {
@@ -158,4 +159,17 @@ public class RobotContainer {
   private double ProcessedAxisValue(GenericHID hid, Axis axis) {
     return inputProcessing(getStickValue(hid, axis));
   }
+
+  /**
+   * Returns zero if a axis input is inside the deadzone
+   * 
+   * @param hid  The controller/plane joystick the axis is on
+   * @param axis The processed axis
+   * @return The processed value.
+   */
+  private double DeadzonedAxis(double axOut) {
+    return (-OI.JOY_THRESH < axOut && axOut < OI.JOY_THRESH) ? 0.0 : axOut;
+  }
+
+  
 }
