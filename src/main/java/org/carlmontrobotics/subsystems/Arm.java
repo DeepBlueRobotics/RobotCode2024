@@ -103,7 +103,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingEnabled(true);
         armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
-        // two PIDs?
+        armPIDMaster.setIZone(IZONE)
 
         SmartDashboard.putData("Arm", this);
 
@@ -174,12 +174,6 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getCurrentArmGoal().position, 0);
         }
         armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
-        if (armAtSetpoint() || getArmPos() > setpoint.position) {
-            armPIDMaster.setIZone(Double.POSITIVE_INFINITY);// turns off pid once it reaches the setpoint
-        } else {
-            armPIDMaster.setIZone(IZONE);
-        }
-
     }
 
     public void setArmTarget(double targetPos) {
