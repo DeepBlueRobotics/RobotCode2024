@@ -42,6 +42,7 @@ public class PassToOutake extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     intake.stopOutake();
+    intake.setRumblyTumbly(false);
   }
 
   // Returns true when the command should end.

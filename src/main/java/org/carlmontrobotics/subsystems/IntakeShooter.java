@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
+    private static boolean rumblyTumbly = false;
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -45,6 +46,13 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[INTAKE]);
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
+        SmartDashboard.putBoolean("Rumble boolean", testingRumble);
+    }
+    public boolean getRumblyTumbly() {
+        return rumblyTumbly;
+    }
+    public void setRumblyTumbly(boolean yippe) {
+        rumblyTumbly=yippe;
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -61,7 +69,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public boolean intakeDetectsNote() {
-        return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
+        return testingRumble;
     }
 
     public boolean outakeDetectsNote() {
@@ -105,7 +113,6 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
-        SmartDashboard.putBoolean("Rumble boolean", testingRumble);
         testingRumble = SmartDashboard.getBoolean("Rumble boolean", testingRumble);
     
     }
