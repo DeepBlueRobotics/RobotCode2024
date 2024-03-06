@@ -56,8 +56,8 @@ public final class Constants {
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 6000;
 
-		public static final double EJECT_RPM_INTAKE = 3000;
-		public static final double EJECT_RPM_OUTAKE = 3000;
+		public static final double EJECT_RPM_INTAKE = 750;
+		public static final double EJECT_RPM_OUTAKE = 750;
 
 
 		public static final double RPM_TOLERANCE = 10;
