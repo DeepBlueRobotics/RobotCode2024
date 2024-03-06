@@ -1,0 +1,31 @@
+package frc.robot.subsystems;
+
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.Constants;
+
+public class Led {
+    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.Led.ledLength);
+    private final AddressableLED led = new AddressableLED(Constants.Led.ledPort);
+
+    double bottomHalf = Math.floor(ledBuffer.getLength()/2); //rounds down
+    double topHalf = ledBuffer.getLength() - bottomHalf;
+    double all = ledBuffer.getLength();
+
+    int index = 1;
+    public Led(){
+        led.setLength(ledBuffer.getLength());
+        setLedColor(Constants.Led.defaultColor);
+        led.start();
+    }
+    public void setLedColor(Color8Bit color) {
+        for (int i = 0; i < ledBuffer.getLength() ; i++)
+            ledBuffer.setRGB(i, color.red, color.green, color.blue);
+        led.setData(ledBuffer);
+    }
+     
+    
+}
+
+

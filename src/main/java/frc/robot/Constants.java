@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,6 +19,14 @@ package frc.robot;
 public final class Constants {
 	public static final class Drivetrain {
 	}
+	public static final class Led {
+		public static final int ledLength = 5;
+		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
+		public static final int ledPort = 0;
+
+	}
+
+	
 	
 	public static final class Elevator {
 		
@@ -28,7 +40,7 @@ public final class Constants {
 		
 		public static final double MAX_VEL = 1; // rot / s
 		public static final double MAX_ACCEL = 1; // rot / s^2
-		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL_AUTO[ARM], MAX_FF_ACCEL[ARM]);
+		//public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL_AUTO, MAX_FF_ACCEL[ARM]);
 
 	}
 	public static final class Arm {

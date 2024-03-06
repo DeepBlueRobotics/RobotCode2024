@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-
+import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,9 +30,10 @@ public class Shooter extends SubsystemBase {
     }
     // method to check if holding note (beambreaker / digital input)
     public double getGamePieceDistanceIn() {
-      return Units.metersToInches((distSensor.getRange() - distSensorDepthMM */) / 1000 /* Convert mm to m */);
+      //return Units.metersToInches((distSensor.getRange() - distSensorDepthMM */) / 1000 /* Convert mm to m */);
                                                                         
       //The sensor measures from the back of the sensor
+      return 0;
       
                                                                            
     }
