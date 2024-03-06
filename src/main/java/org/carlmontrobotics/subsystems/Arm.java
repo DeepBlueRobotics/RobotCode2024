@@ -174,7 +174,7 @@ public class Arm extends SubsystemBase {
         double armFeedVolts = armFeed.calculate(getArmPos(), setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
-            armFeedVolts = kG * (COM_ARM_LENGTH_METERS) * Math.cos(getArmPos()) + armFeed.calculate(getCurrentArmGoal().position, 0);
+            armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
         armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
