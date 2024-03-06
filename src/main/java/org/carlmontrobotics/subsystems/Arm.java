@@ -92,9 +92,7 @@ public class Arm extends SubsystemBase {
         // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
-        armMotorFollower.follow(armMotorMaster);
-
-        armFollowEncoder.setPosition(armMasterEncoder.getPosition());
+        armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
         armPIDMaster.setP(kP);
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
