@@ -6,6 +6,7 @@ package org.carlmontrobotics;
 
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -68,6 +69,12 @@ public final class Constants {
 
 		public static final int EJECT_TIME_SECS = 5;
 		public static final int INTAKE_TIME_SECS = 4;
+
+		public static final int ledLength = 85;
+		public static final int ledPort = 85;
+        public static final double ledDefaultColorRestoreTime = 3;
+	    public static final Color defaultColor = new Color(0, 0, 200);
+        public static final Color pickupSuccessColor = new Color(0, 200, 0);
 
 	}
 
