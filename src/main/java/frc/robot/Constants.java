@@ -23,6 +23,8 @@ public final class Constants {
 		public static final int ledLength = 5;
 		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
 		public static final int ledPort = 0;
+		public static final Color8Bit intakeColor = new Color8Bit(255,255,0);
+		//apparently 100% of red and green makes yellow w/ rgb values
 
 	}
 

@@ -9,6 +9,7 @@ public class Led {
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.Led.ledLength);
     private final AddressableLED led = new AddressableLED(Constants.Led.ledPort);
 
+
     double bottomHalf = Math.floor(ledBuffer.getLength()/2); //rounds down
     double topHalf = ledBuffer.getLength() - bottomHalf;
     double all = ledBuffer.getLength();
@@ -25,7 +26,21 @@ public class Led {
         led.setData(ledBuffer);
     }
      
-    
+        //in arm code make it so that color changes to intakeColor when distance sensors detect a note
+        //in either boolean noteInIntake or boolean intakeDetectsNote
+        // if(noteInIntake){
+       //    setLedColor(intakeColor);
+       //    resetColorCommand.schedule();     
+       // }
+
+       //private Command resetColorCommand = new SequentialCommandGroup(
+            // new WaitCommand(ledDefaultColorRestoreTime),
+            //new InstantCommand(() -> setLedColor(defaultColor))) {
+            //public boolean runsWhenDisabled() {
+            //return true;
+        // };
+        //};
+
 }
 
 
