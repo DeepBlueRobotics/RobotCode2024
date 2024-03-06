@@ -40,7 +40,7 @@ public final class Constants {
 
 			public static final double driveModifier = 1;
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
-			public static final double mu = 0.5; /* 70/83.2;  */
+			public static final double mu = 1; /* 70/83.2;  */
 
 			public static final double NEOFreeSpeed = 5676 * (2 * Math.PI) / 60;    // radians/s
 			// Angular speed to translational speed --> v = omega * r / gearing
@@ -81,7 +81,7 @@ public final class Constants {
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
 			// Order of modules: (FL, FR, BL, BR)
-			public static final double[] drivekP = {4.5, 4.5, 4.5, 3.5}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
+			public static final double[] drivekP = {2.8, 2.8, 2.8, 2.8}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {false, false, false, false};
@@ -136,11 +136,11 @@ public final class Constants {
 
 			//#region Command Constants
 
-			public static final double kNormalDriveSpeed = 1; // Percent Multiplier
-			public static final double kNormalDriveRotation = 0.5; // Percent Multiplier
-			public static final double kSlowDriveSpeed = 0.4; // Percent Multiplier
-			public static final double kSlowDriveRotation = 0.250; // Percent Multiplier
-			public static final double kAlignMultiplier = 1D/3D;
+			public static  double kNormalDriveSpeed = 1; // Percent Multiplier
+			public static  double kNormalDriveRotation = 0.5; // Percent Multiplier
+			public static  double kSlowDriveSpeed = 0.4; // Percent Multiplier
+			public static  double kSlowDriveRotation = 0.250; // Percent Multiplier
+			public static  double kAlignMultiplier = 1D/3D;
 			public static final double kAlignForward = 0.6;
 
 			public static final double wheelTurnDriveSpeed = 0.0001; // Meters / Second ; A non-zero speed just used to orient the wheels to the correct angle. This should be very small to avoid actually moving the robot.
