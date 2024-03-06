@@ -43,6 +43,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.noteInIntake() || timer.hasElapsed(INTAKE_TIME_SECS);
+    return intake.outakeDetectsNote();
   }
 }
