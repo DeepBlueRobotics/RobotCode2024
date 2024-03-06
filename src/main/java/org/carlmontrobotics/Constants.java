@@ -42,7 +42,7 @@ public final class Constants {
 		public static final int OUTAKE_PORT = 1; //port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 10; //port
 		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 11; //port
-		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
+		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 6.5; // inches
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
