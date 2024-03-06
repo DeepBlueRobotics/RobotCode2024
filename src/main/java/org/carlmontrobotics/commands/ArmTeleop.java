@@ -46,6 +46,8 @@ public class ArmTeleop extends Command {
   public void execute() {
     // use trapazoid math and controllerMoveArm method from arm subsytem to apply
     // voltage to the motor
+    if (Constants.OI.JOY_THRESH == 0)
+      return;
     double speeds = getRequestedSpeeds();
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
