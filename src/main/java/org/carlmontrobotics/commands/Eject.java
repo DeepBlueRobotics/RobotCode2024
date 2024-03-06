@@ -32,6 +32,7 @@ public class Eject extends Command {
     intakeShooter.stopIntake();
     intakeShooter.stopOutake();
     timer.stop();
+    intakeShooter.setRumblyTumbly(false);
   }
 
   // Returns true when the command should end.

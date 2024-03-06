@@ -47,12 +47,13 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
         SmartDashboard.putBoolean("Rumble boolean", testingRumble);
+        testingRumble = false;
     }
     public boolean getRumblyTumbly() {
         return rumblyTumbly;
     }
-    public void setRumblyTumbly(boolean yippe) {
-        rumblyTumbly=yippe;
+    public void setRumblyTumbly(boolean hasIntakedOnce) {
+        rumblyTumbly=hasIntakedOnce;
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance

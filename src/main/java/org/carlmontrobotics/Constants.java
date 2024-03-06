@@ -76,7 +76,7 @@ public final class Constants {
 
 	public static final class OI {
 		public static final class Driver {
-			public static final int port = 0;
+			public static final int port = 1;
 
 			public static final int slowDriveButton = Button.kLeftBumper.value;
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
@@ -89,7 +89,7 @@ public final class Constants {
 		}
 
 		public static final class Manipulator {
-			public static final int port = 1;
+			public static final int port = 0;
 			public static final int INTAKE_BUTTON = Axis.kRightTrigger.value;
 			public static final int SHOOTER_BUTTON = Axis.kRightTrigger.value;
 			public static final int EJECT_BUTTON = Button.kA.value;
