@@ -1,7 +1,29 @@
 package org.carlmontrobotics.subsystems;
 
 
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static org.carlmontrobotics.Constants.IntakeShoot.DETECT_DISTANCE_INCHES;
+import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_DISTANCE_SENSOR_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_MOTOR_INVERSION;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_DISTANCE_SENSOR_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_MOTOR_INVERSION;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTTAKE;
+import static org.carlmontrobotics.Constants.IntakeShoot.RPM_TOLERANCE;
+import static org.carlmontrobotics.Constants.IntakeShoot.defaultColor;
+import static org.carlmontrobotics.Constants.IntakeShoot.kA;
+import static org.carlmontrobotics.Constants.IntakeShoot.kD;
+import static org.carlmontrobotics.Constants.IntakeShoot.kI;
+import static org.carlmontrobotics.Constants.IntakeShoot.kP;
+import static org.carlmontrobotics.Constants.IntakeShoot.kS;
+import static org.carlmontrobotics.Constants.IntakeShoot.kV;
+import static org.carlmontrobotics.Constants.IntakeShoot.ledDefaultColorRestoreTime;
+import static org.carlmontrobotics.Constants.IntakeShoot.pickupSuccessColor;
+import static org.carlmontrobotics.Constants.IntakeShoot.ledLength;
+import static org.carlmontrobotics.Constants.IntakeShoot.ledPort;
+
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
@@ -17,8 +39,15 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 
@@ -35,6 +64,17 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
+    private final AddressableLED led = new AddressableLED(ledPort);
+    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
+    
+    private Command resetColorCommand = new SequentialCommandGroup(
+            new WaitCommand(ledDefaultColorRestoreTime),
+            new InstantCommand(() -> ledBuffer.setRGB(0,0,0, 200))) {
+        public boolean runsWhenDisabled() {
+            return true;
+        };
+    };
+    
     private boolean testingRumble = false;
     public IntakeShooter() {
         //Figure out which ones to set inverted
@@ -116,7 +156,19 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
         testingRumble = SmartDashboard.getBoolean("Rumble boolean", testingRumble);
     
+
+        {
+            boolean hasGamePiece = noteInIntake();
+            if (hasGamePiece) {
+                ledBuffer.setRGB(0,0,200, 0);
+                resetColorCommand.schedule();
+            }
+            
+        }
+    
     }
+     
+
 
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, outakeFeedforward.calculate(rpm/60));
