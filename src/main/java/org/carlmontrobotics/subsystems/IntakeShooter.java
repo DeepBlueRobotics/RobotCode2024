@@ -110,7 +110,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public boolean intakeDetectsNote() {
-        return testingRumble;
+        return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
     }
 
     public boolean outakeDetectsNote() {
@@ -118,9 +118,7 @@ public class IntakeShooter extends SubsystemBase {
     }
     
     //Aaron will work on this
-    public boolean noteInIntake(){
-        return testingRumble;//intakeDetectsNote() && outakeDetectsNote();
-    }    
+      
     // //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     // //find out what this means
     // public double calculateDistanceSensorNotes() {
@@ -158,7 +156,7 @@ public class IntakeShooter extends SubsystemBase {
     
 
         {
-            boolean hasGamePiece = noteInIntake();
+            boolean hasGamePiece = intakeDetectsNote();
             if (hasGamePiece) {
                 ledBuffer.setRGB(0,0,200, 0);
                 resetColorCommand.schedule();
