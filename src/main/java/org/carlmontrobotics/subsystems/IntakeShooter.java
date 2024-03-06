@@ -34,6 +34,7 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
+    private boolean testingRumble = false;
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
@@ -69,7 +70,7 @@ public class IntakeShooter extends SubsystemBase {
     
     //Aaron will work on this
     public boolean noteInIntake(){
-        return intakeDetectsNote() && outakeDetectsNote();
+        return testingRumble;//intakeDetectsNote() && outakeDetectsNote();
     }    
     // //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
     // //find out what this means
@@ -104,6 +105,8 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
+        SmartDashboard.putBoolean("Rumble boolean", testingRumble);
+        testingRumble = SmartDashboard.getBoolean("Rumble boolean", testingRumble);
     
     }
 
