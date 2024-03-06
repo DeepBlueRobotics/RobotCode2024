@@ -171,7 +171,7 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
-        double armFeedVolts = armFeed.calculate(getArmPos(), setpoint.velocity);
+        double armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
