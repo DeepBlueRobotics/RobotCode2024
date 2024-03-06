@@ -77,8 +77,9 @@ public final class Constants {
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0.5; // placeholder - issue not resolved (this is same value as )
-		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(42); // placeholder //Whether or not this is the actual account
+
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0.5; // placeholder - issue not resolved (this is same value as in Robot Code 2023)
+		public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
 		public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD/0.02); // 20ms per robot loop
