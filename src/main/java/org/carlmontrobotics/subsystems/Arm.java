@@ -91,6 +91,7 @@ public class Arm extends SubsystemBase {
         // Comment out when running sysid
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
+        armMasterEncoder.setZeroOffset​(ENCODER_OFFSET_RAD);
         // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
