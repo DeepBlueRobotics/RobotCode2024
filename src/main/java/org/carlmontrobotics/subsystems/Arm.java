@@ -91,7 +91,7 @@ public class Arm extends SubsystemBase {
         // Comment out when running sysid
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
-        armMasterEncoder.setZeroOffset​(ENCODER_OFFSET_RAD);
+        armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
         // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
@@ -174,7 +174,7 @@ public class Arm extends SubsystemBase {
         double armFeedVolts = armFeed.calculate(getArmPos(), setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
-            armFeedVolts = kG * (COM_ARM_LENGTH_METERS) * Math.cos(getArmPos()) + armFeed.calculate(getCurrentArmGoal().position, 0);
+                    armFeedVolts = kG * (COM_ARM_LENGTH_METERS) * Math.cos(getArmPos()) + armFeed.calculate(getCurrentArmGoal().position, 0);
             //kg * cos(arm angle) * arm_COM_length
         }
         armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
