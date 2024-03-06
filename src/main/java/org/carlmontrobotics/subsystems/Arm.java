@@ -204,7 +204,7 @@ public class Arm extends SubsystemBase {
                         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
                         Volts))
                 .angularVelocity(velocity.mut_replace(
-                        armMasterEncoder.getVelocity() / 60,
+                        armMasterEncoder.getVelocity()* (Math.PI/ 180),
                         RadiansPerSecond))
                 .angularPosition(distance.mut_replace(
                         armMasterEncoder.getPosition(),
