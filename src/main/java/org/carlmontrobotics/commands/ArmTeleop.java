@@ -49,7 +49,8 @@ public class ArmTeleop extends Command {
     double speeds = getRequestedSpeeds();
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
-    if (speeds == 0){
+    lastTime = currTime;
+    if (speeds == 0){// If no input, return, seen in issue #24
       return;
     }
     double goalArmRad = goalState.position + speeds * deltaT;
@@ -60,7 +61,6 @@ public class ArmTeleop extends Command {
     goalState.velocity = 0;
     //don't put in constants bc it's always zero
     armSubsystem.setArmTarget(goalState.position);
-    lastTime = currTime;
   }
 
   public double getRequestedSpeeds() {
