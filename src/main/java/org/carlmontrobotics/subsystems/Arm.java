@@ -106,7 +106,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingEnabled(true);
         armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
-        armPIDMaster.setIZone(IZONE);
+        armPIDMaster.setIZone(IZONE_RAD);
 
         SmartDashboard.putData("Arm", this);
 
