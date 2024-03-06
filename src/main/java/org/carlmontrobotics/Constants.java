@@ -34,8 +34,8 @@ public final class Constants {
 		public static final int ARM_MOTOR_PORT_MASTER = 13;
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
 		// Config for motors
-		public static final boolean MOTOR_INVERTED_MASTER = true; // Todo: find all these (they are definetely wrong)
-		public static final boolean MOTOR_INVERTED_FOLLOWER = false;
+		public static final boolean MOTOR_INVERTED_MASTER = false; 
+		public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
 
@@ -62,7 +62,7 @@ public final class Constants {
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
-		public static final double IZONE_RAD = .09;//FIXME #22
+		public static final double IZONE_RAD = .8;
 		public static final double MAX_FF_VEL_RAD_P_S = 0.8; // rad / s
 		public static final double MAX_FF_ACCEL_RAD_P_S = 1; // rad / s^2
 
@@ -77,8 +77,7 @@ public final class Constants {
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
-
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0.5; // placeholder - issue not resolved (this is same value as in Robot Code 2023)
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
 		public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
