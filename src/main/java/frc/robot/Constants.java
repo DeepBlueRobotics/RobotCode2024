@@ -21,10 +21,12 @@ public final class Constants {
 	}
 	public static final class Led {
 		public static final int ledLength = 5;
-		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
+		public static final Color8Bit defaultColor = new Color8Bit(255, 0, 0); //default = red
 		public static final int ledPort = 0;
-		public static final Color8Bit intakeColor = new Color8Bit(255,255,0);
-		//apparently 100% of red and green makes yellow w/ rgb values
+		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
+		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
+		public static final Color8Bit intakeouttakeColor = new Color8Bit(0,255,9); //intake and outtake (both) = green
+		//Red when nothing, purple/blue when intake/outtake detect only, green when both
 
 	}
 

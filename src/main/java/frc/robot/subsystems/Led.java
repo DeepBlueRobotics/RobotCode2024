@@ -27,7 +27,8 @@ public class Led {
     }
      
         /*in arm code make it so that color changes to intakeColor when distance sensors detect a note
-        using either boolean noteInIntake or boolean intakeDetectsNote
+        (using either boolean noteInIntake or boolean intakeDetectsNote)
+        there is definitely a shorter way to write this
         
         public void changeIntakeColor(){
             setLedColor(intakeColor);
@@ -37,7 +38,24 @@ public class Led {
         if(noteInIntake){
             changeIntakeColor();   
         }
+
+        public void changeOuttakeColor(){
+            setLedColor(outtakeColor);
+            resetColorCommand.schedule(); 
+        }
+
+        if(/boolean value for outtake detection/){
+            changeOuttakeColor();   
+        }
         
+        public void changeIntakeOuttakeColor(){
+            setLedColor(intakeouttakeColor);
+            resetColorCommand.schedule(); 
+        }
+
+        if(noteInIntake && /boolean value for outtake detection/){
+            changeIntakeOuttakeColor();   
+        }
 
        private Command resetColorCommand = new SequentialCommandGroup(
             new WaitCommand(ledDefaultColorRestoreTime),
