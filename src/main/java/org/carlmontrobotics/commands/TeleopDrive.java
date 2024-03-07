@@ -51,9 +51,9 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double[] speeds = getRequestedSpeeds();
     double currentTime = Timer.getFPGATimestamp();
     robotPeriod = currentTime - prevTimestamp;
+    double[] speeds = getRequestedSpeeds();
     SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
     prevTimestamp = currentTime;
     kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
