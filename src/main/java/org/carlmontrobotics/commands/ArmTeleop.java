@@ -50,7 +50,7 @@ public class ArmTeleop extends Command {
     double currTime = Timer.getFPGATimestamp();
     double deltaT = currTime - lastTime;
     lastTime = currTime;
-    if (speeds == 0){// If no input, return, explained in @brettles comments on issue #24
+    if (speeds == 0){// If no input, return so that the actual goal set by the instant command wouldn't be overriden, can be further explained in this issue: https://github.com/DeepBlueRobotics/RobotCode2024/issues/24
       return;
     }
     double goalArmRad = goalState.position + speeds * deltaT;
