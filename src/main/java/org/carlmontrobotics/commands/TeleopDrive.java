@@ -95,6 +95,7 @@ public class TeleopDrive extends Command {
     double accelerationX = (forward - currentForwardVel) / robotPeriod;
     double accelerationY = (strafe - currentStrafeVel) / robotPeriod;
     double translationalAcceleration = Math.hypot(accelerationX, accelerationY);
+    SmartDashboard.putNumber("Translational Acceleration", translationalAcceleration);
     if(translationalAcceleration > autoMaxAccelMps2) {
       Translation2d limitedAccelerationVector = new Translation2d(autoMaxAccelMps2, Rotation2d.fromRadians(Math.atan2(accelerationY, accelerationX)));
       Translation2d limitedVelocityVector = limitedAccelerationVector.times(robotPeriod);
@@ -104,6 +105,8 @@ public class TeleopDrive extends Command {
       currentForwardVel = forward;
       currentStrafeVel = strafe;
     }
+    SmartDashboard.putNumber("current velocity", Math.hypot(currentForwardVel, currentStrafeVel));
+
     // ATM, there is no rotational acceleration limit
     // currentForwardVel = forward;
     // currentStrafeVel = strafe;
