@@ -17,18 +17,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 //pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -52,7 +54,7 @@ public class RobotContainer {
 	Drivetrain drivetrain = new Drivetrain();
 
 	private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-			"Penis"
+			"nothing here"
 	};
 
 	public RobotContainer() {
@@ -67,30 +69,35 @@ public class RobotContainer {
 
 	private void setDefaultCommands() {
 		drivetrain.setDefaultCommand(new TeleopDrive(
-				drivetrain,
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-				(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
-				(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
+			drivetrain,
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+			(DoubleSupplier) () -> ProcessedAxisValue(driverController, Axis.kRightX),
+			(BooleanSupplier) () -> driverController.getRawButton(OI.Driver.slowDriveButton)));
 	}
 
 	private void setBindingsDriver() {
 		// reset field orientation??
 		new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
 				new InstantCommand(drivetrain::resetFieldOrientation));
-		// toggle orientation plane between field and relative
-		new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
-				new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+		// // toggle orientation plane between field and relative
+		// new JoystickButton(driverController, Driver.toggleFieldOrientedButton).onTrue(
+		// 		new InstantCommand(() -> drivetrain.setFieldOriented(!drivetrain.getFieldOriented())));
+		
+		new JoystickButton(driverController, Button.kY.value).whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    	new JoystickButton(driverController, Button.kA.value).whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    	new JoystickButton(driverController, Button.kB.value).whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    	new JoystickButton(driverController, Button.kX.value).whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
 		// 4 cardinal directions on arrowpad
-		new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
-				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
-		new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
-				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
-		new JoystickButton(driverController, Driver.rotateFieldRelative180Deg)
-				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
-		new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
-				.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
+		// new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
+		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
+		// new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
+		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(-90), drivetrain));
+		// new JoystickButton(driverController, Driver.rotateFieldRelative180Deg)
+		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
+		// new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
+		// 		.onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
 
 		// TODO: 3 cardinal directions on letterpad
 		// new JoystickButton(driverController,
