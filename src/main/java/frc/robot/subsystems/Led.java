@@ -26,21 +26,26 @@ public class Led {
         led.setData(ledBuffer);
     }
      
-        //in arm code make it so that color changes to intakeColor when distance sensors detect a note
-        //in either boolean noteInIntake or boolean intakeDetectsNote
-        // if(noteInIntake){
-       //    setLedColor(intakeColor);
-       //    resetColorCommand.schedule();     
-       // }
+        /*in arm code make it so that color changes to intakeColor when distance sensors detect a note
+        using either boolean noteInIntake or boolean intakeDetectsNote
+        
+        public void changeIntakeColor(){
+            setLedColor(intakeColor);
+            resetColorCommand.schedule(); 
+        }
 
-       //private Command resetColorCommand = new SequentialCommandGroup(
-            // new WaitCommand(ledDefaultColorRestoreTime),
-            //new InstantCommand(() -> setLedColor(defaultColor))) {
-            //public boolean runsWhenDisabled() {
-            //return true;
-        // };
-        //};
+        if(noteInIntake){
+            changeIntakeColor();   
+        }
+        
 
+       private Command resetColorCommand = new SequentialCommandGroup(
+            new WaitCommand(ledDefaultColorRestoreTime),
+            new InstantCommand(() -> setLedColor(defaultColor))) {
+            public boolean runsWhenDisabled() {
+            return true;
+         };
+        }; */
 }
 
 
