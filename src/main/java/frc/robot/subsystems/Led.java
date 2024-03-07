@@ -8,23 +8,25 @@ import frc.robot.Constants;
 public class Led {
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.Led.ledLength);
     private final AddressableLED led = new AddressableLED(Constants.Led.ledPort);
-
-
-    double bottomHalf = Math.floor(ledBuffer.getLength()/2); //rounds down
-    double topHalf = ledBuffer.getLength() - bottomHalf;
-    double all = ledBuffer.getLength();
+    private double midpoint = Math.floor(ledBuffer.getLength()/2); 
+    //rounds down
+  
 
     int index = 1;
     public Led(){
         led.setLength(ledBuffer.getLength());
-        setLedColor(Constants.Led.defaultColor);
+        setLedColor(Constants.Led.defaultColor, 0 , ledBuffer.getLength());
         led.start();
     }
-    public void setLedColor(Color8Bit color) {
-        for (int i = 0; i < ledBuffer.getLength() ; i++)
+    public void setLedColor(Color8Bit color, int start, int end) {
+        for (int i = start; i < end ; i++)
             ledBuffer.setRGB(i, color.red, color.green, color.blue);
         led.setData(ledBuffer);
     }
+    // nothing : setLedColor(defaultColr, 0, ledBuffer.getLength())
+    //first tof detect: setLedColor(detectNote, 0, midpoint)
+    //second tof detec: setLedColor(detectNote, midpoint, ledBuffer.getLength())
+    //both tof detect: setLedColor(holding, 0, ledBuffer.getLength())
      
         /*in arm code make it so that color changes to intakeColor when distance sensors detect a note
         (using either boolean noteInIntake or boolean intakeDetectsNote)

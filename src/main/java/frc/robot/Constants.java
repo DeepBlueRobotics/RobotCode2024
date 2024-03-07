@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -21,7 +22,11 @@ public final class Constants {
 	}
 	public static final class Led {
 		public static final int ledLength = 5;
-		public static final Color8Bit defaultColor = new Color8Bit(255, 0, 0); //default = red
+		
+		
+		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
+		public static final Color8Bit detectNote = new Color8Bit(250,140,3);
+		public static final Color8Bit holding = new Color8Bit(0,250,0);
 		public static final int ledPort = 0;
 		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
 		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
