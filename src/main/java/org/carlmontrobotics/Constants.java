@@ -63,8 +63,8 @@ public final class Constants {
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
 		public static final double IZONE_RAD = .8;
-		public static final double MAX_FF_VEL_RAD_P_S = 0.8; // rad / s
-		public static final double MAX_FF_ACCEL_RAD_P_S = 1; // rad / s^2
+		public static final double MAX_FF_VEL_RAD_P_S = 1.845; // rad / s
+		public static final double MAX_FF_ACCEL_RAD_P_S = 19.4569; // rad / s^2
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
