@@ -4,8 +4,15 @@
 
 package org.carlmontrobotics.commands;
 
+
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static org.carlmontrobotics.Constants.Led.*;
+
+import org.carlmontrobotics.Constants;
+import org.carlmontrobotics.subsystems.Led;
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
+import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +30,7 @@ public class PassToOutake extends Command {
   @Override
   public void initialize(){
     new SequentialCommandGroup(
-      new InstantCommand(() -> intake.setRPMOutake(SPEAKER_RPM)), 
+      new InstantCommand(() -> intake.setRPMOutake(SPEAKER_RPM)),
       new InstantCommand(() -> intake.stopIntake())
       ).schedule();
   }
@@ -49,5 +56,6 @@ public class PassToOutake extends Command {
   @Override
   public boolean isFinished() {
     return !intake.intakeDetectsNote();
+    //led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
   }
 }

@@ -7,6 +7,7 @@ package org.carlmontrobotics;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -23,10 +24,18 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class Constants {
 	public static final double g = 9.81; //meters per second squared
 
-	public static final class Drivetrain {
+	public static final class Led {
+		public static final int ledLength = 5;
+		
+		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
+		public static final Color8Bit detectNote = new Color8Bit(250,140,3);
+		public static final Color8Bit holding = new Color8Bit(0,250,0);
+		public static final int ledPort = 0;
+		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
+		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
+		public static final Color8Bit intakeouttakeColor = new Color8Bit(0,255,9); //intake and outtake (both) = green
+		//Red when nothing, purple/blue when intake/outtake detect only, green when both
 	}
-
-	public static final class Arm{}
 
 	public static final class IntakeShoot {
 		// PID values
