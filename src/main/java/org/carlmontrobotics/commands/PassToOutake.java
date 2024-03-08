@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PassToOutake extends Command {
   //pass ring from intake to outtake
   private final IntakeShooter intake;
+  private final Led led = new Led();
 
   public PassToOutake(IntakeShooter intake) {
       this.intake = intake;
@@ -41,7 +42,9 @@ public class PassToOutake extends Command {
     if(intake.isWithinTolerance()){
       intake.setRPMIntake(PASS_RPM);
     }
-    
+    if (!intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
+      led.setLedColor(outtakeColor, 0, led.Midpoint);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -50,12 +53,12 @@ public class PassToOutake extends Command {
     intake.stopIntake();
     intake.stopOutake();
     intake.setRumblyTumbly(false);
+    led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return !intake.intakeDetectsNote();
-    //led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
   }
 }
