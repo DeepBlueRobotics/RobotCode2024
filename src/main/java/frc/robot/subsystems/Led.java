@@ -12,7 +12,7 @@ public class Led {
     //rounds down
   
 
-    int index = 1;
+    
     public Led(){
         led.setLength(ledBuffer.getLength());
         setLedColor(Constants.Led.defaultColor, 0 , ledBuffer.getLength());
