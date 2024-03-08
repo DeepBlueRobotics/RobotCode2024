@@ -10,10 +10,9 @@ import static org.carlmontrobotics.Constants.Led.*;
 
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.Led;
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
-import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -42,6 +41,7 @@ public class PassToOutake extends Command {
     if(intake.isWithinTolerance()){
       intake.setRPMIntake(PASS_RPM);
     }
+    //Shooting Led
     if (!intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
       led.setLedColor(outtakeColor, 0, led.Midpoint);
     }
@@ -53,6 +53,7 @@ public class PassToOutake extends Command {
     intake.stopIntake();
     intake.stopOutake();
     intake.setRumblyTumbly(false);
+    //resets to defaultColor
     led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
   }
 

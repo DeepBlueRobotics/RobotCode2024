@@ -21,6 +21,9 @@ import static org.carlmontrobotics.Constants.IntakeShoot.kS;
 import static org.carlmontrobotics.Constants.IntakeShoot.kV;
 import static org.carlmontrobotics.Constants.IntakeShoot.ledDefaultColorRestoreTime;
 import static org.carlmontrobotics.Constants.IntakeShoot.pickupSuccessColor;
+
+import org.carlmontrobotics.Constants;
+
 import static org.carlmontrobotics.Constants.IntakeShoot.ledLength;
 import static org.carlmontrobotics.Constants.IntakeShoot.ledPort;
 
@@ -64,8 +67,9 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
-    private final AddressableLED led = new AddressableLED(ledPort);
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
+    private final Led led = new Led();
+
     
     private Command resetColorCommand = new SequentialCommandGroup(
             new WaitCommand(ledDefaultColorRestoreTime),
@@ -153,7 +157,14 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
         testingRumble = SmartDashboard.getBoolean("Rumble boolean", testingRumble);
-    
+        //Holding Led
+        if (intakeDetectsNote() && outakeDetectsNote()) {
+            led.setLedColor(Constants.Led.holding, 0, led.Midpoint);
+        }
+        //reset back to defaultColor
+        if (!intakeDetectsNote() && !outakeDetectsNote()) {
+            led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
+        }
 
         {
             boolean hasGamePiece = intakeDetectsNote();

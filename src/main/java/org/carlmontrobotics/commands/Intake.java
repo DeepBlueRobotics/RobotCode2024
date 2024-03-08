@@ -29,6 +29,7 @@ public class Intake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
     public void execute() {
+      //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
         led.setLedColor(intakeColor, 0, led.Midpoint);
@@ -43,6 +44,7 @@ public class Intake extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     timer.stop();
+    //resets to defaultColor
     led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
 
   }
