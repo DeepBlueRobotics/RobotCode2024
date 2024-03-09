@@ -4,7 +4,7 @@
 
 package org.carlmontrobotics;
 
-import org.carlmontrobotics.Constants.OI;
+//import org.carlmontrobotics.Constants.OI;
 //199 files
 // import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
@@ -13,6 +13,8 @@ import static org.carlmontrobotics.Constants.Arm.*;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.Constants;
+import static org.carlmontrobotics.Constants.IntakeShoot;
+import static org.carlmontrobotics.Constants.OI.Manipulator;
 
 //subsystems
 //import org.carlmontrobotics.subsystems.Drivetrain;
