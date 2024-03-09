@@ -20,6 +20,7 @@ public class Eject extends Command {
     }
     @Override
     public void initialize() {
+      intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
       arm.setArmTarget(AMP_ANGLE_RAD);
       
 
@@ -30,9 +31,9 @@ public class Eject extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
     public void execute() {
-      if(arm.armAtSetpoint()){
+      if(arm.armAtSetpoint() && intakeShooter.isWithinTolerance()){
         intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
-        intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
+        
       }
 
     }

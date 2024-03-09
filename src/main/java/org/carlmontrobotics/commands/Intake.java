@@ -14,19 +14,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
-    private final IntakeShooter intake;
+    private final IntakeShooter intakeShooter;
     private final Arm arm = new Arm();
     private final Led led = new Led();
-    public Intake(IntakeShooter intake) {
-        this.intake = intake;
+    public Intake(IntakeShooter intakeShooter) {
+        this.intakeShooter = intakeShooter;
     }    
     
     @Override
     public void initialize() {
       arm.setArmTarget(INTAKE_ANGLE_RAD);
-      if(arm.armAtSetpoint()){
-        intake.setRPMIntake(INTAKE_RPM);
-      }
+      intakeShooter.setRPMIntake(INTAKE_RPM);
+      
 
       
       timer.reset();
@@ -38,22 +37,20 @@ public class Intake extends Command {
   @Override
     public void execute() {
       //Intake Led
-      if(arm.armAtSetpoint()){
-        intake.setRPMIntake(INTAKE_RPM);
-      } 
-      if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
+      
+      if (intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) {
+        intakeShooter.setRPMIntake(INTAKE_SLOWDOWN_RPM);
         led.setLedColor(intakeColor, 0, led.Midpoint);
       }
-      if (intake.outakeDetectsNote() ) {
-        intake.setRPMIntake(0.0);
+      if (intakeShooter.outakeDetectsNote() ) {
+        intakeShooter.setRPMIntake(0.0);
       }  
     }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
+    intakeShooter.stopIntake();
     timer.stop();
     //resets to defaultColor
     led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
@@ -63,6 +60,6 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.outakeDetectsNote();
+    return intakeShooter.outakeDetectsNote();
   }
 }
