@@ -49,7 +49,7 @@ public class ArmTeleop extends Command {
     double speeds = getRequestedSpeeds();
 
     if (speeds == 0){//if no input, don't set any goals.
-      lastTime = Timer.getFPGATimestamp();
+      lastTime = Timer.getFPGATimestamp();//update deltaT even when not running
       return;
     }
 

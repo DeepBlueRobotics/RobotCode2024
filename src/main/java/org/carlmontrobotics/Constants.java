@@ -35,7 +35,8 @@ public final class Constants {
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
 		// Config for motors
 		public static final boolean MOTOR_INVERTED_MASTER = false;
-		public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design
+		public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design AND physical testing
+
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
 
@@ -71,7 +72,7 @@ public final class Constants {
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
 		public static final double ARM_MASS_KG = 9.59302503;
 
-		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS;//initalized by arm constructor 
+		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS;//initalized by arm constructor
 		// other0;
 
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
