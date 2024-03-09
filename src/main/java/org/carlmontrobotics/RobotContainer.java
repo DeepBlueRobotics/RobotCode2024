@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
   // defaultCommands: elevator, dt
   // (pass in controller!)
-
   // set up subsystems / controllers / limelight
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
@@ -49,8 +48,7 @@ public class RobotContainer {
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
   public Arm arm = new Arm();
-  // private final Drivetrain drivetrain = new Drivetrain();
-
+  // private final Drivetrain drivetrain = new Drivetrain()
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
   //private final GenericHID driverController = new GenericHID(OI.Driver.port);
@@ -97,10 +95,7 @@ public class RobotContainer {
     // right joystick used for manual arm control
     // COMMENT THESE OUT DURING SYSID TESTING
     // Speaker Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(PODIUM_ANGLE_RAD);
-        }));
+    
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
@@ -109,16 +104,6 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);
         }));
-    // Amp and Intake Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_AMP_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(AMP_ANGLE_RAD);
-        }));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_GROUND_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(INTAKE_ANGLE_RAD);
-        }));
-    // Cimber Buttons
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_CLIMBER_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(CLIMBER_UP_ANGLE_RAD);
@@ -148,13 +133,11 @@ public class RobotContainer {
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
-   // new JoystickButton(manipulatorController, Button.kLeftStick.value).onFalse(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 0);}));
     intakeShooter.setDefaultCommand(new RumbleNote(intakeShooter, manipulatorController));
     //TODO: ask charles if passing in controller is okay
   }
 
   public Command getAutonomousCommand() {
-    //Auto-generated method stub
 	//return new PrintCommand("No auto, intakeshooter branch");
   //throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
 

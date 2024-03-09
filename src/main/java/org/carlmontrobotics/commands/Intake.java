@@ -2,10 +2,12 @@ package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
 import static org.carlmontrobotics.Constants.Led.*;
+import static org.carlmontrobotics.Constants.Arm.*;
 
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.Led;
 import org.carlmontrobotics.subsystems.IntakeShooter;
+import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +15,7 @@ public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
     private final IntakeShooter intake;
+    private final Arm arm = new Arm();
     private final Led led = new Led();
     public Intake(IntakeShooter intake) {
         this.intake = intake;
@@ -20,7 +23,12 @@ public class Intake extends Command {
     
     @Override
     public void initialize() {
-      intake.setRPMIntake(INTAKE_RPM);
+      arm.setArmTarget(INTAKE_ANGLE_RAD);
+      if(arm.armAtSetpoint()){
+        intake.setRPMIntake(INTAKE_RPM);
+      }
+
+      
       timer.reset();
       timer.start();
     }
