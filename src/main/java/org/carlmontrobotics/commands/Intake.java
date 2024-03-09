@@ -38,6 +38,9 @@ public class Intake extends Command {
   @Override
     public void execute() {
       //Intake Led
+      if(arm.armAtSetpoint()){
+        intake.setRPMIntake(INTAKE_RPM);
+      } 
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
         led.setLedColor(intakeColor, 0, led.Midpoint);

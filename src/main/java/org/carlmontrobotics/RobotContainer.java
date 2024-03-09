@@ -96,7 +96,7 @@ public class RobotContainer {
     // COMMENT THESE OUT DURING SYSID TESTING
     // Speaker Buttons
     
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON)
+   /*  new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
         }));
@@ -104,6 +104,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);
         }));
+      */
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_CLIMBER_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(CLIMBER_UP_ANGLE_RAD);
