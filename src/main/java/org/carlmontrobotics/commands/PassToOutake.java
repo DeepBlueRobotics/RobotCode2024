@@ -34,9 +34,10 @@ public class PassToOutake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
+    intake.stopIntake();
     arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
     intake.setRPMOutake(SPEAKER_RPM);
-    intake.stopIntake();
+   
 
     //set rpm outtake while moving arm
     //if arm finished
