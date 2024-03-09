@@ -183,10 +183,10 @@ public final class Constants {
 			public static final int AMP_BUTTON = Button.kLeftBumper.value;
 			public static final int INTAKE_BUTTON = Axis.kLeftTrigger.value;
 			public static final int SHOOTER_BUTTON = Axis.kRightTrigger.value;
-			public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
+			//public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
 			
-			public static final int RAISE_TO_SPEAKER_SAFE_BUTTON = Button.kA.value;
-			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
+			//public static final int RAISE_TO_SPEAKER_SAFE_BUTTON = Button.kA.value;
+			//public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
 			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
 			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
         }
