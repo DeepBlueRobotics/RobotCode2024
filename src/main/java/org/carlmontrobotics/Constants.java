@@ -62,7 +62,8 @@ public final class Constants {
 		public static final double kG = 0.1;
 		public static final double kV = 0.1;
 		public static final double kA = 0.1;
-		public static final double IZONE_RAD = .8;
+		public static final double IZONE_RAD = .09;
+		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		public static final double MAX_FF_VEL_RAD_P_S = 8.44470886; // rad / s WORK: w = at, a=max accel, t = sqrt([2*max angular position]/a) -> t=sqrt([7pi/6]/a) -> at = 8.44470886
 		public static final double MAX_FF_ACCEL_RAD_P_S = 19.4569; // rad / s^2 WORK: a=I/T*gear ratio -> I=1/2mr^2(metric units) -> m=6.80389kg, r =.6855m, -> I=1.16741703, T=3.6 newton meters -> a=(I/T)*60[gear ratio] 
 
