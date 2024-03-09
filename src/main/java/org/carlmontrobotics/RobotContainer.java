@@ -57,7 +57,6 @@ public class RobotContainer {
   public RobotContainer() {
 		//defaultCommands: elevator, dt
 		//(pass in controller!)
-
     // setupAutos();
 		setDefaultCommands();
 		setBindingsDriver();
@@ -94,17 +93,9 @@ public class RobotContainer {
     // Up is Speaker, down is ground, right is Amp
     // right joystick used for manual arm control
     // COMMENT THESE OUT DURING SYSID TESTING
-    // Speaker Buttons
-    
-   /*  new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
-        }));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_SAFE_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);
-        }));
-      */
+  
+
+    //arm/climber buttons 
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_CLIMBER_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(CLIMBER_UP_ANGLE_RAD);
@@ -115,7 +106,6 @@ public class RobotContainer {
         }));
 
 
-  //have the trigger and button bindings here call the Intake, Shoot, and Eject commands
 
   //NEW BINDINGS(easier for manipulator)
   //Xbox right trigger axis -> Shoot
@@ -124,8 +114,8 @@ public class RobotContainer {
   //Xbox left bumper button -> Amp (arm position and RPM and Eject)
   //Xbox X button -> Intake(arm position)
 
-    //IMPLEMENTING BINDINGS WHEN MERGED WITH ARM
-    /*/Eject also for AMP/*/
+
+    /*/Eject/ AMP/*/
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
 
     /*/Shooting/*/
@@ -133,6 +123,7 @@ public class RobotContainer {
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
+    //rumble
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
     intakeShooter.setDefaultCommand(new RumbleNote(intakeShooter, manipulatorController));
     //TODO: ask charles if passing in controller is okay
@@ -140,7 +131,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 	//return new PrintCommand("No auto, intakeshooter branch");
-  //throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
+  //throw new UnsuppxortedOperationException("Unimplemented method 'getAutonomousCommand'");
 
     return Commands.print("No autonomous command configured");
   }

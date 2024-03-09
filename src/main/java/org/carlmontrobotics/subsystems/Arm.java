@@ -66,19 +66,15 @@ public class Arm extends SubsystemBase {
     private static double kDt = 0.02;
 
     // PID, feedforward, trap profile
-
-    // rel offset = starting absolute offset
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
     private static TrapezoidProfile.State setpoint;
-
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
 
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
     public Arm() {
-        // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
         //master is left motor, it is not inverted, follower is right motor it is inerted
         armMotorMaster.setIdleMode(IdleMode.kBrake);
@@ -92,12 +88,10 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
+        //PID
         armPIDMaster.setP(kP);
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
-
-        // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
-
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
         armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
@@ -106,6 +100,7 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putData("Arm", this);
 
+        
         setpoint = getCurrentArmState();
         goalState = getCurrentArmState();
         setArmTarget(goalState.position);
