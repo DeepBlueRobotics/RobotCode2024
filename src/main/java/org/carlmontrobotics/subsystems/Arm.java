@@ -75,16 +75,12 @@ public class Arm extends SubsystemBase {
     private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
 
-    // rad, rad/s
-    // public static TrapezoidProfile.State[] goalState = { new
-    // TrapezoidProfile.State(-Math.PI / 2, 0), new TrapezoidProfile.State(0, 0) };
-
-
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
+        //master is left motor, it is not inverted, follower is right motor it is inerted
         armMotorMaster.setIdleMode(IdleMode.kBrake);
         armMotorFollower.setInverted(MOTOR_INVERTED_FOLLOWER);
         armMotorFollower.setIdleMode(IdleMode.kBrake);
