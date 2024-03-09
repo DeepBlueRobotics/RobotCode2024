@@ -28,8 +28,8 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(19.75);
-			public static final double trackWidth = Units.inchesToMeters(28.75);
+			public static final double wheelBase = Units.inchesToMeters(16.5);
+			public static final double trackWidth = Units.inchesToMeters(23.25);
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
@@ -61,7 +61,7 @@ public final class Constants {
 			// Determine correct turnZero constants (FL, FR, BL, BR)
 			public static final double[] turnZeroDeg = RobotBase.isSimulation() ?
 					new double[] {0, 0, 0, 0} :
-					new double[] {85.7812, 85.0782 , -96.9433, -162.9492};/*real values here*/
+					new double[] {-48.6914, 63.3691, 94.1309, -6.7676};/*real values here*/
 
 			// kP, kI, and kD constants for turn motor controllers in the order of front-left, front-right, back-left, back-right.
 			// Determine correct turn PID constants
@@ -86,7 +86,7 @@ public final class Constants {
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {false, false, false, false};
 			public static final boolean[] turnInversion = {true, true, true, true};
-
+			// kS
 			public static final double[] kForwardVolts = {0.26744, 0.31897, 0.27967, 0.2461};
 			public static final double[] kBackwardVolts = kForwardVolts;
 
@@ -123,14 +123,14 @@ public final class Constants {
 			public static final int driveBackRightPort = 17; //correct
 
 			public static final int turnFrontLeftPort = 12; //
-			public static final int turnFrontRightPort = 20; // 
+			public static final int turnFrontRightPort = 20; // 20
 			public static final int turnBackLeftPort = 15; // 
 			public static final int turnBackRightPort = 16; //correct
 
-			public static final int canCoderPortFL = 1;
-			public static final int canCoderPortFR = 2;
-			public static final int canCoderPortBL = 3;
-			public static final int canCoderPortBR = 4;
+			public static final int canCoderPortFL = 0;
+			public static final int canCoderPortFR = 3;
+			public static final int canCoderPortBL = 2;
+			public static final int canCoderPortBR = 1;
 
 			//#endregion
 
