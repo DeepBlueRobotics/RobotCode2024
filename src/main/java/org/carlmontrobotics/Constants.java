@@ -78,7 +78,7 @@ public final class Constants {
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
 		public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
