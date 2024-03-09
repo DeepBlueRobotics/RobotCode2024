@@ -52,10 +52,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 // Wrist angle is measured relative to the arm with 0 being parallel to the arm and bounded between -π and π (Center of Mass of Roller)
 public class Arm extends SubsystemBase {
-
-    private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
+    //master is left, follower is right
+    private final CANSparkMax armMotorMaster = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
-    private final CANSparkMax armMotorFollower/* right */ = MotorControllerFactory
+    private final CANSparkMax armMotorFollower = MotorControllerFactory
             .createSparkMax(ARM_MOTOR_PORT_FOLLOWER, MotorConfig.NEO);
     private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -74,7 +74,8 @@ public class Arm extends SubsystemBase {
 
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
-    public Arm() {
+    public Arm() 
+    {
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
         //master is left motor, it is not inverted, follower is right motor it is inerted
         armMotorMaster.setIdleMode(IdleMode.kBrake);
@@ -113,7 +114,8 @@ public class Arm extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
+    public void periodic() 
+    {
 
         if (DriverStation.isDisabled())
             resetGoal();
@@ -139,13 +141,14 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
-        // SmartDashboard.putNumber("ArmPos", getArmPos());
+        SmartDashboard.putNumber("ArmPos", getArmPos());
 
         autoCancelArmCommand();
         driveArm();
     }
 
-    public void autoCancelArmCommand() {
+    public void autoCancelArmCommand() 
+    {
         if (!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous())
             return;
 
@@ -160,7 +163,8 @@ public class Arm extends SubsystemBase {
     }
 
     // #region Drive Methods
-    private void driveArm() {
+    private void driveArm() 
+    {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
         double armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
@@ -171,25 +175,29 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
     }
 
-    public void setArmTarget(double targetPos) {
+    public void setArmTarget(double targetPos) 
+    {
         targetPos = getArmClampedGoal(targetPos);
 
         goalState.position = targetPos;
         goalState.velocity = 0;
     }
 
-    public void resetGoal() {
+    public void resetGoal() 
+    {
         double armPos = getArmPos();
         setArmTarget(armPos);
     }
 
-    public void driveMotor(Measure<Voltage> volts) {
+    public void driveMotor(Measure<Voltage> volts) 
+    {
         armMotorMaster.setVoltage(volts.in(Volts));
 
     }
     private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(2), Seconds.of(10));
 
-    public void logMotor(SysIdRoutineLog log) {
+    public void logMotor(SysIdRoutineLog log) 
+    {
         log.motor("armMotorMaster")
                 .voltage(voltage.mut_replace(
                         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
@@ -209,35 +217,42 @@ public class Arm extends SubsystemBase {
                     this::logMotor,
                     this));
 
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) 
+    {
         return routine.quasistatic(direction);
     }
 
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) 
+    {
         return routine.dynamic(direction);
     }
     // #endregion
 
     // #region Getters
 
-    public double getArmPos() {
+    public double getArmPos() 
+    {
         return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONT_RAD,
                 ARM_DISCONT_RAD + 2 * Math.PI);
     }
 
-    public double getArmVel() {
+    public double getArmVel() 
+    {
         return armMasterEncoder.getVelocity();
     }
 
-    public TrapezoidProfile.State getCurrentArmState() {
+    public TrapezoidProfile.State getCurrentArmState()
+    {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
 
-    public TrapezoidProfile.State getCurrentArmGoal() {
+    public TrapezoidProfile.State getCurrentArmGoal() 
+    {
         return goalState;
     }
 
-    public boolean armAtSetpoint() {
+    public boolean armAtSetpoint() 
+    {
         return Math.abs(getArmPos() - goalState.position) < POS_TOLERANCE_RAD &&
                 Math.abs(getArmVel() - goalState.velocity) < VEL_TOLERANCE_RAD_P_SEC;
     }
