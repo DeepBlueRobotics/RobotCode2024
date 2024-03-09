@@ -11,13 +11,11 @@ import java.util.function.DoubleSupplier;
 
 import org.carlmontrobotics.subsystems.Arm;
 
-import edu.wpi.first.wpilibj.XboxController;
+
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-import edu.wpi.first.wpilibj.Timer;
-
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class ArmTeleop extends Command {
