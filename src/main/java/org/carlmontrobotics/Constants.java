@@ -4,6 +4,13 @@
 
 package org.carlmontrobotics;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units.*;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Color;
@@ -23,7 +30,9 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
  */
 public final class Constants {
 	public static final double g = 9.81; //meters per second squared
-
+	public static final class Drivetrain {
+	}
+	
 	public static final class Led {
 		public static final int ledLength = 5;
 		
@@ -38,11 +47,73 @@ public final class Constants {
 		//Red when nothing, purple/blue when intake/outtake detect only, green when both
 	}
 
-	public static final class IntakeShoot {
+	public static final class Arm {
+	// Motor port
+	public static final int ARM_MOTOR_PORT_MASTER = 13;
+	public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
+	// Config for motors
+	public static final boolean MOTOR_INVERTED_MASTER = false; 
+	public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design
+	public static final double ROTATION_TO_RAD = 2 * Math.PI;
+	public static final boolean ENCODER_INVERTED = false;
+
+	public static final int MAX_VOLTAGE = 12;
+	public static final double ENCODER_OFFSET_RAD = 0;
+
+	// TODO: finish understand why this is broken public static final Measure<Angle>
+	// INTAKE_ANGLE = Degrees.to(-1);
+
+	// USE RADIANS FOR THE ARM
+	public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
+	public static final double AMP_ANGLE_RAD = Units.degreesToRadians(105);
+	public static final double SUBWOFFER_ANGLE_RAD = Units.degreesToRadians(24);
+	public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(24);
+	public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(24);
+	public static final double CLIMBER_UP_ANGLE_RAD = Units.degreesToRadians(24);
+	public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
+
+	// PID, Feedforward, Trapezoid
+	public static final double kP = 0.1;
+	public static final double kI = 0.1;
+	public static final double kD = 0.1;
+	public static final double kS = 0.1;
+	public static final double kG = 0.1;
+	public static final double kV = 0.1;
+	public static final double kA = 0.1;
+	public static final double IZONE_RAD = .09;
+	//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
+	public static final double MAX_FF_VEL_RAD_P_S = 8.44470886; // rad / s WORK: w = at, a=max accel, t = sqrt([2*max angular position]/a) -> t=sqrt([7pi/6]/a) -> at = 8.44470886
+	public static final double MAX_FF_ACCEL_RAD_P_S = 19.4569; // rad / s^2 WORK: a=I/T*gear ratio -> I=1/2mr^2(metric units) -> m=6.80389kg, r =.6855m, -> I=1.16741703, T=3.6 newton meters -> a=(I/T)*60[gear ratio] 
+
+	// if needed
+	public static final double COM_ARM_LENGTH_METERS = 0.381;
+	public static final double ARM_MASS_KG = 9.59302503;
+
+	public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
+			MAX_FF_VEL_RAD_P_S, MAX_FF_ACCEL_RAD_P_S);
+	// other0;
+
+	// public static final double MARGIN_OF_ERROR = Math.PI / 18;
+
+	// Boundaries
+	public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; // placeholder
+	public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
+														// idk TODO: test on actual encoder without a conversion
+														// factor
+	public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD/0.02); // 20ms per robot loop
+	public static final double UPPER_ANGLE_LIMIT_RAD = Units.degreesToRadians(70);
+	public static final double LOWER_ANGLE_LIMIT_RAD = Units.degreesToRadians(0);
+	public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
+
+	// Arm buttons
+
+	}
+	}
+	public static final class IntakeShooter {
 		// PID values
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
-
+//TODO: will it cause an issue that both arm and intake shooter have the same names for these values below?
 		public static final double[] kP = {/*/Intake/*/ 0.0001, /*/Outake/*/0};
 		public static final double[] kI = {/*/Intake/*/0.00001, /*/Outake/*/0};
 		public static final double[] kD = {/*/Intake/*/0, /*/Outake/*/0 };
@@ -85,15 +156,17 @@ public final class Constants {
         public static final double ledDefaultColorRestoreTime = 3;
 	    public static final Color defaultColor = new Color(0, 0, 200);
         public static final Color pickupSuccessColor = new Color(0, 200, 0);
-
 	}
 
 	public static final class Limelight {
 	}
 
 	public static final class OI {
-		public static final class Driver {
-			public static final int port = 1;
+		public static final double JOY_THRESH = 0.01;
+		//public static final int port = 0;
+		public static final double MIN_AXIS_TRIGGER_VALUE = 0.25;
+        public static final class Driver {
+            public static final int port = 1;
 
 			public static final int slowDriveButton = Button.kLeftBumper.value;
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
@@ -103,18 +176,16 @@ public final class Constants {
             public static final int rotateFieldRelative90Deg = Button.kB.value;
             public static final int rotateFieldRelative180Deg = Button.kA.value;
             public static final int rotateFieldRelative270Deg = Button.kX.value;
-		}
+        }
+        public static final class Manipulator {
+            public static final int port = 1;
+			public static final int RAISE_TO_SPEAKER_POD_BUTTON = Button.kY.value;
+			public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
+			public static final int RAISE_TO_SPEAKER_SAFE_BUTTON = Button.kA.value;
+			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
+			public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
+			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
+			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
+        }
+    }
 
-		public static final class Manipulator {
-			public static final int port = 0;
-			public static final int INTAKE_BUTTON = Axis.kRightTrigger.value;
-			public static final int SHOOTER_BUTTON = Axis.kRightTrigger.value;
-			public static final int EJECT_BUTTON = Button.kA.value;
-			public static final int AMP_BUTTON = Button.kLeftBumper.value;
-			public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
-
-		}
-		public static final double JOY_THRESH = 0.01;
-        public static final double MIN_AXIS_TRIGGER_VALUE = 0.25;
-	}
-}
