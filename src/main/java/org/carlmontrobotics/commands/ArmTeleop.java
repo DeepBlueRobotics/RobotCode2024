@@ -47,13 +47,18 @@ public class ArmTeleop extends Command {
     // use trapazoid math and controllerMoveArm method from arm subsytem to apply
     // voltage to the motor
     double speeds = getRequestedSpeeds();
-    double currTime = Timer.getFPGATimestamp();
-    double deltaT = currTime - lastTime;
-    lastTime = currTime;
-    if (speeds == 0){// If no input, return so that the actual goal set by the instant command wouldn't be overriden, can be further explained in this issue: https://github.com/DeepBlueRobotics/RobotCode2024/issues/24
+
+    if (speeds == 0){//if no input, don't set any goals.
+      lastTime = Timer.getFPGATimestamp();
       return;
     }
-    double goalArmRad = goalState.position + speeds * deltaT;
+
+    double currTime = Timer.getFPGATimestamp();
+    double deltaT = currTime - lastTime;//only move by a tick of distance at once
+    lastTime = currTime;
+
+    double goalArmRad = goalState.position + speeds * deltaT;//speed*time = dist
+
     goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT_RAD, LOWER_ANGLE_LIMIT_RAD);
     goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos() + ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD,
         armSubsystem.getArmPos() - ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
@@ -64,14 +69,7 @@ public class ArmTeleop extends Command {
   }
 
   public double getRequestedSpeeds() {
-    double rawArmVel;
-    if (Math.abs(joystick.getAsDouble()) <= Constants.OI.JOY_THRESH) {
-      rawArmVel = 0.0;
-    } else {
-      rawArmVel = armSubsystem.getMaxAccelRad() * joystick.getAsDouble();
-    }
-
-    return rawArmVel;
+    return armSubsystem.getMaxAccelRad() * joystick.getAsDouble();
   }
 
   // Called once the command ends or is interrupted.

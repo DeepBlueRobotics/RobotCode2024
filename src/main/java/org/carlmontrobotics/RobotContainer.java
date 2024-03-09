@@ -59,8 +59,8 @@ public class RobotContainer {
     // () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
 
-    arm.setDefaultCommand(new ArmTeleop(arm, 
-      () -> DeadzonedAxis(inputProcessing(getStickValue(manipulatorController, Axis.kLeftY)))));
+    arm.setDefaultCommand(new ArmTeleop(arm,
+      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY);
   }
 
   private void setBindingsDriver() {
@@ -123,7 +123,7 @@ public class RobotContainer {
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
    * joystick axis
-   * 
+   *
    * @param hid  The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
@@ -135,7 +135,7 @@ public class RobotContainer {
   /**
    * Processes an input from the joystick into a value between -1 and 1,
    * sinusoidally instead of linearly
-   * 
+   *
    * @param value The value to be processed.
    * @return The processed value.
    */
@@ -151,25 +151,25 @@ public class RobotContainer {
   /**
    * Combines both getStickValue and inputProcessing into a single function for
    * processing joystick outputs
-   * 
+   *
    * @param hid  The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
    */
   private double ProcessedAxisValue(GenericHID hid, Axis axis) {
-    return inputProcessing(getStickValue(hid, axis));
+    return DeadzonedAxis(inputProcessing(getStickValue(hid, axis)));
   }
 
   /**
    * Returns zero if a axis input is inside the deadzone
-   * 
+   *
    * @param hid  The controller/plane joystick the axis is on
    * @param axis The processed axis
    * @return The processed value.
    */
   private double DeadzonedAxis(double axOut) {
-    return (-OI.JOY_THRESH < axOut && axOut < OI.JOY_THRESH) ? 0.0 : axOut;
+    return (Math.abs(axOut) <= OI.JOY_THRESH) ? 0.0 : axOut;
   }
 
-  
+
 }
