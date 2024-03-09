@@ -60,7 +60,7 @@ public class RobotContainer {
     // ));
 
     arm.setDefaultCommand(new ArmTeleop(arm,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY);
+      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)));
   }
 
   private void setBindingsDriver() {
