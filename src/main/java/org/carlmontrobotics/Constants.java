@@ -34,7 +34,7 @@ public final class Constants {
 		public static final int ARM_MOTOR_PORT_MASTER = 13;
 		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
 		// Config for motors
-		public static final boolean MOTOR_INVERTED_MASTER = false; 
+		public static final boolean MOTOR_INVERTED_MASTER = false;
 		public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = false;
@@ -64,15 +64,14 @@ public final class Constants {
 		public static final double kA = 0.1;
 		public static final double IZONE_RAD = .09;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
-		public static final double MAX_FF_VEL_RAD_P_S = 8.44470886; // rad / s WORK: w = at, a=max accel, t = sqrt([2*max angular position]/a) -> t=sqrt([7pi/6]/a) -> at = 8.44470886
-		public static final double MAX_FF_ACCEL_RAD_P_S = 19.4569; // rad / s^2 WORK: a=I/T*gear ratio -> I=1/2mr^2(metric units) -> m=6.80389kg, r =.6855m, -> I=1.16741703, T=3.6 newton meters -> a=(I/T)*60[gear ratio] 
+		//public static final double MAX_FF_VEL_RAD_P_S = 8.44470886; // rad / s WORK: w = at, a=max accel, t = sqrt([2*max angular position]/a) -> t=sqrt([7pi/6]/a) -> at = 8.44470886
+		public static final double MAX_FF_ACCEL_RAD_P_S = 19.4569; // rad / s^2 WORK: a=I/T*gear ratio -> I=1/2mr^2(metric units) -> m=6.80389kg, r =.6855m, -> I=1.16741703, T=3.6 newton meters -> a=(I/T)*60[gear ratio]
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
 		public static final double ARM_MASS_KG = 9.59302503;
 
-		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-				MAX_FF_VEL_RAD_P_S, MAX_FF_ACCEL_RAD_P_S);
+		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS;//initalized by arm constructor 
 		// other0;
 
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;

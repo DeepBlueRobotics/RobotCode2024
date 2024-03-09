@@ -108,6 +108,11 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
         armPIDMaster.setIZone(IZONE_RAD);
 
+        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            armFeed.maxAchievableVelocity(12, Math.PI/2, 0), 
+            MAX_FF_ACCEL_RAD_P_S);
+        //^ worst case scenario
+
         SmartDashboard.putData("Arm", this);
 
         setpoint = getCurrentArmState();
@@ -254,5 +259,9 @@ public class Arm extends SubsystemBase {
     public double getArmClampedGoal(double goal) {
         return MathUtil.clamp(MathUtil.inputModulus(goal, ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI),
                 LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD);
+    }
+
+    public double getMaxAccelRad(){
+      return armFeed.maxAchievableVelocity(12, getArmPos(), getArmVel());
     }
 }

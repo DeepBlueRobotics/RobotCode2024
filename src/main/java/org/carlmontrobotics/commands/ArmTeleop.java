@@ -68,7 +68,7 @@ public class ArmTeleop extends Command {
     if (Math.abs(joystick.getAsDouble()) <= Constants.OI.JOY_THRESH) {
       rawArmVel = 0.0;
     } else {
-      rawArmVel = MAX_FF_VEL_RAD_P_S * joystick.getAsDouble();
+      rawArmVel = armSubsystem.getMaxAccelRad() * joystick.getAsDouble();
     }
 
     return rawArmVel;
