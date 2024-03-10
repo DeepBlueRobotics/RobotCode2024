@@ -61,8 +61,8 @@ public final class Constants {
 		public static final double kD = 0.1;
 		public static final double kS = 0.1;
 		public static final double kG = 0.1;
-		public static final double kV = 0.1;
-		public static final double kA = 0.1;
+		public static final double kV = Units.rotationsToRadians(0.1);
+		public static final double kA = Units.rotationsToRadians(0.1);
 		public static final double IZONE_RAD = .09;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		public static final double MAX_FF_VEL_RAD_P_S = 9.92; //rad/s Aarav did the work
@@ -87,6 +87,7 @@ public final class Constants {
 		public static final double LOWER_ANGLE_LIMIT_RAD = Units.degreesToRadians(0);
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
+		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.25;
 		// Arm buttons
 
 	}
