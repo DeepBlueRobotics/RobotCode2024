@@ -16,10 +16,11 @@ public class Intake extends Command {
     private final Timer timer = new Timer();
     private final IntakeShooter intakeShooter;
     private final Arm arm;
-    private final Led led = new Led();
     public Intake(IntakeShooter intakeShooter, Arm arm) {
         this.intakeShooter = intakeShooter;
         this.arm = arm;
+        addRequirements(arm);
+        addRequirements(intakeShooter);
     }    
     
     @Override
@@ -40,9 +41,9 @@ public class Intake extends Command {
     public void execute() {
       //Intake Led
       
-      if (intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) {
+      if (intakeShooter.intakeDetectsNote()) {
         intakeShooter.setRPMIntake(INTAKE_SLOWDOWN_RPM);
-        led.setLedColor(intakeColor, 0, led.Midpoint);
+        
       }
       if (intakeShooter.outakeDetectsNote() ) {
         intakeShooter.setRPMIntake(0.0);
@@ -55,7 +56,7 @@ public class Intake extends Command {
     intakeShooter.stopIntake();
     timer.stop();
     //resets to defaultColor
-    led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
+    
 
   }
 
