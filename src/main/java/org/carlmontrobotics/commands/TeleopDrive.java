@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;

@@ -171,7 +171,7 @@ public final class Constants {
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
 	}
-	public static final class Drivetrain {
+	public static final class Drivetrainc {
 
 			//#region Subsystem Constants
 
@@ -313,4 +313,40 @@ public final class Constants {
 			//#endregion
 	}
 
+	public static final class OI {
+		public static final class Driver {
+			public static final int port = 0;
+
+			public static final int slowDriveButton = Button.kLeftBumper.value;
+			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
+            public static final int toggleFieldOrientedButton = Button.kStart.value;
+
+            public static final int rotateFieldRelative0Deg = Button.kY.value;
+            public static final int rotateFieldRelative90Deg = Button.kB.value;
+            public static final int rotateFieldRelative180Deg = Button.kA.value;
+            public static final int rotateFieldRelative270Deg = Button.kX.value;
+		}
+
+		public static final class Manipulator {
+			public static final int port = 1;
+			//NEW BINDINGS(easier for manipulator)
+			//Xbox left joy Y axis -> raw Intake control
+			//Xbox right joy Y axis -> raw Outtake control
+			//Xbox right trigger axis -> Intake pos + intake
+			//Xbox left trigger axis -> amp pos , eject into amp
+			//Xbox left bumper button -> CLOSE Speaker pos , Fire
+			//Xbox right bumper button -> SAFE  Speaker pos , Fire
+			//Xbox X button -> goto Intake pos
+			//Xbox Y button -> Eject rpm
+			public static final int INTAKE = Axis.kRightTrigger.value;
+			public static final int AMP = Axis.kLeftTrigger.value;
+			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
+			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
+			public static final int SPEAKER_POS = Button.kA.value;
+			public static final int INTAKE_POS = Button.kX.value;
+			public static final int EJECT_RPM = Button.kY.value;
+		}
+		public static final double JOY_THRESH = 0.01;
+        public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;//woah, this is high.
+	}
 }

@@ -1,6 +1,6 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -19,7 +19,7 @@ import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
-import org.carlmontrobotics.Constants.Drivetrain.Auto;
+import org.carlmontrobotics.Constants.Drivetrainc.Auto;
 import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;

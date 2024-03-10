@@ -59,15 +59,15 @@ public class RobotContainer {
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
 
   private final IntakeShooter intakeShooter = new IntakeShooter();
-  public Arm arm = new Arm();
-  Drivetrain drivetrain = new Drivetrain();
+  private final Arm arm = new Arm();
+  private final Drivetrain drivetrain = new Drivetrain();
 
   /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
   private Command[] autoCommands;
 
   private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-      "nothing here"
+      "straight"
   };
 
   public RobotContainer() {
@@ -149,7 +149,29 @@ public class RobotContainer {
 
   private void setupAutos() {
     ////AUTO-USABLE COMMANDS
-    // NamedCommands.registerCommand("AutoIntakeOnce", new AutoIntakeOnce());
+    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
+    NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
+
+    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
+    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
+    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
+
+    NamedCommands.registerCommand("RampRPMSpeakerSafe", 
+      new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_SAFE));
+    NamedCommands.registerCommand("RampRPMSpeakerPodium",
+      new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_CLOSE));
+
+    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
+    NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
+
+    NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
+    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
+    NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
+      new InstantCommand(intakeShooter::stopIntake),
+      new InstantCommand(intakeShooter::stopOutake)
+    ));
+
+    
 
 
     ////CREATING PATHS
