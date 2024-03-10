@@ -119,7 +119,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter, arm));
 
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter));
+    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter, arm));
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter, arm)); //I don't know the UI so this is placeholder

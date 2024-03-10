@@ -18,10 +18,11 @@ public class PassToOutake extends Command {
   //pass ring from intake to outtake
   private final IntakeShooter intake;
   private final Led led = new Led();
-  private final Arm arm = new Arm();
+  private final Arm arm;
 
-  public PassToOutake(IntakeShooter intake) {
+  public PassToOutake(IntakeShooter intake, Arm arm) {
       this.intake = intake;
+      this.arm = arm;
   }
   // Called when the command is initially scheduled.
   @Override
