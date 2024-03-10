@@ -25,7 +25,8 @@ public class Intake extends Command {
     @Override
     public void initialize() {
       arm.setArmTarget(INTAKE_ANGLE_RAD);
-      intakeShooter.setRPMIntake(INTAKE_RPM);
+      if (arm.armAtSetpoint())
+        intakeShooter.setRPMIntake(INTAKE_RPM);
       
 
       
