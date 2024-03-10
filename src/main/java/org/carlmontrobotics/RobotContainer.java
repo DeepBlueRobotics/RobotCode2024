@@ -67,7 +67,7 @@ public class RobotContainer {
   private Command[] autoCommands;
 
   private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-      "straight"
+      "Left-Straight"
   };
 
   public RobotContainer() {
@@ -156,7 +156,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
     NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
 
-    NamedCommands.registerCommand("RampRPMSpeakerSafe", 
+    NamedCommands.registerCommand("RampRPMSpeakerSafe",
       new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_SAFE));
     NamedCommands.registerCommand("RampRPMSpeakerPodium",
       new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_CLOSE));
@@ -171,7 +171,7 @@ public class RobotContainer {
       new InstantCommand(intakeShooter::stopOutake)
     ));
 
-    
+
 
 
     ////CREATING PATHS

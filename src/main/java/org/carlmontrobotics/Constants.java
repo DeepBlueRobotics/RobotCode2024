@@ -192,7 +192,7 @@ public final class Constants {
 
 			public static final double driveModifier = 1;
 			public static final double wheelDiameterMeters = Units.inchesToMeters(4.0) * 7.36/7.65 /* empirical correction */;
-			public static final double mu = 1; /* 70/83.2;  */
+			public static final double mu = .7; //coeff of friction w the ground
 
 			public static final double NEOFreeSpeed = 5676 * (2 * Math.PI) / 60;    // radians/s
 			// Angular speed to translational speed --> v = omega * r / gearing
