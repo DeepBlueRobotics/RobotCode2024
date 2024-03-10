@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
