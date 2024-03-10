@@ -88,8 +88,9 @@ public final class Constants {
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
 		public static final boolean OUTAKE_MOTOR_INVERSION = true;
 
-		public static final int EJECT_TIME_SECS = 5;
-		public static final int INTAKE_TIME_SECS = 4;
+		public static final double EJECT_TIME_SECS = 5.;
+		public static final double EJECT_MIN_SECS = 1.25;
+		public static final double INTAKE_TIME_SECS = 4.;
 
 		public static final int ledLength = 85;
 		public static final int ledPort = 85;
