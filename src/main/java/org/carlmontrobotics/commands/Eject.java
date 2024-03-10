@@ -11,17 +11,26 @@ import static org.carlmontrobotics.Constants.Arm.*;
 
 public class Eject extends Command {
     //eject until no more game peice
-    // raise arm while setting motors to speed, if motor at speed and arm at goal pos then shoot
+    //raise arm while setting motors to speed, if motor at speed and arm at goal pos then shoot
     private final IntakeShooter intakeShooter;
     private final Arm arm = new Arm();
     private final Timer timer = new Timer();
-    public Eject(IntakeShooter intakeShooter) {
+    public Eject(IntakeShooter intakeShooter, Arm arm) {
         this.intakeShooter = intakeShooter;
+        this.arm = arm;
+        addRequirements(intakeShooter);
+        addRequirements(arm);
     }
     @Override
-    public void initialize() {
+    public void initialize() 
+    {
       intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
       arm.setArmTarget(AMP_ANGLE_RAD);
+      if(arm.armAtSetpoint() && intakeShooter.isWithinTolerance())
+      {
+        intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
+        
+      }
       
 
       timer.reset();
@@ -30,17 +39,15 @@ public class Eject extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-    public void execute() {
-      if(arm.armAtSetpoint() && intakeShooter.isWithinTolerance()){
-        intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
-        
-      }
-
+    public void execute() 
+    {
+      
     }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
     intakeShooter.stopIntake();
     intakeShooter.stopOutake();
     timer.stop();
@@ -50,6 +57,6 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeShooter.intakeDetectsNote()|| timer.hasElapsed(EJECT_TIME_SECS);
+    return !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()|| timer.hasElapsed(EJECT_TIME_SECS) ;
   }
 }
