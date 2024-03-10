@@ -13,7 +13,7 @@ public class Eject extends Command {
     //eject until no more game peice
     //raise arm while setting motors to speed, if motor at speed and arm at goal pos then shoot
     private final IntakeShooter intakeShooter;
-    private final Arm arm = new Arm();
+    private final Arm arm;
     private final Timer timer = new Timer();
     public Eject(IntakeShooter intakeShooter, Arm arm) {
         this.intakeShooter = intakeShooter;

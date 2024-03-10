@@ -116,7 +116,7 @@ public class RobotContainer {
 
 
     /*/Eject/ AMP/*/
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter, arm));
 
     /*/Shooting/*/
     new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter));
