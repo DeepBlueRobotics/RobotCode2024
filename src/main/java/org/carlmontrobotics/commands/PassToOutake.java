@@ -29,7 +29,9 @@ public class PassToOutake extends Command {
   @Override
   public void initialize(){
     intake.setRPMIntake(PASS_RPM);
-    intake.setRPMOutake(PASS_RPM);
+    if Math.abs(intake.getOutakeRPM()-RPM_TOLERANCE){//only move it if it wasn't already ramped up to a speed
+      intake.setRPMOutake(PASS_RPM);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,7 +43,7 @@ public class PassToOutake extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
-    intake.stopOutake();
+    // intake.stopOutake();
   }
 
   // Returns true when the command should end.

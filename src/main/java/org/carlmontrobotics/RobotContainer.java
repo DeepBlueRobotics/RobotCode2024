@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -86,13 +87,17 @@ public class RobotContainer {
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
         new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_CLOSE),
-        new PassToOutake(intakeShooter)
+        new PassToOutake(intakeShooter),
+        new WaitCommand(1),
+        new InstantCommand(intakeShooter::stopOutake)
       ));
     new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
         new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_SAFE),
-        new PassToOutake(intakeShooter)
+        new PassToOutake(intakeShooter),
+        new WaitCommand(1),
+        new InstantCommand(intakeShooter::stopOutake)
       ));
     new JoystickButton(manipulatorController, OI.Manipulator.AMP)//MELEE ATTACK
       .onTrue(new SequentialCommandGroup(
