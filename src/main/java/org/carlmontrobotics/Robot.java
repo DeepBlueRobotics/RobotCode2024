@@ -4,6 +4,13 @@
 
 package org.carlmontrobotics;
 
+import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_DISTANCE_SENSOR_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_DISTANCE_SENSOR_PORT;
+
+import com.playingwithfusion.TimeOfFlight;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -27,6 +34,15 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robot = this;
+//  //for(int i = 0; i<100; i++){
+//      TimeOfFlight intakeDistanceSensor1 = new TimeOfFlight(i); // make sure id port is correct here
+//      double distance = Units.metersToInches((intakeDistanceSensor1.getRange() - DS_DEPTH_INCHES) / 1000);
+//      if(distance > 0.2){
+//       System.out.println("something");
+//       System.out.println(i);
+//      }
+
+ //}
     m_robotContainer = new RobotContainer();
   }
 

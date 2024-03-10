@@ -115,10 +115,12 @@ public class IntakeShooter extends SubsystemBase {
 
     public boolean intakeDetectsNote() {
         return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
+
     }
 
     public boolean outakeDetectsNote() {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
+
     }
     
     //Aaron will work on this
@@ -150,6 +152,8 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("intakeDetctsNote", intakeDetectsNote());
+        SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
         SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
