@@ -82,6 +82,10 @@ public class Arm extends SubsystemBase {
 
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
+    private double lastMeasuredTime;
+    private double lastArmPos;
+    private boolean isArmEncoderConnected = false;
+
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
@@ -125,6 +129,9 @@ public class Arm extends SubsystemBase {
         sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
         sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+        lastArmPos = getArmPos();
+        lastMeasuredTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -157,9 +164,27 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
-
+        double currTime = Timer.getFPGATimestamp();
+        SmartDashboard.putNumber("Current Time", currTime);
+        //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
+        
+        // when the value is different
+        double currentArmPos = getArmPos();
+        if (currentArmPos != lastArmPos) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+        }
+        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
+        SmartDashboard.putBoolean("ArmEncoderConnected", isArmEncoderConnected);
+        
+        if (isArmEncoderConnected){
+            driveArm();
+        }
+        else {
+            armMotorMaster.set(0);
+            armMotorFollower.set(0);
+        }
         autoCancelArmCommand();
-        driveArm();
     }
 
     public void autoCancelArmCommand() {
