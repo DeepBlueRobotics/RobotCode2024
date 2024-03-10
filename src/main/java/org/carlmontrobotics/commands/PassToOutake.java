@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToOutake extends Command {
   //pass ring from intake to outtake
-  private final IntakeShooter intake;
+  private final IntakeShooter intakeOuttake;
   private final Led led = new Led();
   private final Arm arm;
 
   public PassToOutake(IntakeShooter intake, Arm arm) {
-      this.intake = intake;
+      this.intakeOuttake = intake;
       this.arm = arm;
       addRequirements(intake);
       addRequirements(arm);
@@ -29,9 +29,9 @@ public class PassToOutake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    intake.stopIntake();
+    intakeOuttake.stopIntake();
     arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
-    intake.setRPMOutake(SPEAKER_RPM);
+    intakeOuttake.setRPMOutake(SPEAKER_RPM);
    
 
     //set rpm outtake while moving arm
@@ -47,8 +47,8 @@ public class PassToOutake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(intake.isWithinTolerance() && arm.armAtSetpoint()){
-      intake.setRPMIntake(PASS_RPM);
+    if(intakeOuttake.isWithinTolerance() && arm.armAtSetpoint()){
+      intakeOuttake.setRPMIntake(PASS_RPM);
     }
     //Shooting Led
     /*if (!intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
@@ -59,9 +59,9 @@ public class PassToOutake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
-    intake.stopOutake();
-    intake.setRumblyTumbly(false);
+    intakeOuttake.stopIntake();
+    intakeOuttake.stopOutake();
+    intakeOuttake.setRumblyTumbly(false);
     //resets to defaultColor
     led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
   }
@@ -69,6 +69,6 @@ public class PassToOutake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intake.intakeDetectsNote();
+    return !intakeOuttake.intakeDetectsNote();
   }
 }
