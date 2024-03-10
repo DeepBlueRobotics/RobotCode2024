@@ -177,9 +177,14 @@ public class Arm extends SubsystemBase {
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
         SmartDashboard.putBoolean("ArmEncoderConnected", isArmEncoderConnected);
         
-
+        if (isArmEncoderConnected){
+            driveArm();
+        }
+        else {
+            armMotorMaster.set(0);
+            armMotorFollower.set(0);
+        }
         autoCancelArmCommand();
-        driveArm();
     }
 
     public void autoCancelArmCommand() {
