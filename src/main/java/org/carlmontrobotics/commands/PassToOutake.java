@@ -69,6 +69,6 @@ public class PassToOutake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeOuttake.intakeDetectsNote();
+    return !intakeOuttake.intakeDetectsNote() && !intakeOuttake.outakeDetectsNote();
   }
 }
