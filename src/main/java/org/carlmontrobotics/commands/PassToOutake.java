@@ -29,7 +29,7 @@ public class PassToOutake extends Command {
   @Override
   public void initialize(){
     intake.setRPMIntake(PASS_RPM);
-    if Math.abs(intake.getOutakeRPM()-RPM_TOLERANCE){//only move it if it wasn't already ramped up to a speed
+    if (Math.abs(intake.getOutakeRPM()-RPM_TOLERANCE)<=RPM_TOLERANCE){//only move it if it wasn't already ramped up to a speed
       intake.setRPMOutake(PASS_RPM);
     }
   }
