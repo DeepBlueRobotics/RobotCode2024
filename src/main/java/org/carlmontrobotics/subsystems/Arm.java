@@ -72,7 +72,7 @@ public class Arm extends SubsystemBase {
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
     private static TrapezoidProfile.State setpoint;
 
-    private TrapezoidProfile armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
+    private TrapezoidProfile armProfile;
     TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
 
     // rad, rad/s
@@ -112,6 +112,7 @@ public class Arm extends SubsystemBase {
             armFeed.maxAchievableVelocity(12, Math.PI/2, 0), 
             MAX_FF_ACCEL_RAD_P_S);
         //^ worst case scenario
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
         SmartDashboard.putData("Arm", this);
 
@@ -137,6 +138,8 @@ public class Arm extends SubsystemBase {
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL
         // );
+        SmartDashboard.putNumber("Current Position", armMasterEncoder.getPosition());
+
 
         // smart dahsboard stuff
         // SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
