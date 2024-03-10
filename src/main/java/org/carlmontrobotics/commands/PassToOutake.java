@@ -23,6 +23,8 @@ public class PassToOutake extends Command {
   public PassToOutake(IntakeShooter intake, Arm arm) {
       this.intake = intake;
       this.arm = arm;
+      addRequirements(intake);
+      addRequirements(arm);
   }
   // Called when the command is initially scheduled.
   @Override
