@@ -15,10 +15,11 @@ public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
     private final IntakeShooter intakeShooter;
-    private final Arm arm = new Arm();
+    private final Arm arm;
     private final Led led = new Led();
-    public Intake(IntakeShooter intakeShooter) {
+    public Intake(IntakeShooter intakeShooter, Arm arm) {
         this.intakeShooter = intakeShooter;
+        this.arm = arm;
     }    
     
     @Override
