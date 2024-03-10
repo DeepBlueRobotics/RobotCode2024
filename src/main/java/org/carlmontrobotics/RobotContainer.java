@@ -122,7 +122,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter));
 
     /*/Intake/*/ 
-    new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); //I don't know the UI so this is placeholder
+    new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter, arm)); //I don't know the UI so this is placeholder
     //rumble
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
     intakeShooter.setDefaultCommand(new RumbleNote(intakeShooter, manipulatorController));
