@@ -12,11 +12,22 @@ import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.*;
 //subsystems
 import org.carlmontrobotics.subsystems.*;
+//199 files
+import org.carlmontrobotics.subsystems.*;
+import org.carlmontrobotics.commands.*;
+
+import static org.carlmontrobotics.Constants.OI;
+import org.carlmontrobotics.Constants.OI.Driver;
+import org.carlmontrobotics.Constants.OI.Manipulator;
+//wpi
+import edu.wpi.first.math.geometry.Rotation2d;
 //controllers
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,6 +40,17 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import com.pathplanner.lib.auto.AutoBuilder;
+//pathplanner
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+//java
+import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class RobotContainer {
   // 1. using GenericHID allows us to use different kinds of controllers
@@ -38,22 +60,31 @@ public class RobotContainer {
 
   private final IntakeShooter intakeShooter = new IntakeShooter();
   public Arm arm = new Arm();
+  Drivetrain drivetrain = new Drivetrain();
+
+  /* These must be equal to the pathPlanner path names from the GUI! */
+  // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
+  private Command[] autoCommands;
+
+  private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
+      "nothing here"
+  };
 
   public RobotContainer() {
-    // setupAutos();
+    setupAutos();
 		setDefaultCommands();
 		setBindingsDriver();
 		setBindingsManipulator();
   }
 
 	private void setDefaultCommands() {
-    // drivetrain.setDefaultCommand(new TeleopDrive(
-    //   drivetrain,
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-    //   () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-    //   () -> ProcessedAxisValue(driverController, Axis.kRightX),
-    //   () -> driverController.getRawButton(OI.Driver.slowDriveButton)
-    // ));
+    drivetrain.setDefaultCommand(new TeleopDrive(
+      drivetrain,
+      () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+      () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+      () -> ProcessedAxisValue(driverController, Axis.kRightX),
+      () -> driverController.getRawButton(OI.Driver.slowDriveButton)
+    ));
     intakeShooter.setDefaultCommand(new TeleopEffector(
       intakeShooter,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
@@ -116,11 +147,46 @@ public class RobotContainer {
     //TODO: ask charles if passing in controller is okay
   }
 
-  public Command getAutonomousCommand() {
-    //Auto-generated method stub
-	return new PrintCommand("No auto, intakeshooter branch");
-    //throw new UnsupportedOperationException("Unimplemented method 'getAutonomousCommand'");
+  private void setupAutos() {
+    ////AUTO-USABLE COMMANDS
+    // NamedCommands.registerCommand("AutoIntakeOnce", new AutoIntakeOnce());
+
+
+    ////CREATING PATHS
+    ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
+    for (String name : autoNames) {
+      autoPaths.add(PathPlannerPath.fromPathFile(name));
+    }
+
+
+    //AutoBuilder is setup in the drivetrain.
+
+    //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
+    ////CREATE COMMANDS FROM PATHS
+    autoCommands = (Command[]) autoPaths.stream().map(
+      (PathPlannerPath path) -> AutoBuilder.followPath(path)
+        ).collect(Collectors.toList()).toArray();
+
+    //}end
   }
+
+  public Command getAutonomousCommand() {
+    //get the funny ports on the robot
+    DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
+    for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);//set up blank list
+
+    //check which ones are short-circuiting
+      for(int i = 1; i < autoSelectors.length; i++) { /* skip index 0, reserved for null auto */
+        if(!autoSelectors[i].get()) {
+          String name = autoNames[i-1];
+          new PrintCommand("Using Path " + i + ": " + name);
+          return new PathPlannerAuto(name);
+        }
+      }
+
+    //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
+    return new PrintCommand("No Auto selected | Auto selector broke :(");
+	}
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
