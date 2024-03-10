@@ -65,8 +65,7 @@ public final class Constants {
 		public static final double kA = 0.1;
 		public static final double IZONE_RAD = .09;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
-		public static final double MAX_FF_VEL_RAD_P_S = 9.92; //rad/s Aarav did the work
-		public static final double MAX_FF_ACCEL_RAD_P_S =  .0183; // rad / s^2 Aarav did the math
+		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
