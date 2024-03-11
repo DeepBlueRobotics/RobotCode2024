@@ -120,7 +120,7 @@ public class RobotContainer {
 
     /*/Eject/ AMP/*/
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(
-      new ParallelCommandGroup(new MoveToPos(arm,AMP_ANGLE_RAD),
+      new SequentialCommandGroup(new MoveToPos(arm,AMP_ANGLE_RAD),
       new Eject(intakeShooter)));
 
     /*/Shooting/*/
