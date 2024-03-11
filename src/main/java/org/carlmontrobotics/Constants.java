@@ -55,9 +55,9 @@ public final class Constants {
 		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 50; //5.7938 / (2 * Math.PI);
+		public static final double kP = 50; //5.7938;
 		public static final double kI = 0;
-		public static final double kD = 1.0761 / (2 * Math.PI);
+		public static final double kD = 1.0761;
 		public static final double kS = 0.1498;
 		public static final double kG = 0.3489;
 		public static final double kV = 5.7539 / (2 * Math.PI);
