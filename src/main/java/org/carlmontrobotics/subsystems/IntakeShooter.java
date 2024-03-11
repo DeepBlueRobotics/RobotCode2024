@@ -105,22 +105,22 @@ public class IntakeShooter extends SubsystemBase {
         return outakeEncoder.getVelocity()<goalOutakeRPM+RPM_TOLERANCE && goalOutakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
     }
     //---------------------------------------------------------------------------------------------------
-    private double getGamePieceDistanceIntake() {
+    private double getPieceDistanceIntakeMeters() {
         double DS_DEPTH_METERS = Units.inchesToMeters(DS_DEPTH_INCHES);
         return (intakeDistanceSensor.getRange() * 1000) - DS_DEPTH_METERS;
     }
 
-    private double getGamePieceDistanceOutake() {
+    private double getPieceDistanceOutakeMeters() {
         double DS_DEPTH_METERS = Units.inchesToMeters(DS_DEPTH_INCHES);
         return (OutakeDistanceSensor.getRange() * 1000) - DS_DEPTH_METERS;
     }
 
     public boolean intakeDetectsNote() {
-        return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
+        return getPieceDistanceIntakeMeters() < DETECT_DISTANCE_INCHES;
     }
 
     public boolean outakeDetectsNote() {
-        return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
+        return getPieceDistanceOutakeMeters() < DETECT_DISTANCE_INCHES;
     }
     
     //Aaron will work on this
@@ -154,8 +154,8 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
+        SmartDashboard.putNumber("distance sensor intake", getPieceDistanceIntakeMeters());
+        SmartDashboard.putNumber("distance sensor outake", getPieceDistanceOutakeMeters());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
         testingRumble = SmartDashboard.getBoolean("Rumble boolean", testingRumble);
