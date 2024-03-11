@@ -13,6 +13,8 @@ import static org.carlmontrobotics.Constants.Arm.*;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.Constants;
+import org.carlmontrobotics.Constants.OI;
+
 import static org.carlmontrobotics.Constants.IntakeShoot;
 import static org.carlmontrobotics.Constants.OI.Manipulator;
 
@@ -30,6 +32,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //control bindings
@@ -116,13 +119,15 @@ public class RobotContainer {
 
 
     /*/Eject/ AMP/*/
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter, arm));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
 
     /*/Shooting/*/
     new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter, arm));
 
     /*/Intake/*/ 
-    new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter, arm)); //I don't know the UI so this is placeholder
+    new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(
+        new ParallelCommandGroup(new MoveToPos(arm, INTAKE_ANGLE_RAD),
+        new Intake(intakeShooter))); //I don't know the UI so this is placeholder
     //rumble
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
     intakeShooter.setDefaultCommand(new RumbleNote(intakeShooter, manipulatorController));
