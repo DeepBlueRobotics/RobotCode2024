@@ -64,7 +64,7 @@ public final class Constants {
 		public static final double kA = 0.9569 / (2 * Math.PI);
 		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
-		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
+		public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
@@ -81,7 +81,7 @@ public final class Constants {
 		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
 
 		// Boundaries
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = Math.pow(MAX_FF_VEL_RAD_P_S, 2) / MAX_FF_ACCEL_RAD_P_S;
 		public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
