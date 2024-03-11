@@ -55,16 +55,16 @@ public final class Constants {
 		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 5.7938;
+		public static final double kP = 50; //5.7938 / (2 * Math.PI);
 		public static final double kI = 0;
-		public static final double kD = 1.0761 * 1000;
+		public static final double kD = 1.0761 / (2 * Math.PI);
 		public static final double kS = 0.1498;
 		public static final double kG = 0.3489;
 		public static final double kV = 5.7539 / (2 * Math.PI);
 		public static final double kA = 0.9569 / (2 * Math.PI);
 		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
-		public static final double MAX_FF_VEL_RAD_P_S = 0.4; //rad/s
+		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
@@ -78,10 +78,10 @@ public final class Constants {
 		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS;//initalized by arm constructor
 		// other0;
 
-		// public static final double MARGIN_OF_ERROR = Math.PI / 18;
+		// public static final double MARGIN_OF_ERROR = Math.PI / 18; v^2 /a
 
 		// Boundaries
-		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 0; //placeholder; max_vel^2 / max accel
+		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
 		public static final double POS_TOLERANCE_RAD = Math.PI/512; // placeholder //Whether or not this is the actual account
 															// idk TODO: test on actual encoder without a conversion
 															// factor
