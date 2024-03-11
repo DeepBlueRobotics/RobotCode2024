@@ -119,10 +119,14 @@ public class RobotContainer {
 
 
     /*/Eject/ AMP/*/
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(
+      new ParallelCommandGroup(new MoveToPos(arm,AMP_ANGLE_RAD),
+      new Eject(intakeShooter)));
 
     /*/Shooting/*/
-    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter, arm));
+    new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(
+      new SequentialCommandGroup(new MoveToPos(arm,SUBWOFFER_ANGLE_RAD),
+      new PassToOutake(intakeShooter)));
 
     /*/Intake/*/ 
     new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(
