@@ -116,9 +116,10 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setIZone(IZONE_RAD);
 
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            armFeed.maxAchievableVelocity(0, Math.PI/2, 0), 
+            armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S),
             MAX_FF_ACCEL_RAD_P_S);
         //^ worst case scenario
+        //
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
         SmartDashboard.putData("Arm", this);
