@@ -38,10 +38,9 @@ public final class Constants {
 		public static final boolean MOTOR_INVERTED_FOLLOWER = true; //verifyed by design AND physical testing
 
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
-		public static final boolean ENCODER_INVERTED = false;
+		public static final boolean ENCODER_INVERTED = true;
 
-		public static final int MAX_VOLTAGE = 12;
-		public static final double ENCODER_OFFSET_RAD = 0;
+		public static final double ENCODER_OFFSET_RAD = 2.678 - 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
 		// INTAKE_ANGLE = Degrees.to(-1);
@@ -56,16 +55,21 @@ public final class Constants {
 		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 0.1;
-		public static final double kI = 0.1;
-		public static final double kD = 0.1;
-		public static final double kS = 0.1;
-		public static final double kG = 0.1;
-		public static final double kV = Units.rotationsToRadians(0.1);
-		public static final double kA = Units.rotationsToRadians(0.1);
-		public static final double IZONE_RAD = .09;
+		public static final double kP = 50; //5.7938 / (2 * Math.PI);
+		public static final double kI = 0;
+		public static final double kD = 1.0761 / (2 * Math.PI);
+		public static final double kS = 0.1498;
+		public static final double kG = 0.3489;
+		public static final double kV = 5.7539 / (2 * Math.PI);
+		public static final double kA = 0.9569 / (2 * Math.PI);
+		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
-		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
+		public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s Aarav did the work
+		public static final double MAX_FF_ACCEL_RAD_P_S =  .0183; // rad / s^2 Aarav did the math
+
+		
+		public static final double MIN_VOLTAGE = -12; //-((kS + kG + 1)/12);
+		public static final double MAX_VOLTAGE = 12; //(kS + kG + 1)/12;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
@@ -82,8 +86,8 @@ public final class Constants {
 															// idk TODO: test on actual encoder without a conversion
 															// factor
 		public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD/0.02); // 20ms per robot loop
-		public static final double UPPER_ANGLE_LIMIT_RAD = Units.degreesToRadians(70);
-		public static final double LOWER_ANGLE_LIMIT_RAD = Units.degreesToRadians(0);
+		public static final double UPPER_ANGLE_LIMIT_RAD = 1.63;
+		public static final double LOWER_ANGLE_LIMIT_RAD = -0.5;
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.25;

@@ -59,8 +59,8 @@ public class RobotContainer {
     // () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     // ));
 
-    arm.setDefaultCommand(new ArmTeleop(arm,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)));
+    // arm.setDefaultCommand(new ArmTeleop(arm,
+    //   () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)));
   }
 
   private void setBindingsDriver() {

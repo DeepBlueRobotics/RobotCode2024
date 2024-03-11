@@ -73,7 +73,7 @@ public class Arm extends SubsystemBase {
     private static TrapezoidProfile.State setpoint;
 
     private TrapezoidProfile armProfile;
-    TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
+    private TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
 
     // rad, rad/s
     // public static TrapezoidProfile.State[] goalState = { new
@@ -96,14 +96,17 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
+        armMasterEncoder.getVelocity();
         // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
-        armPIDMaster.setP(kP);
+
+        SmartDashboard.putNumber("set KP", 5.738);
+        armPIDMaster.setP(SmartDashboard.getNumber("set KP", 5.738));
         armPIDMaster.setI(kI);
         armPIDMaster.setD(kD);
-
+        armPIDMaster.setOutputRange(MIN_VOLTAGE, MAX_VOLTAGE);
         // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
@@ -129,7 +132,8 @@ public class Arm extends SubsystemBase {
         sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
         sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
+        SmartDashboard.putNumber("arm initial position", goalState.position);
+        SmartDashboard.putNumber("set arm angle (rad)", 0);
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
     }
@@ -145,11 +149,12 @@ public class Arm extends SubsystemBase {
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL
         // );
-        SmartDashboard.putNumber("Current Position", armMasterEncoder.getPosition());
+        SmartDashboard.putNumber("Current Position", getArmPos());
 
 
         // smart dahsboard stuff
-        // SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
+        SmartDashboard.putBoolean("ArmPIDAtSetpoint", armAtSetpoint());
+        SmartDashboard.putNumber("Arm Goal Pos (rad)", goalState.position);
         // SmartDashboard.putBoolean("ArmProfileFinished",
         // armProfile.isFinished(armProfileTimer.get()));
         // posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos",
@@ -167,6 +172,7 @@ public class Arm extends SubsystemBase {
         double currTime = Timer.getFPGATimestamp();
         SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
+        setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
         
         // when the value is different
         double currentArmPos = getArmPos();
@@ -204,15 +210,20 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
+        SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
         double armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        armPIDMaster.setReference(Units.radiansToRotations(setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
     }
 
+    /**
+     * 
+     * @param targetPos in radians
+     */
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
 
@@ -237,7 +248,7 @@ public class Arm extends SubsystemBase {
                         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
                         Volts))
                 .angularVelocity(velocity.mut_replace(
-                        armMasterEncoder.getVelocity()* (Math.PI/ 180),
+                        armMasterEncoder.getVelocity(),
                         RadiansPerSecond))
                 .angularPosition(distance.mut_replace(
                         armMasterEncoder.getPosition(),
