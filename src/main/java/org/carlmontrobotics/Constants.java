@@ -68,8 +68,8 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
-		public static final double MIN_VOLTAGE = -12; //-((kS + kG + 1)/12);
-		public static final double MAX_VOLTAGE = 12; //(kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE = -3; //-((kS + kG + 1)/12);
+		public static final double MAX_VOLTAGE = 3; //(kS + kG + 1)/12;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
