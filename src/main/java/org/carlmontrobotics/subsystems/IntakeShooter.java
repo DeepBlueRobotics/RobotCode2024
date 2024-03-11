@@ -1,5 +1,5 @@
 package org.carlmontrobotics.subsystems;
-
+ 
 
 import static org.carlmontrobotics.Constants.IntakeShoot.DETECT_DISTANCE_INCHES;
 import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
@@ -106,11 +106,13 @@ public class IntakeShooter extends SubsystemBase {
     }
     //---------------------------------------------------------------------------------------------------
     private double getGamePieceDistanceIntake() {
-        return Units.metersToInches((intakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
+        double DS_DEPTH_METERS = Units.inchesToMeters(DS_DEPTH_INCHES);
+        return (intakeDistanceSensor.getRange() * 1000) - DS_DEPTH_METERS;
     }
 
     private double getGamePieceDistanceOutake() {
-        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
+        double DS_DEPTH_METERS = Units.inchesToMeters(DS_DEPTH_INCHES);
+        return (OutakeDistanceSensor.getRange() * 1000) - DS_DEPTH_METERS;
     }
 
     public boolean intakeDetectsNote() {
