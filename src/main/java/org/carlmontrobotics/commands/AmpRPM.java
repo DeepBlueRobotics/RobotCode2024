@@ -29,14 +29,15 @@ public class AmpRPM extends Command {
   @Override
   public void initialize(){
     timer.reset();
-      intakeShooter.stopIntake();
+      intakeShooter.setRPMIntake(AMP_RPM);
+      intakeShooter.setRPMOutake(AMP_RPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     intakeShooter.setRPMOutake(AMP_RPM);
-    if(intakeShooter.getOutakeRPM()>=AMP_RPM){
+    if(intakeShooter.isWithinTolerance()){
       intakeShooter.setMaxIntake(-1);
       timer.start();
     }
