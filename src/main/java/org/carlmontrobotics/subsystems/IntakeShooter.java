@@ -1,191 +1,50 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package org.carlmontrobotics.subsystems;
- 
 
-import static org.carlmontrobotics.Constants.IntakeShoot.DETECT_DISTANCE_INCHES;
-import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_DISTANCE_SENSOR_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_MOTOR_INVERSION;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_DISTANCE_SENSOR_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_MOTOR_INVERSION;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTTAKE;
-import static org.carlmontrobotics.Constants.IntakeShoot.RPM_TOLERANCE;
-import static org.carlmontrobotics.Constants.IntakeShoot.kA;
-import static org.carlmontrobotics.Constants.IntakeShoot.kD;
-import static org.carlmontrobotics.Constants.IntakeShoot.kI;
-import static org.carlmontrobotics.Constants.IntakeShoot.kP;
-import static org.carlmontrobotics.Constants.IntakeShoot.kS;
-import static org.carlmontrobotics.Constants.IntakeShoot.kV;
-import static org.carlmontrobotics.Constants.IntakeShoot.ledLength;
-
-import org.carlmontrobotics.lib199.MotorConfig;
-import org.carlmontrobotics.lib199.MotorControllerFactory;
-
-import com.playingwithfusion.TimeOfFlight;
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.MotorConfig;
+import org.carlmontrobotics.Constants.IntakeShooter.*;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand; 
 
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
-    private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
-    private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
-    private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
-    private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
-    private final SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE], kA[INTAKE]);//for both intake and outtake 
-    private final SimpleMotorFeedforward outakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE], kA[OUTTAKE]);//for both intake and outtake 
-    private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT); // make sure id port is correct here
-    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
-    private double goalOutakeRPM = outakeEncoder.getVelocity();
-    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
+    // CANSparkMax leftFiringMotor = MotorControllerFactory.createSparkMax(0, MotorConfig.NEO);
+    // CANSparkMax rightFiringMotor = MotorControllerFactory.createSparkMax(1,MotorConfig.NEO);
+    // CANSparkMax leftPassMotor = MotorControllerFactory.createSparkMax(2, MotorConfig.NEO_550);
+		// CANSparkMax rightPassMotor = MotorControllerFactory.createSparkMax(3,MotorConfig.NEO_550);
+	
+		// CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(4, MotorConfig.NEO_550);
+//	CANSparkMax rightIntakeMotor = MotorControllerFactory.createSparkMax(5, MotorConfig.NEO_550);
+	
+		public IntakeShooter() {
+    }
+	
+		public void intake() {}//run both intake and passing motors
+    public void fire() {}//run both passing and firing motors
+		
+		public void eject() {}//throw ring onto ground (run all motors in reverse)
+	
+	
+    public void isHoldingNote(){
+			// method to check if holding note (beambreaker / digital input)
+    }
 
+  
     
-    public IntakeShooter() {
-        //Figure out which ones to set inverted
-        intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
-        outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);         
-        pidControllerOutake.setP(kP[OUTTAKE]);
-        pidControllerOutake.setI(kI[OUTTAKE]);
-        pidControllerOutake.setD(kD[OUTTAKE]);
-        pidControllerIntake.setP(kP[INTAKE]);
-        pidControllerIntake.setI(kI[INTAKE]);
-        pidControllerIntake.setD(kD[INTAKE]);
-        intakeMotor.setSmartCurrentLimit(20);
-    }
-
-    //---------------------------------------------------------------------------------------------------
-    //checking whether RPM is within tolerance
-    public boolean isWithinTolerance(){
-        return outakeEncoder.getVelocity()<goalOutakeRPM+RPM_TOLERANCE && goalOutakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
-    }
-    //---------------------------------------------------------------------------------------------------
-    //TODO: fix the unit conversion
-    private double getGamePieceDistanceIntake() {
-        return Units.metersToInches(intakeDistanceSensor.getRange()/1000/*mm->m*/)- DS_DEPTH_INCHES;
-    }
-
-    private double getGamePieceDistanceOutake() {
-        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
-    }
-
-    public boolean intakeDetectsNote() {
-        return getGamePieceDistanceIntake() < DETECT_DISTANCE_INCHES;
-
-    }
-
-    public boolean outakeDetectsNote() {
-        return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
-
-    }
-    
-    //Aaron will work on this
-      
-    // //Find offset of note from the center line using big mathy mathy, god I hope this works chatgpt gave me the formulas :))))))
-    // //find out what this means
-    // public double calculateDistanceSensorNotes() {
-    //     double center = 11.485;// center line between the 2 side plates (in)
-    //     double d1 = getGamePieceDistanceIntake();
-    //     double d2 = getGamePieceDistanceOutake();
-    //     double r = 7;
-    //     double ym = (d1+d2)/2; //Y midpoint between 2 points
-    //     double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) * (DISTANCE_BETWEEN_SENSORS))/r;// y cord of center
-    //     //Take into note that in reality, the 2 points can return 2 possible centers
-    //     return k - center; //<- offset from the center
-    // }
-    // //find out what this means
-    // public double calculateIntakeAmount(){
-    //     //Literatly just calcDistanceSensorNotes but instead of solving for k, we are solving for h
-    //     double d1 = getGamePieceDistanceIntake();
-    //     double d2 = getGamePieceDistanceOutake();
-    //     double r = 7;
-
-    //     double xm = (DISTANCE_BETWEEN_SENSORS)/2;
-
-    //     double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r; 
-    //     return h;
-    // }
-
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("intakeDetctsNote", intakeDetectsNote());
-        SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
-        SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
-        SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
-        SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
-        SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
-       
-
-    }
-     
-    public void setCurrentLimit(int limit) {
-        intakeMotor.setSmartCurrentLimit(limit);
-    }
-    public void setMaxIntake(int direction) {
-        intakeMotor.setSmartCurrentLimit(60);
-        intakeMotor.set(1 * direction);
-        
-    }
-
-    public void setRPMOutake(double rpm) {
-        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, outakeFeedforward.calculate(rpm/60.0));
-    }
-
-    public void setRPMIntake(double rpm) {
-        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, intakeFeedforward.calculate(rpm/60.0));
-    }
-
-    public double getOutakeRPM(){
-        return outakeEncoder.getVelocity();
-    }
-
-    public void stopOutake() {
-        setRPMOutake(0);
-    }
-    
-    public void stopIntake() {
-        setRPMIntake(0);
-    }
-    public double getIntakeRPM() {
-        return intakeEncoder.getVelocity();
-    }
-    @Override
-    public void initSendable(SendableBuilder sendableBuilder) {
-        sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
-        sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
-        sendableBuilder.addBooleanProperty("Intake Distance Sensor Detects Notes", this::intakeDetectsNote, null);
-        sendableBuilder.addBooleanProperty("Outake Distance Sensor Detects Notes", this::outakeDetectsNote ,null);
-    }
-    /* 
-    public double calculateRPMAtDistance() {
-
-        double minRPM = Integer.MAX_VALUE;
-        double distance = limelight.distanceToTargetSpeaker(); // placeholder for limelight 
-        for(int i = 0; i<= 360; i++) {
-            double t = Math.sqrt((OFFSETFROMGROUND-SPEAKER_HEIGHT+distance*Math.tan(i)));
-            double rpm = distance/Math.cos(i)*t;
-            if(rpm<minRPM) {
-                minRPM = rpm;
-            }
-        }   
-        if(minRPM == Integer.MAX_VALUE) {
-            System.err.println("FAILURE");
-        }
-        return minRPM;
-    }
-*/
+			//is pid needed? for rpm speeds?
+		}
 }

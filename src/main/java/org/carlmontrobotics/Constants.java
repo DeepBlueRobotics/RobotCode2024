@@ -8,26 +8,21 @@ import org.carlmontrobotics.lib199.Limelight;
 import org.carlmontrobotics.lib199.Limelight.Transform;
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.util.Color;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	public static final double g = 9.81; // meters per second squared
+	public static final double g = 9.81; //meters per second squared
 
 	public static final class Drivetrain {
 
@@ -156,90 +151,58 @@ public final class Constants {
 			//#endregion
 	}
 
-	public static final class IntakeShoot {
-		// PID values
-		public static final int INTAKE = 0;
-		public static final int OUTTAKE = 1;
+	public static final class Arm {
 
-		public static final double[] kP = { /* /Intake/ */ 0.0001184, /* /Outake/ */0.0001 };
-		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
-		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
-		public static final double[] kS = { /* /Intake/ */0.52174, /* /Outake/ */0.29753 * 2 };
-		public static final double[] kV = { /* /Intake/ */0.064142, /* /Outake/ */0.077913 };
-		public static final double[] kA = { /* /Intake/ */0.0074649, /* /Outake/ */0.05289 };
-		public static final int INTAKE_PORT = 9; // port
-		public static final int OUTAKE_PORT = 1; // port
-		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
-		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
-		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
-		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
-		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
-		public static final double DETECT_DISTANCE_INCHES = 13;
+		//all angles in rot here
+		public static final double intakeAngle = -.1;
+		public static final double ampAngle = .3;
+		public static final double speakerAngle = .4;
+		//if needed
+//		public static final trapAngle = 80;
 
-		public static final double OUTAKE_RPM = 6000;
-		public static final double INTAKE_RPM = -6500;
-		public static final double INTAKE_SLOWDOWN_RPM = -500;
+		//Motor Controllers: pid, FF
+		public static final double[] pidVals = new double[] { 0.1, 0.0, 0.1 };
+		// Feedforward
+		public static final double kS = 0.1;
+		public static final double kG = 0.1;
+		public static final double kV = 0.1;
+		public static final double kA = 0.1;
 
-		public static final double PASS_RPM = -6000;
-
-		public static final double AMP_RPM = 800;
-		public static final double SPEAKER_RPM = 2000;
-
-		public static final double EJECT_RPM_INTAKE = 750;
-		public static final double EJECT_RPM_OUTAKE = 750;
-
-		public static final double RPM_TOLERANCE = 10;
-		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
-
-		public static final boolean INTAKE_MOTOR_INVERSION = false;
-		public static final boolean OUTAKE_MOTOR_INVERSION = false;
-
-		public static final int EJECT_TIME_SECS = 5;
-		public static final int INTAKE_TIME_SECS = 4;
-
-		public static final int ledLength = 85;
-		public static final int ledPort = 85;
-		public static final double ledDefaultColorRestoreTime = 3;
-		public static final Color defaultColor = new Color(0, 0, 200);
-		public static final Color pickupSuccessColor = new Color(0, 200, 0);
+		public static final double MAX_FF_VEL = 1; // rot / s
+		public static final double MAX_FF_ACCEL = 1; // rot / s^2
+		public static TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL, MAX_FF_ACCEL);
+	}
+	public static final class IntakeShooter {
+		//in set() speed
+		public static final double idleSpeed = 0;
+		public static final double intakeSpeed = .7;
+		public static final double outtakeSpeed = 1;
 
 	}
 
 	public static final class OI {
-		public static final class Driver {
-			public static final int port = 1;
+        public static final class Driver {
+            public static final int port = 0;
 
-			public static final int slowDriveButton = Button.kLeftBumper.value;
+			public static final int 
+			slowDriveButton = Button.kLeftBumper.value;
 			public static final int resetFieldOrientationButton = Button.kRightBumper.value;
-			public static final int toggleFieldOrientedButton = Button.kStart.value;
-
+            public static final int toggleFieldOrientedButton = Button.kStart.value;
+			
 			public static final int quasistaticForward = Button.kY.value;
-			public static final int quasistaticBackward = Button.kB.value;
-			public static final int dynamicForward = Button.kA.value;
-			public static final int dynamicBackward = Button.kX.value;
+            public static final int quasistaticBackward = Button.kB.value;
+            public static final int dynamicForward = Button.kA.value;
+            public static final int dynamicBackward = Button.kX.value;
 
-			// public static final int rotateFieldRelative0Deg = Button.kY.value;
-			// public static final int rotateFieldRelative90Deg = Button.kB.value;
-			// public static final int rotateFieldRelative180Deg = Button.kA.value;
-			// public static final int rotateFieldRelative270Deg = Button.kX.value;
-		}
-
-		public static final class Manipulator {
-			public static final int port = 0;
-			public static final int rotateFieldRelative0Deg = Button.kY.value;
-			public static final int rotateFieldRelative90Deg = Button.kB.value;
-			public static final int rotateFieldRelative180Deg = Button.kA.value;
-			public static final int rotateFieldRelative270Deg = Button.kX.value;
-
-			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
-			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
-			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
-			public static final int AMP_BUTTON = Button.kRightBumper.value;
-			// public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
-
-		}
-
+            // public static final int rotateFieldRelative0Deg = Button.kY.value;
+            // public static final int rotateFieldRelative90Deg = Button.kB.value;
+            // public static final int rotateFieldRelative180Deg = Button.kA.value;
+            // public static final int rotateFieldRelative270Deg = Button.kX.value;
+        }
+        public static final class Manipulator {
+            public static final int port = 1;
+        }
 		public static final double JOY_THRESH = 0.01;
-		public static final double MIN_AXIS_TRIGGER_VALUE = 0.25;
-	}
+        public static final double MIN_AXIS_TRIGGER_VALUE = 0.25;
+    }
 }
