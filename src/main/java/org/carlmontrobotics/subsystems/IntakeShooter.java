@@ -1,5 +1,5 @@
 package org.carlmontrobotics.subsystems;
-
+ 
 
 import static org.carlmontrobotics.Constants.IntakeShoot.DETECT_DISTANCE_INCHES;
 import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
@@ -94,7 +94,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     private double getGamePieceDistanceOutake() {
-        return Units.metersToInches(OutakeDistanceSensor.getRange()/1000/*mm->m*/)- DS_DEPTH_INCHES;
+        return Units.metersToInches((OutakeDistanceSensor.getRange() - DS_DEPTH_INCHES) / 1000);
     }
 
     public boolean intakeDetectsNote() {
@@ -140,8 +140,8 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
+        SmartDashboard.putNumber("distance sensor intake", getPieceDistanceIntakeMeters());
+        SmartDashboard.putNumber("distance sensor outake", getPieceDistanceOutakeMeters());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
        
