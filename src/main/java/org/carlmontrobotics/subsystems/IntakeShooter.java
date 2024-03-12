@@ -1,33 +1,13 @@
 package org.carlmontrobotics.subsystems;
  
-
-import static org.carlmontrobotics.Constants.IntakeShoot.DETECT_DISTANCE_INCHES;
-import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_DISTANCE_SENSOR_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_MOTOR_INVERSION;
-import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_DISTANCE_SENSOR_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_MOTOR_INVERSION;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_PORT;
-import static org.carlmontrobotics.Constants.IntakeShoot.OUTTAKE;
-import static org.carlmontrobotics.Constants.IntakeShoot.RPM_TOLERANCE;
-import static org.carlmontrobotics.Constants.IntakeShoot.defaultColor;
-import static org.carlmontrobotics.Constants.IntakeShoot.kA;
-import static org.carlmontrobotics.Constants.IntakeShoot.kD;
-import static org.carlmontrobotics.Constants.IntakeShoot.kI;
-import static org.carlmontrobotics.Constants.IntakeShoot.kP;
-import static org.carlmontrobotics.Constants.IntakeShoot.kS;
-import static org.carlmontrobotics.Constants.IntakeShoot.kV;
-import static org.carlmontrobotics.Constants.IntakeShoot.ledDefaultColorRestoreTime;
-import static org.carlmontrobotics.Constants.IntakeShoot.pickupSuccessColor;
+import edu.wpi.first.units.MutableMeasure;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static edu.wpi.first.units.MutableMeasure.mutable;
 
 import org.carlmontrobotics.Constants;
-
-import static org.carlmontrobotics.Constants.IntakeShoot.ledLength;
-import static org.carlmontrobotics.Constants.IntakeShoot.ledPort;
-
-
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
@@ -39,25 +19,33 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
+    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -68,8 +56,10 @@ public class IntakeShooter extends SubsystemBase {
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT); // insert
     private double goalOutakeRPM = outakeEncoder.getVelocity();
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
-
-    
+    private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RotationsPerSecond.of(0));
+    private final MutableMeasure<Angle> distance = mutable(Rotations.of(0));
+    private ShuffleboardTab sysIDTab  = Shuffleboard.getTab("Sysid");
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
@@ -81,6 +71,11 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
         intakeMotor.setSmartCurrentLimit(20);
+        SmartDashboard.putData("intake shooter",this);
+        sysIDTab.add("quasistatic forward", sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        sysIDTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        sysIDTab.add("dynamic foward", sysIdDynamic(SysIdRoutine.Direction.kForward));
+        sysIDTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     //---------------------------------------------------------------------------------------------------
@@ -137,18 +132,37 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("intakeDetctsNote", intakeDetectsNote());
-        SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
-        SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
-        SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
-        SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
-        SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
+       
        
 
     }
-     
+    public void logMotor(SysIdRoutineLog log) {
+        log.motor("shooter-motor")
+                .voltage(voltage.mut_replace(
+                        outakeMotor.getBusVoltage() * outakeMotor.getAppliedOutput(),
+                        Volts))
+                .angularVelocity(velocity.mut_replace(
+                        outakeEncoder.getVelocity() / 60,
+                        RotationsPerSecond))
+                .angularPosition(distance.mut_replace(
+                        outakeEncoder.getPosition(),
+                        Rotations));
+    }
+
+    private final SysIdRoutine routine = new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                    this::driveMotor,
+                    this::logMotor,
+                    this));
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return routine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return routine.dynamic(direction);
+    }
     public void setCurrentLimit(int limit) {
         intakeMotor.setSmartCurrentLimit(limit);
     }
@@ -180,12 +194,17 @@ public class IntakeShooter extends SubsystemBase {
     public double getIntakeRPM() {
         return intakeEncoder.getVelocity();
     }
+     public void driveMotor(Measure<Voltage> volts) {
+        outakeMotor.setVoltage(volts.in(Volts));
+    }
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
         sendableBuilder.addBooleanProperty("Intake Distance Sensor Detects Notes", this::intakeDetectsNote, null);
         sendableBuilder.addBooleanProperty("Outake Distance Sensor Detects Notes", this::outakeDetectsNote ,null);
+        sendableBuilder.addDoubleProperty("Outtake distance sensor num", this::getGamePieceDistanceOutake, null);
+        sendableBuilder.addDoubleProperty("Intake distance sensor num", this::getGamePieceDistanceIntake, null);
     }
     /* 
     public double calculateRPMAtDistance() {
