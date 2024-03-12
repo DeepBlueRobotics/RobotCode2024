@@ -28,7 +28,9 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
@@ -64,12 +66,18 @@ public class Arm extends SubsystemBase {
     // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
+    private double armFeedVolts;//for SendableBuilder
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
     private static TrapezoidProfile.State setpoint;
 
     private TrapezoidProfile armProfile;
     private TrapezoidProfile.State goalState;
+
+    private double lastMeasuredTime;
+    private double lastArmPos;
+
+    private boolean isArmEncoderConnected = false;
 
     public Arm() {
         // weird math stuff
@@ -85,29 +93,40 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setInverted(ENCODER_INVERTED);
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
-        armPIDMaster.setP(kP);
-        armPIDMaster.setI(kI);
-        armPIDMaster.setD(kD);
 
-        // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
+        // //SmartDashboard.putNumber("set KP", kP);
+        // //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+        // SmartDashboard.putNumber("set KP", kP);
+        // armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+        // armPIDMaster.setI(kI);
+        // SmartDashboard.putNumber("set kD", kD);
+        // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
+        // SmartDashboard.putNumber("set kG", kG);
+        // // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
+        // armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
+        // // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
-        // absolutely not. do NOT wrap our arm!
-        // armPIDMaster.setPositionPIDWrappingEnabled(true);
-        // armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
-        // armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
+        armPIDMaster.setPositionPIDWrappingEnabled(true);
+        armPIDMaster.setPositionPIDWrappingMinInput(-Math.PI/2);
+        armPIDMaster.setPositionPIDWrappingMaxInput((3*Math.PI)/ 2);
         armPIDMaster.setIZone(IZONE_RAD);
 
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            armFeed.maxAchievableVelocity(12, Math.PI/2, 0), 
+            Math.PI,
             MAX_FF_ACCEL_RAD_P_S);
         //^ worst case scenario
+        //armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
+        SmartDashboard.putData("Arm", this);
 
         setpoint = getCurrentArmState();
         goalState = getCurrentArmState();
         setArmTarget(goalState.position);
+
+        lastArmPos = getArmPos();
+        lastMeasuredTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -121,11 +140,11 @@ public class Arm extends SubsystemBase {
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL
         // );
-        SmartDashboard.putNumber("Current Position", armMasterEncoder.getPosition());
 
-
+        //SmartDashboard.putNumber("KP", );
         // smart dahsboard stuff
-        // SmartDashboard.putBoolean("ArmPIDAtSetpoint", armPID1.atSetpoint());
+        SmartDashboard.putBoolean("ArmPIDAtSetpoint", armAtSetpoint());
+        SmartDashboard.putNumber("Arm Goal Pos (rad)", goalState.position);
         // SmartDashboard.putBoolean("ArmProfileFinished",
         // armProfile.isFinished(armProfileTimer.get()));
         // posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos",
@@ -133,23 +152,62 @@ public class Arm extends SubsystemBase {
         // velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel",
         // velToleranceRadPSec);
 
-        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
-        // SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
-        // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
         SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
+        double currTime = Timer.getFPGATimestamp();
+        // SmartDashboard.putNumber("Current Time", currTime);
+        //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
+        setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
 
+        double currP = SmartDashboard.getNumber("set kP", kP);
+        double KP = kP;
+        if (currP != KP) {
+            armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+            KP = currP;
+
+        }
+
+        double currD = SmartDashboard.getNumber("set kD", kD);
+        double KD = kD;
+        if (currD != KD) {
+            armPIDMaster.setD(SmartDashboard.getNumber("set kD", currD));
+            KD = currD;
+
+        }
+
+        // double currG = SmartDashboard.getNumber("set kG", kG);
+        // double KG = kG;
+        // if (currG != KG) {
+        //     armFeed = new ArmFeedforward(kS, SmartDashboard.getNumber("set kG", currG), kV, kA);
+        //     KG = currG;
+        // }
+
+        // when the value is different
+        double currentArmPos = getArmPos();
+        if (currentArmPos != lastArmPos) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+        }
+        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
+
+        if (isArmEncoderConnected){
+            driveArm();
+        }
+        else {
+            armMotorMaster.set(0);
+            armMotorFollower.set(0);
+        }
         autoCancelArmCommand();
-        driveArm();
+
     }
 
     public void autoCancelArmCommand() {
-        if (!(getDefaultCommand() instanceof TeleopArm) || DriverStation.isAutonomous())
+        if (!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous())
             return;
 
-        double requestedSpeeds = ((TeleopArm) getDefaultCommand()).getRequestedSpeeds();
+        double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
 
         if (requestedSpeeds != 0) {
             Command currentArmCommand = getCurrentCommand();
@@ -162,15 +220,22 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
-        double armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
+        SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
+        armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference(setpoint.position, CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        armPIDMaster.setReference(Units.radiansToRotations(setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        SmartDashboard.putNumber("feedforward volts", armFeedVolts);
+        SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
+    /**
+     *
+     * @param targetPos in radians
+     */
     public void setArmTarget(double targetPos) {
         targetPos = getArmClampedGoal(targetPos);
 
