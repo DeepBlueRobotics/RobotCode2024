@@ -51,7 +51,7 @@ public final class Constants {
 
 		public static final double PASS_RPM = -6000;
 
-		public static final double AMP_RPM = 1500;
+		public static final double AMP_RPM = 800;
 		public static final double SPEAKER_RPM = 2000;
 
 		public static final double EJECT_RPM_INTAKE = 750;
@@ -99,7 +99,7 @@ public final class Constants {
 
 			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
 			public static final int EJECT_BUTTON = Button.kA.value;
-			public static final int AMP_BUTTON = Button.kLeftBumper.value;
+			public static final int AMP_BUTTON = Button.kY.value;
 			public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
 
 		}

@@ -37,7 +37,7 @@ public class PassToOutake extends Command {
   public void execute() {
     intakeShooter.setRPMOutake(SPEAKER_RPM);
     if(intakeShooter.getOutakeRPM()>=SPEAKER_RPM){
-      intakeShooter.setMaxIntake();
+      intakeShooter.setMaxIntake(-1);
       timer.start();
     }
   }

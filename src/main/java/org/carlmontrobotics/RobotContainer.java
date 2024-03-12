@@ -77,7 +77,11 @@ public class RobotContainer {
     // Xbox X button -> Intake(arm position)
 
     /* /Eject also for AMP/ */
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
+
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new AmpRPM(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
 
     /* /Shooting/ */
     //new JoystickButton(manipulatorController, SHOOTER_BUTTON).onTrue(new PassToOutake(intakeShooter));

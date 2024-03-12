@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class Eject extends Command {
+public class AmpRPM extends Command {
   //pass ring from intake to outtake
   private final IntakeShooter intakeShooter;
   private Timer timer=new Timer();
 
-  public Eject(IntakeShooter intake) {
+  public AmpRPM(IntakeShooter intake) {
       this.intakeShooter = intake;
       addRequirements(intake);
   }
@@ -35,12 +35,10 @@ public class Eject extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(intakeShooter.intakeDetectsNote()) {
-      intakeShooter.setMaxIntake(1);
+    intakeShooter.setRPMOutake(AMP_RPM);
+    if(intakeShooter.getOutakeRPM()>=AMP_RPM){
+      intakeShooter.setMaxIntake(-1);
       timer.start();
-    } else if(intakeShooter.outakeDetectsNote()) {
-      intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
-      
     }
   }
 

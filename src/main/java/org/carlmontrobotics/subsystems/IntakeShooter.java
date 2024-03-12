@@ -151,9 +151,9 @@ public class IntakeShooter extends SubsystemBase {
     public void setCurrentLimit(int limit) {
         intakeMotor.setSmartCurrentLimit(limit);
     }
-    public void setMaxIntake() {
+    public void setMaxIntake(int direction) {
         intakeMotor.setSmartCurrentLimit(60);
-        intakeMotor.set(-1);
+        intakeMotor.set(1 * direction);
         
     }
 
