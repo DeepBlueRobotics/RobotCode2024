@@ -140,8 +140,8 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
         SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
         SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getPieceDistanceIntakeMeters());
-        SmartDashboard.putNumber("distance sensor outake", getPieceDistanceOutakeMeters());
+        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
+        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
         SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
         SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
        
