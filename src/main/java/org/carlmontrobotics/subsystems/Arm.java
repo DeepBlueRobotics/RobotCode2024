@@ -68,7 +68,9 @@ public class Arm extends SubsystemBase {
     // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
-    private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
+    
+    private ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);;
+
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
     private static TrapezoidProfile.State setpoint;
 
@@ -102,17 +104,22 @@ public class Arm extends SubsystemBase {
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
 
-        SmartDashboard.putNumber("set KP", 5.738);
-        armPIDMaster.setP(SmartDashboard.getNumber("set KP", 5.738));
+        //SmartDashboard.putNumber("set KP", kP);
+        //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+        SmartDashboard.putNumber("set KP", kP);
+        armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
         armPIDMaster.setI(kI);
-        armPIDMaster.setD(kD);
-        armPIDMaster.setOutputRange(MIN_VOLTAGE, MAX_VOLTAGE);
+        SmartDashboard.putNumber("set kD", kD);
+        armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
+        SmartDashboard.putNumber("set kG", kG);
+        // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
+        armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
         // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
-        armPIDMaster.setPositionPIDWrappingMinInput(LOWER_ANGLE_LIMIT_RAD);
-        armPIDMaster.setPositionPIDWrappingMaxInput(UPPER_ANGLE_LIMIT_RAD);
+        armPIDMaster.setPositionPIDWrappingMinInput(-Math.PI/2);
+        armPIDMaster.setPositionPIDWrappingMaxInput((3*Math.PI)/ 2);
         armPIDMaster.setIZone(IZONE_RAD);
 
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -152,7 +159,7 @@ public class Arm extends SubsystemBase {
         // );
         SmartDashboard.putNumber("Current Position", getArmPos());
 
-
+        //SmartDashboard.putNumber("KP", );
         // smart dahsboard stuff
         SmartDashboard.putBoolean("ArmPIDAtSetpoint", armAtSetpoint());
         SmartDashboard.putNumber("Arm Goal Pos (rad)", goalState.position);
@@ -175,6 +182,29 @@ public class Arm extends SubsystemBase {
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
         
+        double currP = SmartDashboard.getNumber("set kP", kP);
+        double KP = kP;
+        if (currP != KP) {
+            armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+            KP = currP;
+
+        }
+        
+        double currD = SmartDashboard.getNumber("set kD", kD);
+        double KD = kD;
+        if (currD != KD) {
+            armPIDMaster.setD(SmartDashboard.getNumber("set kD", currD));
+            KD = currD;
+
+        }
+
+        // double currG = SmartDashboard.getNumber("set kG", kG);
+        // double KG = kG;
+        // if (currG != KG) {
+        //     armFeed = new ArmFeedforward(kS, SmartDashboard.getNumber("set kG", currG), kV, kA);
+        //     KG = currG;
+        // }
+
         // when the value is different
         double currentArmPos = getArmPos();
         if (currentArmPos != lastArmPos) {
@@ -192,6 +222,7 @@ public class Arm extends SubsystemBase {
             armMotorFollower.set(0);
         }
         autoCancelArmCommand();
+
     }
 
     public void autoCancelArmCommand() {
@@ -219,6 +250,8 @@ public class Arm extends SubsystemBase {
             //kg * cos(arm angle) * arm_COM_length
         }
         armPIDMaster.setReference(Units.radiansToRotations(setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        SmartDashboard.putNumber("feedforward volts", armFeedVolts);
+        SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
     /**
@@ -303,5 +336,9 @@ public class Arm extends SubsystemBase {
 
     public double getMaxAccelRad(){
       return armFeed.maxAchievableVelocity(12, getArmPos(), getArmVel());
+    }
+
+    public double getMaxVelocity(){
+        return TRAP_CONSTRAINTS.maxVelocity;
     }
 }

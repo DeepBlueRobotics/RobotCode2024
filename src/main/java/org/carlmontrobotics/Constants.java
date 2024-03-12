@@ -40,7 +40,7 @@ public final class Constants {
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = true;
 
-		public static final double ENCODER_OFFSET_RAD = 2.678 - 0.6095;
+		public static final double ENCODER_OFFSET_RAD = 2.678; //- 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
 		// INTAKE_ANGLE = Degrees.to(-1);
@@ -55,9 +55,9 @@ public final class Constants {
 		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 50; //5.7938 / (2 * Math.PI);
+		public static final double kP = 5.7938;
 		public static final double kI = 0;
-		public static final double kD = 1.0761 / (2 * Math.PI);
+		public static final double kD = 1.0761 * 1000;
 		public static final double kS = 0.1498;
 		public static final double kG = 0.3489;
 		public static final double kV = 5.7539 / (2 * Math.PI);
@@ -122,3 +122,4 @@ public final class Constants {
 		}
 	}
 }
+
