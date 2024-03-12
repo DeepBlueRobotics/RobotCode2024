@@ -95,12 +95,10 @@ public final class Constants {
 		public static final class Manipulator {
 			public static final int port = 0;
 			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
-
-
 			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
-			public static final int EJECT_BUTTON = Button.kA.value;
-			public static final int AMP_BUTTON = Button.kY.value;
-			public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
+			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
+			public static final int AMP_BUTTON = Button.kRightBumper.value;
+			//public static final int BOOLEAN_BUTTON = Button.kRightBumper.value;
 
 		}
 		public static final double JOY_THRESH = 0.01;
