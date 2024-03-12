@@ -204,10 +204,10 @@ public class Arm extends SubsystemBase {
     }
 
     public void autoCancelArmCommand() {
-        if (!(getDefaultCommand() instanceof ArmTeleop) || DriverStation.isAutonomous())
+        if (!(getDefaultCommand() instanceof TeleopArm) || DriverStation.isAutonomous())
             return;
 
-        double requestedSpeeds = ((ArmTeleop) getDefaultCommand()).getRequestedSpeeds();
+        double requestedSpeeds = ((TeleopArm) getDefaultCommand()).getRequestedSpeeds();
 
         if (requestedSpeeds != 0) {
             Command currentArmCommand = getCurrentCommand();
@@ -283,6 +283,10 @@ public class Arm extends SubsystemBase {
     }
 
     public double getMaxAccelRad(){
-      return armFeed.maxAchievableVelocity(12, getArmPos(), getArmVel());
+        return armFeed.maxAchievableAcceleration(MAX_VOLTAGE, getArmPos(), getArmVel());
+    }
+
+    public double getMaxVelRad(){
+        return armFeed.maxAchievableVelocity(MAX_VOLTAGE, getArmPos(), getArmVel());
     }
 }

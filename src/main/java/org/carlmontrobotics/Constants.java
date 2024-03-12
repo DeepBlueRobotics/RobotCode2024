@@ -123,7 +123,6 @@ public final class Constants {
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = true;
 
-		public static final int MAX_VOLTAGE = 12;
 		public static final double ENCODER_OFFSET_RAD = 2.678; //- 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
@@ -152,8 +151,8 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 
-		public static final double MIN_VOLTAGE = -3; //-((kS + kG + 1)/12);
-		public static final double MAX_VOLTAGE = 3; //(kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE = -5; //-((kS + kG + 1)/12) +2 becaus why not;
+		public static final double MAX_VOLTAGE = 5; //(kS + kG + 1)/12 +2;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
