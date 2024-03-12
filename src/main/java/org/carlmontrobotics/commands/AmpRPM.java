@@ -33,7 +33,7 @@ public class AmpRPM extends Command {
   @Override
   public void execute() {
     intakeShooter.setRPMOutake(AMP_RPM);
-    if(intakeShooter.getOutakeRPM()>=AMP_RPM){
+    if(intakeShooter.isWithinTolerance()){
       intakeShooter.setMaxIntake(-1);
       timer.start();
     }
