@@ -39,6 +39,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -175,6 +176,16 @@ public class IntakeShooter extends SubsystemBase {
     
     public void stopIntake() {
         setRPMIntake(0);
+    }
+    public double getIntakeRPM() {
+        return intakeEncoder.getVelocity();
+    }
+    @Override
+    public void initSendable(SendableBuilder sendableBuilder) {
+        sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
+        sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
+        sendableBuilder.addBooleanProperty("Intake Distance Sensor Detects Notes", this::intakeDetectsNote, null);
+        sendableBuilder.addBooleanProperty("Outake Distance Sensor Detects Notes", this::outakeDetectsNote ,null);
     }
     /* 
     public double calculateRPMAtDistance() {
