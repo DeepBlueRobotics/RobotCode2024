@@ -204,9 +204,10 @@ public class Drivetrain extends SubsystemBase {
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d());
+        kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
+
         // Setup autopath builder
         configurePPLAutoBuilder();
-        SmartDashboard.putNumber("biggoal", 0);
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
@@ -251,8 +252,6 @@ public class Drivetrain extends SubsystemBase {
         
 
         {
-           kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
-
             SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
             SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
