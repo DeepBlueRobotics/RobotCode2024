@@ -26,5 +26,6 @@
     },
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
-  "wpilib.skipTests": true
+  "wpilib.skipTests": true,
+  "java.debug.settings.onBuildFailureProceed": true
 }

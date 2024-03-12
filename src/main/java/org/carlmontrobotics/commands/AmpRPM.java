@@ -5,50 +5,56 @@
 package org.carlmontrobotics.commands;
 
 
-import static org.carlmontrobotics.Constants.Effectorc.*;
-import static org.carlmontrobotics.Constants.Led.*;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
 import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.AuxSystems;
 import org.carlmontrobotics.subsystems.IntakeShooter;
-import static org.carlmontrobotics.Constants.Effectorc.*;
+import static org.carlmontrobotics.Constants.IntakeShoot.*;
 
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class PassToOutake extends Command {
+public class AmpRPM extends Command {
   //pass ring from intake to outtake
-  private final IntakeShooter intake;
+  private final IntakeShooter intakeShooter;
+  private Timer timer=new Timer();
 
-  public PassToOutake(IntakeShooter intake) {
-      addRequirements(this.intake = intake);
+  public AmpRPM(IntakeShooter intake) {
+      this.intakeShooter = intake;
+      addRequirements(intake);
   }
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    intake.setRPMIntake(PASS_RPM);
-    if (Math.abs(intake.getOutakeRPM()-RPM_TOLERANCE)<=RPM_TOLERANCE){//only move it if it wasn't already ramped up to a speed
-      intake.setRPMOutake(PASS_RPM);
-    }
+    timer.reset();
+      intakeShooter.stopIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    intakeShooter.setRPMOutake(AMP_RPM);
+    if(intakeShooter.getOutakeRPM()>=AMP_RPM){
+      intakeShooter.setMaxIntake(-1);
+      timer.start();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
-    // intake.stopOutake();
+    intakeShooter.stopIntake();
+    intakeShooter.stopOutake();
+    intakeShooter.setCurrentLimit(20);
+    timer.stop();
+    //resets to defaultColor
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!intake.intakeDetectsNote() && !intake.outakeDetectsNote());
+    return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>1.5;
   }
 }

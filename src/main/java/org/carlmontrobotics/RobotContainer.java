@@ -8,6 +8,9 @@ package org.carlmontrobotics;
 //199 files
 import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.*;
+
+import org.carlmontrobotics.Constants.Armc;
+import org.carlmontrobotics.Constants.Effectorc;
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.*;
 //subsystems
@@ -27,7 +30,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 //control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -117,7 +118,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka podium
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
-        new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_CLOSE),
+        new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM),
         new PassToOutake(intakeShooter),
         new WaitCommand(1),
         new InstantCommand(intakeShooter::stopOutake)
@@ -125,7 +126,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
-        new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_SAFE),
+        new RampToRPM(intakeShooter, Effectorc.SAFE_RPM),
         new PassToOutake(intakeShooter),
         new WaitCommand(1),
         new InstantCommand(intakeShooter::stopOutake)
@@ -140,6 +141,10 @@ public class RobotContainer {
       .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
     new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
       .onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, OI.Manipulator.RAISE_CLIMBER)
+      .onTrue(new MoveToPos(arm, Armc.CLIMBER_UP_ANGLE_RAD));
+    new JoystickButton(manipulatorController, OI.Manipulator.LOWER_CLIMBER)
+      .onTrue(new MoveToPos(arm, Armc.CLIMBER_DOWN_ANGLE_RAD));
     // new JoystickButton(manipulatorController, Button.kLeftStick.value)
     //   .onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
 
@@ -157,9 +162,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
 
     NamedCommands.registerCommand("RampRPMSpeakerSafe",
-      new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_SAFE));
-    NamedCommands.registerCommand("RampRPMSpeakerPodium",
-      new RampToRPM(intakeShooter, Effectorc.OUTAKE_RPM_CLOSE));
+      new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
+    NamedCommands.registerCommand("RampRPMSpeakerSubwoofer",
+      new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM));
 
     NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
     NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));

@@ -13,19 +13,21 @@ public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
     private final IntakeShooter intake;
-    
+
+    private double endAt =0;
+    private final double keepIntakingFor = .2;
+
     public Intake(IntakeShooter intake) {
         addRequirements(this.intake = intake);
-    }    
-    
+    }
+
     @Override
     public void initialize() {
       intake.setRPMIntake(INTAKE_RPM);
-      intake.stopOutake();
       timer.reset();
       timer.start();
     }
-      
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,6 +35,12 @@ public class Intake extends Command {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
+      }
+      if (intake.outakeDetectsNote() ) {
+        intake.setRPMIntake(0.0);
+        if (endAt==0) {
+          endAt = Timer.getFPGATimestamp()+keepIntakingFor;
+        }
       }
     }
 
@@ -46,7 +54,8 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) 
+    return (intake.intakeDetectsNote() && !intake.outakeDetectsNote()
+        && (endAt - Timer.getFPGATimestamp() <= 0))
       || timer.hasElapsed(INTAKE_TIME_SECS);
   }
 }

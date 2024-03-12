@@ -24,8 +24,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -40,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	public static final double g = 9.81; //meters per second squared
+	public static final double g = 9.81; // meters per second squared
 
 	public static final class Led {
 		public static final int ledLength = 5;
@@ -61,39 +63,38 @@ public final class Constants {
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 
-		public static final double[] kP = {/*/Intake/*/ 0.0001, /*/Outake/*/0};
-		public static final double[] kI = {/*/Intake/*/0.00001, /*/Outake/*/0};
-		public static final double[] kD = {/*/Intake/*/0, /*/Outake/*/0 };
-		public static final double[] kS = {/*/Intake/*/0.29753, /*/Outake/*/0.29753};
-		public static final double[] kV = {/*/Intake/*/0.077913, /*/Outake/*/0.077913};
-		public static final double[] kA = {/*/Intake/*/0.05289, /*/Outake/*/0.05289};
-		public static final int INTAKE_PORT = 0; //port
-		public static final int OUTAKE_PORT = 1; //port
-		public static final int INTAKE_DISTANCE_SENSOR_PORT = 10; //port
-		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 11; //port
-		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 6.5; // inches
+		public static final double[] kP = { /* /Intake/ */ 0.0001184, /* /Outake/ */0.0001 };
+		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
+		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
+		public static final double[] kS = { /* /Intake/ */0.52174, /* /Outake/ */0.29753 * 2 };
+		public static final double[] kV = { /* /Intake/ */0.064142, /* /Outake/ */0.077913 };
+		public static final double[] kA = { /* /Intake/ */0.0074649, /* /Outake/ */0.05289 };
+		public static final int INTAKE_PORT = 9; // port
+		public static final int OUTAKE_PORT = 1; // port
+		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
+		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
+		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
+		
+		public static final double INTAKE_RPM = -6500;
+		public static final double INTAKE_SLOWDOWN_RPM = -1500;
 
-		public static final double OUTAKE_RPM_CLOSE = 4000;
-		public static final double OUTAKE_RPM_SAFE = 7000;
-
-		public static final double INTAKE_RPM = 6000;
-		public static final double INTAKE_SLOWDOWN_RPM = 1500;
-
-		public static final double PASS_RPM = 750;
+		public static final double PASS_RPM = -6000;
 
 		public static final double AMP_RPM = 1500;
-		public static final double SPEAKER_RPM = 6000;
+		public static final double SPEAKER_RPM = 2000;
+		public static final double SUBWOOFER_RPM = 6000;//WTF FAB ISSUE
+		public static final double SAFE_RPM = 6000;//WTF FAB ISSUE
 
-		public static final double EJECT_RPM_INTAKE = 750;
-		public static final double EJECT_RPM_OUTAKE = 750;
+		public static final double EJECT_RPM_INTAKE = 2550;
+		public static final double EJECT_RPM_OUTAKE = 2550;
 
 		public static final double MANUAL_RPM_MAX = 4000;
 
 
-		public static final double RPM_TOLERANCE = 20;
+		public static final double RPM_TOLERANCE = 500;
 		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
 
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
@@ -131,11 +132,10 @@ public final class Constants {
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(105);
-		public static final double SUBWOFFER_ANGLE_RAD = Units.degreesToRadians(24);
-		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(24);
-		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(24);
-		public static final double CLIMBER_UP_ANGLE_RAD = Units.degreesToRadians(24);
-		public static final double CLIMBER_DOWN_ANGLE_RAD = Units.degreesToRadians(24);
+
+		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(24);//touching the base of the speaker
+		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(24);//touching the white line
+		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(24);//touching the safe pad on the stage
 
 		// PID, Feedforward, Trapezoid
 		public static final double kP = 5.7938;
@@ -171,6 +171,9 @@ public final class Constants {
 		public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD/0.02); // 20ms per robot loop
 		public static final double UPPER_ANGLE_LIMIT_RAD = 1.63;
 		public static final double LOWER_ANGLE_LIMIT_RAD = -0.5;
+		public static final double CLIMBER_UP_ANGLE_RAD = UPPER_ANGLE_LIMIT_RAD;
+		public static final double CLIMBER_DOWN_ANGLE_RAD = LOWER_ANGLE_LIMIT_RAD;
+
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.25;
