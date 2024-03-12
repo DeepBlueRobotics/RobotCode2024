@@ -28,7 +28,9 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
@@ -303,5 +305,12 @@ public class Arm extends SubsystemBase {
 
     public double getMaxAccelRad(){
       return armFeed.maxAchievableVelocity(12, getArmPos(), getArmVel());
+    }
+    public double getMaxVelocity(){
+        return TRAP_CONSTRAINTS.maxVelocity;
+    }
+    public void initSendable(SendableBuilder builder){
+        builder.addDoubleProperty("armKp", () -> armPIDMaster.getP(), armPIDMaster::setP);
+        builder.addDoubleProperty("armKd", () -> armPIDMaster.getD(), armPIDMaster::setD);
     }
 }
