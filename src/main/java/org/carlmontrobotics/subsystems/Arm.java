@@ -48,6 +48,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -66,7 +68,7 @@ public class Arm extends SubsystemBase {
     private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
 
     private static double kDt = 0.02;
-
+    private double armFeedVolts;
     // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
@@ -106,17 +108,17 @@ public class Arm extends SubsystemBase {
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
 
-        //SmartDashboard.putNumber("set KP", kP);
-        //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
-        SmartDashboard.putNumber("set KP", kP);
-        armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
-        armPIDMaster.setI(kI);
-        SmartDashboard.putNumber("set kD", kD);
-        armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
-        SmartDashboard.putNumber("set kG", kG);
+        // //SmartDashboard.putNumber("set KP", kP);
+        // //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+        // SmartDashboard.putNumber("set KP", kP);
+        // armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
+        // armPIDMaster.setI(kI);
+        // SmartDashboard.putNumber("set kD", kD);
         // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
-        armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
-        // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
+        // SmartDashboard.putNumber("set kG", kG);
+        // // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
+        // armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
+        // // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
         armPIDMaster.setPositionPIDWrappingEnabled(true);
@@ -159,7 +161,6 @@ public class Arm extends SubsystemBase {
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
         // armConstraints = new TrapezoidProfile.Constraints(MAX_FF_VEL , MAX_FF_ACCEL
         // );
-        SmartDashboard.putNumber("Current Position", getArmPos());
 
         //SmartDashboard.putNumber("KP", );
         // smart dahsboard stuff
@@ -172,15 +173,12 @@ public class Arm extends SubsystemBase {
         // velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel",
         // velToleranceRadPSec);
 
-        // SmartDashboard.putNumber("MaxHoldingTorque", maxHoldingTorqueNM());
-        // SmartDashboard.putNumber("V_PER_NM", getV_PER_NM());
-        // SmartDashboard.putNumber("COMDistance", getCoM().getNorm());
         SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
         double currTime = Timer.getFPGATimestamp();
-        SmartDashboard.putNumber("Current Time", currTime);
+        // SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
         
@@ -214,7 +212,6 @@ public class Arm extends SubsystemBase {
             lastArmPos = currentArmPos;
         }
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
-        SmartDashboard.putBoolean("ArmEncoderConnected", isArmEncoderConnected);
         
         if (isArmEncoderConnected){
             driveArm();
@@ -245,7 +242,7 @@ public class Arm extends SubsystemBase {
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
         SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
-        double armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
+        armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
                 || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
@@ -299,11 +296,11 @@ public class Arm extends SubsystemBase {
                     this));
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return routine.quasistatic(direction);
+        return new SequentialCommandGroup(new InstantCommand(() -> armMasterEncoder.setZeroOffset(0)), routine.quasistatic(direction));
     }
 
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return routine.dynamic(direction);
+        return new SequentialCommandGroup(new InstantCommand(() -> armMasterEncoder.setZeroOffset(0)), routine.dynamic(direction));
     }
     // #endregion
 
@@ -345,5 +342,15 @@ public class Arm extends SubsystemBase {
     public void initSendable(SendableBuilder builder){
         builder.addDoubleProperty("armKp", () -> armPIDMaster.getP(), armPIDMaster::setP);
         builder.addDoubleProperty("armKd", () -> armPIDMaster.getD(), armPIDMaster::setD);
+        builder.addDoubleProperty("Current Position", () -> getArmPos(), null);
+        builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
+        builder.addDoubleProperty("Arm Goal Pos (rad)", () -> goalState.position, null);
+        builder.addBooleanProperty("ArmEncoderConnected", () -> isArmEncoderConnected, null);
+        builder.addDoubleProperty("feedforward volts", () -> armFeedVolts, null);
+        builder.addDoubleProperty("pid volts", () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts, null);
+        builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
+        builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
+        //builder.addDoubleProperty("set arm angle (rad)", () -> armMasterEncoder.getPosition(), setArmTarget());
+
     }
 }
