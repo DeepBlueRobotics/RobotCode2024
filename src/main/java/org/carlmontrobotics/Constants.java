@@ -94,7 +94,7 @@ public final class Constants {
 		public static final double MANUAL_RPM_MAX = 4000;
 
 
-		public static final double RPM_TOLERANCE = 500;
+		public static final double RPM_TOLERANCE = 200;
 		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
 
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
