@@ -65,8 +65,6 @@ public class RobotContainer {
   }
 
   private void setBindingsManipulator() {
-      BooleanSupplier isIntake = () -> new JoystickButton(manipulatorController, Manipulator.INTAKE_BOOLEAN_SUPPLIER).getAsBoolean();
-      BooleanSupplier isOuttake = () -> new JoystickButton(manipulatorController, Manipulator.SHOOTER_BOOLEAN_SUPPLIER).getAsBoolean();
 
 
     // have the trigger and button bindings here call the Intake, Shoot, and Eject
@@ -88,23 +86,25 @@ public class RobotContainer {
     //new JoystickButton(manipulatorController, INTAKE_BUTTON).onTrue(new Intake(intakeShooter)); // I don't know the UI
                                                                                                 // so this is
                                                                                                 // placeholder
-    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new InstantCommand(() -> {
-      manipulatorController.setRumble(RumbleType.kBothRumble, 1);
-    }));
 
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)//.and(isOuttake)
-      .onTrue(new ConditionalCommand(
-        new PassToOutake(intakeShooter), 
-        new InstantCommand(), 
-        isOuttake
-      ));
+  axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+      .onTrue(
+        new PassToOutake(intakeShooter)
+      );
+ axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+      .onFalse(
+        new InstantCommand(intakeShooter::stopOutake, intakeShooter)
+      );
 
-    Trigger axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)//.and(isIntake)
-      .onTrue(new ConditionalCommand(
-        new Intake(intakeShooter), 
-        new InstantCommand(), 
-        isIntake
-      ));
+  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+      .onTrue(
+        new Intake(intakeShooter)
+      );  
+
+  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+      .onTrue(
+        new Intake(intakeShooter)
+      );
 
     // TODO: ask charles if passing in controller is okay
   }
@@ -122,7 +122,7 @@ public class RobotContainer {
     return stick.getRawAxis(axis.value) * (axis == Axis.kLeftY || axis == Axis.kRightY ? -1 : 1);
   }
 
-  private Trigger axisTrigger(GenericHID stick, Axis axis) {
+  private final Trigger axisTrigger(GenericHID stick, Axis axis) {
     return new Trigger(() -> Math.abs(getStickValue(stick, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);
   }
 

@@ -11,8 +11,10 @@ public class Eject extends Command {
     //eject until no more game peice
     private final IntakeShooter intakeShooter;
     private final Timer timer = new Timer();
+    //TODO: add requirements for intakshooter
     public Eject(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
+        addRequirements(intakeShooter);
     }
     @Override
     public void initialize() {
@@ -32,7 +34,6 @@ public class Eject extends Command {
     intakeShooter.stopIntake();
     intakeShooter.stopOutake();
     timer.stop();
-    intakeShooter.setRumblyTumbly(false);
   }
 
   // Returns true when the command should end.

@@ -1,10 +1,8 @@
 package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.IntakeShoot.*;
-import static org.carlmontrobotics.Constants.Led.*;
 
 import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.Led;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -12,10 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private final Timer timer = new Timer();
+    //private double sawAt=0.;
     private final IntakeShooter intake;
-    private final Led led = new Led();
     public Intake(IntakeShooter intake) {
         this.intake = intake;
+        addRequirements(intake);
     }    
     
     @Override
@@ -32,10 +31,12 @@ public class Intake extends Command {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
-        led.setLedColor(intakeColor, 0, led.Midpoint);
       }
       if (intake.outakeDetectsNote() ) {
         intake.setRPMIntake(0.0);
+        // if (sawAt==0) {
+        //   sawAt = Timer.getFPGATimestamp();
+        // }
       }  
     }
 
@@ -45,8 +46,6 @@ public class Intake extends Command {
     intake.stopIntake();
     timer.stop();
     //resets to defaultColor
-    led.setLedColor(Constants.Led.defaultColor, 0, led.Midpoint);
-
   }
 
   // Returns true when the command should end.

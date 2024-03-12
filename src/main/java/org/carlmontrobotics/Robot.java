@@ -15,16 +15,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.Led;
-import org.carlmontrobotics.subsystems.IntakeShooter;
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
-
 
 
 public class Robot extends TimedRobot {
-  private final Led led = new Led();
-  private final IntakeShooter intakeShoot = new IntakeShooter();
 
   private Command m_autonomousCommand;
   public static Robot robot;
@@ -34,15 +27,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robot = this;
-//  //for(int i = 0; i<100; i++){
-//      TimeOfFlight intakeDistanceSensor1 = new TimeOfFlight(i); // make sure id port is correct here
-//      double distance = Units.metersToInches((intakeDistanceSensor1.getRange() - DS_DEPTH_INCHES) / 1000);
-//      if(distance > 0.2){
-//       System.out.println("something");
-//       System.out.println(i);
-//      }
-
- //}
     m_robotContainer = new RobotContainer();
   }
 
