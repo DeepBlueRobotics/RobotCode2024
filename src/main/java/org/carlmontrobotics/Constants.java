@@ -11,6 +11,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -113,10 +114,10 @@ public final class Constants {
 		public static final class Manipulator {
 			public static final int port = 1;
 			public static final int RAISE_TO_AMP_BUTTON = Button.kB.value;
-			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kX.value;
-			public static final int RAISE_TO_GROUND_BUTTON = Button.kStart.value;
-			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftBumper.value;
-			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightBumper.value;
+			public static final int RAISE_TO_SPEAKER_NEXT_BUTTON = Button.kY.value;
+			public static final int LOWER_TO_GROUND_BUTTON = Button.kA.value;
+			public static final int RAISE_TO_CLIMBER_BUTTON = Button.kLeftStick.value;
+			public static final int LOWER_TO_CLIMBER_BUTTON = Button.kRightStick.value;
 		}
 	}
 }
