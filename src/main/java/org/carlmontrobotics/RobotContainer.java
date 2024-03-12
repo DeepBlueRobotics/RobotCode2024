@@ -83,24 +83,24 @@ public class RobotContainer {
     // right joystick used for manual arm control
     // COMMENT THESE OUT DURING SYSID TESTING
     // Speaker Buttons
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(PODIUM_ANGLE_RAD);
-        }));
+   // new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_POD_BUTTON)
+     //   .onTrue(new InstantCommand(() -> {
+       //   arm.setArmTarget(PODIUM_ANGLE_RAD);
+        //}));
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_NEXT_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(SUBWOFFER_ANGLE_RAD);
         }));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_SAFE_BUTTON)
-        .onTrue(new InstantCommand(() -> {
-          arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);
-        }));
+   // new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_SPEAKER_SAFE_BUTTON)
+     //   .onTrue(new InstantCommand(() -> {
+       //   arm.setArmTarget(SAFE_ZONE_ANGLE_RAD);
+        //}));
     // Amp and Intake Buttons
     new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_AMP_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(AMP_ANGLE_RAD);
         }));
-    new JoystickButton(manipulatorController, Constants.OI.Manipulator.RAISE_TO_GROUND_BUTTON)
+    new JoystickButton(manipulatorController, Constants.OI.Manipulator.LOWER_TO_GROUND_BUTTON)
         .onTrue(new InstantCommand(() -> {
           arm.setArmTarget(INTAKE_ANGLE_RAD);
         }));
