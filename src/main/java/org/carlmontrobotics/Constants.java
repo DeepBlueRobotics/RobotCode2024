@@ -175,8 +175,8 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(16.5);
-			public static final double trackWidth = Units.inchesToMeters(23.25);
+			public static final double wheelBase = Units.inchesToMeters(16.75);
+			public static final double trackWidth = Units.inchesToMeters(23.75);
 
 			public static final Translation2d locationFL = new Translation2d(-trackWidth, wheelBase);
 			public static final Translation2d locationFR = new Translation2d(trackWidth, wheelBase);
