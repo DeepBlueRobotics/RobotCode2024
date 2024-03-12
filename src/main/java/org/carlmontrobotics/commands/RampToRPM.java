@@ -13,6 +13,7 @@ public class RampToRPM extends Command {
     //intake until sees game peice or 4sec has passed
     private final double rpm;
     private final IntakeShooter intake;
+    private Timer timer;
 
     public RampToRPM(IntakeShooter intake, double rpm) {
         addRequirements(this.intake = intake);
@@ -22,6 +23,8 @@ public class RampToRPM extends Command {
     @Override
     public void initialize() {
       intake.setRPMOutake(rpm);
+      timer.reset();
+      timer.start();
     }
 
 
@@ -38,6 +41,6 @@ public class RampToRPM extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return intake.isWithinTolerance();
+      return intake.isWithinTolerance() || timer.hasElapsed(1.5);
     }
 }

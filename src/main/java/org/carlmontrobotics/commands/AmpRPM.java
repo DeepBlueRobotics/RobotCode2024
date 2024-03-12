@@ -4,12 +4,9 @@
 
 package org.carlmontrobotics.commands;
 
-
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
-
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.IntakeShooter;
-import static org.carlmontrobotics.Constants.IntakeShoot.*;
+import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
