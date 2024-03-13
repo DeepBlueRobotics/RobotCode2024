@@ -24,7 +24,6 @@ public class Intake extends Command {
     @Override
     public void initialize() {
       intake.setRPMIntake(INTAKE_RPM);
-      intake.setCurrentLimit(60);
       timer.reset();
       timer.start();
     }
@@ -49,7 +48,6 @@ public class Intake extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
-    intake.resetCurrentLimit();
     timer.stop();
   }
 

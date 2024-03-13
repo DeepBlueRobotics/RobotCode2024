@@ -28,7 +28,11 @@ public class PassToOutake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    intake.setRPMIntake(PASS_RPM);
+    intake.setMaxIntake(-1);
+    if (intake.getOutakeRPM()<=PASS_RPM){
+      intake.setRPMOutake(PASS_RPM);
+    }
+    intake.setCurrentLimit(60);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +44,7 @@ public class PassToOutake extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
+    intake.resetCurrentLimit();
     // intake.stopOutake();
   }
 
