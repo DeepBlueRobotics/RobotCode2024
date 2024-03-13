@@ -82,7 +82,7 @@ public final class Constants {
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
 		public static final double INTAKE_RPM = -6500;
-		public static final double INTAKE_SLOWDOWN_RPM = -1500;
+		public static final double INTAKE_SLOWDOWN_RPM = -500;
 
 		public static final double PASS_RPM = -8000;
 
