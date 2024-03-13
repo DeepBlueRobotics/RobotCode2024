@@ -59,7 +59,7 @@ public class TeleopArm extends Command {
 
     double goalArmRad = goalState.position + speeds * deltaT;//speed*time = dist
 
-    goalArmRad = MathUtil.clamp(goalArmRad, UPPER_ANGLE_LIMIT_RAD, LOWER_ANGLE_LIMIT_RAD);
+    goalArmRad = MathUtil.clamp(goalArmRad,  LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD) ;
     goalArmRad = MathUtil.clamp(goalArmRad, armSubsystem.getArmPos() + Math.pow(armSubsystem.getMaxVelRad(),2)/MAX_FF_ACCEL_RAD_P_S,
         armSubsystem.getArmPos() - Math.pow(armSubsystem.getMaxVelRad(),2)/MAX_FF_ACCEL_RAD_P_S);
         
