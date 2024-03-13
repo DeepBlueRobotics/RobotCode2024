@@ -42,7 +42,7 @@ public class TeleopEffector extends Command {
   @Override
   public void execute() {
     intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
-    intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    intake.setRPMOutake(-MANUAL_RPM_MAX * joystick.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

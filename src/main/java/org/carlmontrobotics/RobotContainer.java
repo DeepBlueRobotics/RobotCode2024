@@ -21,7 +21,7 @@ import org.carlmontrobotics.commands.*;
 
 import static org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.Driver;
-import org.carlmontrobotics.Constants.OI.Manipulator;
+import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 //wpi
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -101,6 +101,30 @@ public class RobotContainer {
   }
 
   private void setBindingsManipulator() {
+    /* /Eject also for AMP/ */
+    new JoystickButton(manipulatorController, Manipulator.EJECT_BUTTON).onTrue(new Eject(intakeShooter));
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
+
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+      .onTrue(
+        new PassToOutake(intakeShooter)
+      );
+ axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+      .onFalse(
+        new InstantCommand(intakeShooter::stopOutake, intakeShooter)
+      );
+
+  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+      .onTrue(
+        new Intake(intakeShooter)
+      );  
+
+  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+      .onTrue(
+        new Intake(intakeShooter)
+      );
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
     //Xbox right joy Y axis -> raw Arm control
@@ -112,12 +136,13 @@ public class RobotContainer {
     //Xbox Y button -> Eject rpm
 
     /*/Multi-commands/*/
+    /*
     axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
         new Intake(intakeShooter)
       ));
-    /*/Shooting/*/
+    /*//*/
     new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka podium
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
@@ -139,7 +164,7 @@ public class RobotContainer {
         //new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
         new Eject(intakeShooter)
       ));
-    /*/Singulars/*/
+    /*//*/
     new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_POS)
       .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
     new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
@@ -151,7 +176,7 @@ public class RobotContainer {
     // new JoystickButton(manipulatorController, Button.kLeftStick.value)
     //   .onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
 
-
+*/
     //TODO: ask charles if passing in controller is okay
   }
 

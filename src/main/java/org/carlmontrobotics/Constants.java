@@ -94,7 +94,7 @@ public final class Constants {
 		public static final double EJECT_RPM_INTAKE = 2550;
 		public static final double EJECT_RPM_OUTAKE = 2550;
 
-		public static final double MANUAL_RPM_MAX = 10000;
+		public static final double MANUAL_RPM_MAX = 9500;
 
 
 		public static final double RPM_TOLERANCE = 200;
@@ -349,6 +349,10 @@ public final class Constants {
 			//Xbox right bumper button -> SAFE  Speaker pos , Fire
 			//Xbox X button -> goto Intake pos
 			//Xbox Y button -> Eject rpm
+			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
+			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
+			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
+			public static final int AMP_BUTTON = Button.kRightBumper.value;
 			public static final Axis INTAKE_AX = Axis.kRightTrigger;
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
 			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
