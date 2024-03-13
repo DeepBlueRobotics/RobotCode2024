@@ -76,7 +76,7 @@ public class Arm extends SubsystemBase {
     private ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);;
 
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
-    private static TrapezoidProfile.State setpoint;
+    private TrapezoidProfile.State setpoint = getCurrentArmState();
 
     private TrapezoidProfile armProfile;
     private TrapezoidProfile.State goalState = new TrapezoidProfile.State(0, 0);// TODO: update pos later
