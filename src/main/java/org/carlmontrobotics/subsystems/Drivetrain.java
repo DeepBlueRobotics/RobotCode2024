@@ -204,8 +204,10 @@ public class Drivetrain extends SubsystemBase {
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d());
+        kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
 
-        SmartDashboard.putNumber("biggoal", 0);
+        // Setup autopath builder
+        configurePPLAutoBuilder();
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
@@ -250,11 +252,6 @@ public class Drivetrain extends SubsystemBase {
         
 
         {
-           kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
-
-           // Setup autopath builder
-           configurePPLAutoBuilder();
-
             SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
             SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
@@ -304,27 +301,27 @@ public class Drivetrain extends SubsystemBase {
     
    public void configurePPLAutoBuilder(){
      AutoBuilder.configureHolonomic(
-      () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
-      (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
-      this::getSpeeds, //chassisSpeed supplier
-      (ChassisSpeeds cs) -> drive(cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond),
-      new HolonomicPathFollowerConfig(
-        new PIDConstants(2.8, 0., 0., driveIzone), //translation (drive) pid vals
-        new PIDConstants(58.474, 0., 0., turnIzone), //rotation pid vals
+    () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
+    (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
+    this::getSpeeds, //chassisSpeed supplier
+    (ChassisSpeeds cs) -> drive(cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond),
+    new HolonomicPathFollowerConfig(
+        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
+        new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
         maxSpeed,
         swerveRadius,
         Auto.replanningConfig,
         Robot.robot.getPeriod()//robot period
-      ),
-      () -> {
-        // Boolean supplier that controls when the path will be mirrored for the red alliance
-        // This will flip the path being followed to the red side of the field.
-        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent())
-            return alliance.get() == DriverStation.Alliance.Red;
-        //else:
-        return false;
+    ),
+    () -> {
+    // Boolean supplier that controls when the path will be mirrored for the red alliance
+    // This will flip the path being followed to the red side of the field.
+    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent())
+        return alliance.get() == DriverStation.Alliance.Red;
+    //else:
+    return false;
       },
       this
     );

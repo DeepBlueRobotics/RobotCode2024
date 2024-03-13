@@ -137,6 +137,10 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
+    public void resetCurrentLimit() {
+        intakeMotor.setSmartCurrentLimit(20);
+    }
+
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0, outakeFeedforward.calculate(rpm/60.0));
     }

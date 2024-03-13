@@ -190,9 +190,9 @@ public class RobotContainer {
 
     //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
     ////CREATE COMMANDS FROM PATHS
-    autoCommands = (Command[]) autoPaths.stream().map(
+    autoCommands = autoPaths.stream().map(
       (PathPlannerPath path) -> AutoBuilder.followPath(path)
-        ).collect(Collectors.toList()).toArray();
+        ).collect(Collectors.toList()).toArray(Command[]::new);
 
     //}end
   }
