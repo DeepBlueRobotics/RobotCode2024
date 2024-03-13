@@ -297,6 +297,14 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(SwerveModuleState[] moduleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, maxSpeed);
+        for (int i = 0; i < 4; i++) {
+            SmartDashboard.putNumber("moduleIn" + Integer.toString(i), moduleStates[i].angle.getDegrees());
+            moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
+            Rotation2d.fromDegrees(modules[i].getModuleAngle()));
+            SmartDashboard.putNumber("moduleOT" + Integer.toString(i), moduleStates[i].angle.getDegrees());
+
+            modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
+        }
     }
     
    public void configurePPLAutoBuilder(){
