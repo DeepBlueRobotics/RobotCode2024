@@ -131,11 +131,11 @@ public final class Constants {
 
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(105);
+		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(90);
 
-		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(24);//touching the base of the speaker
-		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(24);//touching the white line
-		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(24);//touching the safe pad on the stage
+		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);//touching the base of the speaker
+		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);//touching the white line
+		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);//touching the safe pad on the stage
 
 		// PID, Feedforward, Trapezoid
 		public static final double kP = 5.7938;
