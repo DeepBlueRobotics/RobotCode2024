@@ -45,13 +45,14 @@ public final class Constants {
 	public static final double g = 9.81; // meters per second squared
 
 	public static final class Led {
-		public static final int ledLength = 5;
+		public static final int ledLength = 1000;//lower doesn't work but higher does
+		public static final int ledPort = 5;
 
 		public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
 		public static final Color8Bit detectNote = new Color8Bit(250,140,3);
 		public static final Color8Bit holding = new Color8Bit(0,250,0);
 		public static final Color8Bit ejectColor = new Color8Bit(250,250,0);
-		public static final int ledPort = 0;
+		
 		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
 		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
 		public static final Color8Bit intakeouttakeColor = new Color8Bit(0,255,9); //intake and outtake (both) = green
@@ -103,9 +104,6 @@ public final class Constants {
 		public static final double EJECT_TIME_SECS = 5.;
 		public static final double EJECT_MIN_SECS = 1.25;
 		public static final double INTAKE_TIME_SECS = 4.;
-
-		public static final int ledLength = 85;
-		public static final int ledPort = 85;
         public static final double ledDefaultColorRestoreTime = 3;
 	    public static final Color defaultColor = new Color(0, 0, 200);
         public static final Color pickupSuccessColor = new Color(0, 200, 0);
@@ -347,8 +345,8 @@ public final class Constants {
 			//Xbox right bumper button -> SAFE  Speaker pos , Fire
 			//Xbox X button -> goto Intake pos
 			//Xbox Y button -> Eject rpm
-			public static final int INTAKE = Axis.kRightTrigger.value;
-			public static final int AMP = Axis.kLeftTrigger.value;
+			public static final Axis INTAKE_AX = Axis.kRightTrigger;
+			public static final Axis AMP_AX = Axis.kLeftTrigger;
 			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
 			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
 			public static final int SPEAKER_POS = Button.kA.value;
