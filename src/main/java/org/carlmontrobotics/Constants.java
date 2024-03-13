@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -84,7 +85,7 @@ public final class Constants {
 			public static final double[] drivekP = {2.8, 2.8, 2.8, 2.8}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
-			public static final boolean[] driveInversion = {false, false, false, false};
+			public static final boolean[] driveInversion = {true, false, true, false};
 			public static final boolean[] turnInversion = {true, true, true, true};
 			// kS
 			public static final double[] kForwardVolts = {0.26744, 0.31897, 0.27967, 0.2461};
