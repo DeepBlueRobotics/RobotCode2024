@@ -70,7 +70,7 @@ public final class Constants {
 		public static final double[] kV = { /* /Intake/ */0.064142, /* /Outake/ */0.077913 };
 		public static final double[] kA = { /* /Intake/ */0.0074649, /* /Outake/ */0.05289 };
 		public static final int INTAKE_PORT = 9; // port
-		public static final int OUTAKE_PORT = 1; // port
+		public static final int OUTAKE_PORT = 10; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
 		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
 		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
