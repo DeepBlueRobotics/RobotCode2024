@@ -179,22 +179,6 @@ public class Arm extends SubsystemBase {
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
 
-        double currP = SmartDashboard.getNumber("set kP", kP);
-        double KP = kP;
-        if (currP != KP) {
-            armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
-            KP = currP;
-
-        }
-
-        double currD = SmartDashboard.getNumber("set kD", kD);
-        double KD = kD;
-        if (currD != KD) {
-            armPIDMaster.setD(SmartDashboard.getNumber("set kD", currD));
-            KD = currD;
-
-        }
-
         // double currG = SmartDashboard.getNumber("set kG", kG);
         // double KG = kG;
         // if (currG != KG) {
@@ -299,7 +283,7 @@ public class Arm extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return new SequentialCommandGroup(new InstantCommand(() -> armMasterEncoder.setZeroOffset(0)), routine.dynamic(direction));
     }
-    
+
     // #region Getters
 
     public double getArmPos() {

@@ -24,6 +24,7 @@ import org.carlmontrobotics.Constants.OI.Driver;
 import org.carlmontrobotics.Constants.OI.Manipulator;
 //wpi
 import edu.wpi.first.math.geometry.Rotation2d;
+
 //controllers
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -109,7 +110,7 @@ public class RobotContainer {
     //Xbox Y button -> Eject rpm
 
     /*/Multi-commands/*/
-    new JoystickButton(manipulatorController, OI.Manipulator.INTAKE)
+    axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
       .onTrue(new ParallelCommandGroup(
         new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
         new Intake(intakeShooter)
@@ -131,7 +132,7 @@ public class RobotContainer {
         new WaitCommand(1),
         new InstantCommand(intakeShooter::stopOutake)
       ));
-    new JoystickButton(manipulatorController, OI.Manipulator.AMP)//MELEE ATTACK
+    axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
       .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
         new Eject(intakeShooter)
@@ -266,5 +267,18 @@ public class RobotContainer {
     return (Math.abs(axOut) <= OI.JOY_THRESH) ? 0.0 : axOut;
   }
 
+    /**
+   * Returns a new instance of Trigger based on the given Joystick and Axis objects.
+   * The Trigger is triggered when the absolute value of the stick value on the specified axis
+   * exceeds a minimum threshold value.
+   * 
+   * @param stick The Joystick object to retrieve stick value from.
+   * @param axis The Axis object to retrieve value from the Joystick.
+   * @return A new instance of Trigger based on the given Joystick and Axis objects.
+   * @throws NullPointerException if either stick or axis is null.
+   */
+  private Trigger axisTrigger(GenericHID controller, Axis axis) {
+    return new Trigger(() -> Math.abs(getStickValue(controller, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);
+  }
 
 }
