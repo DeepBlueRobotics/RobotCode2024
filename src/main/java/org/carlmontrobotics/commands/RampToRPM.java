@@ -33,10 +33,13 @@ public class RampToRPM extends Command {
     public void execute() {
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    intake.setCurrentLimit(20);
+    timer.stop();
+    //resets to defaultColor
+  }
 
     // Returns true when the command should end.
     @Override
