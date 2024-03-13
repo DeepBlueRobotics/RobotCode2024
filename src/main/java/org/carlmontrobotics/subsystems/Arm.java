@@ -103,7 +103,7 @@ public class Arm extends SubsystemBase {
         // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
         // SmartDashboard.putNumber("set kG", kG);
         // // armPIDMaster.setD(SmartDashboard.getNumber("set kD", kD));
-        // armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
+        armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
         // // armPID.setTolerance(posToleranceRad, velToleranceRadPSec);
 
         armPIDMaster.setFeedbackDevice(armMasterEncoder);
