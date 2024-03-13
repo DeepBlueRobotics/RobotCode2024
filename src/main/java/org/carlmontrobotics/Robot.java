@@ -4,17 +4,29 @@
 
 package org.carlmontrobotics;
 
+import static org.carlmontrobotics.Constants.IntakeShoot.DS_DEPTH_INCHES;
+import static org.carlmontrobotics.Constants.IntakeShoot.INTAKE_DISTANCE_SENSOR_PORT;
+import static org.carlmontrobotics.Constants.IntakeShoot.OUTAKE_DISTANCE_SENSOR_PORT;
+
+import com.playingwithfusion.TimeOfFlight;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+
+
 public class Robot extends TimedRobot {
+
   private Command m_autonomousCommand;
+  public static Robot robot;
 
   private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
+    robot = this;
     m_robotContainer = new RobotContainer();
   }
 
