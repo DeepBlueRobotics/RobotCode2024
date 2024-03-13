@@ -29,8 +29,8 @@ public final class Constants {
 
 			//#region Subsystem Constants
 
-			public static final double wheelBase = Units.inchesToMeters(16.5);
-			public static final double trackWidth = Units.inchesToMeters(23.25);
+			public static final double wheelBase = Units.inchesToMeters(16.75);
+			public static final double trackWidth = Units.inchesToMeters(23.75);
 			// "swerveRadius" is the distance from the center of the robot to one of the modules
 			public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
 			// The gearing reduction from the drive motor controller to the wheels
