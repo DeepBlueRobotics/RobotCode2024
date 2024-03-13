@@ -48,6 +48,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -78,6 +80,12 @@ public class Arm extends SubsystemBase {
     private double lastArmPos;
 
     private boolean isArmEncoderConnected = false;
+
+    private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RadiansPerSecond.of(0));
+    private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
+
+    private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
 
     public Arm() {
         // weird math stuff
@@ -124,6 +132,16 @@ public class Arm extends SubsystemBase {
         setpoint = getCurrentArmState();
         goalState = getCurrentArmState();
         setArmTarget(goalState.position);
+
+        //sysid
+            //sysid buttons on smartdashbaord; sysid tab name is arm sysid
+        sysIdTab.add("quasistatic forward", sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
+        sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        SmartDashboard.putNumber("arm initial position", goalState.position);
+        SmartDashboard.putNumber("set arm angle (rad)", 0);
+        //sysid
 
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
@@ -252,7 +270,36 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setVoltage(volts.in(Volts));
 
     }
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(2), Seconds.of(10));
 
+    public void logMotor(SysIdRoutineLog log) {
+        log.motor("armMotorMaster")
+                .voltage(voltage.mut_replace(
+                        armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(),
+                        Volts))
+                .angularVelocity(velocity.mut_replace(
+                        armMasterEncoder.getVelocity(),
+                        RadiansPerSecond))
+                .angularPosition(distance.mut_replace(
+                        armMasterEncoder.getPosition(),
+                        Radians));
+    }
+
+    private final SysIdRoutine routine = new SysIdRoutine(
+            defaultSysIdConfig,
+            new SysIdRoutine.Mechanism(
+                    this::driveMotor,
+                    this::logMotor,
+                    this));
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return new SequentialCommandGroup(new InstantCommand(() -> armMasterEncoder.setZeroOffset(0)), routine.quasistatic(direction));
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return new SequentialCommandGroup(new InstantCommand(() -> armMasterEncoder.setZeroOffset(0)), routine.dynamic(direction));
+    }
+    
     // #region Getters
 
     public double getArmPos() {
