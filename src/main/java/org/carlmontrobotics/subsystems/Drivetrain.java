@@ -204,7 +204,6 @@ public class Drivetrain extends SubsystemBase {
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d());
-        kinematics = new SwerveDriveKinematics(locationFL, locationFR, locationBL, locationBR);
 
         // Setup autopath builder
         configurePPLAutoBuilder();
@@ -252,11 +251,29 @@ public class Drivetrain extends SubsystemBase {
         
 
         {
+            
             SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
             SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
             SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
        }
+        // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
+        SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        // // // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
+        // // // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
+        SmartDashboard.putBoolean("Field Oriented", fieldOriented);
+        SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
+        //SmartDashboard.putNumber("Compass Offset", compassOffset);
+        SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
+        gyro.isMagneticDisturbance());
+    //     SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+    //    SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+    //      SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+    //     SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 
     }
 
