@@ -84,10 +84,10 @@ public final class Constants {
 		public static final double INTAKE_RPM = -6500;
 		public static final double INTAKE_SLOWDOWN_RPM = -1500;
 
-		public static final double PASS_RPM = -6000;
+		public static final double PASS_RPM = -8000;
 
 		public static final double AMP_RPM = 1500;
-		public static final double SPEAKER_RPM = 2000;
+		public static final double SPEAKER_RPM = 4500;
 		public static final double SUBWOOFER_RPM = 6000;//WTF FAB ISSUE
 		public static final double SAFE_RPM = 6000;//WTF FAB ISSUE
 
