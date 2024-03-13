@@ -50,7 +50,6 @@ public class IntakeShooter extends SubsystemBase {
         new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE], kA[OUTTAKE]);
 
     private double goalOutakeRPM = outakeEncoder.getVelocity();
-    private static boolean rumble = false;
 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
@@ -65,7 +64,7 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[INTAKE]);
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
-        SmartDashboard.putBoolean("Rumbling?", rumble);
+        SmartDashboard.putData("Intake Shooter",this);
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -118,14 +117,7 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("intakeDetctsNote", intakeDetectsNote());
-        SmartDashboard.putBoolean("outakeDetctsNote", outakeDetectsNote());
-        SmartDashboard.putNumber("Outake Velocity", outakeEncoder.getVelocity());
-        SmartDashboard.putNumber("Intake Velocity", intakeEncoder.getVelocity());
-        SmartDashboard.putNumber("distance sensor intake", getGamePieceDistanceIntake());
-        SmartDashboard.putNumber("distance sensor outake", getGamePieceDistanceOutake());
-        SmartDashboard.putBoolean("DSIntake Sees piece", intakeDetectsNote());
-        SmartDashboard.putBoolean("DSOutake Sees piece", outakeDetectsNote());
+        
     }
 
     public void setCurrentLimit(int limit) {
@@ -169,6 +161,8 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
         sendableBuilder.addBooleanProperty("Intake Distance Sensor Detects Notes", this::intakeDetectsNote, null);
         sendableBuilder.addBooleanProperty("Outake Distance Sensor Detects Notes", this::outakeDetectsNote ,null);
+        sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceIntake, null);
+        sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceOutake, null);
     }
     /*
     public double calculateRPMAtDistance() {
