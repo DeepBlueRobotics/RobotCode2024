@@ -98,7 +98,7 @@ public final class Constants {
 		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
 
 		public static final boolean INTAKE_MOTOR_INVERSION = false;
-		public static final boolean OUTAKE_MOTOR_INVERSION = true;
+		public static final boolean OUTAKE_MOTOR_INVERSION = false;
 
 		public static final double EJECT_TIME_SECS = 5.;
 		public static final double EJECT_MIN_SECS = 1.25;
