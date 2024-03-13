@@ -26,6 +26,7 @@ public class Intake extends Command {
       intake.setRPMIntake(INTAKE_RPM);
       timer.reset();
       timer.start();
+      intake.setCurrentLimit(60);
     }
 
 
@@ -49,6 +50,7 @@ public class Intake extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     timer.stop();
+    intake.resetCurrentLimit();
   }
 
   // Returns true when the command should end.
