@@ -2,6 +2,10 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/arm SysID/dynamic backward": "Command",
+      "/Shuffleboard/arm SysID/dynamic forward": "Command",
+      "/Shuffleboard/arm SysID/quasistatic backward": "Command",
+      "/Shuffleboard/arm SysID/quasistatic forward": "Command",
       "/SmartDashboard/Arm": "Subsystem"
     }
   },

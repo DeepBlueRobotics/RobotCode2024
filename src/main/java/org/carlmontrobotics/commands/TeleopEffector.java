@@ -14,7 +14,7 @@ import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -41,8 +41,16 @@ public class TeleopEffector extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double joystickVal = joystick.getAsDouble();
+    if(joystickVal >= 0) {
+      intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    } else if(joystickVal<=0) {
+      intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    } 
+    /*
     intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
-    intake.setRPMOutake(-MANUAL_RPM_MAX * joystick.getAsDouble());
+    intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    */
   }
 
   // Called once the command ends or is interrupted.
