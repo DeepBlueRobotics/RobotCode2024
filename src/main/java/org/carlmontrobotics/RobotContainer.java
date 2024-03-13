@@ -136,7 +136,7 @@ public class RobotContainer {
       ));
     axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
       .onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
+        //new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
         new Eject(intakeShooter)
       ));
     /*/Singulars/*/

@@ -32,7 +32,6 @@ public class PassToOutake extends Command {
     if (intake.getOutakeRPM()<=PASS_RPM){
       intake.setRPMOutake(PASS_RPM);
     }
-    intake.setCurrentLimit(60);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

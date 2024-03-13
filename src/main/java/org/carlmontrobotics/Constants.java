@@ -94,7 +94,7 @@ public final class Constants {
 		public static final double EJECT_RPM_INTAKE = 2550;
 		public static final double EJECT_RPM_OUTAKE = 2550;
 
-		public static final double MANUAL_RPM_MAX = 4000;
+		public static final double MANUAL_RPM_MAX = 10000;
 
 
 		public static final double RPM_TOLERANCE = 200;
