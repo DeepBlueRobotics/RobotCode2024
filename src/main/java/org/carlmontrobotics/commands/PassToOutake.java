@@ -49,7 +49,7 @@ public class PassToOutake extends Command {
     intake.stopIntake();
     intake.resetCurrentLimit();
     timer.stop();
-    // intake.stopOutake();
+    intake.stopOutake();
   }
 
   // Returns true when the command should end.
