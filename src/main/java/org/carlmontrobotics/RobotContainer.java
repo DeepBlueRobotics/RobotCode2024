@@ -95,7 +95,9 @@ public class RobotContainer {
       () -> ProcessedAxisValue(manipulatorController, Axis.kRightY)
     ));
   }
-  private void setBindingsDriver() {}
+  private void setBindingsDriver() {
+    new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
+  }
 
   private void setBindingsManipulator() {
     //NEW BINDINGS(easier for manipulator)
