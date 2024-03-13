@@ -132,7 +132,8 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-       
+       outakeMotor.set(-1);
+       SmartDashboard.putNumber("Applied voltage",outakeMotor.getAppliedOutput()*outakeMotor.getBusVoltage());
        
 
     }
