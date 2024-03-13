@@ -113,7 +113,7 @@ public class RobotContainer {
 
     /*/Multi-commands/*/
     axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
-      .onTrue(new ParallelCommandGroup(
+      .onTrue(new SequentialCommandGroup(
         new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
         new Intake(intakeShooter)
       ));
@@ -273,7 +273,7 @@ public class RobotContainer {
    * Returns a new instance of Trigger based on the given Joystick and Axis objects.
    * The Trigger is triggered when the absolute value of the stick value on the specified axis
    * exceeds a minimum threshold value.
-   * 
+   *
    * @param stick The Joystick object to retrieve stick value from.
    * @param axis The Axis object to retrieve value from the Joystick.
    * @return A new instance of Trigger based on the given Joystick and Axis objects.
