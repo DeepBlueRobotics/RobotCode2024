@@ -36,7 +36,7 @@ public class RampToRPM extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.setCurrentLimit(20);
+    intake.resetCurrentLimit();
     timer.stop();
     //resets to defaultColor
   }
