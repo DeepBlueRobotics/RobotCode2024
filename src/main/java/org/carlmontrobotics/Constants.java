@@ -85,7 +85,7 @@ public final class Constants {
 		public static final double INTAKE_RPM = 7500;
 		public static final double INTAKE_SLOWDOWN_RPM = 1000;
 
-		public static final double PASS_RPM = 8000;
+		public static final double PASS_RPM = 5800;
 
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 4500;
