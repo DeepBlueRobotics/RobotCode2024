@@ -14,7 +14,7 @@ public class Intake extends Command {
     private final Timer timer = new Timer();
     private final IntakeShooter intake;
 
-    private double endAt =0;
+    private double endAt = 0;
     private final double keepIntakingFor = .2;
 
     public Intake(IntakeShooter intake) {
@@ -38,6 +38,7 @@ public class Intake extends Command {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
       }
       if (intake.outakeDetectsNote() ) {
+        Timer.delay(keepIntakingFor);
         intake.setRPMIntake(0.0);
       }
     }
