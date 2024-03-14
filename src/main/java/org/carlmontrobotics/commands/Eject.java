@@ -22,7 +22,7 @@ public class Eject extends Command {
       timer.reset();
       timer.start();
       intakeShooter.setMaxOutakeOverload(1);
-      intakeShooter.setMaxIntake(-1);
+      intakeShooter.setMaxIntake(1);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,6 +42,6 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.hasElapsed(INTAKE_TIME_SECS-2) && !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
+    return (timer.hasElapsed(2) || !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
   }
 }

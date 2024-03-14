@@ -67,7 +67,7 @@ public final class Constants {
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 		//0.0001184
-		public static final double[] kP = { /* /Intake/ */ 0.0003184, /* /Outake/ */0.0001 };
+		public static final double[] kP = { /* /Intake/ */ 0.001184, /* /Outake/ */0.0001 };
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kS = { /* /Intake/ */0.52174, /* /Outake/ */0.29753 * 2 };
@@ -82,9 +82,9 @@ public final class Constants {
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
-		public static final double INTAKE_RPM = 7500;
-		public static final double INTAKE_SLOWDOWN_RPM = 1000;
-
+		public static final double INTAKE_RPM = 6500;
+		public static final double INTAKE_SLOWDOWN_RPM = 500;
+		public static final double MAX_SECONDS_OVERLOAD = 2.0;
 		public static final double PASS_RPM = 5800;
 
 		public static final double AMP_RPM = 1500;

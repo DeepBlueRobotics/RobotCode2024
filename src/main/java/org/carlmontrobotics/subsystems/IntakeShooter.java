@@ -18,6 +18,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -43,6 +44,8 @@ public class IntakeShooter extends SubsystemBase {
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
+    private Timer timer = new Timer();
+    private int count = 0;
 
     private final SimpleMotorFeedforward intakeFeedforward =
         new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE], kA[INTAKE]);
@@ -72,6 +75,9 @@ public class IntakeShooter extends SubsystemBase {
     //checking whether RPM is within tolerance
     public boolean isWithinTolerance(){
         return outakeEncoder.getVelocity()<goalOutakeRPM+RPM_TOLERANCE && goalOutakeRPM-RPM_TOLERANCE<outakeEncoder.getVelocity();
+    }
+    private double countPeridoic() {
+        return count/timer.get();
     }
     //---------------------------------------------------------------------------------------------------
     private double getGamePieceDistanceIntake() {
@@ -119,8 +125,8 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        outakeMotor.setSmartCurrentLimit(40);
-        outakeMotor.set(1);
+        count++;
+        SmartDashboard.putNumber("robot period", countPeridoic());
     }
 
     public void setCurrentLimit(int limit) {
@@ -140,8 +146,8 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void resetCurrentLimit() {
-        intakeMotor.setSmartCurrentLimit(20);
-        outakeMotor.setSmartCurrentLimit(20);
+        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
+        outakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
         //intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
 
@@ -171,8 +177,6 @@ public class IntakeShooter extends SubsystemBase {
     public void initSendable(SendableBuilder sendableBuilder) {
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
-        sendableBuilder.addBooleanProperty("Intake Distance Sensor Detects Notes", this::intakeDetectsNote, null);
-        sendableBuilder.addBooleanProperty("Outake Distance Sensor Detects Notes", this::outakeDetectsNote ,null);
         sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceIntake, null);
         sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceOutake, null);
     }

@@ -23,10 +23,10 @@ public class Intake extends Command {
 
     @Override
     public void initialize() {
-      intake.setRPMIntake(INTAKE_RPM-1000);
+      intake.setRPMIntake(INTAKE_RPM);
       timer.reset();
       timer.start();
-      intake.setCurrentLimit(60);
+      intake.setCurrentLimit(20);
     }
 
 
@@ -35,10 +35,10 @@ public class Intake extends Command {
     public void execute() {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM-500);
+        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
       }
       if (intake.outakeDetectsNote() ) {
-        Timer.delay(keepIntakingFor);
+        //Timer.delay(keepIntakingFor);
         intake.setRPMIntake(0.0);
       }
     }
@@ -55,6 +55,6 @@ public class Intake extends Command {
   @Override
   public boolean isFinished() {
     return (intake.intakeDetectsNote() && !intake.outakeDetectsNote())
-      || timer.hasElapsed(INTAKE_TIME_SECS);
+      || timer.hasElapsed(MAX_SECONDS_OVERLOAD);
   }
 }
