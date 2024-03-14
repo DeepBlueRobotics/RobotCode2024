@@ -107,23 +107,23 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
     new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
+    
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
       .onTrue(
         new PassToOutake(intakeShooter)
       );
- axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
       .onFalse(
         new InstantCommand(intakeShooter::stopOutake, intakeShooter)
       );
 
-  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
       .onTrue(
         new Intake(intakeShooter)
-      );  
-
-  axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-      .onTrue(
-        new Intake(intakeShooter)
+      );
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+      .onFalse(
+        new InstantCommand(intakeShooter::stopIntake, intakeShooter)
       );
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
