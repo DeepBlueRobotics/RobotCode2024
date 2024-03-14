@@ -63,6 +63,7 @@ public final class Constants {
 
 	public static final class Effectorc {
 		// PID values
+
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 
@@ -81,18 +82,18 @@ public final class Constants {
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
-		public static final double INTAKE_RPM = -6500;
-		public static final double INTAKE_SLOWDOWN_RPM = -500;
+		public static final double INTAKE_RPM = 7500;
+		public static final double INTAKE_SLOWDOWN_RPM = 1000;
 
-		public static final double PASS_RPM = -8000;
+		public static final double PASS_RPM = 8000;
 
 		public static final double AMP_RPM = 1500;
 		public static final double SPEAKER_RPM = 4500;
 		public static final double SUBWOOFER_RPM = 6000;//WTF FAB ISSUE
 		public static final double SAFE_RPM = 6000;//WTF FAB ISSUE
 
-		public static final double EJECT_RPM_INTAKE = 2550;
-		public static final double EJECT_RPM_OUTAKE = 2550;
+		public static final double EJECT_RPM_INTAKE = -2550;
+		public static final double EJECT_RPM_OUTAKE = -2550;
 
 		public static final double MANUAL_RPM_MAX = 9500;
 
@@ -100,8 +101,8 @@ public final class Constants {
 		public static final double RPM_TOLERANCE = 200;
 		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
 
-		public static final boolean INTAKE_MOTOR_INVERSION = false;
-		public static final boolean OUTAKE_MOTOR_INVERSION = false;
+		public static final boolean INTAKE_MOTOR_INVERSION = true;
+		public static final boolean OUTAKE_MOTOR_INVERSION = true;
 
 		public static final double EJECT_TIME_SECS = 5.;
 		public static final double EJECT_MIN_SECS = 1.25;

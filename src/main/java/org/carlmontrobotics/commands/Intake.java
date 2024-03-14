@@ -39,9 +39,6 @@ public class Intake extends Command {
       }
       if (intake.outakeDetectsNote() ) {
         intake.setRPMIntake(0.0);
-        if (endAt==0) {
-          endAt = Timer.getFPGATimestamp()+keepIntakingFor;
-        }
       }
     }
 
@@ -56,8 +53,7 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && !intake.outakeDetectsNote()
-        && (endAt - Timer.getFPGATimestamp() <= 0))
+    return (intake.intakeDetectsNote() && !intake.outakeDetectsNote())
       || timer.hasElapsed(INTAKE_TIME_SECS);
   }
 }

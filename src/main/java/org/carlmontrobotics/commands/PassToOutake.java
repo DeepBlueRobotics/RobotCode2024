@@ -31,15 +31,15 @@ public class PassToOutake extends Command {
   public void initialize(){
     timer.reset();
     timer.start();
-    intake.setRPMOutake(PASS_RPM);
+    intake.setMaxOutake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setRPMOutake(PASS_RPM);
-    if (intake.getOutakeRPM()<=PASS_RPM){
-      intake.setMaxIntake(-1);
+    //intake.setMaxOutake();
+    if (intake.getOutakeRPM()>=SPEAKER_RPM){
+      intake.setMaxIntake(1);
     }
   }
 

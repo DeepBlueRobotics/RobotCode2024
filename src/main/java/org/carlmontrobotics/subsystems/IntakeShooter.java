@@ -128,9 +128,12 @@ public class IntakeShooter extends SubsystemBase {
         intakeMotor.set(1 * direction);
 
     }
+    public void setMaxOutake() {
+     outakeMotor.set(1);   
+    }
 
     public void resetCurrentLimit() {
-        intakeMotor.setSmartCurrentLimit(20);
+        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
 
     public void setRPMOutake(double rpm) {

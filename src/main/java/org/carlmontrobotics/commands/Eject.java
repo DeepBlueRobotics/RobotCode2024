@@ -16,10 +16,12 @@ public class Eject extends Command {
     }
     @Override
     public void initialize() {
-      intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
-      intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
+      // intakeShooter.setRPMIntake(EJECT_RPM_INTAKE);
+      // intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
       timer.reset();
       timer.start();
+      intakeShooter.setMaxOutake();
+      intakeShooter.setMaxIntake(-1);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +39,7 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( timer.hasElapsed(EJECT_MIN_SECS) && !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote() )
-      || timer.hasElapsed(EJECT_TIME_SECS);
+    return ( timer.hasElapsed(EJECT_TIME_SECS) && !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote() )
+      || timer.hasElapsed(EJECT_MIN_SECS);
   }
 }

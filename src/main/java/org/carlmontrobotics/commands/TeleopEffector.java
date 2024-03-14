@@ -45,6 +45,7 @@ public class TeleopEffector extends Command {
     if(joystickVal >= 0) {
       intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
     } else if(joystickVal<=0) {
+      intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
       intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
     } 
     /*
