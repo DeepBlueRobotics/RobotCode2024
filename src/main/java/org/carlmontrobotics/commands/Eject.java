@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class Eject extends Command {
     //eject until no more game peice
     private final IntakeShooter intakeShooter;
+
     private final Timer timer = new Timer();
     public Eject(IntakeShooter intakeShooter) {
         addRequirements(this.intakeShooter = intakeShooter);
@@ -20,7 +21,7 @@ public class Eject extends Command {
       // intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
       timer.reset();
       timer.start();
-      intakeShooter.setMaxOutake();
+      intakeShooter.setMaxOutakeOverload(1);
       intakeShooter.setMaxIntake(-1);
     }
 
@@ -34,12 +35,13 @@ public class Eject extends Command {
     intakeShooter.stopIntake();
     intakeShooter.stopOutake();
     timer.stop();
+    intakeShooter.resetCurrentLimit();
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( timer.hasElapsed(EJECT_TIME_SECS) && !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote() )
-      || timer.hasElapsed(EJECT_MIN_SECS);
+    return (timer.hasElapsed(INTAKE_TIME_SECS-2) && !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
   }
 }

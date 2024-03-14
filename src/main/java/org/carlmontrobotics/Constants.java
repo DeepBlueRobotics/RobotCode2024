@@ -66,8 +66,8 @@ public final class Constants {
 
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
-
-		public static final double[] kP = { /* /Intake/ */ 0.0001184, /* /Outake/ */0.0001 };
+		//0.0001184
+		public static final double[] kP = { /* /Intake/ */ 0.0003184, /* /Outake/ */0.0001 };
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kS = { /* /Intake/ */0.52174, /* /Outake/ */0.29753 * 2 };
@@ -102,7 +102,7 @@ public final class Constants {
 		public static final double SPEAKER_HEIGHT_INCHES = 83; // inches
 
 		public static final boolean INTAKE_MOTOR_INVERSION = true;
-		public static final boolean OUTAKE_MOTOR_INVERSION = true;
+		public static final boolean OUTAKE_MOTOR_INVERSION = false;
 
 		public static final double EJECT_TIME_SECS = 5.;
 		public static final double EJECT_MIN_SECS = 1.25;

@@ -30,7 +30,6 @@ public class PassToOutake extends Command {
   @Override
   public void initialize(){
     timer.reset();
-    timer.start();
     intake.setMaxOutake();
   }
 
@@ -38,8 +37,9 @@ public class PassToOutake extends Command {
   @Override
   public void execute() {
     //intake.setMaxOutake();
-    if (intake.getOutakeRPM()>=SPEAKER_RPM){
+    if (intake.getOutakeRPM()>=3900) {//SPEAKER_RPM){
       intake.setMaxIntake(1);
+      timer.start();
     }
   }
 

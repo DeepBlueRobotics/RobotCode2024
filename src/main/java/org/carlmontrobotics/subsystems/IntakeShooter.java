@@ -65,6 +65,8 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
         SmartDashboard.putData("Intake Shooter",this);
+        intakeEncoder.setAverageDepth(4);
+        intakeEncoder.setMeasurementPeriod(8);
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -117,7 +119,8 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+        outakeMotor.setSmartCurrentLimit(40);
+        outakeMotor.set(1);
     }
 
     public void setCurrentLimit(int limit) {
@@ -128,12 +131,18 @@ public class IntakeShooter extends SubsystemBase {
         intakeMotor.set(1 * direction);
 
     }
+    public void setMaxOutakeOverload(int direction) {
+        outakeMotor.setSmartCurrentLimit(60);
+        outakeMotor.setSmartCurrentLimit(1*direction);
+    }
     public void setMaxOutake() {
-     outakeMotor.set(1);   
+     outakeMotor.set(-1);   
     }
 
     public void resetCurrentLimit() {
-        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
+        intakeMotor.setSmartCurrentLimit(20);
+        outakeMotor.setSmartCurrentLimit(20);
+        //intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
 
     public void setRPMOutake(double rpm) {
