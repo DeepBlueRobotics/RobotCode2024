@@ -69,7 +69,9 @@ public class RobotContainer {
   private Command[] autoCommands;
 
   private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-      "Left-Straight"
+      "Left-Straight",
+      "Center-Straight",
+      "Right-Straight"
   };
 
   public RobotContainer() {
