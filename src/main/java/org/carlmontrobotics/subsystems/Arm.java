@@ -163,9 +163,9 @@ public class Arm extends SubsystemBase {
         // );
 
         //SmartDashboard.putNumber("KP", );
-        // smart dahsboard stuff
-        SmartDashboard.putBoolean("ArmPIDAtSetpoint", armAtSetpoint());
-        SmartDashboard.putNumber("Arm Goal Pos (rad)", goalState.position);
+        // // smart dahsboard stuff
+        // SmartDashboard.putBoolean("ArmPIDAtSetpoint", armAtSetpoint());
+        // SmartDashboard.putNumber("Arm Goal Pos (rad)", goalState.position);
         // SmartDashboard.putBoolean("ArmProfileFinished",
         // armProfile.isFinished(armProfileTimer.get()));
         // posToleranceRad = SmartDashboard.getNumber("Arm Tolerance Pos",
@@ -173,7 +173,7 @@ public class Arm extends SubsystemBase {
         // velToleranceRadPSec= SmartDashboard.getNumber("Arm Tolerance Vel",
         // velToleranceRadPSec);
 
-        SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
+        // SmartDashboard.putNumber("InternalArmVelocity", armMasterEncoder.getVelocity());
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
@@ -351,6 +351,9 @@ public class Arm extends SubsystemBase {
         builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
         builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
         //builder.addDoubleProperty("set arm angle (rad)", () -> armMasterEncoder.getPosition(), setArmTarget());
+        builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
+        builder.addDoubleProperty("Arm Goal Pos (rad)", () -> goalState.position, null);
+        builder.addDoubleProperty("InternalArmVelocity", () -> armMasterEncoder.getVelocity(), null);
 
     }
 }
