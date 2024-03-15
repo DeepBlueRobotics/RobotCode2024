@@ -127,6 +127,7 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         count++;
         SmartDashboard.putNumber("robot period", countPeridoic());
+        //setMaxOutake();
     }
 
     public void setCurrentLimit(int limit) {
@@ -142,7 +143,7 @@ public class IntakeShooter extends SubsystemBase {
         outakeMotor.setSmartCurrentLimit(1*direction);
     }
     public void setMaxOutake() {
-     outakeMotor.set(-1);   
+     outakeMotor.set(1);   
     }
 
     public void resetCurrentLimit() {

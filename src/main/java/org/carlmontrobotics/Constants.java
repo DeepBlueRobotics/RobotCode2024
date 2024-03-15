@@ -83,7 +83,7 @@ public final class Constants {
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
 		public static final double INTAKE_RPM = 6500;
-		public static final double INTAKE_SLOWDOWN_RPM = 500;
+		public static final double INTAKE_SLOWDOWN_RPM = 1000;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
 		public static final double PASS_RPM = 5800;
 
@@ -238,7 +238,7 @@ public final class Constants {
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
 			// Order of modules: (FL, FR, BL, BR)
-			public static final double[] drivekP = {2.8, 2.8, 2.8, 2.8}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
+			public static final double[] drivekP = {0.95, 0.95, 0.95, 0.95}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {true, false, true, false};

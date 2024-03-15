@@ -15,7 +15,7 @@ public class Intake extends Command {
     private final IntakeShooter intake;
 
     private double endAt = 0;
-    private final double keepIntakingFor = 0.0;
+    private final double keepIntakingFor = 0.2;
 
     public Intake(IntakeShooter intake) {
         addRequirements(this.intake = intake);
@@ -23,7 +23,7 @@ public class Intake extends Command {
 
     @Override
     public void initialize() {
-      intake.setRPMIntake(INTAKE_RPM);
+      intake.setRPMIntake(INTAKE_RPM+1000);
       timer.reset();
       timer.start();
       intake.setCurrentLimit(20);
@@ -38,7 +38,7 @@ public class Intake extends Command {
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
       }
       if (intake.outakeDetectsNote() ) {
-        //Timer.delay(keepIntakingFor);
+       // Timer.delay(keepIntakingFor);
         intake.setRPMIntake(0.0);
       }
     }
