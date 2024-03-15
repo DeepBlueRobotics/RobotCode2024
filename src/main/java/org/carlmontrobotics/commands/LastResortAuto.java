@@ -27,8 +27,7 @@ public class LastResortAuto extends Command {
  
   
   public LastResortAuto(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
-  addRequirements(drivetrain);
+  addRequirements(this.drivetrain = drivetrain);
   
   
 
