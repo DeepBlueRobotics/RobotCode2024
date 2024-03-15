@@ -75,6 +75,7 @@ public class RobotContainer {
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
   //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
   private List<Command> autoCommands = new ArrayList<Command>();
+  private boolean hasSetupAutos = false;
 
   private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
       "Left-Straight",
@@ -321,9 +322,13 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    setupAutos();
-    //get the funny ports on the robot
-    for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);//set up blank list
+    if (!hasSetupAutos){
+      setupAutos();
+      //get the funny ports on the robot
+      for(int a = 0; a < autoSelectors.length; a++) 
+        autoSelectors[a] = new DigitalInput(a);//set up blank list
+      hasSetupAutos=true;
+    }
 
     //check which ones are short-circuiting
       for(int i = 2; i < autoSelectors.length; i++) { /* skip index 0, reserved for null auto */
