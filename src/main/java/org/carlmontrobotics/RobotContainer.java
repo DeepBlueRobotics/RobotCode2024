@@ -340,12 +340,15 @@ public class RobotContainer {
       );
       // Prevent the path from being flipped if the coordinates are already correct
       path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+         path.flipPath();
+      }
 
       
       //NOTHING
       autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
       //RAW FORWARD command
-      autoCommands.add(1, new PrintCommand("Gavin, where's the raw auto??"));
+      autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
       autoCommands.add(2, AutoBuilder.followPath(path));
     }
@@ -361,15 +364,15 @@ public class RobotContainer {
       */
       hasSetupAutos=true;
     }
-    //return autoCommands.get(2); //hard-coded PP straight auto
-    Integer autoIndex = autoSelector.getSelected();
+    return autoCommands.get(1); //hard-coded PP straight auto
+    // Integer autoIndex = autoSelector.getSelected();
 
-    if (autoIndex!=null && autoIndex!=0){
-      new PrintCommand("Running selected auto: "+autoSelector.toString());
-      return autoCommands.get(autoIndex.intValue());
-    }
-    new PrintCommand("No auto :(");
-    return null;
+    // if (autoIndex!=null && autoIndex!=0){
+    //   new PrintCommand("Running selected auto: "+autoSelector.toString());
+    //   return autoCommands.get(autoIndex.intValue());
+    // }
+    // new PrintCommand("No auto :(");
+    // return null;
 
     /*
 
