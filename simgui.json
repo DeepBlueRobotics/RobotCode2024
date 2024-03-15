@@ -2,11 +2,13 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Auto Chooser Tab/SendableChooser[0]": "String Chooser",
       "/Shuffleboard/arm SysID/dynamic backward": "Command",
       "/Shuffleboard/arm SysID/dynamic forward": "Command",
       "/Shuffleboard/arm SysID/quasistatic backward": "Command",
       "/Shuffleboard/arm SysID/quasistatic forward": "Command",
-      "/SmartDashboard/Arm": "Subsystem"
+      "/SmartDashboard/Arm": "Subsystem",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
   "NetworkTables Info": {
