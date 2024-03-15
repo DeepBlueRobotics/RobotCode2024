@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO);
+    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -127,7 +127,8 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         count++;
         SmartDashboard.putNumber("robot period", countPeridoic());
-        //setMaxOutake();
+        
+        setMaxOutake();
     }
 
     public void setCurrentLimit(int limit) {

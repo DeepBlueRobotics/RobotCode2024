@@ -74,16 +74,17 @@ public class RobotContainer {
   /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
   //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
-  private List<Command> autoCommands;
+  private List<Command> autoCommands = new ArrayList<Command>();
 
   private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
       "Left-Straight",
       "Center-Straight",
       "Right-Straight"
   };
+  DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
   public RobotContainer() {
-    setupAutos();
+    
 		setDefaultCommands();
 		setBindingsDriver();
 		setBindingsManipulatorENDEFF();
@@ -320,8 +321,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    setupAutos();
     //get the funny ports on the robot
-    DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
     for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);//set up blank list
 
     //check which ones are short-circuiting
