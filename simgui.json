@@ -1,4 +1,48 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "CANCoder (v6)[0]": {
+        "header": {
+          "open": true
+        }
+      },
+      "CANCoder (v6)[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "CANCoder (v6)[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "CANCoder (v6)[3]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SparkMax[11]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SparkMax[14]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SparkMax[18]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SparkMax[19]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -16,5 +60,20 @@
       "open": true
     },
     "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 338
+        }
+      ]
+    }
   }
 }

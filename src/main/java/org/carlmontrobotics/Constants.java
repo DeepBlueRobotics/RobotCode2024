@@ -311,9 +311,9 @@ public final class Constants {
 
 				// "swerveRadius" is the distance from the center of the robot to one of the modules
 				public static final double turnkP_avg = (turnkP[0]+turnkP[1]+turnkP[2]+turnkP[3])/4;
-				public static final double turnIzone = .01;
+				public static final double turnIzone = .1;
 
-				public static final double driveIzone = .01;
+				public static final double driveIzone = .1;
 
 				public static final class Auto {
 					public static final ReplanningConfig replanningConfig = new ReplanningConfig( /*put in Constants.Drivetrain.Auto*/

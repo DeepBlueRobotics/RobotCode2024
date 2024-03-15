@@ -336,12 +336,12 @@ public class Drivetrain extends SubsystemBase {
      */
      AutoBuilder.configureHolonomic(
     () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
-    (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
+    (Pose2d pose) -> { autoGyroOffset=pose.times(-1); }, //position reset (by subtracting current pos)
     this::getSpeeds, //chassisSpeed supplier
     (ChassisSpeeds cs) -> drive(
             cs.vxMetersPerSecond, 
             -cs.vyMetersPerSecond,
-            /*flipped because robot assumes left is negative, but PP assumes up is positive*/
+            /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
             cs.omegaRadiansPerSecond
     ),
     new HolonomicPathFollowerConfig(
