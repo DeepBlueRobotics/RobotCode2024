@@ -297,11 +297,20 @@ public class RobotContainer {
             currPos,
             currPos.plus(new Transform2d(1,0,new Rotation2d(0)))
     );
-
+    /**
+     * PATHPLANNER SETTINGS
+     * Robot Width (m): .91
+     * Robot Length(m): .94
+     * Max Module Spd (m/s): 4.30
+     * Default Constraints
+     * Max Vel: 1.54, Max Accel: 6.86
+     * Max Angvel: 360, Max AngAccel: 360 (guesses!)
+     */
     // Create the path using the bezier points created above
     PathPlannerPath path = new PathPlannerPath(
             bezierPoints,
-            new PathConstraints(1.54, 6.86, 1.5 * Math.PI, 3 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+            /*m/s, m/s^2, rad/s, rad/s^2 */
+            new PathConstraints(1.54, 6.86, 2 * Math.PI, 2 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
             new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
     // Prevent the path from being flipped if the coordinates are already correct

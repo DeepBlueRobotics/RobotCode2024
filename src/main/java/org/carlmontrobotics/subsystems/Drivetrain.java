@@ -325,6 +325,15 @@ public class Drivetrain extends SubsystemBase {
     }
     
    public void configurePPLAutoBuilder(){
+    /**
+     * PATHPLANNER SETTINGS
+     * Robot Width (m): .91
+     * Robot Length(m): .94
+     * Max Module Spd (m/s): 4.30
+     * Default Constraints
+     * Max Vel: 1.54, Max Accel: 6.86
+     * Max Angvel: 360, Max AngAccel: 180 (guesses!)
+     */
      AutoBuilder.configureHolonomic(
     () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
     (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
