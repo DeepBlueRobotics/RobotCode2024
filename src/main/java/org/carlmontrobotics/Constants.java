@@ -126,7 +126,7 @@ public final class Constants {
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = true;
 
-		public static final double ENCODER_OFFSET_RAD = 2.678; //- 0.6095;
+		public static final double ENCODER_OFFSET_RAD = 0.15235 + 2.08; //- 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
 		// INTAKE_ANGLE = Degrees.to(-1);
@@ -140,21 +140,21 @@ public final class Constants {
 		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);//touching the safe pad on the stage
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 5.7938;
+		public static final double kP = 1.75;//5.7938; // (2 * Math.PI);
 		public static final double kI = 0;
-		public static final double kD = 1.0761 * 1000;
-		public static final double kS = 0.1498;
-		public static final double kG = 0.3489;
-		public static final double kV = 5.7539 / (2 * Math.PI);
-		public static final double kA = 0.9569 / (2 * Math.PI);
+		public static final double kD = 0 * 1000;
+		public static final double kS = 0.80641; //0.1498;
+		public static final double kG = 0.8067; //0.3489;
+		public static final double kV = 5.1201 / (2 * Math.PI);
+		public static final double kA = 0.43308 / (2 * Math.PI);
 		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
-
-		public static final double MIN_VOLTAGE = -3; //-((kS + kG + 1)/12) +2 becaus why not;
-		public static final double MAX_VOLTAGE = 3; //(kS + kG + 1)/12 +2;
+		
+		public static final double MIN_VOLTAGE = -1; //-((kS + kG + 1)/12);
+		public static final double MAX_VOLTAGE = 1; //(kS + kG + 1)/12;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
