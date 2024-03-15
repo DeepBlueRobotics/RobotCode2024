@@ -339,14 +339,14 @@ public class Drivetrain extends SubsystemBase {
         Robot.robot.getPeriod()//robot period
     ),
     () -> {
-    // Boolean supplier that controls when the path will be mirrored for the red alliance
-    // This will flip the path being followed to the red side of the field.
-    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent())
-        return alliance.get() == DriverStation.Alliance.Red;
-    //else:
-    return false;
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
       },
       this
     );
