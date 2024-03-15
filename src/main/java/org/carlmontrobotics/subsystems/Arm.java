@@ -108,6 +108,7 @@ public class Arm extends SubsystemBase {
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
 
+        armPIDMaster.setP(kP);
         // //SmartDashboard.putNumber("set KP", kP);
         // //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
         // SmartDashboard.putNumber("set KP", kP);
@@ -181,22 +182,6 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
-        
-        double currP = SmartDashboard.getNumber("set kP", kP);
-        double KP = kP;
-        if (currP != KP) {
-            armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
-            KP = currP;
-
-        }
-        
-        double currD = SmartDashboard.getNumber("set kD", kD);
-        double KD = kD;
-        if (currD != KD) {
-            armPIDMaster.setD(SmartDashboard.getNumber("set kD", currD));
-            KD = currD;
-
-        }
 
         // double currG = SmartDashboard.getNumber("set kG", kG);
         // double KG = kG;
@@ -349,6 +334,8 @@ public class Arm extends SubsystemBase {
         builder.addDoubleProperty("feedforward volts", () -> armFeedVolts, null);
         builder.addDoubleProperty("pid volts", () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts, null);
         builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
+        builder.addDoubleProperty("setpoint velocity", () -> setpoint.velocity, null);
+
         builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
         //builder.addDoubleProperty("set arm angle (rad)", () -> armMasterEncoder.getPosition(), setArmTarget());
         builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
