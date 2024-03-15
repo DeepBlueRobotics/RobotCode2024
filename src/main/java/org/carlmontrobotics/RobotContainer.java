@@ -295,7 +295,7 @@ public class RobotContainer {
     // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
             currPos,
-            currPos.plus(new Transform2d(1,0,new Rotation2d(0)))
+            currPos.plus(new Transform2d(5,0,new Rotation2d(0)))
     );
     /**
      * PATHPLANNER SETTINGS
