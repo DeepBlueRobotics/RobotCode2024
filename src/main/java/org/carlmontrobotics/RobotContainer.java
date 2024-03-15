@@ -128,10 +128,7 @@ public class RobotContainer {
       intakeShooter,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
-    arm.setDefaultCommand(new TeleopArm(
-      arm,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kRightY)
-    ));
+    
   }
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
@@ -162,6 +159,8 @@ public class RobotContainer {
       .onFalse(
         new InstantCommand(intakeShooter::stopIntake, intakeShooter)
       );
+      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, Math.PI/2));
+      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, -0.427725));
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
     //Xbox right joy Y axis -> raw Arm control

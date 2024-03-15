@@ -4,7 +4,7 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_DRIVE;
+//import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_DRIVE;
 import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_OVERLOAD;
 
 import java.sql.Time;
@@ -25,7 +25,7 @@ public class LastResortAuto extends Command {
   /** Creates a new LastResortAuto. */
   private final Drivetrain drivetrain;
  
-  
+ int MAX_SECONDS_DRIVE = 4;
   public LastResortAuto(Drivetrain drivetrain) {
   addRequirements(this.drivetrain = drivetrain);
   

@@ -74,7 +74,7 @@ public class Arm extends SubsystemBase {
     private TrapezoidProfile.State setpoint = getCurrentArmState();
 
     private TrapezoidProfile armProfile;
-    private TrapezoidProfile.State goalState;
+    private TrapezoidProfile.State goalState =  new TrapezoidProfile.State(0,0);
 
     private double lastMeasuredTime;
     private double lastArmPos;
@@ -178,7 +178,7 @@ public class Arm extends SubsystemBase {
         double currTime = Timer.getFPGATimestamp();
         // SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
-        setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
+        //setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
 
         // double currG = SmartDashboard.getNumber("set kG", kG);
         // double KG = kG;
