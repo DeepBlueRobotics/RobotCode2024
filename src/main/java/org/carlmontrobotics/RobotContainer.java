@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -323,8 +324,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     setupAutos();
     //get the funny ports on the robot
-    for(int a = 0; a < autoSelectors.length; a++) autoSelectors[a] = new DigitalInput(a);//set up blank list
-
+    for(int a = 0; a < autoSelectors.length; a++) {
+      autoSelectors[a] = new DigitalInput(a);//set up blank list
+      SmartDashboard.putBoolean("DIO"+a, autoSelectors[a].get());
+    }
     //check which ones are short-circuiting
       for(int i = 2; i < autoSelectors.length; i++) { /* skip index 0, reserved for null auto */
         if(!autoSelectors[i].get()) {

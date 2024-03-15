@@ -128,7 +128,7 @@ public class IntakeShooter extends SubsystemBase {
         count++;
         SmartDashboard.putNumber("robot period", countPeridoic());
         
-        setMaxOutake();
+       // setMaxOutake();
     }
 
     public void setCurrentLimit(int limit) {
