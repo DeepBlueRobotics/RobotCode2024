@@ -120,7 +120,7 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
     new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
-    
+    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
       .onTrue(
         new PassToOutake(intakeShooter)

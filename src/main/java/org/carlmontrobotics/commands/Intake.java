@@ -16,17 +16,19 @@ public class Intake extends Command {
 
     private double endAt = 0;
     private final double keepIntakingFor = 0.2;
-
+    int increaseAmount = 750;
+    int index = 0;
     public Intake(IntakeShooter intake) {
         addRequirements(this.intake = intake);
     }
 
     @Override
     public void initialize() {
-      intake.setRPMIntake(INTAKE_RPM+1000);
+      intake.setRPMIntake(INTAKE_RPM);
       timer.reset();
       timer.start();
       intake.setCurrentLimit(20);
+      
     }
 
 
@@ -35,7 +37,9 @@ public class Intake extends Command {
     public void execute() {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM);
+        index++;
+        intake.setRPMIntake(0);
+        intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index*increaseAmount);
       }
       if (intake.outakeDetectsNote() ) {
        // Timer.delay(keepIntakingFor);
@@ -54,7 +58,7 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && !intake.outakeDetectsNote())
-      || timer.hasElapsed(MAX_SECONDS_OVERLOAD);
+    return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
+      // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
   }
 }
