@@ -338,7 +338,7 @@ public class Drivetrain extends SubsystemBase {
     () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
     (Pose2d pose) -> { autoGyroOffset=pose; }, //position reset
     this::getSpeeds, //chassisSpeed supplier
-    (ChassisSpeeds cs) -> drive(cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond),
+    (ChassisSpeeds cs) -> drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond),
     new HolonomicPathFollowerConfig(
         new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
         new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
