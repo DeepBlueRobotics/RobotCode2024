@@ -145,9 +145,9 @@ public class RobotContainer {
     // );
 
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0),drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90),drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(270),drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180),drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(270),drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90),drivetrain));
   }
 
   private void setBindingsManipulatorENDEFF() {
@@ -177,9 +177,10 @@ public class RobotContainer {
       );
       new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
       new JoystickButton(manipulatorController, Button.kA.value).onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, GROUND_INTAKE_POS+0.05),
-        new WaitCommand(.5),
-        new MoveToPos(arm, GROUND_INTAKE_POS)));//MoveToPos(arm, GROUND_INTAKE_POS));
+        new MoveToPos(arm, GROUND_INTAKE_POS)
+        //new WaitCommand(.5),
+        //new MoveToPos(arm, GROUND_INTAKE_POS)
+       ));//MoveToPos(arm, GROUND_INTAKE_POS));
       
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control

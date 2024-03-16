@@ -108,7 +108,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         // Calibrate Gyro
-        {
+        {   
+            
             double initTimestamp = Timer.getFPGATimestamp();
             double currentTimestamp = initTimestamp;
             while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
@@ -122,6 +123,7 @@ public class Drivetrain extends SubsystemBase {
                 System.out.println("Calibrating the gyro...");
             }
             gyro.reset();
+            //this.resetFieldOrientation();
             System.out.println("NavX-MXP firmware version: " + gyro.getFirmwareVersion());
             System.out.println("Magnetometer is calibrated: " + gyro.isMagnetometerCalibrated());
         }
