@@ -19,7 +19,7 @@ import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
-import org.carlmontrobotics.Constants.Drivetrainc.Auto;
+import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
 import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;
@@ -352,7 +352,7 @@ public class Drivetrain extends SubsystemBase {
         new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
         maxSpeed,
         swerveRadius,
-        Auto.replanningConfig,
+        Autoc.replanningConfig,
         Robot.robot.getPeriod()//robot period
     ),
     () -> {

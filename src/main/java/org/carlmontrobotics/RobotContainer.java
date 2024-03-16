@@ -12,9 +12,13 @@ import static org.carlmontrobotics.Constants.*;
 import org.carlmontrobotics.Constants.Armc;
 import org.carlmontrobotics.Constants.Effectorc;
 import org.carlmontrobotics.Constants.OI;
+import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
 import org.carlmontrobotics.Constants.OI.*;
 //subsystems
 import org.carlmontrobotics.subsystems.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 //199 files
 import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
@@ -51,17 +55,19 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import com.pathplanner.lib.auto.AutoBuilder;
 //pathplanner
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import static com.pathplanner.lib.auto.AutoBuilder.*;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 //java
 import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,10 +90,12 @@ public class RobotContainer {
   private SendableChooser<Integer> autoSelector = new SendableChooser<Integer>();
 
   private boolean hasSetupAutos = false;
-  private final String[] autoNames = new String[] { /* These are assumed to be equal to the file names */
-      "Left-Straight",
-      "middle-simple",
-      "right-simple"
+  private final String[] autoNames = new String[] { 
+    /* These are assumed to be equal to the AUTO ames in pathplanner */
+    "Left-Amp",
+    "Center-Straight",
+    "Middle-Ram"
+      
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -316,19 +324,31 @@ public class RobotContainer {
   private void setupAutos() {
     ////CREATING PATHS from files
     {
-      ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
-      for (String name : autoNames) {
-        autoPaths.add(PathPlannerPath.fromPathFile(name));
+      for (int i=0;i<autoNames.length;i++){
+        String name = autoNames[i];
+        
+        autoCommands.add(new SequentialCommandGroup(
+          AutoBuilder.pathfindToPose(
+            // PathPlannerAuto.getStaringPoseFromAutoFile(name), 
+            PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
+            Autoc.pathConstraints ),
+          new PathPlannerAuto(name)
+        ));
       }
+      
+      // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
+      // for (String name : autoNames) {
+      //   autoPaths.add(PathPlannerPath.fromPathFile(name));
+      // }
 
 
-      //AutoBuilder is setup in the drivetrain.
+      // //AutoBuilder is setup in the drivetrain.
 
-      //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
-      ////CREATE COMMANDS FROM PATHS
-      autoCommands = autoPaths.stream().map(
-        (PathPlannerPath path) -> AutoBuilder.followPath(path)
-      ).collect(Collectors.toList());
+      // //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
+      // ////CREATE COMMANDS FROM PATHS
+      // autoCommands = autoPaths.stream().map(
+      //   (PathPlannerPath path) -> AutoBuilder.followPath(path)
+      // ).collect(Collectors.toList());
 
     }
     
@@ -355,7 +375,7 @@ public class RobotContainer {
       PathPlannerPath path = new PathPlannerPath(
               bezierPoints,
               /*m/s, m/s^2, rad/s, rad/s^2 */
-              new PathConstraints(1.54, 6.86, 2 * Math.PI, 2 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+              Autoc.pathConstraints,
               new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
       );
       // Prevent the path from being flipped if the coordinates are already correct
@@ -364,13 +384,14 @@ public class RobotContainer {
          path.flipPath();
       }
 
-      
       //NOTHING
       autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
       //RAW FORWARD command
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
-      autoCommands.add(2, AutoBuilder.followPath(path));
+      autoCommands.add(2, AutoBuilder.followPath(path));//no events so just use path instead of auto
+      
+      // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
     }
   }
 

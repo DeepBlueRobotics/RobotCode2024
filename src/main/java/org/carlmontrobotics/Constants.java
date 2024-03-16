@@ -19,6 +19,7 @@ import org.carlmontrobotics.lib199.Limelight;
 import org.carlmontrobotics.lib199.Limelight.Transform;
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
 
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -316,13 +317,14 @@ public final class Constants {
 
 				public static final double driveIzone = .1;
 
-				public static final class Auto {
+				public static final class Autoc {
 					public static final ReplanningConfig replanningConfig = new ReplanningConfig( /*put in Constants.Drivetrain.Auto*/
 						false, //replan at start of path if robot not at start of path?
 						false, //replan if total error surpasses total error/spike threshold?
 						1.5, //total error threshold in meters that will cause the path to be replanned
 						.8 //error spike threshold, in meters, that will cause the path to be replanned
 					);
+					public static final PathConstraints pathConstraints = new PathConstraints(1.54, 6.86, 2 * Math.PI, 2 * Math.PI); // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
 				}
 				//#endregion
 		}
