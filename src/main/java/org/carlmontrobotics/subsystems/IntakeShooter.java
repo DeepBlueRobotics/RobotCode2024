@@ -84,7 +84,7 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches(intakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;
     }
     public void motorSetOutake(int speed) {
-        outakeMotor.set(1);
+        outakeMotor.set(speed);
     }
     private double getGamePieceDistanceOutake() {
         return Units.metersToInches(OutakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;

@@ -20,6 +20,8 @@ import org.carlmontrobotics.subsystems.*;
 import org.carlmontrobotics.commands.*;
 
 import static org.carlmontrobotics.Constants.OI;
+import static org.carlmontrobotics.Constants.Armc.AMP_ANGLE_RAD;
+import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -128,6 +130,7 @@ public class RobotContainer {
       intakeShooter,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
+  // arm.setDefaultCommand(new TeleopArm(arm, null));
     
   }
   private void setBindingsDriver() {
@@ -167,8 +170,11 @@ public class RobotContainer {
       .onFalse(
         new InstantCommand(intakeShooter::stopIntake, intakeShooter)
       );
-      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, Math.PI/2));
-      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, -0.427725));
+      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
+      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new SequentialCommandGroup(
+        new MoveToPos(arm, GROUND_INTAKE_POS+0.05),
+        new WaitCommand(.5),
+        new MoveToPos(arm, GROUND_INTAKE_POS)));//MoveToPos(arm, GROUND_INTAKE_POS));
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
     //Xbox right joy Y axis -> raw Arm control

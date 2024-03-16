@@ -134,6 +134,7 @@ public final class Constants {
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(90);
+		public static final double GROUND_INTAKE_POS = -0.427725;
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);//touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);//touching the white line
@@ -150,7 +151,7 @@ public final class Constants {
 		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
-		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
+		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728/4; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
 		public static final double MIN_VOLTAGE = -0.7; //-((kS + kG + 1)/12);

@@ -122,7 +122,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setIZone(IZONE_RAD);
 
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            Math.PI,
+            Math.PI*.5,
             MAX_FF_ACCEL_RAD_P_S);
         //^ worst case scenario
         //armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
@@ -344,5 +344,10 @@ public class Arm extends SubsystemBase {
 
     public double getMaxVelRad(){
         return armFeed.maxAchievableVelocity(MAX_VOLTAGE, getArmPos(), getArmVel());
+    }
+
+    public void setDefaultCommand(TeleopArm teleopArm, Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
     }
 }
