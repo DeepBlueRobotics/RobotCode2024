@@ -84,10 +84,10 @@ public class TeleopDrive extends Command {
     if (Math.abs(rotateClockwise) <= Constants.OI.JOY_THRESH) rotateClockwise = 0.0;
     else rotateClockwise *= maxRCW;
 
-    // double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
-    // double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
-    double driveMultiplier = kNormalDriveSpeed;
-    double rotationMultiplier = kNormalDriveRotation;
+    double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
+    double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
+    // double driveMultiplier = kNormalDriveSpeed;
+    // double rotationMultiplier = kNormalDriveRotation;
 
     forward *= driveMultiplier;
     strafe *= driveMultiplier;

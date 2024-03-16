@@ -1,5 +1,7 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
+
 import org.carlmontrobotics.subsystems.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +23,6 @@ public class SetToGroud extends Command {
     }
     @Override
     public boolean isFinished() {
-        return arm.getArmPos() <= -0.32;
+        return arm.getArmPos() <= GROUND_INTAKE_POS+0.15;
     }
 }

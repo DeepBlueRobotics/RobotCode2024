@@ -134,28 +134,29 @@ public final class Constants {
 
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(90);
+		public static final double AMP_ANGLE_RAD = 1.28;
+		public static final double GROUND_INTAKE_POS = -0.427725;
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);//touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);//touching the white line
 		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);//touching the safe pad on the stage
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 0.75;//5.7938; // (2 * Math.PI);
+		public static final double kP = 0.45;//5.7938; // (2 * Math.PI);
 		public static final double kI = 0;
 		public static final double kD = 0 * 1000;
-		public static final double kS = 1.6; //0.1498;
+		public static final double kS = 1.6/2; //0.1498;
 		public static final double kG = 0.8067; //0.3489;
 		public static final double kV = 5.1201 / (2 * Math.PI);
 		public static final double kA = 0.43308 / (2 * Math.PI);
 		public static final double IZONE_RAD = 0;
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
-		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
+		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728/4; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
-		public static final double MIN_VOLTAGE = -0.7; //-((kS + kG + 1)/12);
-		public static final double MAX_VOLTAGE = 0.7; //(kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE = -0.5; //-((kS + kG + 1)/12);
+		public static final double MAX_VOLTAGE = 0.5; //(kS + kG + 1)/12;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
@@ -240,7 +241,7 @@ public final class Constants {
 			// Forward: 1.72, 1.71, 1.92, 1.94
 			// Backward: 1.92, 1.92, 2.11, 1.89
 			// Order of modules: (FL, FR, BL, BR)
-			public static final double[] drivekP = {1.5, 1.5, 1.5, 1.5}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
+			public static final double[] drivekP = {3.5, 3.5, 3.5, 3.5}; //{1.82/100, 1.815/100, 2.015/100, 1.915/100};
 			public static final double[] drivekI = {0, 0, 0, 0};
 			public static final double[] drivekD = {0, 0, 0, 0};
 			public static final boolean[] driveInversion = {true, false, true, false};
@@ -266,7 +267,7 @@ public final class Constants {
 			// PID values are listed in the order kP, kI, and kD
 			public static final double[] xPIDController = {4, 0.0, 0.0};
 			public static final double[] yPIDController = {4, 0.0, 0.0};
-			public static final double[] thetaPIDController = {0.10, 0.0, 0.001};
+			public static final double[] thetaPIDController = {0.05, 0.0, 0.001};
 
 			public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZeroDeg, driveInversion, reversed, driveModifier, turnInversion);
 
@@ -362,7 +363,7 @@ public final class Constants {
 			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
 			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
 			public static final int SPEAKER_POS = Button.kA.value;
-			public static final int INTAKE_POS = Button.kX.value;
+			//public static final int INTAKE_POS = Button.kX.value;
 			public static final int EJECT_RPM = Button.kY.value;
 			public static final int RAISE_CLIMBER = Button.kLeftStick.value;
 			public static final int LOWER_CLIMBER = Button.kRightStick.value;

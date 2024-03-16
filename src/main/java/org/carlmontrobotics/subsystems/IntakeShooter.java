@@ -84,7 +84,7 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches(intakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;
     }
     public void motorSetOutake(int speed) {
-        outakeMotor.set(1);
+        outakeMotor.set(speed);
     }
     private double getGamePieceDistanceOutake() {
         return Units.metersToInches(OutakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;
@@ -148,7 +148,7 @@ public class IntakeShooter extends SubsystemBase {
     public void setMaxOutake() {
      outakeMotor.set(1);   
     }
-
+    
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
         outakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
@@ -172,7 +172,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void stopIntake() {
-        setRPMIntake(0);
+        outakeMotor.set(0);
     }
     public double getIntakeRPM() {
         return intakeEncoder.getVelocity();
