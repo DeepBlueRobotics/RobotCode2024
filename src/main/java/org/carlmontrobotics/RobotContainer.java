@@ -135,6 +135,14 @@ public class RobotContainer {
   }
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
+    
+    new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new ParallelCommandGroup(
+      new InstantCommand(()->drivetrain.setFieldOriented(false)),
+      new PrintCommand("Setting to ROBOT ORIENTED!!\nRO\nRO\nRO\n"))
+    ).onFalse(new ParallelCommandGroup(
+      new InstantCommand(()->drivetrain.setFieldOriented(true)),
+      new PrintCommand("Setting to FIELD FORI!!\nFO\nFO\nFO\n"))
+    );
   }
 
   private void setBindingsManipulatorENDEFF() {

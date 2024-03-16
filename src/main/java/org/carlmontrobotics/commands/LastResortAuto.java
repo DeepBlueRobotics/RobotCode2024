@@ -35,9 +35,9 @@ public class LastResortAuto extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
-    drivetrain.drive(1, 0, 0);
     prev = drivetrain.getFieldOriented();
     drivetrain.setFieldOriented(false);
+    drivetrain.drive(-1, 0, 0);
   }
   
 
