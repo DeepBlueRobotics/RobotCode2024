@@ -148,7 +148,7 @@ public class IntakeShooter extends SubsystemBase {
     public void setMaxOutake() {
      outakeMotor.set(1);   
     }
-
+    
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
         outakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
@@ -172,7 +172,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void stopIntake() {
-        setRPMIntake(0);
+        outakeMotor.set(0);
     }
     public double getIntakeRPM() {
         return intakeEncoder.getVelocity();

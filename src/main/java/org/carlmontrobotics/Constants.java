@@ -133,7 +133,7 @@ public final class Constants {
 
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
-		public static final double AMP_ANGLE_RAD = Units.degreesToRadians(90);
+		public static final double AMP_ANGLE_RAD = 1.28;
 		public static final double GROUND_INTAKE_POS = -0.427725;
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);//touching the base of the speaker
@@ -297,7 +297,7 @@ public final class Constants {
 
 			public static  double kNormalDriveSpeed = 1; // Percent Multiplier
 			public static  double kNormalDriveRotation = 0.5; // Percent Multiplier
-			public static  double kSlowDriveSpeed = 0.4; // Percent Multiplier
+			public static  double kSlowDriveSpeed = 0.5; // Percent Multiplier
 			public static  double kSlowDriveRotation = 0.250; // Percent Multiplier
 			public static  double kAlignMultiplier = 1D/3D;
 			public static final double kAlignForward = 0.6;
@@ -361,7 +361,7 @@ public final class Constants {
 			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
 			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
 			public static final int SPEAKER_POS = Button.kA.value;
-			public static final int INTAKE_POS = Button.kX.value;
+			//public static final int INTAKE_POS = Button.kX.value;
 			public static final int EJECT_RPM = Button.kY.value;
 			public static final int RAISE_CLIMBER = Button.kLeftStick.value;
 			public static final int LOWER_CLIMBER = Button.kRightStick.value;
