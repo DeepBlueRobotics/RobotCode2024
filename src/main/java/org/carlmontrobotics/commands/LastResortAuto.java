@@ -4,6 +4,7 @@
 
 package org.carlmontrobotics.commands;
 
+//import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_DRIVE;
 import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_OVERLOAD;
 
 import java.sql.Time;
@@ -24,8 +25,8 @@ public class LastResortAuto extends Command {
   /** Creates a new LastResortAuto. */
   private final Drivetrain drivetrain;
   private boolean prev;
- 
-  
+
+ int MAX_SECONDS_DRIVE = 4;
   public LastResortAuto(Drivetrain drivetrain) {
     addRequirements(this.drivetrain = drivetrain);
   }
@@ -39,7 +40,7 @@ public class LastResortAuto extends Command {
     drivetrain.setFieldOriented(false);
     drivetrain.drive(-1, 0, 0);
   }
-  
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

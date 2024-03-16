@@ -71,10 +71,10 @@ public class Arm extends SubsystemBase {
     private double armFeedVolts;//for SendableBuilder
     private final ArmFeedforward armFeed = new ArmFeedforward(kS, kG, kV, kA);
     private final SparkPIDController armPIDMaster = armMotorMaster.getPIDController();
-    private static TrapezoidProfile.State setpoint;
+    private TrapezoidProfile.State setpoint = getCurrentArmState();
 
     private TrapezoidProfile armProfile;
-    private TrapezoidProfile.State goalState;
+    private TrapezoidProfile.State goalState =  new TrapezoidProfile.State(0,0);
 
     private double lastMeasuredTime;
     private double lastArmPos;
@@ -102,6 +102,7 @@ public class Arm extends SubsystemBase {
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
 
+        armPIDMaster.setP(kP);
         // //SmartDashboard.putNumber("set KP", kP);
         // //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
         // SmartDashboard.putNumber("set KP", kP);
@@ -177,7 +178,7 @@ public class Arm extends SubsystemBase {
         double currTime = Timer.getFPGATimestamp();
         // SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
-        setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
+        //setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
 
         // double currG = SmartDashboard.getNumber("set kG", kG);
         // double KG = kG;
@@ -229,11 +230,14 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference(Units.radiansToRotations(setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
         SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
-
+    public void stopArm() {
+        armMotorMaster.set(0);
+        
+    }
     /**
      *
      * @param targetPos in radians
@@ -315,6 +319,27 @@ public class Arm extends SubsystemBase {
 
     public double getMaxAccelRad(){
         return armFeed.maxAchievableAcceleration(MAX_VOLTAGE, getArmPos(), getArmVel());
+    }
+    public double getMaxVelocity(){
+        return TRAP_CONSTRAINTS.maxVelocity;
+    }
+    public void initSendable(SendableBuilder builder){
+        builder.addDoubleProperty("armKp", () -> armPIDMaster.getP(), armPIDMaster::setP);
+        builder.addDoubleProperty("armKd", () -> armPIDMaster.getD(), armPIDMaster::setD);
+        builder.addDoubleProperty("Current Position", () -> getArmPos(), null);
+        builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
+        builder.addDoubleProperty("Arm Goal Pos (rad)", () -> goalState.position, null);
+        builder.addBooleanProperty("ArmEncoderConnected", () -> isArmEncoderConnected, null);
+        builder.addDoubleProperty("feedforward volts", () -> armFeedVolts, null);
+        builder.addDoubleProperty("pid volts", () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts, null);
+        builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
+        builder.addDoubleProperty("setpoint velocity", () -> setpoint.velocity, null);
+
+        builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
+        //builder.addDoubleProperty("set arm angle (rad)", () -> armMasterEncoder.getPosition(), setArmTarget());
+        builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
+        builder.addDoubleProperty("Arm Goal Pos (rad)", () -> goalState.position, null);
+        builder.addDoubleProperty("InternalArmVelocity", () -> armMasterEncoder.getVelocity(), null);
     }
 
     public double getMaxVelRad(){
