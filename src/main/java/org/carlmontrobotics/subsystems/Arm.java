@@ -230,11 +230,14 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference(Units.radiansToRotations(setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
         SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
-
+    public void stopArm() {
+        armMotorMaster.set(0);
+        
+    }
     /**
      *
      * @param targetPos in radians

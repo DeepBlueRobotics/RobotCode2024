@@ -140,10 +140,10 @@ public final class Constants {
 		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);//touching the safe pad on the stage
 
 		// PID, Feedforward, Trapezoid
-		public static final double kP = 1.75;//5.7938; // (2 * Math.PI);
+		public static final double kP = 0.75;//5.7938; // (2 * Math.PI);
 		public static final double kI = 0;
 		public static final double kD = 0 * 1000;
-		public static final double kS = 0.80641; //0.1498;
+		public static final double kS = 1.6; //0.1498;
 		public static final double kG = 0.8067; //0.3489;
 		public static final double kV = 5.1201 / (2 * Math.PI);
 		public static final double kA = 0.43308 / (2 * Math.PI);
@@ -153,8 +153,8 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
 		
-		public static final double MIN_VOLTAGE = -1; //-((kS + kG + 1)/12);
-		public static final double MAX_VOLTAGE = 1; //(kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE = -0.7; //-((kS + kG + 1)/12);
+		public static final double MAX_VOLTAGE = 0.7; //(kS + kG + 1)/12;
 
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
