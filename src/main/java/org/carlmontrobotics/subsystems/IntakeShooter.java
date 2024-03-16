@@ -70,6 +70,8 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putData("Intake Shooter",this);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
+       // setMaxOutakeOverload(1);
+
     }
     //---------------------------------------------------------------------------------------------------
     //checking whether RPM is within tolerance
@@ -129,8 +131,8 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         count++;
         SmartDashboard.putNumber("robot period", countPeridoic());
-        
-       // setMaxOutake();
+      // setMaxOutake();
+
     }
 
     public void setCurrentLimit(int limit) {
@@ -142,8 +144,8 @@ public class IntakeShooter extends SubsystemBase {
 
     }
     public void setMaxOutakeOverload(int direction) {
-        outakeMotor.setSmartCurrentLimit(60);
-        outakeMotor.setSmartCurrentLimit(1*direction);
+        outakeMotor.setSmartCurrentLimit(40);
+        //outakeMotor.setSmartCurrentLimit(1*direction);
     }
     public void setMaxOutake() {
      outakeMotor.set(1);   
