@@ -185,6 +185,7 @@ public class RobotContainer {
       );
       new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
       new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
+      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new IntakeTesting(intakeShooter));
         //new WaitCommand(.5),
         //new MoveToPos(arm, GROUND_INTAKE_POS)
        //MoveToPos(arm, GROUND_INTAKE_POS));
