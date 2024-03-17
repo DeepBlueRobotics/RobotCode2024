@@ -184,11 +184,10 @@ public class RobotContainer {
         new InstantCommand(intakeShooter::stopIntake, intakeShooter)
       );
       new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
-      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, GROUND_INTAKE_POS)
+      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
         //new WaitCommand(.5),
         //new MoveToPos(arm, GROUND_INTAKE_POS)
-       ));//MoveToPos(arm, GROUND_INTAKE_POS));
+       //MoveToPos(arm, GROUND_INTAKE_POS));
       
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control

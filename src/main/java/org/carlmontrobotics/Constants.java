@@ -135,7 +135,8 @@ public final class Constants {
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double AMP_ANGLE_RAD = 1.28;
-		public static final double GROUND_INTAKE_POS = -0.427725;
+		//-0.427725
+		public static final double GROUND_INTAKE_POS = Units.degreesToRadians(-24.5068373);
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);//touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);//touching the white line
