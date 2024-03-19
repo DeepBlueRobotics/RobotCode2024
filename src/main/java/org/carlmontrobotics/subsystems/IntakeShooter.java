@@ -130,7 +130,7 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         count++;
-        SmartDashboard.putNumber("robot period", countPeridoic());
+        
       // setMaxOutake();
 
     }
@@ -185,6 +185,7 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
         sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceIntake, null);
         sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceOutake, null);
+        sendableBuilder.addDoubleProperty("Period time", this::countPeridoic,null);
     }
     /*
     public double calculateRPMAtDistance() {

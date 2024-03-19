@@ -138,7 +138,7 @@ public class RobotContainer {
       intakeShooter,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
-  // arm.setDefaultCommand(new TeleopArm(arm, null));
+  
     
   }
   private void setBindingsDriver() {
