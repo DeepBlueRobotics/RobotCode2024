@@ -20,7 +20,7 @@ public class IntakeTesting extends Command {
     }
     @Override
     public void execute() {
-        while(!intakeShooter.outakeDetectsNote()) {
+        if(!intakeShooter.outakeDetectsNote()) {
             intakeShooter.setRPMIntake(startingRPMWithNote+increaseRPM*index);
             index++;
             SmartDashboard.putNumber("RPM Used", increaseRPM*index + startingRPMWithNote);
