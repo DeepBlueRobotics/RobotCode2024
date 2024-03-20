@@ -369,6 +369,15 @@ public final class Constants {
 			public static final int RAISE_CLIMBER = Button.kLeftStick.value;
 			public static final int LOWER_CLIMBER = Button.kRightStick.value;
 		}
+		public static final class Led {
+			public static final int ledLength = 5;
+		
+		
+			public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
+			public static final Color8Bit detectNote = new Color8Bit(250,140,3);
+			public static final Color8Bit holding = new Color8Bit(0,250,0);
+			public static final int ledPort = 0;
+		}
 		public static final double JOY_THRESH = 0.01;
     public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;//woah, this is high.
 	}
