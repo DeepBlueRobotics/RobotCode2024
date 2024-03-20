@@ -11,9 +11,11 @@ import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
@@ -40,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
+    private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(9,MotorType.kBrushless);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -56,7 +59,7 @@ public class IntakeShooter extends SubsystemBase {
 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
-
+    
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
@@ -70,6 +73,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putData("Intake Shooter",this);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
+        SmartDashboard.putNumber("Vortex volts", 0);
        // setMaxOutakeOverload(1);
 
     }
@@ -130,11 +134,13 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         count++;
-        
+        double volts = SmartDashboard.getNumber("Vortex volts", 0);
       // setMaxOutake();
 
     }
-
+    public void driveMotor(double volts) {
+        outakeMotorVortex.set(volts);
+    }
     public void setCurrentLimit(int limit) {
         intakeMotor.setSmartCurrentLimit(limit);
     }
@@ -179,6 +185,9 @@ public class IntakeShooter extends SubsystemBase {
     public double getIntakeRPM() {
         return intakeEncoder.getVelocity();
     }
+    public double getVortexRPM() {
+        return outakeMotorVortex.getEncoder().getVelocity();
+    }
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
@@ -186,6 +195,7 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceIntake, null);
         sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceOutake, null);
         sendableBuilder.addDoubleProperty("Period time", this::countPeridoic,null);
+        sendableBuilder.addDoubleProperty("Vortex Motor Velocity", this::getVortexRPM, null);
     }
     /*
     public double calculateRPMAtDistance() {
