@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package org.carlmontrobotics.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -9,7 +9,7 @@ import static org.carlmontrobotics.Constants.Led.*;
 public class Led {
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
     private final AddressableLED led = new AddressableLED(ledPort);
-    private double midpoint = Math.floor(ledBuffer.getLength()/2); 
+    //private double midpoint = Math.floor(ledBuffer.getLength()/2); 
     //rounds down
   
 

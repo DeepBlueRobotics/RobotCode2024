@@ -377,6 +377,7 @@ public final class Constants {
 			public static final Color8Bit detectNote = new Color8Bit(250,140,3);
 			public static final Color8Bit holding = new Color8Bit(0,250,0);
 			public static final int ledPort = 0;
+			public static final double midpoint = Math.floor(ledLength/2); 
 		}
 		public static final double JOY_THRESH = 0.01;
     public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;//woah, this is high.
