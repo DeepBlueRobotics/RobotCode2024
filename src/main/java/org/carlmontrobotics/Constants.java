@@ -54,12 +54,12 @@ public final class Constants {
 		public static final Color8Bit detectNote = new Color8Bit(250,140,3);
 		public static final Color8Bit holding = new Color8Bit(0,250,0);
 		public static final Color8Bit ejectColor = new Color8Bit(250,250,0);
-		
+
 		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
 		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
 		public static final Color8Bit intakeouttakeColor = new Color8Bit(0,255,9); //intake and outtake (both) = green
 		//Red when nothing, purple/blue when intake/outtake detect only, green when both
-			
+
 	}
 
 	public static final class Effectorc {
@@ -82,7 +82,7 @@ public final class Constants {
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
-		
+
 		public static final double INTAKE_RPM = 6500;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
@@ -155,7 +155,7 @@ public final class Constants {
 		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728/4; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 
-		
+
 		public static final double MIN_VOLTAGE = -0.5; //-((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; //(kS + kG + 1)/12;
 
@@ -186,7 +186,7 @@ public final class Constants {
 		}
 		public static final class Drivetrainc {
 
-				
+
 				//#region Subsystem Constants
 
 			public static final double wheelBase = Units.inchesToMeters(16.75);
@@ -234,7 +234,7 @@ public final class Constants {
 
 			// V = kS + kV * v + kA * a
 			// 12 = 0.2 + 0.00463 * v
-			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s	
+			// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
 			public static final double[] turnkV = {2.6532, 2.7597, 2.7445, 2.7698};
 			public static final double[] turnkA = {0.17924, 0.17924, 0.17924, 0.17924};
 
@@ -279,13 +279,13 @@ public final class Constants {
 			//#region Ports
 
 			public static final int driveFrontLeftPort = 11; //
-			public static final int driveFrontRightPort = 19; // 	
+			public static final int driveFrontRightPort = 19; //
 			public static final int driveBackLeftPort = 14; //
 			public static final int driveBackRightPort = 17; //correct
 
 			public static final int turnFrontLeftPort = 12; //
 			public static final int turnFrontRightPort = 20; // 20
-			public static final int turnBackLeftPort = 15; // 
+			public static final int turnBackLeftPort = 15; //
 			public static final int turnBackRightPort = 16; //correct
 
 			public static final int canCoderPortFL = 0;
