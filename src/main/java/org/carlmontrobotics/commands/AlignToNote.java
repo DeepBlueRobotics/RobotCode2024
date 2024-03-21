@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 public class AlignToNote extends ProxyCommand {
-     static Drivetrain drivetrain;
-     
-     public AlignToNote() {
+
+     public AlignToNote(Drivetrain dt) {
           super(() -> {
                double fieldOrientedTargetAngle = LimelightHelpers.getTX(intakeLimelightName);
-               return new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(fieldOrientedTargetAngle), drivetrain);
+               return new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(fieldOrientedTargetAngle), dt);
           });
+          super.addRequirements(dt);
      }
      //REMINDER TO UPLOAD SHOOTER LIMELIGHT WITH THE PIPELINE MODEL :D
 }
