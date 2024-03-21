@@ -155,8 +155,8 @@ public final class Constants {
 	public static final class IntakeShooter {
 	}
 	public static final class Limelight {
-		public static final String intakeLimelightName = "intake-limelight";
-		public static final String shooterLimelightName = "shooter-limelight";
+		public static final String INTAKE_LL_NAME = "intake-limelight";
+		public static final String SHOOTER_LL_NAME = "shooter-limelight";
 
 		public static final double ERROR_TOLERANCE = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0;

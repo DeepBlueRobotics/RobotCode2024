@@ -35,7 +35,7 @@ public class Limelight extends SubsystemBase {
       drivetrain.getModulePositions(), 
       new Pose2d());
     
-    botPose = NetworkTableInstance.getDefault().getTable(shooterLimelightName).getEntry("botpose").getDoubleArray(new double[7]);
+    botPose = NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new double[7]);
     //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
   }
 
@@ -46,7 +46,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public void updateBotPose3d(){
-    botpose = LimelightHelpers.getBotPose3d(shooterLimelightName);
+    botpose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
   }
 
 
@@ -57,7 +57,7 @@ public class Limelight extends SubsystemBase {
 
 
   public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID(shooterLimelightName) == SPEAKER_CENTER_TAG_ID_1 || LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_2){
+    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_1 || LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_2){
       double angleToGoalRadians = Units.degreesToRadians(MOUNT_ANGLE_DEG + LimelightHelpers.getTY("limelight"));
       double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / Math.tan(angleToGoalRadians);
       SmartDashboard.putNumber("limelight distance", distance);
