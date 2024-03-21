@@ -136,7 +136,7 @@ public class RobotContainer {
     ));
     intakeShooter.setDefaultCommand(new TeleopEffector(
       intakeShooter,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
+      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY), manipulatorController
     ));
 
 
