@@ -330,6 +330,23 @@ public final class Constants {
 				//#endregion
 		}
 
+		public static final class Limelight {
+			public static final String intakeLimelightName = "intake-limelight";
+			public static final String shooterLimelightName = "shooter-limelight";
+	
+			public static final double ERROR_TOLERANCE = 0.1;
+			public static final double HORIZONTAL_FOV_DEG = 0;
+			public static final double RESOLUTION_WIDTH = 640;
+			public static final double MOUNT_ANGLE_DEG = 46.2; //23.228
+			public static final double HEIGHT_FROM_GROUND_METERS = Units.inchesToMeters(9); //16.6
+			public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
+			public static final class Apriltag {
+				public static final int SPEAKER_CENTER_TAG_ID_1 = 4;
+				public static final int SPEAKER_CENTER_TAG_ID_2 = 7;
+				public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); //88.125
+			}
+		}
+
 		public static final class OI {
 			public static final class Driver {
 				public static final int port = 0;
