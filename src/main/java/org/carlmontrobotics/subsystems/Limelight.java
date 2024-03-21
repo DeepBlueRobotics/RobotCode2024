@@ -41,6 +41,7 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()), drivetrain.getModulePositions());
     updateBotPose3d();
     getDistanceToTargetSpeaker();
     getCurrentPose();
