@@ -20,9 +20,9 @@ public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
   private final SwerveDrivePoseEstimator poseEstimator;
   private double tv, tx;
-  private double[] botPose = null;
+  //private double[] rawBotPose = null;
   private double[] targetPose = null;
-  private Pose3d botpose;
+  private Pose3d botPose;
 
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
@@ -35,7 +35,7 @@ public class Limelight extends SubsystemBase {
       drivetrain.getModulePositions(), 
       new Pose2d());
     
-    botPose = NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new double[7]);
+    //rawBotPose = NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new double[7]);
     //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
   }
 
@@ -43,10 +43,11 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
     getDistanceToTargetSpeaker();
     getCurrentPose();
+    updateBotPose3d();
   }
 
   public void updateBotPose3d(){
-    botpose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
+    botPose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
   }
 
 
@@ -63,7 +64,7 @@ public class Limelight extends SubsystemBase {
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
-    
+
     else{
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
@@ -71,7 +72,7 @@ public class Limelight extends SubsystemBase {
   }
 
   // public Pose3d getTargetPose() {
-  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
+  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME, "targetpose_robotspace");
   //   return LimelightHelpers.toPose3D(poseArray);
   // }
 }
