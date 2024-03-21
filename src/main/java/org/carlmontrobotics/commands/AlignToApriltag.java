@@ -17,6 +17,5 @@ public class AlignToApriltag extends ProxyCommand {
                Rotation2d fieldOrientedTargetAngle = Rotation2d.fromDegrees(LimelightHelpers.getTX(SHOOTER_LL_NAME)).plus(Rotation2d.fromDegrees(dt.getHeading()));
                return new RotateToFieldRelativeAngle(fieldOrientedTargetAngle, dt);
           });
-          super.addRequirements(dt);
      }
 }

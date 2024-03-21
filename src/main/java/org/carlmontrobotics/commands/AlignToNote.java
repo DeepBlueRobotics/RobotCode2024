@@ -17,7 +17,6 @@ public class AlignToNote extends ProxyCommand {
                Rotation2d fieldOrientedTargetAngle = Rotation2d.fromDegrees(LimelightHelpers.getTX(INTAKE_LL_NAME)).plus(Rotation2d.fromDegrees(dt.getHeading()));
                return new RotateToFieldRelativeAngle(fieldOrientedTargetAngle, dt);
           });
-          super.addRequirements(dt);
      }
      //REMINDER TO UPLOAD SHOOTER LIMELIGHT WITH THE PIPELINE MODEL :D
 }
