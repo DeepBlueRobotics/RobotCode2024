@@ -14,7 +14,7 @@ public class AlignToNote extends ProxyCommand {
 
      public AlignToNote(Drivetrain dt) {
           super(() -> {
-               double fieldOrientedTargetAngle = LimelightHelpers.getTX(intakeLimelightName);
+               double fieldOrientedTargetAngle = LimelightHelpers.getTX(intakeLimelightName) + dt.getHeading();
                return new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(fieldOrientedTargetAngle), dt);
           });
           super.addRequirements(dt);
