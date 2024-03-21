@@ -77,6 +77,7 @@ public class RobotContainer {
   }
   private void setBindingsDriver() {
 	new JoystickButton(driverController, 1).onTrue(new AlignToApriltag(drivetrain)); //button A
+	new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); //button b?
 		// reset field orientation??
     // new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
     //   new InstantCommand(drivetrain::resetFieldOrientation));
