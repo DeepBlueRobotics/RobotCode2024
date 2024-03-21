@@ -41,9 +41,9 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    updateBotPose3d();
     getDistanceToTargetSpeaker();
     getCurrentPose();
-    updateBotPose3d();
   }
 
   public void updateBotPose3d(){
