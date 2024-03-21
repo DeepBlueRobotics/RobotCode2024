@@ -57,12 +57,13 @@ public class Limelight extends SubsystemBase {
 
 
   public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_1 || LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_2){
-      double angleToGoalRadians = Units.degreesToRadians(MOUNT_ANGLE_DEG + LimelightHelpers.getTY("limelight"));
-      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / Math.tan(angleToGoalRadians);
+    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_LEFT || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_RIGHT){
+      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
+      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
+    
     else{
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
@@ -72,10 +73,5 @@ public class Limelight extends SubsystemBase {
   // public Pose3d getTargetPose() {
   //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
   //   return LimelightHelpers.toPose3D(poseArray);
-  // }
-
-  // public double distanceToTargetmath(Pose3d target){
-  //   return(6.5 inches)/2 x tan(2 * 320 pixels)
-  //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
   // }
 }
