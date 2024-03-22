@@ -49,9 +49,9 @@ public final class Constants {
 	public static final class Led {
 			
 	
-		public static final Color8Bit DEFAULT_COLOR = new Color8Bit(0, 0, 200);
-		public static final Color8Bit DETECT_NOTE = new Color8Bit(250,140,3);
-		public static final Color8Bit HOLDING = new Color8Bit(0,250,0);
+		public static final Color8Bit DEFAULT_COLOR_BLUE = new Color8Bit(0, 0, 200);
+		public static final Color8Bit DETECT_NOTE_ORANGE = new Color8Bit(250,140,3);
+		public static final Color8Bit HOLDING_GREEN = new Color8Bit(0,250,0);
 		public static final int ledPort = 0;
 		
 	}

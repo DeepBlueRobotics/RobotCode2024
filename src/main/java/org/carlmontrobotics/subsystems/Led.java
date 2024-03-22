@@ -21,7 +21,7 @@ public class Led extends SubsystemBase{
     
     public Led(){
         led.setLength(ledBuffer.getLength());
-        setLedColor(DEFAULT_COLOR, 0 , ledBuffer.getLength());
+        setLedColor(DEFAULT_COLOR_BLUE, 0 , ledBuffer.getLength());
         led.start();
     }
     public void setLedColor(Color8Bit color, int start, int end) {
@@ -34,18 +34,22 @@ public class Led extends SubsystemBase{
     }
     public void periodic(){
         if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote()) {
-            setLedColor(DETECT_NOTE, 0, midpoint);
+            setLedColor(DETECT_NOTE_ORANGE, 0, midpoint);
+            //when intake TOF detects, but outtake TOF does not the bottom half of the LEDs become orange
 
         }
         else if(!intakeshooter.intakeDetectsNote() && intakeshooter.outakeDetectsNote()){
-            setLedColor(DETECT_NOTE,midpoint, getLength());
+            setLedColor(DETECT_NOTE_ORANGE,midpoint, getLength());
+            //when outtake TOF detects, but intake TOF does not the top half of the LEDs become orange
         }
         else if (intakeshooter.intakeDetectsNote() && intakeshooter.outakeDetectsNote()) {
-            setLedColor(HOLDING, 0, getLength());
+            setLedColor(HOLDING_GREEN, 0, getLength());
+            //when both TOFs detect and the end efforcter is holding the note the LEDS turn green
 
         }
         else{
-            setLedColor(DEFAULT_COLOR, 0, getLength());
+            setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
+            //otherwise LEds are blue
         }
 
 
