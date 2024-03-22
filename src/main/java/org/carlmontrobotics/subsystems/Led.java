@@ -12,14 +12,15 @@ import org.carlmontrobotics.subsystems.IntakeShooter.*;
 public class Led extends SubsystemBase{
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(getLength());
     private final AddressableLED led = new AddressableLED(ledPort);
-    private final IntakeShooter intakeshooter = new IntakeShooter();
+    private final IntakeShooter intakeshooter;
     private int midpoint = (int)ledBuffer.getLength()/2; 
     //rounds down
     // public static final double midpoint = Math.floor(ledLength/2); 
     //public static final int ledLength = led.getLength();
 
     
-    public Led(){
+    public Led(IntakeShooter intakeShooter){
+        this.intakeshooter = intakeShooter;
         led.setLength(ledBuffer.getLength());
         setLedColor(DEFAULT_COLOR_BLUE, 0 , ledBuffer.getLength());
         led.start();
