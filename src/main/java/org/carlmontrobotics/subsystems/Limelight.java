@@ -20,9 +20,9 @@ public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
   private final SwerveDrivePoseEstimator poseEstimator;
   private double tv, tx;
-  private double[] botPose = null;
+  //private double[] rawBotPose = null;
   private double[] targetPose = null;
-  private Pose3d botpose;
+  private Pose3d botPose;
 
   //private double distOffset, horizOffset;
   //private double horizHeadingError, horizAdjust;
@@ -35,34 +35,40 @@ public class Limelight extends SubsystemBase {
       drivetrain.getModulePositions(), 
       new Pose2d());
     
-    botPose = NetworkTableInstance.getDefault().getTable(shooterLimelightName).getEntry("botpose").getDoubleArray(new double[7]);
+    //rawBotPose = NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new double[7]);
     //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
   }
 
   @Override
   public void periodic() {
+    poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()), drivetrain.getModulePositions());
+    updateBotPose3d();
     getDistanceToTargetSpeaker();
     getCurrentPose();
   }
 
   public void updateBotPose3d(){
-    botpose = LimelightHelpers.getBotPose3d(shooterLimelightName);
+    botPose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
   }
 
 
   public Pose2d getCurrentPose(){
-    System.out.println(poseEstimator.getEstimatedPosition());
+    Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
+    System.out.println(estimatedPos.getX());
+    System.out.println(estimatedPos.getY());
+    System.out.println(estimatedPos.getRotation().getDegrees() + "degrees");
     return poseEstimator.getEstimatedPosition();
   }
 
 
   public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID(shooterLimelightName) == SPEAKER_CENTER_TAG_ID_1 || LimelightHelpers.getFiducialID("limelight") == SPEAKER_CENTER_TAG_ID_2){
-      double angleToGoalRadians = Units.degreesToRadians(MOUNT_ANGLE_DEG + LimelightHelpers.getTY("limelight"));
-      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / Math.tan(angleToGoalRadians);
+    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID){
+      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
+      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
+
     else{
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
@@ -70,12 +76,7 @@ public class Limelight extends SubsystemBase {
   }
 
   // public Pose3d getTargetPose() {
-  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray("limelight", "targetpose_robotspace");
+  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME, "targetpose_robotspace");
   //   return LimelightHelpers.toPose3D(poseArray);
-  // }
-
-  // public double distanceToTargetmath(Pose3d target){
-  //   return(6.5 inches)/2 x tan(2 * 320 pixels)
-  //   return (tag width in real world)/(2 x tan((tag pixel width/(2 * horizontal resolution)) * pi/180));
   // }
 }

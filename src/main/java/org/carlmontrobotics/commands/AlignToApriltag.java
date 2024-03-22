@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 public class AlignToApriltag extends ProxyCommand {
-     static Drivetrain drivetrain;
-     
-     public AlignToApriltag() {
+
+     public AlignToApriltag(Drivetrain dt) {
           super(() -> {
-               double fieldOrientedTargetAngle = LimelightHelpers.getTX(shooterLimelightName);
-               return new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(fieldOrientedTargetAngle), drivetrain);
+               Rotation2d fieldOrientedTargetAngle = Rotation2d.fromDegrees(LimelightHelpers.getTX(SHOOTER_LL_NAME)).plus(Rotation2d.fromDegrees(dt.getHeading()));
+               return new RotateToFieldRelativeAngle(fieldOrientedTargetAngle, dt);
           });
+          super.addRequirements(dt);
      }
 }
