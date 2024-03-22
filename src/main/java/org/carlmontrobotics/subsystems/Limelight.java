@@ -62,7 +62,7 @@ public class Limelight extends SubsystemBase {
 
 
   public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_LEFT || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == SPEAKER_CENTER_TAG_ID_RIGHT){
+    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID){
       Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
       double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
       SmartDashboard.putNumber("limelight distance", distance);
