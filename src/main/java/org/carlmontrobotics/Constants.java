@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.util.Color;
+import org.carlmontrobotics.subsystems.Led;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -370,12 +371,12 @@ public final class Constants {
 			public static final int LOWER_CLIMBER = Button.kRightStick.value;
 		}
 		public static final class Led {
-			public static final int ledLength = 5;
+			public static final int ledLength = Led.getLength();
 		
 		
-			public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
-			public static final Color8Bit detectNote = new Color8Bit(250,140,3);
-			public static final Color8Bit holding = new Color8Bit(0,250,0);
+			public static final Color8Bit DEFAULT_COLOR = new Color8Bit(0, 0, 200);
+			public static final Color8Bit DETECT_NOTE = new Color8Bit(250,140,3);
+			public static final Color8Bit HOLDING = new Color8Bit(0,250,0);
 			public static final int ledPort = 0;
 			public static final double midpoint = Math.floor(ledLength/2); 
 		}

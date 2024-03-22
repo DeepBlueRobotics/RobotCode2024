@@ -41,13 +41,14 @@ public class Intake extends Command {
     public void execute() {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-        index++;
-        led.setLedColor(detectNote, 0, Constants.Led.midpoint);
+        index ++;
+        led.setLedColor(DETECT_NOTE, 0, Constants.Led.midpoint);
         intake.setRPMIntake(0);
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index*increaseAmount);
       }
       if (intake.outakeDetectsNote() ) {
        // Timer.delay(keepIntakingFor);
+        led.setLedColor(HOLDING, 0, Constants.Led.ledLength)
         intake.setRPMIntake(0.0);
       }
     }
