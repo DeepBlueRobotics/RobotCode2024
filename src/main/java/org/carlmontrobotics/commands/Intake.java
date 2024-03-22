@@ -5,15 +5,15 @@ import static org.carlmontrobotics.Constants.Led.*;
 
 import org.carlmontrobotics.Constants;
 
-import org.carlmontrobotics.subsystems.AuxSystems;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Led;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
-    private final Timer timer;
+    private Timer timer;
     private final IntakeShooter intake;
     private final Led led;
 
@@ -21,9 +21,10 @@ public class Intake extends Command {
     private final double keepIntakingFor = 0.2;
     int increaseAmount = 750;
     int index = 0;
-    public Intake(IntakeShooter intake, Led led) {
+    public Intake(IntakeShooter intake,Led led) {
         addRequirements(this.intake = intake);
         addRequirements(this.led = led);
+        
     }
 
     @Override
@@ -42,13 +43,13 @@ public class Intake extends Command {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         index ++;
-        led.setLedColor(DETECT_NOTE, 0, Constants.Led.midpoint);
+        led.setLedColor(DETECT_NOTE, 0, led.getLength());
         intake.setRPMIntake(0);
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index*increaseAmount);
       }
       if (intake.outakeDetectsNote() ) {
        // Timer.delay(keepIntakingFor);
-        led.setLedColor(HOLDING, 0, Constants.Led.ledLength)
+        led.setLedColor(HOLDING, 0, led.getLength());
         intake.setRPMIntake(0.0);
       }
     }
@@ -66,5 +67,6 @@ public class Intake extends Command {
   public boolean isFinished() {
     return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
       // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
+      
   }
 }

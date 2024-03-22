@@ -4,7 +4,7 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 import static org.carlmontrobotics.Constants.Led.*;
 
 import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.AuxSystems;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
