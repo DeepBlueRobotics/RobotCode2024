@@ -15,15 +15,15 @@ public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
     private Timer timer;
     private final IntakeShooter intake;
-    private final Led led;
+
 
     private double endAt = 0;
     private final double keepIntakingFor = 0.2;
     int increaseAmount = 750;
     int index = 0;
-    public Intake(IntakeShooter intake,Led led) {
+    public Intake(IntakeShooter intake) {
         addRequirements(this.intake = intake);
-        addRequirements(this.led = led);
+        
         
     }
 
@@ -43,13 +43,13 @@ public class Intake extends Command {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
         index ++;
-        led.setLedColor(DETECT_NOTE, 0, led.getLength());
+        
         intake.setRPMIntake(0);
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index*increaseAmount);
       }
       if (intake.outakeDetectsNote() ) {
        // Timer.delay(keepIntakingFor);
-        led.setLedColor(HOLDING, 0, led.getLength());
+       
         intake.setRPMIntake(0.0);
       }
     }
