@@ -53,7 +53,7 @@ public final class Constants {
 		public static final Color8Bit DETECT_NOTE_ORANGE = new Color8Bit(250,140,3);
 		public static final Color8Bit HOLDING_GREEN = new Color8Bit(0,250,0);
 		public static final int ledPort = 0;
-		
+		//TODO: figure out how to get port of LED, it could be 0 or
 	}
 
 	

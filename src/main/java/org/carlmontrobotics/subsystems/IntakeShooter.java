@@ -42,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
     private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(OUTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(9,MotorType.kBrushless);
+    //private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(9,MotorType.kBrushless);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -133,13 +133,13 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        count++;
-        double volts = SmartDashboard.getNumber("Vortex volts", 0);
+        //count++;
+       // double volts = SmartDashboard.getNumber("Vortex volts", 0);
       // setMaxOutake();
 
     }
     public void driveMotor(double volts) {
-        outakeMotorVortex.set(volts);
+        //outakeMotorVortex.set(volts);
     }
     public void setCurrentLimit(int limit) {
         intakeMotor.setSmartCurrentLimit(limit);
@@ -186,7 +186,8 @@ public class IntakeShooter extends SubsystemBase {
         return intakeEncoder.getVelocity();
     }
     public double getVortexRPM() {
-        return outakeMotorVortex.getEncoder().getVelocity();
+        //return outakeMotorVortex.getEncoder().getVelocity();
+        return 0;
     }
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {

@@ -247,7 +247,7 @@ public class Drivetrain extends SubsystemBase {
     //     moduleBR.periodic();
         //double goal = SmartDashboard.getNumber("bigoal", 0);
 
-        for (SwerveModule module : modules) {
+        /*for (SwerveModule module : modules) {
             module.periodic();
            // module.move(0, goal);
         }
@@ -277,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
     //    SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
     //      SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
     //     SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-
+            */
     }
 
     @Override

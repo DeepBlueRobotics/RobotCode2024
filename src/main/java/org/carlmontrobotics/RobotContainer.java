@@ -63,6 +63,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import static com.pathplanner.lib.auto.AutoBuilder.*;
 import com.pathplanner.lib.auto.AutoBuilder;
+import org.carlmontrobotics.subsystems.Led;
 
 //java
 import java.util.function.DoubleSupplier;
@@ -78,8 +79,8 @@ public class RobotContainer {
   // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(OI.Driver.port);
   public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
-
   private final IntakeShooter intakeShooter = new IntakeShooter();
+  private final Led led = new Led(intakeShooter);
   private final Arm arm = new Arm();
   private final Drivetrain drivetrain = new Drivetrain();
 
