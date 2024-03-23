@@ -10,8 +10,8 @@ import org.carlmontrobotics.subsystems.IntakeShooter.*;
 
 
 public class Led extends SubsystemBase{
-    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(20);
-    private final AddressableLED led = new AddressableLED(ledPort);
+    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(100);
+    private final AddressableLED led = new AddressableLED(9);
     private final IntakeShooter intakeshooter;
     private int midpoint = (int)ledBuffer.getLength()/2; 
     //rounds down
@@ -22,9 +22,10 @@ public class Led extends SubsystemBase{
     public Led(IntakeShooter intakeShooter){
         this.intakeshooter = intakeShooter;
         led.setLength(ledBuffer.getLength());
-        
+        led.setData(ledBuffer);
+                led.start();
+
         setLedColor(DEFAULT_COLOR_BLUE, 0 , getLength());
-        led.start();
         
     }
     public void setLedColor(Color8Bit color, int start, int end) {
@@ -37,6 +38,7 @@ public class Led extends SubsystemBase{
     }
     @Override
     public void periodic(){
+        System.err.println("skdjfksd");
         /*if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote()) {
             setLedColor(DETECT_NOTE_ORANGE, 0, midpoint);
             //when intake TOF detects, but outtake TOF does not the bottom half of the LEDs become orange
