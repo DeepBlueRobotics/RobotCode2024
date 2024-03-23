@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -86,6 +86,8 @@ public class TeleopDrive extends Command {
 
     double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
     double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
+    // double driveMultiplier = kNormalDriveSpeed;
+    // double rotationMultiplier = kNormalDriveRotation;
 
     forward *= driveMultiplier;
     strafe *= driveMultiplier;

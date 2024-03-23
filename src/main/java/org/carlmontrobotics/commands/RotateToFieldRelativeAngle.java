@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 public class RotateToFieldRelativeAngle extends Command {
 

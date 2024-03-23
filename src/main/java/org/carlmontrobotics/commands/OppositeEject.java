@@ -4,17 +4,26 @@
 
 package org.carlmontrobotics.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import org.carlmontrobotics.subsystems.IntakeShooter;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class AutoIntakeOnce extends CommandBase {
-  /** Creates a new StartIntake. */
-  public AutoIntakeOnce() {
+public class OppositeEject extends Command {
+  private final IntakeShooter intake;
+  private final Timer timer = new Timer();
+  /** Creates a new IntactEject. */
+  public OppositeEject(IntakeShooter intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.intake = intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+    timer.start();
+    intake.setMaxIntake(-1);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -22,11 +31,15 @@ public class AutoIntakeOnce extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.stopIntake();
+    timer.stop();
+    intake.resetCurrentLimit();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (timer.hasElapsed(1.5));
   }
 }

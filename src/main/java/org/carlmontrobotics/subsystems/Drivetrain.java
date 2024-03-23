@@ -1,6 +1,6 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -11,11 +11,16 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
+import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
+import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
 import org.carlmontrobotics.commands.TeleopDrive;
 
@@ -24,6 +29,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -76,7 +82,9 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
 public class Drivetrain extends SubsystemBase {
-    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
+   private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
+   private Pose2d autoGyroOffset = new Pose2d(0.,0.,new Rotation2d(0.));
+   // ^used by PathPlanner for chaining paths
 
     private SwerveDriveKinematics kinematics = null;
     private SwerveDriveOdometry odometry = null;
@@ -87,143 +95,10 @@ public class Drivetrain extends SubsystemBase {
     private CANSparkMax[] driveMotors = new CANSparkMax[] {null, null, null, null};
     private CANSparkMax[] turnMotors = new CANSparkMax[] {null,null,null,null};
     private CANcoder[] turnEncoders = new CANcoder[] {null, null, null, null};
-    
+
     // gyro
     public final float initPitch;
     public final float initRoll;
-
-    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-    private final MutableMeasure<Voltage>[] m_appliedVoltage = new MutableMeasure[8];
-    
-    // Mutable holder for unit-safe linear distance values, persisted to avoid
-    // reallocation.
-    private final MutableMeasure<Distance>[] m_distance = new MutableMeasure[4];
-    // Mutable holder for unit-safe linear velocity values, persisted to avoid
-    // reallocation.
-    private final MutableMeasure<Velocity<Distance>>[] m_velocity = new MutableMeasure[4];
-    // edu.wpi.first.math.util.Units.Rotations beans;
-    private final MutableMeasure<Angle>[] m_revs = new MutableMeasure[4];
-    private final MutableMeasure<Velocity<Angle>>[] m_revs_vel = new MutableMeasure[4];
-    
-    private enum SysIdTest {
-        FRONT_DRIVE,
-        BACK_DRIVE,
-        ALL_DRIVE,
-        // FLBR_TURN,
-        // FRBL_TURN,
-        // ALL_TURN
-        FL_ROT,
-        FR_ROT,
-        BL_ROT,
-        BR_ROT
-    }
-
-    private SendableChooser<SysIdTest> sysIdChooser = new SendableChooser<>();
-
-    //ROUTINES FOR SYSID
-    //private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(5));
-    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(2.891), Seconds.of(10));
-    //DRIVE
-    private void motorLogShort_drive(SysIdRoutineLog log, int id){
-        String name = new String[] {"fl","fr","bl","br"}[id];
-        log.motor(name)
-            .voltage(m_appliedVoltage[id].mut_replace(
-                    driveMotors[id].getBusVoltage() * driveMotors[id].getAppliedOutput(), Volts))
-            .linearPosition(
-                    m_distance[id].mut_replace(driveMotors[id].getEncoder().getPosition(), Meters))
-            .linearVelocity(m_velocity[id].mut_replace(driveMotors[id].getEncoder().getVelocity(),
-                    MetersPerSecond));
-    }
-    // Create a new SysId routine for characterizing the drive.
-    private SysIdRoutine frontOnlyDriveRoutine = new SysIdRoutine(
-        defaultSysIdConfig,
-        new SysIdRoutine.Mechanism(
-            // Tell SysId how to give the driving voltage to the motors.
-            (Measure<Voltage> volts) -> {
-                driveMotors[0].setVoltage(volts.in(Volts));
-                driveMotors[1].setVoltage(volts.in(Volts));
-                modules[2].coast();
-                modules[3].coast();                                                     
-            },
-            log -> {// FRONT
-                motorLogShort_drive(log,0);//fl named automatically
-                motorLogShort_drive(log,1);//fr
-            },
-            this
-        )
-    );
-
-    private SysIdRoutine backOnlyDriveRoutine = new SysIdRoutine(
-        defaultSysIdConfig,
-        new SysIdRoutine.Mechanism(
-            (Measure<Voltage> volts) -> {
-                modules[0].coast();
-                modules[1].coast();
-                modules[2].brake();
-                modules[3].brake();
-                driveMotors[2].setVoltage(volts.in(Volts));
-                driveMotors[3].setVoltage(volts.in(Volts));
-            },
-            log -> {// BACK
-                motorLogShort_drive(log,2);//bl
-                motorLogShort_drive(log,3);//br
-            },
-            this
-        )
-    );
-
-    private SysIdRoutine allWheelsDriveRoutine = new SysIdRoutine(
-        defaultSysIdConfig, 
-        new SysIdRoutine.Mechanism(
-            (Measure<Voltage> volts) -> {
-                for (CANSparkMax dm : driveMotors) {
-                    dm.setVoltage(volts.in(Volts));
-                }
-            }, 
-            log -> {
-                motorLogShort_drive(log,0);//fl named automatically
-                motorLogShort_drive(log,1);//fr
-                motorLogShort_drive(log,2);//bl
-                motorLogShort_drive(log,3);//br
-            }, 
-            this
-        )
-    );
-    private SysIdRoutine sysidroutshort_turn(int id, String logname){
-        return new SysIdRoutine(
-            defaultSysIdConfig,
-//            new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6), Seconds.of(3)), 
-            new SysIdRoutine.Mechanism(
-                (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
-                log -> log.motor(logname+"_turn")
-                    .voltage(m_appliedVoltage[id+4].mut_replace(
-                            //^because drivemotors take up the first 4 slots of the unit holders
-                            turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
-                    .angularPosition(m_revs[id].mut_replace(turnEncoders[id].getPosition().getValue(), Rotations))
-                    .angularVelocity(m_revs_vel[id].mut_replace(turnEncoders[id].getVelocity().getValueAsDouble(), RotationsPerSecond)),
-                this
-            )
-        );
-    }
-    //as always, fl/fr/bl/br
-    private SysIdRoutine[] rotateRoutine = new SysIdRoutine[] {
-        sysidroutshort_turn(0,"fl"),//woaw, readable code???
-        sysidroutshort_turn(1,"fr"),
-        sysidroutshort_turn(2,"bl"),
-        sysidroutshort_turn(3,"br")
-    };
-
-    private ShuffleboardTab sysIdTab = Shuffleboard.getTab("Drivetrain SysID");
-
-    // void sysidtabshorthand(String name, SysIdRoutine.Direction dir, int width, int height){
-    //     sysIdTab.add(name, dir).withSize(width, height);
-    // }
-    void sysidtabshorthand_qsi(String name, SysIdRoutine.Direction dir){
-        sysIdTab.add(name, sysIdQuasistatic(dir)).withSize(2,1);
-    }
-    void sysidtabshorthand_dyn(String name, SysIdRoutine.Direction dir){
-        sysIdTab.add(name, sysIdDynamic(dir)).withSize(2,1);
-    }
 
     // debug purposes
     private SwerveModule moduleFL;
@@ -233,7 +108,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         // Calibrate Gyro
-        {
+        {   
+            
             double initTimestamp = Timer.getFPGATimestamp();
             double currentTimestamp = initTimestamp;
             while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
@@ -247,6 +123,7 @@ public class Drivetrain extends SubsystemBase {
                 System.out.println("Calibrating the gyro...");
             }
             gyro.reset();
+            //this.resetFieldOrientation();
             System.out.println("NavX-MXP firmware version: " + gyro.getFirmwareVersion());
             System.out.println("Magnetometer is calibrated: " + gyro.isMagnetometerCalibrated());
         }
@@ -307,6 +184,7 @@ public class Drivetrain extends SubsystemBase {
                 driveMotor.getEncoder().setVelocityConversionFactor(wheelDiameterMeters * Math.PI / driveGearing / 60);
                 driveMotor.getEncoder().setAverageDepth(2);
                 driveMotor.getEncoder().setMeasurementPeriod(16);
+                driveMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
             }
             for (CANSparkMax turnMotor : turnMotors) {
                 turnMotor.getEncoder().setPositionConversionFactor(360 / turnGearing);
@@ -318,87 +196,20 @@ public class Drivetrain extends SubsystemBase {
                  coder.getAbsolutePosition().setUpdateFrequency(500);
                  coder.getPosition().setUpdateFrequency(500);
                  coder.getVelocity().setUpdateFrequency(500);
-                
+
             }
-            
+
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
-           
+
         }
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d());
-        
-        SmartDashboard.putNumber("biggoal", 0);
 
-
-        // SysId Setup
-        {
-            Supplier<SequentialCommandGroup> stopNwait = ()->new SequentialCommandGroup(new InstantCommand(this::stop), new WaitCommand(2));
-
-            /* Alex's old sysId tests 
-            sysIdTab.add("All sysid tests", new SequentialCommandGroup(
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,2), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,2), (Command)stopNwait.get())
-            ));
-            sysIdTab.add("All sysid tests - FRONT wheels", new SequentialCommandGroup(
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,0), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,0), (Command)stopNwait.get())
-            ));
-            sysIdTab.add("All sysid tests - BACK wheels", new SequentialCommandGroup(
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,1), (Command)stopNwait.get()),
-                new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,1), (Command)stopNwait.get())
-            ));
-            */
-            
-            
-            sysidtabshorthand_qsi("Quasistatic Forward",SysIdRoutine.Direction.kForward);
-            sysidtabshorthand_qsi("Quasistatic Backward",SysIdRoutine.Direction.kReverse);
-            sysidtabshorthand_dyn("Dynamic Forward",SysIdRoutine.Direction.kForward);
-            sysidtabshorthand_dyn("Dynamic Backward",SysIdRoutine.Direction.kReverse);
-
-            sysIdChooser.addOption("Front Only Drive", SysIdTest.FRONT_DRIVE);
-            sysIdChooser.addOption("Back Only Drive", SysIdTest.BACK_DRIVE);
-            sysIdChooser.addOption("All Drive", SysIdTest.ALL_DRIVE);
-            // sysIdChooser.addOption("fl-br Turn", SysIdTest.FLBR_TURN);
-            // sysIdChooser.addOption("fr-bl Turn", SysIdTest.FRBL_TURN);
-            // sysIdChooser.addOption("All Turn", SysIdTest.ALL_TURN);
-            sysIdChooser.addOption("FL Rotate", SysIdTest.FL_ROT);
-            sysIdChooser.addOption("FR Rotate", SysIdTest.FR_ROT);
-            sysIdChooser.addOption("BL Rotate", SysIdTest.BL_ROT);
-            sysIdChooser.addOption("BR Rotate", SysIdTest.BR_ROT);
-
-            sysIdTab
-                .add(sysIdChooser)
-                .withSize(2, 1);
-
-            sysIdTab.add("ALL THE SYSID TESTS", allTheSYSID())//is this legal??
-                .withSize(2, 1);
-
-            sysIdTab.add(this);
-
-            for (int i = 0; i < 8; i++) {//first four are drive, next 4 are turn motors
-                m_appliedVoltage[i] = mutable(Volts.of(0));
-            }
-            for (int i = 0; i < 4; i++) {
-                m_distance[i] = mutable(Meters.of(0));
-                m_velocity[i] = mutable(MetersPerSecond.of(0));
-
-                m_revs[i] = mutable(Rotations.of(0));
-                m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
-            }
-
-            SmartDashboard.putNumber("Desired Angle", 0);
-
-            SmartDashboard.putNumber("kS", 0);
-        }
+        // Setup autopath builder
+        configurePPLAutoBuilder();
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
@@ -413,172 +224,6 @@ public class Drivetrain extends SubsystemBase {
     //     return new PrintCommand("Invalid Command");
     // }
 
-    private SysIdTest selector() {
-        SysIdTest test = sysIdChooser.getSelected();
-        System.out.println("Test Selected: " + test);
-        return test;
-    }
-
-
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return new SelectCommand<>(
-            Map.ofEntries(
-                //DRIVE
-                Map.entry(SysIdTest.FRONT_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running front only quasistatic forward") :
-                        new PrintCommand("Running front only quasistatic backward"), 
-                    frontOnlyDriveRoutine.quasistatic(direction)
-                )),
-                Map.entry(SysIdTest.BACK_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running back only quasistatic forward") :
-                        new PrintCommand("Running back only quasistatic backward"), 
-                    backOnlyDriveRoutine.quasistatic(direction)
-                )),
-                Map.entry(SysIdTest.ALL_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running all drive quasistatic forward") :
-                        new PrintCommand("Running all drive quasistatic backward"), 
-                    allWheelsDriveRoutine.quasistatic(direction)
-                )),
-                //ROTATE
-                Map.entry(SysIdTest.FL_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running FL rotate quasistatic forward") :
-                        new PrintCommand("Running FL rotate quasistatic backward"), 
-                    rotateRoutine[0].quasistatic(direction)
-                )),
-                Map.entry(SysIdTest.FR_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running FR rotate quasistatic forward") :
-                        new PrintCommand("Running FR rotate quasistatic backward"), 
-                    rotateRoutine[1].quasistatic(direction)
-                )),
-                Map.entry(SysIdTest.BL_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running BL rotate quasistatic forward") :
-                        new PrintCommand("Running BL rotate quasistatic backward"), 
-                    rotateRoutine[2].quasistatic(direction)
-                )),
-                Map.entry(SysIdTest.BR_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running BR rotate quasistatic forward") :
-                        new PrintCommand("Running BR rotate quasistatic backward"), 
-                    rotateRoutine[3].quasistatic(direction)
-                ))
-                
-                // //TURN
-                // Map.entry(SysIdTest.FLBR_TURN, new ParallelCommandGroup(
-                //     direction == SysIdRoutine.Direction.kForward ? 
-                //         new PrintCommand("Running fL-bR turn quasistatic forward") :
-                //         new PrintCommand("Running fL-bR turn quasistatic backward"), 
-                //     flbrTurn.quasistatic(direction)
-                // )),
-                // Map.entry(SysIdTest.FRBL_TURN, new ParallelCommandGroup(
-                //     direction == SysIdRoutine.Direction.kForward ? 
-                //         new PrintCommand("Running fR-bL turn quasistatic forward") :
-                //         new PrintCommand("Running fR-bL turn quasistatic backward"), 
-                //     frblTurn.quasistatic(direction)
-                // )),
-                // Map.entry(SysIdTest.ALL_TURN, new ParallelCommandGroup(
-                //     direction == SysIdRoutine.Direction.kForward ? 
-                //         new PrintCommand("Running all turn quasistatic forward") :
-                //         new PrintCommand("Running all turn quasistatic backward"), 
-                //     allWheelsTurn.quasistatic(direction)
-                // ))
-            ),
-            this::selector
-        );
-    }
-
-    // public Command sysIdDynamic(SysIdRoutine.Direction direction, int frontorback) {
-    //     switch(frontorback) {
-    //         case 0:
-    //             return frontOnlyDrive.dynamic(direction);
-    //         case 1:
-    //             return backOnlyDrive.dynamic(direction);
-    //         case 2:
-    //             return allWheelsDrive.dynamic(direction);
-    //     }
-    //     return new PrintCommand("Invalid Command");
-    // }
-    private Command allTheSYSID(SysIdRoutine.Direction direction){
-        return new SequentialCommandGroup(
-            frontOnlyDriveRoutine.dynamic(direction),
-            backOnlyDriveRoutine.dynamic(direction),
-            allWheelsDriveRoutine.dynamic(direction),
-            rotateRoutine[0].dynamic(direction),
-            rotateRoutine[1].dynamic(direction),
-            rotateRoutine[2].dynamic(direction),
-            rotateRoutine[3].dynamic(direction),
-
-            frontOnlyDriveRoutine.quasistatic(direction),
-            backOnlyDriveRoutine.quasistatic(direction),
-            allWheelsDriveRoutine.quasistatic(direction),
-            rotateRoutine[0].quasistatic(direction),
-            rotateRoutine[1].quasistatic(direction),
-            rotateRoutine[2].quasistatic(direction),
-            rotateRoutine[3].quasistatic(direction)
-        );
-    }
-    public Command allTheSYSID(){
-        return new SequentialCommandGroup(
-            allTheSYSID(SysIdRoutine.Direction.kForward),
-            allTheSYSID(SysIdRoutine.Direction.kReverse)
-        );
-    }
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return new SelectCommand<>(
-            Map.ofEntries(
-                //DRIVE
-                Map.entry(SysIdTest.FRONT_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running front only dynamic forward") :
-                        new PrintCommand("Running front only dynamic backward"), 
-                    frontOnlyDriveRoutine.dynamic(direction)
-                )),
-                Map.entry(SysIdTest.BACK_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running back only dynamic forward") :
-                        new PrintCommand("Running back only dynamic backward"),
-                    backOnlyDriveRoutine.dynamic(direction)
-                )),
-                Map.entry(SysIdTest.ALL_DRIVE, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running all wheels dynamic forward") :
-                        new PrintCommand("Running all wheels dynamic backward"),
-                    allWheelsDriveRoutine.dynamic(direction)
-                )),
-                //ROTATE
-                Map.entry(SysIdTest.FL_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running FL rotate dynamic forward") :
-                        new PrintCommand("Running FL rotate dynamic backward"), 
-                    rotateRoutine[0].dynamic(direction)
-                )),
-                Map.entry(SysIdTest.FR_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running FR rotate dynamic forward") :
-                        new PrintCommand("Running FR rotate dynamic backward"), 
-                    rotateRoutine[1].dynamic(direction)
-                )),
-                Map.entry(SysIdTest.BL_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running BL rotate dynamic forward") :
-                        new PrintCommand("Running BL rotate dynamic backward"), 
-                    rotateRoutine[2].dynamic(direction)
-                )),
-                Map.entry(SysIdTest.BR_ROT, new ParallelCommandGroup(
-                    direction == SysIdRoutine.Direction.kForward ? 
-                        new PrintCommand("Running BR rotate dynamic forward") :
-                        new PrintCommand("Running BR rotate dynamic backward"), 
-                    rotateRoutine[3].dynamic(direction)
-                ))
-            ),
-            this::selector
-        );
-    }
     public void keepRotateMotorsAtDegrees(int angle) {
        for(SwerveModule module : modules) {
         module.turnPeriodic();
@@ -597,59 +242,42 @@ public class Drivetrain extends SubsystemBase {
         // FIXME: unlobotomize lib199
         //turnMotors[2].setVoltage(SmartDashboard.getNumber("kS", 0));
     //     moduleFL.periodic();
-            //moduleFR.periodic();   
+            //moduleFR.periodic();
     //     moduleBL.periodic();
     //     moduleBR.periodic();
         //double goal = SmartDashboard.getNumber("bigoal", 0);
-        
+
         for (SwerveModule module : modules) {
             module.periodic();
            // module.move(0, goal);
         }
-        brake();
         
-        //keepRotateMotorsAtDegrees(0);
-        //  double desiredGoal = SmartDashboard.getNumber("Desired Angle", 0); //this
-        //  moduleFR.move(0.0000000000000000001, desiredGoal);
-        // moduleFL.move(0.0000000000000000001, desiredGoal);
-        // moduleBL.move(0.0000000000000000001, desiredGoal);
-        // moduleBR.move(0.0000000000000000001, desiredGoal);
-        // // // Update the odometry with current heading and encoder position
-        // odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions()); //this
-//        autoCancelDtCommand(); //this
 
+        {
+            
+            SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+            SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+            SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+            SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+       }
         // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
         // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
-        // // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
-        // // SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
+        SmartDashboard.putNumber("Robot Heading", getHeading());
         // // // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
         // // // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
-        // // SmartDashboard.putBoolean("Field Oriented", fieldOriented);
-        // // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
-        // // SmartDashboard.putNumber("Compass Offset", compassOffset);
-        // // SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
-        // // gyro.isMagneticDisturbance());
-        SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-       SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-         SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-        SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+        SmartDashboard.putBoolean("Field Oriented", fieldOriented);
+        SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
+        //SmartDashboard.putNumber("Compass Offset", compassOffset);
+        SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
+        gyro.isMagneticDisturbance());
+    //     SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+    //    SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+    //      SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+    //     SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 
-    }
-
-    public void autoCancelDtCommand() {
-        if (!(getDefaultCommand() instanceof TeleopDrive) || DriverStation.isAutonomous())
-            return;
-
-        // Use hasDriverInput to get around acceleration limiting on slowdown
-        if (((TeleopDrive) getDefaultCommand()).hasDriverInput()) {
-            Command currentDtCommand = getCurrentCommand();
-            if (currentDtCommand != getDefaultCommand() && !(currentDtCommand instanceof RotateToFieldRelativeAngle)
-                    && currentDtCommand != null) {
-                currentDtCommand.cancel();
-            }
-        }
     }
 
     @Override
@@ -689,9 +317,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(SwerveModuleState[] moduleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, maxSpeed);
-
-        // Move the modules based on desired (normalized) speed, desired angle, max
-        // speed, drive modifier, and whether or not to reverse turning.
         for (int i = 0; i < 4; i++) {
             SmartDashboard.putNumber("moduleIn" + Integer.toString(i), moduleStates[i].angle.getDegrees());
             moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
@@ -699,6 +324,61 @@ public class Drivetrain extends SubsystemBase {
             SmartDashboard.putNumber("moduleOT" + Integer.toString(i), moduleStates[i].angle.getDegrees());
 
             modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
+        }
+    }
+    
+   public void configurePPLAutoBuilder(){
+    /**
+     * PATHPLANNER SETTINGS
+     * Robot Width (m): .91
+     * Robot Length(m): .94
+     * Max Module Spd (m/s): 4.30
+     * Default Constraints
+     * Max Vel: 1.54, Max Accel: 6.86
+     * Max Angvel: 360, Max AngAccel: 180 (guesses!)
+     */
+     AutoBuilder.configureHolonomic(
+    () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
+    (Pose2d pose) -> { autoGyroOffset=pose.times(-1); }, //position reset (by subtracting current pos)
+    this::getSpeeds, //chassisSpeed supplier
+    (ChassisSpeeds cs) -> drive(
+            cs.vxMetersPerSecond, 
+            -cs.vyMetersPerSecond,
+            /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
+            cs.omegaRadiansPerSecond
+    ),
+    new HolonomicPathFollowerConfig(
+        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
+        new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
+        maxSpeed,
+        swerveRadius,
+        Autoc.replanningConfig,
+        Robot.robot.getPeriod()//robot period
+    ),
+    () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
+      },
+      this
+    );
+   }
+
+   public void autoCancelDtCommand() {
+       if(!(getDefaultCommand() instanceof TeleopDrive) || DriverStation.isAutonomous()) return;
+
+        // Use hasDriverInput to get around acceleration limiting on slowdown
+        if (((TeleopDrive) getDefaultCommand()).hasDriverInput()) {
+            Command currentDtCommand = getCurrentCommand();
+            if (currentDtCommand != getDefaultCommand() && !(currentDtCommand instanceof RotateToFieldRelativeAngle)
+                    && currentDtCommand != null) {
+                currentDtCommand.cancel();
+            }
         }
     }
 
