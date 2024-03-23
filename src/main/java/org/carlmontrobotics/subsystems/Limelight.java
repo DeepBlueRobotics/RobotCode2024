@@ -1,7 +1,7 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.Limelight.*;
-import static org.carlmontrobotics.Constants.Limelight.Apriltag.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
+import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
 
 import edu.wpi.first.math.MathUtil;
@@ -74,6 +74,14 @@ public class Limelight extends SubsystemBase {
       return -1;
     }
   }
+
+  public double getDistanceToNote(){
+    Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
+    double distance = (NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
+    SmartDashboard.putNumber("limelight distance to note", distance);
+    return distance;
+  }
+
 
   // public Pose3d getTargetPose() {
   //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME, "targetpose_robotspace");

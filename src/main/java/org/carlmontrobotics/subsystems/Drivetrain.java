@@ -1,6 +1,6 @@
 package org.carlmontrobotics.subsystems;
 
-import static org.carlmontrobotics.Constants.Drivetrain.*;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.Arrays;
 import java.util.function.Supplier;

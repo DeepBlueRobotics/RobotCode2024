@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 	public static final double g = 9.81; //meters per second squared
 
-	public static final class Drivetrain {
+	public static final class Drivetrainc {
 
 			//#region Subsystem Constants
 
@@ -149,14 +149,14 @@ public final class Constants {
 			//#endregion
 	}
 
-	public static final class Arm {
+	public static final class Armc {
 	}
 	
-	public static final class IntakeShooter {
+	public static final class IntakeShooterc {
 	}
-	public static final class Limelight {
-		public static final String INTAKE_LL_NAME = "intake-limelight";
-		public static final String SHOOTER_LL_NAME = "shooter-limelight";
+	public static final class Limelightc {
+		public static final String INTAKE_LL_NAME = "limelight-intake";
+		public static final String SHOOTER_LL_NAME = "limelight-shooter";
 
 		public static final double ERROR_TOLERANCE = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0;
@@ -164,6 +164,7 @@ public final class Constants {
 		public static final double MOUNT_ANGLE_DEG = 46.2; //23.228
 		public static final double HEIGHT_FROM_GROUND_METERS = Units.inchesToMeters(9); //16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
+		public static final double NOTE_HEIGHT = Units.inchesToMeters(2);
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
