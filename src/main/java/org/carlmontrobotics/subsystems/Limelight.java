@@ -63,8 +63,8 @@ public class Limelight extends SubsystemBase {
 
   public double getDistanceToTargetSpeaker(){
     if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID){
-      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
-      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
+      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
+      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER) / angleToGoal.getTan();
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
@@ -76,8 +76,8 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getDistanceToNote(){
-    Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
-    double distance = (NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS) / angleToGoal.getTan();
+    Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
+    double distance = (NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS_INTAKE) / angleToGoal.getTan();
     SmartDashboard.putNumber("limelight distance to note", distance);
     return distance;
   }
