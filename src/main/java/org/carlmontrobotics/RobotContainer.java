@@ -134,10 +134,10 @@ public class RobotContainer {
       () -> ProcessedAxisValue(driverController, Axis.kRightX),
       () -> driverController.getRawButton(OI.Driver.slowDriveButton)
     ));
-    intakeShooter.setDefaultCommand(new TeleopEffector(
-      intakeShooter,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY), manipulatorController
-    ));
+    // intakeShooter.setDefaultCommand(new TeleopEffector(
+    //   intakeShooter,
+    //   () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY), manipulatorController
+    // ));
 
 
   }
