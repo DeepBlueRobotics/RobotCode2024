@@ -39,7 +39,9 @@ public class AutoMATICALLYGetNote extends Command {
   public void execute() {
     double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double distErr = limelight.getDistanceToNote(); //meters
-    dt.drive(Math.max(distErr*2, .5),0,Math.max(radErr*2,.5));
+    double forwardErr = distErr * Math.cos(radErr);
+    double strafeErr = distErr * Math.sin(radErr);
+    dt.drive(Math.max(forwardErr*2, .5), Math.max(strafeErr*2, .5), Math.max(radErr*2,.5));
     //180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 
