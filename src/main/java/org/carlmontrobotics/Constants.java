@@ -161,8 +161,8 @@ public final class Constants {
 		public static final double ERROR_TOLERANCE = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0;
 		public static final double RESOLUTION_WIDTH = 640;
-		public static final double MOUNT_ANGLE_DEG_SHOOTER = 46.2; //23.228
-		public static final double MOUNT_ANGLE_DEG_INTAKE = 46.2; //23.228
+		public static final double MOUNT_ANGLE_DEG_SHOOTER = 25; //23.228
+		public static final double MOUNT_ANGLE_DEG_INTAKE = 17.5 + 0; //23.228
 		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(56); //16.6
 		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(56); //16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;

@@ -18,5 +18,4 @@ public class AlignToNote extends ProxyCommand {
                return new RotateToFieldRelativeAngle(fieldOrientedTargetAngle, dt);
           });
      }
-     //REMINDER TO UPLOAD SHOOTER LIMELIGHT WITH THE PIPELINE MODEL :D
 }
