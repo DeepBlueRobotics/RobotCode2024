@@ -106,7 +106,7 @@ public final class Constants {
 		// PID values are listed in the order kP, kI, and kD
 		public static final double[] xPIDController = {4, 0.0, 0.0};
 		public static final double[] yPIDController = {4, 0.0, 0.0};
-		public static final double[] thetaPIDController = {0.10, 0.0, 0.001};
+		public static final double[] thetaPIDController = {0.05, 0.0, 0.00};
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZeroDeg, driveInversion, reversed, driveModifier, turnInversion);
 
@@ -172,11 +172,11 @@ public final class Constants {
 		public static final double HORIZONTAL_FOV_DEG = 0;
 		public static final double RESOLUTION_WIDTH = 640;
 		public static final double MOUNT_ANGLE_DEG_SHOOTER = 25; //23.228
-		public static final double MOUNT_ANGLE_DEG_INTAKE = 17.5 + 0; //23.228
+		public static final double MOUNT_ANGLE_DEG_INTAKE = 22; //23.228
 		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(56); //16.6
-		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(56); //16.6
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); //16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
-		public static final double NOTE_HEIGHT = Units.inchesToMeters(2);
+		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;

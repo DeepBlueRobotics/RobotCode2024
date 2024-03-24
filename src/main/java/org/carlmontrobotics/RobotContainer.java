@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
 //commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -76,9 +76,9 @@ public class RobotContainer {
     ));
   }
   private void setBindingsDriver() {
-	new JoystickButton(driverController, 1).onTrue(new AlignToApriltag(drivetrain)); //button A
-	new JoystickButton(driverController, 2).onTrue(new AlignToNote(drivetrain)); //button b?
-	new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); //button x?
+	new JoystickButton(driverController, Button.kB.value).onTrue(new AutoMATICALLYGetNote(drivetrain, limelight)); //button b
+	//new JoystickButton(driverController, 2).onTrue(new AlignToNote(drivetrain)); //button b?
+	new JoystickButton(driverController, Button.kA.value).whileTrue(new AlignToNote(drivetrain)); //button x?
 		// reset field orientation??
     // new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(
     //   new InstantCommand(drivetrain::resetFieldOrientation));

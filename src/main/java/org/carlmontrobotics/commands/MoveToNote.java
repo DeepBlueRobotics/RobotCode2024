@@ -4,37 +4,31 @@
 
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.Constants.*;
-import org.carlmontrobotics.subsystems.*;
+import org.carlmontrobotics.Constants.Limelightc;
+import org.carlmontrobotics.subsystems.Drivetrain;
+import org.carlmontrobotics.subsystems.Limelight;
+import org.carlmontrobotics.subsystems.LimelightHelpers;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class AutoMATICALLYGetNote extends Command {
-  /** Creates a new AutoMATICALLYGetNote. */
-  private Drivetrain dt;
-  //private IntakeShooter effector;
-  private Limelight ll;
-  private Timer timer = new Timer();
-
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll /*IntakeShooter effector*/) {
-    addRequirements(this.dt = dt);
-    addRequirements(this.ll = ll);
-    //addRequirements(this.effector = effector);
+public class MoveToNote extends Command {
+  private final Drivetrain dt;
+  private final Limelight ll;
+    private Timer timer = new Timer();
+  /** Creates a new MoveToNote. */
+  public MoveToNote(Drivetrain dt, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.dt=dt);
+    addRequirements(this.ll=ll);
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    new AlignToNote(dt);
     timer.reset();
     timer.start();
     //new Intake().finallyDo(()->{this.end(false);});
@@ -42,14 +36,14 @@ public class AutoMATICALLYGetNote extends Command {
     dt.setFieldOriented(false);
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double distErr = ll.getDistanceToNote(); //meters
     double forwardErr = distErr * Math.cos(radErr);
-    double strafeErr = distErr * Math.sin(radErr);
     // dt.drive(0,0,0);
-    dt.drive(Math.max(forwardErr*2, .5), Math.max(strafeErr*2, .5), Math.max(radErr*2,.5));
+    dt.drive(Math.max(forwardErr*2, .5), 0, 0);
     //180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 
@@ -57,7 +51,6 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
-    SmartDashboard.putBoolean("end", true);
   }
 
   // Returns true when the command should end.
