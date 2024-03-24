@@ -26,6 +26,7 @@ import org.carlmontrobotics.commands.*;
 import static org.carlmontrobotics.Constants.OI;
 import static org.carlmontrobotics.Constants.Armc.AMP_ANGLE_RAD;
 import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
+import static org.carlmontrobotics.Constants.Armc.HANG_ANGLE_RAD;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -185,6 +186,7 @@ public class RobotContainer {
       );
       new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
       new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
+      new JoystickButton(manipulatorController, Button.kB.value).onTrue(new moveClimber(arm));
       new JoystickButton(manipulatorController, Button.kX.value).onTrue(new IntakeTesting(intakeShooter));
         //new WaitCommand(.5),
         //new MoveToPos(arm, GROUND_INTAKE_POS)

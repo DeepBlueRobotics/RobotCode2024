@@ -55,7 +55,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 public class Arm extends SubsystemBase {
-
+    public boolean armClimbing = false;
+    public boolean callDrive = true;
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
     private final CANSparkMax armMotorFollower/* right */ = MotorControllerFactory
@@ -195,13 +196,16 @@ public class Arm extends SubsystemBase {
         }
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
-        if (isArmEncoderConnected){
-            driveArm();
-        }
-        else {
+        if (isArmEncoderConnected) {
+            if (callDrive) {
+                driveArm();
+            }
+        } else {
             armMotorMaster.set(0);
             armMotorFollower.set(0);
         }
+
+       
         autoCancelArmCommand();
 
     }
@@ -225,15 +229,23 @@ public class Arm extends SubsystemBase {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
         SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
         armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
-        if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
-                || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
-            armFeedVolts = armFeed.calculate(getArmPos(), 0);
+        
+            if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
+                    || (getArmPos() > UPPER_ANGLE_LIMIT_RAD)) {
+                armFeedVolts = armFeed.calculate(getArmPos(), 0);
             //kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+            armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+       
+    
         SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
+
+    public void drivearm(double throttle) {
+        armMotorMaster.set(throttle);
+    }
+
     public void stopArm() {
         armMotorMaster.set(0);
         

@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units.*;
 import org.carlmontrobotics.lib199.Limelight;
 import org.carlmontrobotics.lib199.Limelight.Transform;
@@ -134,6 +135,7 @@ public final class Constants {
 
 		// USE RADIANS FOR THE ARM
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
+		public static final double HANG_ANGLE_RAD = Units.degreesToRadians(90);
 		public static final double AMP_ANGLE_RAD = 1.28;
 		//-0.427725
 		public static final double GROUND_INTAKE_POS = Units.degreesToRadians(-24.5068373);
