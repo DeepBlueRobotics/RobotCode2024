@@ -167,6 +167,8 @@ public final class Constants {
 		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(56); //16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(2);
+		public static final double xyPControl = 2;
+		public static final double thetaPControl = 2;
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
