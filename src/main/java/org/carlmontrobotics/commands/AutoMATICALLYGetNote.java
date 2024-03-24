@@ -23,9 +23,9 @@ public class AutoMATICALLYGetNote extends Command {
   private IntakeShooter effector;
   private Limelight limelight;
 
-  public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter effector) {
+  public AutoMATICALLYGetNote(Drivetrain dt /*IntakeShooter effector*/) {
     addRequirements(this.dt = dt);
-    addRequirements(this.effector = effector);
+    //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
