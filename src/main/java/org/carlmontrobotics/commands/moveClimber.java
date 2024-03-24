@@ -4,17 +4,14 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
-import static org.carlmontrobotics.Constants.Armc.HANG_ANGLE_RAD;
-import static org.carlmontrobotics.Constants.Armc.LOWER_ANGLE_LIMIT_RAD;
-import static org.carlmontrobotics.Constants.Armc.MAX_FF_ACCEL_RAD_P_S;
-import static org.carlmontrobotics.Constants.Armc.TRAP_CONSTRAINTS;
-import static org.carlmontrobotics.Constants.Armc.UPPER_ANGLE_LIMIT_RAD;
+import static edu.wpi.first.units.Units.Volt;
+import static org.carlmontrobotics.Constants.Armc.*;
 
 import org.carlmontrobotics.subsystems.Arm;
 
 import com.revrobotics.CANSparkBase;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class moveClimber extends Command {
   /** Creates a new moveClimber. */
   private final Arm arm;
-  private double goal;
+  private double goal = HANG_ANGL_RAD;
 
   public moveClimber(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,33 +30,35 @@ public class moveClimber extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.callDrive = false;
-    if (!arm.armClimbing) {
-      goal = HANG_ANGLE_RAD;
-    } else {
-      goal = GROUND_INTAKE_POS;
-    }
-    arm.armClimbing = !arm.armClimbing;
+    arm.callDrive = false;//turn normal arm periodic off
+    arm.setArmTarget(goal);
   }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.drivearm(Math.signum(goal - arm.getArmPos()));
+    double err = goal - arm.getArmPos();
+    arm.drivearm(//equivalent to a clamped P controller with KS
+      Math.signum(err) * //direction control
+          MathUtil.clamp(
+            Math.abs(err)*2,//.5rad err -> 1 speed
+            .2,
+            .1
+          )
+    );
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.setArmTarget(goal);
+    arm.driveMotor(Volt.of(0));
     arm.callDrive = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return Math.abs(arm.getArmPos() - goal) < .1;
   }
 }

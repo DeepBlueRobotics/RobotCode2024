@@ -191,6 +191,9 @@ public class RobotContainer {
         //new WaitCommand(.5),
         //new MoveToPos(arm, GROUND_INTAKE_POS)
        //MoveToPos(arm, GROUND_INTAKE_POS));
+      
+      new JoystickButton(manipulatorController, RAISE_CLIMBER).onTrue(new MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
+      new JoystickButton(manipulatorController, LOWER_CLIMBER).onTrue(new MoveToPos(arm, Armc.HANG_ANGLE_RAD));
 
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
