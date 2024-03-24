@@ -31,28 +31,31 @@ public class moveClimber extends Command {
   @Override
   public void initialize() {
     arm.callDrive = false;//turn normal arm periodic off
-    arm.setArmTarget(goal);
+    //arm.setArmTarget(goal);
+    SmartDashboard.putNumber("climber volts", 0);
   }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double err = goal - arm.getArmPos();
-    arm.drivearm(//equivalent to a clamped P controller with KS
-      Math.signum(err) * //direction control
-          MathUtil.clamp(
-            Math.abs(err)*2,//.5rad err -> 1 speed
-            .2,
-            .1
-          )
-    );
+    arm.drivearm(SmartDashboard.getNumber("climber volts", 0));
+    // double err = goal - arm.getArmPos();
+    // arm.drivearm(//equivalent to a clamped P controller with KS
+    //   Math.signum(err) * //direction control
+    //       MathUtil.clamp(
+    //         Math.abs(err)*2,//.5rad err -> 1 speed
+    //         .2,
+    //         .1
+    //       )
+    // );
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     arm.driveMotor(Volt.of(0));
+    arm.setArmTarget(arm.getArmPos());
     arm.callDrive = true;
   }
 

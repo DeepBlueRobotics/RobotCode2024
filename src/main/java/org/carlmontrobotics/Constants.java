@@ -128,7 +128,8 @@ public final class Constants {
 		public static final double ROTATION_TO_RAD = 2 * Math.PI;
 		public static final boolean ENCODER_INVERTED = true;
 
-		public static final double ENCODER_OFFSET_RAD = 0.15235 + 2.08; //- 0.6095;
+		// difference between CoG and arm is .328 rad
+		public static final double ENCODER_OFFSET_RAD = -0.08 + .328; //- 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
 		// INTAKE_ANGLE = Degrees.to(-1);
@@ -383,11 +384,11 @@ public final class Constants {
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
 			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
 			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
-			public static final int SPEAKER_POS = Button.kA.value;
+			public static final int SPEAKER_POS = Button.kX.value;
 			//public static final int INTAKE_POS = Button.kX.value;
-			public static final int EJECT_RPM = Button.kY.value;
-			public static final int RAISE_CLIMBER = Button.kLeftStick.value;
-			public static final int LOWER_CLIMBER = Button.kRightStick.value;
+			public static final int EJECT_RPM = Button.kX.value;
+			public static final int RAISE_CLIMBER = Button.kA.value;
+			public static final int LOWER_CLIMBER = Button.kY.value;
 		}
 		public static final double JOY_THRESH = 0.01;
     public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;//woah, this is high.

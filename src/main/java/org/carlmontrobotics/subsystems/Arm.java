@@ -97,9 +97,11 @@ public class Arm extends SubsystemBase {
         // Comment out when running sysid
         armMasterEncoder.setPositionConversionFactor(ROTATION_TO_RAD);
         armMasterEncoder.setVelocityConversionFactor(ROTATION_TO_RAD);
-        armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
-        // ------------------------------------------------------------
         armMasterEncoder.setInverted(ENCODER_INVERTED);
+
+        armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
+        
+        // ------------------------------------------------------------
 
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
 
@@ -152,6 +154,8 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
 
+        armMotorMaster.setSmartCurrentLimit(50);
+        armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
             resetGoal();
 
@@ -187,6 +191,9 @@ public class Arm extends SubsystemBase {
         //     armFeed = new ArmFeedforward(kS, SmartDashboard.getNumber("set kG", currG), kV, kA);
         //     KG = currG;
         // }
+        SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
+
 
         // when the value is different
         double currentArmPos = getArmPos();
@@ -197,7 +204,7 @@ public class Arm extends SubsystemBase {
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
         if (isArmEncoderConnected) {
-            if (callDrive) {
+            if (callDrive || true) {
                 driveArm();
             }
         } else {
@@ -242,8 +249,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
-    public void drivearm(double throttle) {
-        armMotorMaster.set(throttle);
+    public void drivearm(double throttleVolts) {
+        armMotorMaster.setVoltage(throttleVolts);
     }
 
     public void stopArm() {
@@ -304,7 +311,8 @@ public class Arm extends SubsystemBase {
 
     public double getArmPos() {
         return MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONT_RAD,
-                ARM_DISCONT_RAD + 2 * Math.PI);
+        ARM_DISCONT_RAD + 2 * Math.PI);//armMasterEncoder.getPosition();//MathUtil.inputModulus(armMasterEncoder.getPosition(), ARM_DISCONT_RAD,
+               // ARM_DISCONT_RAD + 2 * Math.PI);
     }
 
     public double getArmVel() {

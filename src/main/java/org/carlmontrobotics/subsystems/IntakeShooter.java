@@ -41,8 +41,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(30, MotorConfig.NEO_550);
-    private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10,MotorType.kBrushless);
+    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
+    //private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10,MotorType.kBrushless);
     private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
@@ -73,7 +73,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putData("Intake Shooter",this);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
-        SmartDashboard.putNumber("Vortex volts", 0);
+        SmartDashboard.putNumber("intake volts", 0);
        // setMaxOutakeOverload(1);
 
     }
@@ -133,15 +133,17 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        count++;
-        double volts = SmartDashboard.getNumber("Vortex volts", 0);
-        outakeMotorVortex.set(volts);
+        outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
+        SmartDashboard.putNumber("outtake vel", outakeMotor.getEncoder().getVelocity());
+        //count++;
+        //double volts = SmartDashboard.getNumber("Vortex volts", 0);
+        //outakeMotorVortex.set(volts);
 
       //setMaxOutake();
 
     }
     public void driveMotor(double volts) {
-        outakeMotorVortex.set(volts);
+        //outakeMotorVortex.set(volts);
     }
     public void setCurrentLimit(int limit) {
         intakeMotor.setSmartCurrentLimit(limit);
@@ -188,7 +190,8 @@ public class IntakeShooter extends SubsystemBase {
         return intakeEncoder.getVelocity();
     }
     public double getVortexRPM() {
-        return outakeMotorVortex.getEncoder().getVelocity();
+        return 0;
+        //return outakeMotorVortex.getEncoder().getVelocity();
     }
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
