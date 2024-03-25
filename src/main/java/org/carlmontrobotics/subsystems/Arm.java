@@ -193,6 +193,9 @@ public class Arm extends SubsystemBase {
         // }
         SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
         SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Actual Master Arm Volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
+        SmartDashboard.putNumber("Actual Follower Arm Volts", armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
+
 
 
         // when the value is different
