@@ -149,6 +149,9 @@ public class Arm extends SubsystemBase {
 
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
+
+        SmartDashboard.putNumber("ramp rate (s)", 2);
+        SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
     }
     public void setBooleanDrive(boolean climb) {
         callDrive = climb;
@@ -255,20 +258,18 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("pid volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
-    public void drivearm(double throttleVolts) {
-        armMotorMaster.setVoltage(throttleVolts);
-    }
-
     public void stopArm() {
         armMotorMaster.set(0);
         
     }
-    public void driveArmMax(int direction) {
-       drivearm(6 * direction); //STARTING WITH SLOWER SPEED FOR TESTING
+    public void driveArm(double volts) {
+        //armMotorMaster.set(0)
+       armMotorMaster.setVoltage(volts); //STARTING WITH SLOWER SPEED FOR TESTING
     }
     public void setLimitsForClimbOn() {
         armPIDMaster.setOutputRange(-12, 12);
-        armMotorMaster.setOpenLoopRampRate(5);
+        armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse, (float)SmartDashboard.getNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS));
+        armMotorMaster.setOpenLoopRampRate(SmartDashboard.getNumber("ramp rate (s)", 2));
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
     }
     /**
@@ -332,13 +333,10 @@ public class Arm extends SubsystemBase {
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }
-    public void setSoftLimit(float limit) {
-        
-        armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse, limit);
-    }
     public void resetSoftLimit() {
-        armPIDMaster.setOutputRange(-12/MIN_VOLTAGE, 12/MAX_VOLTAGE);
+        armPIDMaster.setOutputRange(MIN_VOLTAGE/-12, MAX_VOLTAGE/12);
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        armMotorMaster.setOpenLoopRampRate(0);
     }
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
