@@ -3,12 +3,18 @@ package org.carlmontrobotics.subsystems;
 import static org.carlmontrobotics.Constants.Limelightc.*;
 import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
+import java.util.List;
+
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -78,7 +84,7 @@ public class Limelight extends SubsystemBase {
 
   public double getDistanceToNote(){
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
-    double distance = -(NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS_INTAKE) / angleToGoal.getTan();
+    double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getDegrees()));;
     SmartDashboard.putNumber("limelight distance", distance);
     return distance;
   }
