@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
 import static org.carlmontrobotics.Constants.Effectorc.*;
-
+import static org.carlmontrobotics.Constants.Led.ledLength;
 import static org.carlmontrobotics.Constants.Led.startingColor;
 
 import org.carlmontrobotics.Constants;
@@ -33,14 +33,30 @@ public class AuxSystems extends SubsystemBase {
     private final IntakeShooter effector;
     //for led color ramping
     private Color8Bit currentColor = new Color8Bit(0,0,0);
-    
-    
+
+
     private LedPoint currentPoint = new LedPoint();
-    public boolean matchMode = false;
+    public boolean matchMode = true;
     //^ whether we use normal color checking or flowing color mode
-    
+
     private double rumble;
     //stuf
+    private Color8Bit[] colorCycle = {
+        new Color8Bit(255,0,0),//0 red
+        new Color8Bit(255,127,0),//1 orange
+        new Color8Bit(255,255,0),//2 yellow
+        new Color8Bit(127,255,0),
+        new Color8Bit(0,255,0),//4 blue
+        new Color8Bit(0,255,127),
+        new Color8Bit(0,255,255),
+        new Color8Bit(0,127,255),
+        new Color8Bit(0,127,255),
+        new Color8Bit(0,0,255),//9 green
+        new Color8Bit(127,0,255),
+        new Color8Bit(255,0,255),//11 purple
+        new Color8Bit(255,0,127),
+        new Color8Bit(0,0,0)//13 black
+    };
 
     public AuxSystems(Arm a, IntakeShooter is){
         this.arm = a;
@@ -49,7 +65,7 @@ public class AuxSystems extends SubsystemBase {
         led.setLength(ledBuffer.getLength());
         setLedColor(startingColor, 0 , ledBuffer.getLength());
         led.start();
-   
+
 
         SmartDashboard.putBoolean("LED Match Mode:", matchMode);
 
@@ -61,39 +77,23 @@ public class AuxSystems extends SubsystemBase {
         //     for (int blue = 0; blue < 255/15; blue ++){
         //         for (int green = 0; green < 255/15; green ++){
         //             g +=15;
-                    
+
         //             currentPoint = currentPoint.addnext(0.1,new Color8Bit(r,g,b));
-                    
+
         //         }
         //         g = 0;
         //         b +=15;
-                
-                
+
+
         //     }
         //     b = 0;
         //     r +=15;
 
-            
-        //}
-        Color8Bit[] colorCycle = {
-            new Color8Bit(255,0,0),
-            new Color8Bit(255,127,0),
-            new Color8Bit(255,255,0),
-            new Color8Bit(127,255,0),
-            new Color8Bit(0,255,0),
-            new Color8Bit(0,255,127),
-            new Color8Bit(0,255,255),
-            new Color8Bit(0,127,255),
-            new Color8Bit(0,127,255),
-            new Color8Bit(0,0,255),
-            new Color8Bit(127,0,255),
-            new Color8Bit(255,0,255),
-            new Color8Bit(255,0,127),
 
-        };
+        //}
         for (Color8Bit color : colorCycle){
             currentPoint = currentPoint.addnext(2,color);
-            
+
         }
 
 
@@ -122,16 +122,27 @@ public class AuxSystems extends SubsystemBase {
              * else: no rumble
              * none:            all red
             */
-            
-            
+            if (effector.intakeDetectsNote() && effector.outakeDetectsNote()){
+                setLedColor(colorCycle[0], 0, ledLength);
+            }else if (effector.intakeDetectsNote()){
+                setLedColor(colorCycle[13], 0, ledLength);//all black
+                setLedColor(colorCycle[2], 0, midpoint);
+            } else if (effector.outakeDetectsNote()) {
+                setLedColor(colorCycle[13], 0, ledLength);//all black
+                setLedColor(colorCycle[11], midpoint, ledLength);
+            } else {
+                setLedColor(colorCycle[0], 0, ledLength);
+            }
+
+
         }else {
             currentColor = currentPoint.currentDesiredColor();
             setLedColor(currentColor,0,Constants.Led.ledLength);
-            
-            
+
+
         }
-        
-        
+
+
 
     }
 
@@ -198,7 +209,7 @@ public class AuxSystems extends SubsystemBase {
                 }
             }
             double endTime = this.startTime+this.duration;
-            
+
             double dfrac = (endTime-currTime)/(endTime-startTime);
             //^ fraction of completion
             return new Color8Bit(
