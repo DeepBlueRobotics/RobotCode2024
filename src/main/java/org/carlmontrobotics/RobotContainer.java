@@ -84,7 +84,6 @@ public class RobotContainer {
   private final Led led = new Led(intakeShooter);
   private final Arm arm = new Arm();
   private final Drivetrain drivetrain = new Drivetrain();
-  private final AuxSystems auxSystems = new AuxSystems(arm, intakeShooter);
 
   /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
