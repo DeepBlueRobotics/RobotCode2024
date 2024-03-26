@@ -186,7 +186,7 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
-        double currTime = Timer.getFPGATimestamp();
+       // double currTime = Timer.getFPGATimestamp();
         // SmartDashboard.putNumber("Current Time", currTime);
         //SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         //setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
@@ -205,7 +205,7 @@ public class Arm extends SubsystemBase {
 
 
         // when the value is different
-        double currentArmPos = getArmPos();
+        /*double currentArmPos = getArmPos();
         if (currentArmPos != lastArmPos) {
             lastMeasuredTime = currTime;
             lastArmPos = currentArmPos;
@@ -223,6 +223,7 @@ public class Arm extends SubsystemBase {
 
        
         autoCancelArmCommand();
+        */
 
     }
     
