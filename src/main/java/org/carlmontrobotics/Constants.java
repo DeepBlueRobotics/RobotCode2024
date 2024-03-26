@@ -165,15 +165,15 @@ public final class Constants {
 		//fine for now, change it later before use - ("Incorect use of setIZone()" Issue #22)
 		//public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
 		public static final double MAX_FF_ACCEL_RAD_P_S =  53.728/4; // rad / s^2 ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
-
+		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
 
 		public static final double MIN_VOLTAGE = -0.5; //-((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; //(kS + kG + 1)/12;
-
+		
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
 		public static final double ARM_MASS_KG = 9.59302503;
-
+		
 		public static TrapezoidProfile.Constraints TRAP_CONSTRAINTS;//initalized by arm constructor
 		// other0;
 

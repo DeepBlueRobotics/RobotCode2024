@@ -56,14 +56,8 @@ public class TeleopEffector extends Command {
       intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
     } 
     //manipulatorController.setRumble(RumbleType.kBothRumble, 0.5);
-    if(!hasIntaked && intake.intakeDetectsNote()) {
-      manipulatorController.setRumble(RumbleType.kBothRumble, 0.5);
-      hasIntaked = true;
-      timer.start();
-    }
-    if(hasIntaked && timer.get() > 1) {
-      manipulatorController.setRumble(RumbleType.kBothRumble, 0);
-      timer.stop();
+    if(intake.intakeDetectsNote()) {
+      manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
     }
     /*
     intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
@@ -74,7 +68,7 @@ public class TeleopEffector extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    manipulatorController.setRumble(RumbleType.kBothRumble, 0); //Reasoning: I WANNA TEST WHAT HAPPENS WHEN ANOTHER CMD IS USED OVER DEFAULT
   }
 
   // Returns true when the command should end.

@@ -30,7 +30,7 @@ public class moveClimber extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.callDrive = false;//turn normal arm periodic off
+    arm.setBooleanDrive(false);//turn normal arm periodic off
     //arm.setArmTarget(goal);
     SmartDashboard.putNumber("climber volts", 0);
   }
@@ -56,7 +56,7 @@ public class moveClimber extends Command {
   public void end(boolean interrupted) {
     arm.driveMotor(Volt.of(0));
     arm.setArmTarget(arm.getArmPos());
-    arm.callDrive = true;
+    arm.setBooleanDrive(false);
   }
 
   // Returns true when the command should end.

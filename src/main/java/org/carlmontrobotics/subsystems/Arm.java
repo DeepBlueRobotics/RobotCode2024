@@ -10,6 +10,7 @@ import org.opencv.core.Mat;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -55,8 +56,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 public class Arm extends SubsystemBase {
-    public boolean armClimbing = false;
-    public boolean callDrive = true;
+    private boolean callDrive = true;
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
     private final CANSparkMax armMotorFollower/* right */ = MotorControllerFactory
@@ -150,6 +150,9 @@ public class Arm extends SubsystemBase {
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
     }
+    public void setBooleanDrive(boolean climb) {
+        callDrive = climb;
+    }
 
     @Override
     public void periodic() {
@@ -207,7 +210,7 @@ public class Arm extends SubsystemBase {
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
         if (isArmEncoderConnected) {
-            if (callDrive || true) {
+            if (callDrive) {
                 driveArm();
             }
         } else {
@@ -219,7 +222,7 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
 
     }
-
+    
     public void autoCancelArmCommand() {
         if (!(getDefaultCommand() instanceof TeleopArm) || DriverStation.isAutonomous())
             return;
@@ -259,6 +262,14 @@ public class Arm extends SubsystemBase {
     public void stopArm() {
         armMotorMaster.set(0);
         
+    }
+    public void driveArmMax(int direction) {
+       drivearm(6 * direction); //STARTING WITH SLOWER SPEED FOR TESTING
+    }
+    public void setLimitsForClimbOn() {
+        armPIDMaster.setOutputRange(-12, 12);
+        armMotorMaster.setOpenLoopRampRate(5);
+        armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
     }
     /**
      *
@@ -321,7 +332,14 @@ public class Arm extends SubsystemBase {
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }
-
+    public void setSoftLimit(float limit) {
+        
+        armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse, limit);
+    }
+    public void resetSoftLimit() {
+        armPIDMaster.setOutputRange(-12/MIN_VOLTAGE, 12/MAX_VOLTAGE);
+        armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    }
     public TrapezoidProfile.State getCurrentArmState() {
         return new TrapezoidProfile.State(getArmPos(), getArmVel());
     }
@@ -363,6 +381,8 @@ public class Arm extends SubsystemBase {
         builder.addBooleanProperty("ArmPIDAtSetpoint", () -> armAtSetpoint(), null);
         builder.addDoubleProperty("Arm Goal Pos (rad)", () -> goalState.position, null);
         builder.addDoubleProperty("InternalArmVelocity", () -> armMasterEncoder.getVelocity(), null);
+        builder.addDoubleProperty("Soft limit Forward", () -> armMotorMaster.getSoftLimit(SoftLimitDirection.kForward), null);
+        builder.addDoubleProperty("Soft limit Reverse", () -> armMotorMaster.getSoftLimit(SoftLimitDirection.kReverse), null);
     }
 
     public double getMaxVelRad(){
