@@ -193,9 +193,9 @@ public class RobotContainer {
         //new MoveToPos(arm, GROUND_INTAKE_POS)
        //MoveToPos(arm, GROUND_INTAKE_POS));
       
-      new JoystickButton(manipulatorController, RAISE_CLIMBER).onTrue(new MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
-      new JoystickButton(manipulatorController, LOWER_CLIMBER).onTrue(new ClimbArmSoftLimit(arm));
-
+      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
+      new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
     //NEW BINDINGS(easier for manipulator)
     //Xbox left joy Y axis -> raw Intake/Outtake control
     //Xbox right joy Y axis -> raw Arm control
@@ -249,7 +249,7 @@ public class RobotContainer {
 
 */
     //TODO: ask charles if passing in controller is okay
-    SmartDashboard.putData(new moveClimber(arm));
+   // SmartDashboard.putData(new moveClimber(arm));
   }
   // private void setBindingsManipulatorARM() {
 	// //NEW BINDINGS(easier for manipulator)
