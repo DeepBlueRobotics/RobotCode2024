@@ -4,6 +4,9 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Limelightc.MIN_MOVEMENT_METERSPSEC;
+import static org.carlmontrobotics.Constants.Limelightc.MIN_MOVEMENT_RADSPSEC;
+
 import org.carlmontrobotics.Constants.*;
 import org.carlmontrobotics.subsystems.*;
 
@@ -44,12 +47,11 @@ public class AutoMATICALLYGetNote extends Command {
 
   @Override
   public void execute() {
-    double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
-    double distErr = ll.getDistanceToNote(); //meters
-    double forwardErr = distErr * Math.cos(radErr);
-    double strafeErr = distErr * Math.sin(radErr);
+    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
+    double forwardDistErrMeters = ll.getDistanceToNote(); 
+    double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
-    dt.drive(Math.max(forwardErr*2, .5), Math.max(strafeErr*2, .5), Math.max(radErr*2,.5));
+    dt.drive(Math.max(forwardDistErrMeters*2, MIN_MOVEMENT_METERSPSEC), Math.max(strafeDistErrMeters*2, MIN_MOVEMENT_METERSPSEC), Math.max(angleErrRad*2,MIN_MOVEMENT_RADSPSEC));
     //180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 

@@ -172,11 +172,13 @@ public final class Constants {
 		public static final double HORIZONTAL_FOV_DEG = 0;
 		public static final double RESOLUTION_WIDTH = 640;
 		public static final double MOUNT_ANGLE_DEG_SHOOTER = 25; //23.228
-		public static final double MOUNT_ANGLE_DEG_INTAKE = 22; //23.228
+		public static final double MOUNT_ANGLE_DEG_INTAKE = -22; //23.228
 		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(56); //16.6
 		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); //16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
+		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
+		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
