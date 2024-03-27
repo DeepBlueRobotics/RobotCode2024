@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class AutoMATICALLYGetNote extends Command {
   /** Creates a new AutoMATICALLYGetNote. */
   private Drivetrain dt;
-  private IntakeShooter effector;
+  //private IntakeShooter effector;
   private Limelight ll;
   private Timer timer = new Timer();
 
