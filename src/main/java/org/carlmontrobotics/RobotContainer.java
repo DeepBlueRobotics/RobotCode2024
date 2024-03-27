@@ -21,12 +21,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 //199 files
 import org.carlmontrobotics.subsystems.*;
+import org.carlmontrobotics.subsystems.Led;
 import org.carlmontrobotics.commands.*;
 
 import static org.carlmontrobotics.Constants.OI;
-import static org.carlmontrobotics.Constants.Armc.AMP_ANGLE_RAD;
-import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
-import static org.carlmontrobotics.Constants.Armc.HANG_ANGLE_RAD;
+import static org.carlmontrobotics.Constants.Armc.*;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -64,7 +63,6 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import static com.pathplanner.lib.auto.AutoBuilder.*;
 import com.pathplanner.lib.auto.AutoBuilder;
-import org.carlmontrobotics.subsystems.Led;
 
 //java
 import java.util.function.DoubleSupplier;
@@ -84,6 +82,7 @@ public class RobotContainer {
   private final Led led = new Led(intakeShooter);
   private final Arm arm = new Arm();
   private final Drivetrain drivetrain = new Drivetrain();
+  private final Limelight limelight = new Limelight(drivetrain);
 
   /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
@@ -145,7 +144,9 @@ public class RobotContainer {
   }
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
-
+    new JoystickButton(driverController, 1).whileTrue(new AlignToApriltag(drivetrain)); //button A
+	new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); //button b?
+	new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, limelight)); //button x?
     // new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new ParallelCommandGroup(
     //   new InstantCommand(()->drivetrain.setFieldOriented(false)),
     //   new PrintCommand("Setting to ROBOT ORIENTED!!\nRO\nRO\nRO\n"))
