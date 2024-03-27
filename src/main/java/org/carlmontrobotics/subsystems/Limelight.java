@@ -3,16 +3,10 @@ package org.carlmontrobotics.subsystems;
 import static org.carlmontrobotics.Constants.Limelightc.*;
 import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -45,6 +39,7 @@ public class Limelight extends SubsystemBase {
     updateBotPose3d();
     getDistanceToTargetSpeaker();
     getCurrentPose();
+    getDistanceToNote();
   }
 
   public void updateBotPose3d(){
@@ -65,21 +60,27 @@ public class Limelight extends SubsystemBase {
     if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID){
       Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
       double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER) / angleToGoal.getTan();
-      SmartDashboard.putNumber("limelight distance", distance);
+      //SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
 
     else{
-      SmartDashboard.putNumber("limelight distance", -1);
+      //SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
   }
 
   public double getDistanceToNote(){
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
-    double distance = (NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS_INTAKE) / angleToGoal.getTan();
-    SmartDashboard.putNumber("limelight distance to note", distance);
-    return distance;
+    if (angleToGoal.getDegrees() <= 0) {
+      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));;
+      SmartDashboard.putNumber("limelight distance", distance);
+      return distance;
+    }
+    else {
+      SmartDashboard.putNumber("limelight distance", -1);
+      return -1;
+    }
   }
 
   // public Pose3d getTargetPose() {
