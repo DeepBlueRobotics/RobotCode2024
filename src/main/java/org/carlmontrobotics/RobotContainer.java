@@ -396,7 +396,8 @@ public class RobotContainer {
       //RAW FORWARD command
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
-      autoCommands.add(2, AutoBuilder.followPath(path));//no events so just use path instead of auto
+      autoCommands.add(2, new ParallelCommandGroup(AutoBuilder.followPath(path),
+        new InstantCommand(()->SmartDashboard.putString("Autoout---", "OMG KAWAII STUNK"))));//no events so just use path instead of auto
 
       // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
     }
@@ -412,15 +413,16 @@ public class RobotContainer {
       */
       hasSetupAutos=true;
     }
-    return autoCommands.get(1); //hard-coded PP straight auto
-    // Integer autoIndex = autoSelector.getSelected();
+    // return autoCommands.get(1); //hard-coded PP straight auto
+    Integer autoIndex = autoSelector.getSelected();
 
-    // if (autoIndex!=null && autoIndex!=0){
-    //   new PrintCommand("Running selected auto: "+autoSelector.toString());
-    //   return autoCommands.get(autoIndex.intValue());
-    // }
-    // new PrintCommand("No auto :(");
-    // return null;
+    if (autoIndex!=null && autoIndex!=0){
+      SmartDashboard.putString("Autoout---","Running selected auto: "+autoIndex.toString());
+      return autoCommands.get(2/*autoIndex.intValue()*/);
+    } else {
+      SmartDashboard.putString("Autoout---","No auto :(");
+      return new WaitCommand(.1);
+    }
 
     /*
 

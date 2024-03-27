@@ -38,7 +38,7 @@ public class Led extends SubsystemBase{
     }
     @Override
     public void periodic(){
-        System.err.println("skdjfksd");
+        //System.err.println("skdjfksd");
         if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote()) {
             setLedColor(DETECT_NOTE_ORANGE, 0, midpoint);
             //when intake TOF detects, but outtake TOF does not the bottom half of the LEDs become orange
