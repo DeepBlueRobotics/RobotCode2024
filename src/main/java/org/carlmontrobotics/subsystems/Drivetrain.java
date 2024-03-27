@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -105,6 +106,9 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule moduleFR;
     private SwerveModule moduleBL;
     private SwerveModule moduleBR;
+
+    private final Field2d field = new Field2d();
+
 
     public Drivetrain() {
         // Calibrate Gyro
@@ -210,6 +214,8 @@ public class Drivetrain extends SubsystemBase {
 
         // Setup autopath builder
         configurePPLAutoBuilder();
+
+        SmartDashboard.putData("Field", field);
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
@@ -278,6 +284,8 @@ public class Drivetrain extends SubsystemBase {
     //      SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
     //     SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
 
+        odometry.update(Rotation2d.fromDegrees(getHeadingDeg()), getModulePositions());
+        field.setRobotPose(odometry.getPoseMeters());
     }
 
     @Override
