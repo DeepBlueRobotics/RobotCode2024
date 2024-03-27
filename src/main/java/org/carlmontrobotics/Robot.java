@@ -14,6 +14,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode;
 
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 
 
 
@@ -32,6 +34,10 @@ public class Robot extends TimedRobot {
     //SignalLogger.start();
     final UsbCamera camera = CameraServer.startAutomaticCapture();
     VideoMode videoMode = new VideoMode(1, 1280, 720, 30);
+    // Get a CvSink. This will capture Mats from the camera
+    CvSink cvSink = CameraServer.getVideo();
+    // Setup a CvSource. This will send images back to the Dashboard
+    CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
     System.out.println("success is " + camera.setVideoMode(videoMode));
     // Record both DS control and joystick data
     DataLogManager.start();
