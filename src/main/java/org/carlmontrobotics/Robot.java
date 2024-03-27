@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
+
+
 
 
 public class Robot extends TimedRobot {
@@ -25,7 +30,9 @@ public class Robot extends TimedRobot {
     robot = this;
     m_robotContainer = new RobotContainer();
     //SignalLogger.start();
-    
+    final UsbCamera camera = CameraServer.startAutomaticCapture();
+    VideoMode videoMode = new VideoMode(1, 1280, 720, 30);
+    System.out.println("success is " + camera.setVideoMode(videoMode));
     // Record both DS control and joystick data
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
