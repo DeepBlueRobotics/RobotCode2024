@@ -41,11 +41,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
-    //private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10,MotorType.kBrushless);
-    private final RelativeEncoder outakeEncoder = outakeMotor.getEncoder();
+   // private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
+    private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10,MotorType.kBrushless);
+    private final RelativeEncoder outakeEncoder = outakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
-    private final SparkPIDController pidControllerOutake = outakeMotor.getPIDController();
+    private final SparkPIDController pidControllerOutake = outakeMotorVortex.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private Timer timer = new Timer();
     private int count = 0;
@@ -63,7 +63,7 @@ public class IntakeShooter extends SubsystemBase {
     public IntakeShooter() {
         //Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
-        outakeMotor.setInverted(OUTAKE_MOTOR_INVERSION);
+        outakeMotorVortex.setInverted(OUTAKE_MOTOR_INVERSION);
         pidControllerOutake.setP(kP[OUTTAKE]);
         pidControllerOutake.setI(kI[OUTTAKE]);
         pidControllerOutake.setD(kD[OUTTAKE]);
@@ -74,6 +74,7 @@ public class IntakeShooter extends SubsystemBase {
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
         SmartDashboard.putNumber("intake volts", 0);
+        SmartDashboard.putNumber("Vortex volts", 0);
        // setMaxOutakeOverload(1);
 
     }
@@ -90,7 +91,7 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches(intakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;
     }
     public void motorSetOutake(int speed) {
-        outakeMotor.set(speed);
+        outakeMotorVortex.set(speed);
     }
     private double getGamePieceDistanceOutake() {
         return Units.metersToInches(OutakeDistanceSensor.getRange()/1000) - DS_DEPTH_INCHES;
@@ -133,11 +134,12 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
-        SmartDashboard.putNumber("outtake vel", outakeMotor.getEncoder().getVelocity());
+        //outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
+        SmartDashboard.putNumber("outtake vel", outakeMotorVortex.getEncoder().getVelocity());
+       
         //count++;
-        //double volts = SmartDashboard.getNumber("Vortex volts", 0);
-        //outakeMotorVortex.set(volts);
+        double volts = SmartDashboard.getNumber("Vortex volts", 0);
+       // outakeMotorVortex.set(volts);
 
       //setMaxOutake();
 
@@ -154,16 +156,16 @@ public class IntakeShooter extends SubsystemBase {
 
     }
     public void setMaxOutakeOverload(int direction) {
-        outakeMotor.setSmartCurrentLimit(40);
+     //   outakeMotor.setSmartCurrentLimit(40);
         //outakeMotor.setSmartCurrentLimit(1*direction);
     }
     public void setMaxOutake() {
-     outakeMotor.set(1);   
+     outakeMotorVortex.set(1);   
     }
     
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
-        outakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
+       // outakeMotorVortex.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
         //intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
 
@@ -184,7 +186,8 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void stopIntake() {
-        outakeMotor.set(0);
+        intakeMotor.set(0);
+        outakeMotorVortex.set(0);
     }
     public double getIntakeRPM() {
         return intakeEncoder.getVelocity();

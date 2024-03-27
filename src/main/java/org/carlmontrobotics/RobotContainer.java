@@ -193,10 +193,12 @@ public class RobotContainer {
         //new MoveToPos(arm, GROUND_INTAKE_POS)
        //MoveToPos(arm, GROUND_INTAKE_POS));
       
-      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
+      //new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
       new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
-    //NEW BINDINGS(easier for manipulator)
+    new JoystickButton(manipulatorController, Button.kRightStick.value).onTrue(new MoveToPos(arm, -0.2));
+    //NEW BINDINGS(easier for mani
+   
     //Xbox left joy Y axis -> raw Intake/Outtake control
     //Xbox right joy Y axis -> raw Arm control
     //Xbox right trigger axis -> Intake pos + intake

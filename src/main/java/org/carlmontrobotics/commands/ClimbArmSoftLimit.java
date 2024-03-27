@@ -4,11 +4,8 @@ import org.carlmontrobotics.subsystems.Arm;
 
 import static org.carlmontrobotics.Constants.Armc.*;
 
-import org.carlmontrobotics.Constants.Armc.*;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -27,18 +24,19 @@ public class ClimbArmSoftLimit extends Command {
     }
     @Override
     public void execute() {
-        arm.driveArm(SmartDashboard.getNumber("climber volts", 0));
+        arm.driveArm(-12);
+      
     }
     @Override
     public void end(boolean interrupted) {
         arm.stopArm(); //OR maintain small voltage to keep arm in place?
         arm.resetSoftLimit();
-        arm.setArmTarget(arm.getArmPos());
+        // arm.setArmTarget(arm.getArmPos());
         arm.setBooleanDrive(true);
     }
     @Override
     public boolean isFinished() {
         //TODO: Figure out the actual climb position
-        return Math.abs(arm.getArmPos() - CLIMBER_DOWN_ANGLE_RAD) < Units.degreesToRadians(5);
+        return Math.abs(arm.getArmPos() - GROUND_INTAKE_POS) < Units.degreesToRadians(5);
     }
 }

@@ -24,6 +24,7 @@ public class GETOUT extends Command{
     public void end(boolean interrupted) {
         timer.stop();
         timer.reset();
+        intakeShooter.setCurrentLimit(20);
     }
     @Override
     public boolean isFinished() {

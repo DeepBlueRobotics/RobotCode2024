@@ -152,6 +152,9 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putNumber("ramp rate (s)", 2);
         SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
+        armMotorMaster.setSmartCurrentLimit(80);
+        armMotorFollower.setSmartCurrentLimit(80);
+
     }
     public void setBooleanDrive(boolean climb) {
         callDrive = climb;
@@ -160,8 +163,8 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
 
-        armMotorMaster.setSmartCurrentLimit(50);
-        armMotorFollower.setSmartCurrentLimit(50);
+        // armMotorMaster.setSmartCurrentLimit(50);
+        // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
             resetGoal();
 
