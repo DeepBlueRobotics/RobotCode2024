@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.util.Color;
+import org.carlmontrobotics.subsystems.Led;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -46,30 +47,17 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public final class Constants {
 	public static final double g = 9.81; // meters per second squared
-
 	public static final class Led {
-		public static final int ledLength = 1000;//lower doesn't work but higher does
-		public static final int ledPort = 5;
-
-	//public static final Color8Bit defaultColor = new Color8Bit(0, 0, 200);
-
-
-
-		public static final Color8Bit detectNote = new Color8Bit(250,140,3);
-		public static final Color8Bit holding = new Color8Bit(0,250,0);
-		public static final Color8Bit ejectColor = new Color8Bit(250,250,0);
-
-		public static final Color8Bit intakeColor = new Color8Bit(154,0,255); //intake detection = purple
-		public static final Color8Bit outtakeColor = new Color8Bit(0,9,255); //outtake detection = blue
-		public static final Color8Bit intakeouttakeColor = new Color8Bit(0,255,9); //intake and outtake (both) = green
-		//Red when nothing, purple/blue when intake/outtake detect only, green when both
-
-
-		//for weird alex stuf
-		public static Color8Bit startingColor = new Color8Bit(255,0,0);
-
+			
+	
+		public static final Color8Bit DEFAULT_COLOR_BLUE = new Color8Bit(0, 0, 200);
+		public static final Color8Bit DETECT_NOTE_YELLOW = new Color8Bit(255,255,0);
+		public static final Color8Bit HOLDING_GREEN = new Color8Bit(0,250,0);
+		public static final int ledPort = 0;
+		//TODO: figure out how to get port of LED, it could be 0 or
 	}
 
+	
 	public static final class Effectorc {
 		// PID values
 
@@ -222,11 +210,11 @@ public final class Constants {
 		 	// seconds it takes to go from 0 to 12 volts(aka MAX)
 			public static final double secsPer12Volts = 0.1;
 
-			// maxRCW is the angular velocity of the robot.
-			// Calculated by looking at one of the motors and treating it as a point mass moving around in a circle.
-			// Tangential speed of this point mass is maxSpeed and the radius of the circle is sqrt((wheelBase/2)^2 + (trackWidth/2)^2)
-			// Angular velocity = Tangential speed / radius
-			public static final double maxRCW = maxSpeed / swerveRadius;
+		// maxRCW is the angular velocity of the robot.
+		// Calculated by looking at one of the motors and treating it as a point mass moving around in a circle.
+		// Tangential speed of this point mass is maxSpeed and the radius of the circle is sqrt((wheelBase/2)^2 + (trackWidth/2)^2)
+		// Angular velocity = Tangential speed / radius
+		public static final double maxRCW = maxSpeed / swerveRadius;
 
 			public static final boolean[] reversed = {false, false, false, false};
 			// public static final boolean[] reversed = {true, true, true, true};
@@ -267,27 +255,27 @@ public final class Constants {
 			public static final double[] kForwardAccels = {1.1047/2, 0.79422/2, 0.77114/2, 1.1003/2};
 			public static final double[] kBackwardAccels = kForwardAccels;
 
-			public static final double autoMaxSpeedMps = 0.35 * 4.4;  // Meters / second
-			public static final double autoMaxAccelMps2 = mu * g;  // Meters / seconds^2
-			public static final double autoMaxVolt = 10.0;   // For Drivetrain voltage constraint in RobotPath.java
-			// The maximum acceleration the robot can achieve is equal to the coefficient of static friction times the gravitational acceleration
-			// a = mu * 9.8 m/s^2
-			public static final double autoCentripetalAccel = mu * g * 2;
+		public static final double autoMaxSpeedMps = 0.35 * 4.4;  // Meters / second
+		public static final double autoMaxAccelMps2 = mu * g;  // Meters / seconds^2
+		public static final double autoMaxVolt = 10.0;   // For Drivetrain voltage constraint in RobotPath.java
+		// The maximum acceleration the robot can achieve is equal to the coefficient of static friction times the gravitational acceleration
+		// a = mu * 9.8 m/s^2
+		public static final double autoCentripetalAccel = mu * g * 2;
 
-			public static final boolean isGyroReversed = true;
+		public static final boolean isGyroReversed = true;
 
-			// PID values are listed in the order kP, kI, and kD
-			public static final double[] xPIDController = {4, 0.0, 0.0};
-			public static final double[] yPIDController = {4, 0.0, 0.0};
-			public static final double[] thetaPIDController = {0.05, 0.0, 0.001};
+		// PID values are listed in the order kP, kI, and kD
+		public static final double[] xPIDController = {4, 0.0, 0.0};
+		public static final double[] yPIDController = {4, 0.0, 0.0};
+		public static final double[] thetaPIDController = {0.1, 0.0, 0.00};
 
 			public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZeroDeg, driveInversion, reversed, driveModifier, turnInversion);
 
-			public static final Transform limelightTransformForPoseEstimation = Transform.BOTPOSE_WPIBLUE;
+		//public static final Limelight.Transform limelightTransformForPoseEstimation = Transform.BOTPOSE_WPIBLUE;
 
-			//#endregion
+		//#endregion
 
-			//#region Ports
+		//#region Ports
 
 			public static final int driveFrontLeftPort = 11; //
 			public static final int driveFrontRightPort = 19; //
@@ -304,21 +292,21 @@ public final class Constants {
 			public static final int canCoderPortBL = 2;
 			public static final int canCoderPortBR = 1;
 
-			//#endregion
+		//#endregion
 
-			//#region Command Constants
+		//#region Command Constants
 
-			public static  double kNormalDriveSpeed = 1; // Percent Multiplier
-			public static  double kNormalDriveRotation = 0.5; // Percent Multiplier
-			public static  double kSlowDriveSpeed = 0.4; // Percent Multiplier
-			public static  double kSlowDriveRotation = 0.250; // Percent Multiplier
-			public static  double kAlignMultiplier = 1D/3D;
-			public static final double kAlignForward = 0.6;
+		public static  double kNormalDriveSpeed = 1; // Percent Multiplier
+		public static  double kNormalDriveRotation = 0.5; // Percent Multiplier
+		public static  double kSlowDriveSpeed = 0.4; // Percent Multiplier
+		public static  double kSlowDriveRotation = 0.250; // Percent Multiplier
+		public static  double kAlignMultiplier = 1D/3D;
+		public static final double kAlignForward = 0.6;
 
-			public static final double wheelTurnDriveSpeed = 0.0001; // Meters / Second ; A non-zero speed just used to orient the wheels to the correct angle. This should be very small to avoid actually moving the robot.
+		public static final double wheelTurnDriveSpeed = 0.0001; // Meters / Second ; A non-zero speed just used to orient the wheels to the correct angle. This should be very small to avoid actually moving the robot.
 
-			public static final double[] positionTolerance = {Units.inchesToMeters(.5), Units.inchesToMeters(.5), 5}; // Meters, Meters, Degrees
-			public static final double[] velocityTolerance = {Units.inchesToMeters(1), Units.inchesToMeters(1), 5}; // Meters, Meters, Degrees/Second
+		public static final double[] positionTolerance = {Units.inchesToMeters(.5), Units.inchesToMeters(.5), 5}; // Meters, Meters, Degrees
+		public static final double[] velocityTolerance = {Units.inchesToMeters(1), Units.inchesToMeters(1), 5}; // Meters, Meters, Degrees/Second
 
 			//#endregion
 			//#region Subsystem Constants
@@ -341,22 +329,27 @@ public final class Constants {
 				//#endregion
 		}
 
-		public static final class Limelight {
+		public static final class Limelightc {
 			public static final String INTAKE_LL_NAME = "intake-limelight";
 			public static final String SHOOTER_LL_NAME = "shooter-limelight";
 
-			public static final double ERROR_TOLERANCE = 0.1;
-			public static final double HORIZONTAL_FOV_DEG = 0;
-			public static final double RESOLUTION_WIDTH = 640;
-			public static final double MOUNT_ANGLE_DEG = 46.2; //23.228
-			public static final double HEIGHT_FROM_GROUND_METERS = Units.inchesToMeters(9); //16.6
-			public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
-			public static final class Apriltag {
-				public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
-				public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
-				public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); //88.125
-			}
+		public static final double ERROR_TOLERANCE_RAD = 0.1;
+		public static final double HORIZONTAL_FOV_DEG = 0;
+		public static final double RESOLUTION_WIDTH_PIX = 640;
+		public static final double MOUNT_ANGLE_DEG_SHOOTER = 25; //23.228
+		public static final double MOUNT_ANGLE_DEG_INTAKE = -22; //23.228
+		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(56); //16.6
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); //16.6
+		public static final double ARM_TO_OUTTAKE_OFFSET_DEG= 115;
+		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
+		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
+		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
+		public static final class Apriltag {
+			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
+			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
+			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); //88.125
 		}
+	}
 
 		public static final class OI {
 			public static final class Driver {
@@ -397,6 +390,7 @@ public final class Constants {
 			public static final int RAISE_CLIMBER = Button.kA.value;
 			public static final int LOWER_CLIMBER = Button.kY.value;
 		}
+		
 		public static final double JOY_THRESH = 0.01;
     public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;//woah, this is high.
 	}

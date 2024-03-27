@@ -4,15 +4,18 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 import static org.carlmontrobotics.Constants.Led.*;
 
 import org.carlmontrobotics.Constants;
-import org.carlmontrobotics.subsystems.AuxSystems;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
+import org.carlmontrobotics.subsystems.Led;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Intake extends Command {
     //intake until sees game peice or 4sec has passed
-    private final Timer timer = new Timer();
+    private Timer timer;
     private final IntakeShooter intake;
+
 
     private double endAt = 0;
     private final double keepIntakingFor = 0.2;
@@ -20,6 +23,8 @@ public class Intake extends Command {
     int index = 0;
     public Intake(IntakeShooter intake) {
         addRequirements(this.intake = intake);
+        
+        
     }
 
     @Override
@@ -37,12 +42,14 @@ public class Intake extends Command {
     public void execute() {
       //Intake Led
       if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-        index++;
+        index ++;
+        
         intake.setRPMIntake(0);
         intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index*increaseAmount);
       }
       if (intake.outakeDetectsNote() ) {
        // Timer.delay(keepIntakingFor);
+       
         intake.setRPMIntake(0.0);
       }
     }
@@ -60,5 +67,6 @@ public class Intake extends Command {
   public boolean isFinished() {
     return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
       // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
+      
   }
 }
