@@ -227,7 +227,7 @@ public final class Constants {
 				// Determine correct turn PID constants
 				public static final double[] turnkP = {51.078,60.885,60.946,60.986}; //{0.00374, 0.00374, 0.00374, 0.00374};
 				public static final double[] turnkI = {0, 0, 0, 0};
-				public static final double[] turnkD = {0/*dont edit */, 0.5, 0.42, 1}; // todo: use d
+				public static final double[] turnkD = {0/*dont edit */, 0.5, 0.42, .2}; // todo: use d
 				//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
 				public static final double[] turnkS = {0.13027, 0.17026, 0.2, 0.23262};
 	
