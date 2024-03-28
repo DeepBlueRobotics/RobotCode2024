@@ -108,8 +108,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         // Calibrate Gyro
-        {   
-            
+        {
+
             double initTimestamp = Timer.getFPGATimestamp();
             double currentTimestamp = initTimestamp;
             while (gyro.isCalibrating() && currentTimestamp - initTimestamp < 10) {
@@ -247,14 +247,15 @@ public class Drivetrain extends SubsystemBase {
     //     moduleBR.periodic();
         //double goal = SmartDashboard.getNumber("bigoal", 0);
 
-        /*for (SwerveModule module : modules) {
+        for (SwerveModule module : modules) {
             module.periodic();
            // module.move(0, goal);
         }
-        
+        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
 
         {
-            
+
             SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
             SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
@@ -271,13 +272,12 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putBoolean("Field Oriented", fieldOriented);
         SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
         //SmartDashboard.putNumber("Compass Offset", compassOffset);
-        SmartDashboard.putBoolean("Current Magnetic Field Disturbance",
-        gyro.isMagneticDisturbance());
+        SmartDashboard.putBoolean("Current Magnetic Field Disturbance", gyro.isMagneticDisturbance());
     //     SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
     //    SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
     //      SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
     //     SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-            */
+            
     }
 
     @Override
@@ -326,7 +326,7 @@ public class Drivetrain extends SubsystemBase {
             modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
         }
     }
-    
+
    public void configurePPLAutoBuilder(){
     /**
      * PATHPLANNER SETTINGS
@@ -338,11 +338,11 @@ public class Drivetrain extends SubsystemBase {
      * Max Angvel: 360, Max AngAccel: 180 (guesses!)
      */
      AutoBuilder.configureHolonomic(
-    () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
+    () -> {return getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation()));},//position supplier
     (Pose2d pose) -> { autoGyroOffset=pose.times(-1); }, //position reset (by subtracting current pos)
     this::getSpeeds, //chassisSpeed supplier
     (ChassisSpeeds cs) -> drive(
-            cs.vxMetersPerSecond, 
+            cs.vxMetersPerSecond,
             -cs.vyMetersPerSecond,
             /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
             cs.omegaRadiansPerSecond
