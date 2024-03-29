@@ -4,6 +4,11 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Drivetrainc.positionTolerance;
+import static org.carlmontrobotics.Constants.Drivetrainc.thetaPIDController;
+import static org.carlmontrobotics.Constants.Drivetrainc.velocityTolerance;
+import static org.carlmontrobotics.Constants.Limelightc.INTAKE_LL_NAME;
+
 import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
@@ -11,48 +16,50 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import static org.carlmontrobotics.Constants.Drivetrainc.*;
-import static org.carlmontrobotics.Constants.Limelightc.INTAKE_LL_NAME;
 
 public class AlignToNote extends Command {
 
-     public final TeleopDrive teleopDrive;
+    public final TeleopDrive teleopDrive;
     public final Drivetrain drivetrain;
 
-    public final PIDController rotationPID = new PIDController(thetaPIDController[0], thetaPIDController[1], thetaPIDController[2]);
+    public final PIDController rotationPID = new PIDController(thetaPIDController[0], thetaPIDController[1],
+            thetaPIDController[2]);
 
     public AlignToNote(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
         this.teleopDrive = (TeleopDrive) drivetrain.getDefaultCommand();
 
         rotationPID.enableContinuousInput(-180, 180);
-        Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading()).minus(Rotation2d.fromDegrees(LimelightHelpers.getTX(INTAKE_LL_NAME)));
+        Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
+                .minus(Rotation2d.fromDegrees(LimelightHelpers.getTX(INTAKE_LL_NAME)));
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
         rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
         SendableRegistry.addChild(this, rotationPID);
-        //SmartDashboard.pu
+        // SmartDashboard.pu
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void execute() {
-     Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading()).minus(Rotation2d.fromDegrees(LimelightHelpers.getTX(INTAKE_LL_NAME)));
+        Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
+                .minus(Rotation2d.fromDegrees(LimelightHelpers.getTX(INTAKE_LL_NAME)));
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
-        if (teleopDrive == null) drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
+        if (teleopDrive == null)
+            drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
         else {
             double[] driverRequestedSpeeds = teleopDrive.getRequestedSpeeds();
-            drivetrain.drive(driverRequestedSpeeds[0], driverRequestedSpeeds[1], rotationPID.calculate(drivetrain.getHeading()));
+            drivetrain.drive(driverRequestedSpeeds[0], driverRequestedSpeeds[1],
+                    rotationPID.calculate(drivetrain.getHeading()));
         }
     }
 
     @Override
     public boolean isFinished() {
-     return false;
-     //    SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
-     //    SmartDashboard.putNumber("Error", rotationPID.getPositionError());
-     //    return rotationPID.atSetpoint();
+        return false;
+        // SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
+        // SmartDashboard.putNumber("Error", rotationPID.getPositionError());
+        // return rotationPID.atSetpoint();
     }
 }
