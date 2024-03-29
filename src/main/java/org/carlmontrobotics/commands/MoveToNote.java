@@ -17,12 +17,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class MoveToNote extends Command {
   private final Drivetrain dt;
   private final Limelight ll;
-    private Timer timer = new Timer();
+  private Timer timer = new Timer();
+
   /** Creates a new MoveToNote. */
   public MoveToNote(Drivetrain dt, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.dt=dt);
-    addRequirements(this.ll=ll);
+    addRequirements(this.dt = dt);
+    addRequirements(this.ll = ll);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +32,7 @@ public class MoveToNote extends Command {
     new AlignToNote(dt);
     timer.reset();
     timer.start();
-    //new Intake().finallyDo(()->{this.end(false);});
+    // new Intake().finallyDo(()->{this.end(false);});
     SmartDashboard.putBoolean("end", false);
     dt.setFieldOriented(false);
   }
@@ -40,11 +41,11 @@ public class MoveToNote extends Command {
   @Override
   public void execute() {
     double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
-    double distErr = ll.getDistanceToNote(); //meters
+    double distErr = ll.getDistanceToNote(); // meters
     double forwardErr = distErr * Math.cos(radErr);
     // dt.drive(0,0,0);
-    dt.drive(Math.max(forwardErr*2, .5), 0, 0);
-    //180deg is about 6.2 rad/sec, min is .5rad/sec
+    dt.drive(Math.max(forwardErr * 2, .5), 0, 0);
+    // 180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 
   // Called once the command ends or is interrupted.

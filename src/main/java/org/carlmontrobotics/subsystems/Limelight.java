@@ -13,24 +13,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
   private final SwerveDrivePoseEstimator poseEstimator;
-  private double tv, tx;
-  //private double[] rawBotPose = null;
-  private double[] targetPose = null;
+  // private double tv, tx;
+  // private double[] rawBotPose = null;
+  // private double[] targetPose = null;
   private Pose3d botPose;
 
-  //private double distOffset, horizOffset;
-  //private double horizHeadingError, horizAdjust;
+  // private double distOffset, horizOffset;
+  // private double horizHeadingError, horizAdjust;
 
   public Limelight(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     poseEstimator = new SwerveDrivePoseEstimator(
-      drivetrain.getKinematics(), 
-      Rotation2d.fromDegrees(drivetrain.getHeading()), 
-      drivetrain.getModulePositions(), 
-      new Pose2d());
-    
-    //rawBotPose = NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new double[7]);
-    //targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new double[7]);
+        drivetrain.getKinematics(),
+        Rotation2d.fromDegrees(drivetrain.getHeading()),
+        drivetrain.getModulePositions(),
+        new Pose2d());
+
+    // rawBotPose =
+    // NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new
+    // double[7]);
+    // targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new
+    // double[7]);
   }
 
   @Override
@@ -42,12 +45,11 @@ public class Limelight extends SubsystemBase {
     getDistanceToNote();
   }
 
-  public void updateBotPose3d(){
+  public void updateBotPose3d() {
     botPose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
   }
 
-
-  public Pose2d getCurrentPose(){
+  public Pose2d getCurrentPose() {
     Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
     SmartDashboard.putNumber("estimated x", estimatedPos.getX());
     SmartDashboard.putNumber("estimated y", estimatedPos.getY());
@@ -55,36 +57,40 @@ public class Limelight extends SubsystemBase {
     return estimatedPos;
   }
 
-
-  public double getDistanceToTargetSpeaker(){
-    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID){
-      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
+  public double getDistanceToTargetSpeaker() {
+    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID
+        || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID) {
+      Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER)
+          .plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(SHOOTER_LL_NAME)));
       double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER) / angleToGoal.getTan();
-      //SmartDashboard.putNumber("limelight distance", distance);
+      // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     }
 
-    else{
-      //SmartDashboard.putNumber("limelight distance", -1);
+    else {
+      // SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
   }
 
-  public double getDistanceToNote(){
-    Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE).plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
+  public double getDistanceToNote() {
+    Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE)
+        .plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
     if (angleToGoal.getDegrees() <= 0) {
-      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));;
+      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));
+      ;
       SmartDashboard.putNumber("limelight distance", distance);
       return distance;
-    }
-    else {
+    } else {
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
   }
 
   // public Pose3d getTargetPose() {
-  //   double[] poseArray = LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME, "targetpose_robotspace");
-  //   return LimelightHelpers.toPose3D(poseArray);
+  // double[] poseArray =
+  // LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME,
+  // "targetpose_robotspace");
+  // return LimelightHelpers.toPose3D(poseArray);
   // }
 }
