@@ -31,15 +31,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = this;
     m_robotContainer = new RobotContainer();
-    //SignalLogger.start();
-    final UsbCamera camera = CameraServer.startAutomaticCapture();
-    VideoMode videoMode = new VideoMode(1, 1280, 720, 30);
-    // Get a CvSink. This will capture Mats from the camera
-    CvSink cvSink = CameraServer.getVideo();
-    // Setup a CvSource. This will send images back to the Dashboard
-    CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
-    System.out.println("success is " + camera.setVideoMode(videoMode));
-    // Record both DS control and joystick data
+  
+    //creates usb camera 
+    
+   
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
