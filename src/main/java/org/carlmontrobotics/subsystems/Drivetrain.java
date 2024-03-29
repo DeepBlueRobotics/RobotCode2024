@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -88,6 +89,8 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveDriveKinematics kinematics = null;
     private SwerveDriveOdometry odometry = null;
+    private Field2d field = new Field2d();
+
     private SwerveModule modules[];
     private boolean fieldOriented = true;
     private double fieldOffset = 0;
@@ -251,7 +254,9 @@ public class Drivetrain extends SubsystemBase {
             module.periodic();
            // module.move(0, goal);
         }
-        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
+        odometry.update(Rotation2d.fromDegrees(getHeadingDeg()), getModulePositions());
+        field.setRobotPose(odometry.getPoseMeters());
 
 
         {
@@ -442,7 +447,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getHeadingDeg() {
-        return getHeading();
+        return getHeading();//...wait.
     }
 
     public SwerveModulePosition[] getModulePositions() {
