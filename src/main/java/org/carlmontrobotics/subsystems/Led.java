@@ -45,41 +45,25 @@ public class Led extends SubsystemBase {
         // System.err.println("skdjfksd");
 
         // testing
-        if (SmartDashboard.getNumber("color", color) == 1) {
-            setLedColor(DETECT_NOTE_YELLOW, 0, getLength());
-            // when intake TOF detects, but outtake TOF does not the bottom half of the LEDs
-            // become orange
+       
 
-        } else if (SmartDashboard.getNumber("color", color) == 2) {
+        
+        if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote())
+         {
+            setLedColor(DETECT_NOTE_YELLOW, 0,getLength());
+         //when intake TOF detects, but outtake TOF does not the bottom half of the
+       
+        
+         }
+         else if (intakeshooter.intakeDetectsNote() &&intakeshooter.outakeDetectsNote()) {
             setLedColor(HOLDING_GREEN, 0, getLength());
-            // when both TOFs detect and the end efforcter is holding the note the LEDS turn
-            // green
-
-        } else if (SmartDashboard.getNumber("color", color) == 3) {
+         //when both TOFs detect and the end efforcter is holding the note the LEDS turn green
+       
+         }else{
             setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
-            // otherwise LEds are blue
-        }
-
-        /*
-         * if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote())
-         * {
-         * setLedColor(DETECT_NOTE_YELLOW, 0,getLength());
-         * //when intake TOF detects, but outtake TOF does not the bottom half of the
-         * LEDs become orange
-         * 
-         * }
-         * else if (intakeshooter.intakeDetectsNote() &&
-         * intakeshooter.outakeDetectsNote()) {
-         * setLedColor(HOLDING_GREEN, 0, getLength());
-         * //when both TOFs detect and the end efforcter is holding the note the LEDS
-         * turn green
-         * 
-         * }
-         * else{
-         * setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
-         * //otherwise LEds are blue
-         * }
-         */
+         //otherwise LEds are blue
+         }
+         
 
     }
     // nothing : setLedColor(defaultColr, 0, ledBuffer.getLength())
