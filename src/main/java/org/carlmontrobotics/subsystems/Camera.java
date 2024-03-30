@@ -17,7 +17,7 @@ public class Camera {
 
         // Creates the CvSource and MjpegServer [2] and connects them
         CvSource outputStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);
-        MjpegServer mjpegServer2 = new MjpegServer("serve_Blur", 1182);
+        MjpegServer mjpegServer2 = new MjpegServer("serve_Blur", 2);
         mjpegServer2.setSource(outputStream);
 
 
