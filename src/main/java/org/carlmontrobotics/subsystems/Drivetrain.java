@@ -213,6 +213,10 @@ public class Drivetrain extends SubsystemBase {
 
         // Setup autopath builder
         configurePPLAutoBuilder();
+        SmartDashboard.putNumber("chassis speeds x", 0);
+                        SmartDashboard.putNumber("chassis speeds y", 0);
+
+                                    SmartDashboard.putNumber("chassis speeds theta", 0);
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
@@ -350,9 +354,14 @@ public class Drivetrain extends SubsystemBase {
         this::getPose,
         this::setPose,
         this::getSpeeds,
-        (ChassisSpeeds cs) -> drive(
-            kinematics.toSwerveModuleStates(cs)
-        ),
+        (ChassisSpeeds cs) -> {
+            //cs.vxMetersPerSecond = -cs.vxMetersPerSecond;
+            SmartDashboard.putNumber("chassis speeds x", cs.vxMetersPerSecond);
+            SmartDashboard.putNumber("chassis speeds y", cs.vyMetersPerSecond);
+            SmartDashboard.putNumber("chassis speeds theta", cs.omegaRadiansPerSecond);
+
+            drive(kinematics.toSwerveModuleStates(cs));  
+        },
         new HolonomicPathFollowerConfig(
         new PIDConstants(xPIDController[0], xPIDController[1], xPIDController[2], 0), //translation (drive) pid vals
         new PIDConstants(thetaPIDController[0], thetaPIDController[1], thetaPIDController[2], 0), //rotation pid vals
