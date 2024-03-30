@@ -227,7 +227,7 @@ public final class Constants {
 				// Determine correct turn PID constants
 				public static final double[] turnkP = {51.078,60.885,60.946,60.986}; //{0.00374, 0.00374, 0.00374, 0.00374};
 				public static final double[] turnkI = {0, 0, 0, 0};
-				public static final double[] turnkD = {0/*dont edit */, 0.5, 0.42, .2}; // todo: use d
+				public static final double[] turnkD = {0/*dont edit */, 0, 0, 0}; // todo: use d
 				//public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
 				public static final double[] turnkS = {0.13027, 0.17026, 0.2, 0.23262};
 	
@@ -265,8 +265,8 @@ public final class Constants {
 				public static final boolean isGyroReversed = true;
 	
 				// PID values are listed in the order kP, kI, and kD
-				public static final double[] xPIDController = {4, 0.0, 0.0};
-				public static final double[] yPIDController = {4, 0.0, 0.0};
+				public static final double[] xPIDController = {0.1, 0.0, 0.0};
+				public static final double[] yPIDController = {0.1, 0.0, 0.0};
 				public static final double[] thetaPIDController = {0.10, 0.0, 0.001};
 	
 				public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu, autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels, kBackwardAccels, drivekP, drivekI, drivekD, turnkP, turnkI, turnkD, turnkS, turnkV, turnkA, turnZeroDeg, driveInversion, reversed, driveModifier, turnInversion);

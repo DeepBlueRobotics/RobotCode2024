@@ -254,7 +254,9 @@ public class Drivetrain extends SubsystemBase {
             module.periodic();
            // module.move(0, goal);
         }
-        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
+        odometry.update(gyro.getRotation2d(), getModulePositions());
+        //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         
 
         {
@@ -349,14 +351,11 @@ public class Drivetrain extends SubsystemBase {
         this::setPose,
         this::getSpeeds,
         (ChassisSpeeds cs) -> drive(
-            cs.vxMetersPerSecond, 
-            -cs.vyMetersPerSecond,
-            /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
-            cs.omegaRadiansPerSecond
+            kinematics.toSwerveModuleStates(cs)
         ),
         new HolonomicPathFollowerConfig(
-        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
-        new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
+        new PIDConstants(xPIDController[0], xPIDController[1], xPIDController[2], 0), //translation (drive) pid vals
+        new PIDConstants(thetaPIDController[0], thetaPIDController[1], thetaPIDController[2], 0), //rotation pid vals
         maxSpeed,
         swerveRadius,
         Autoc.replanningConfig,
@@ -494,7 +493,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setPose(Pose2d initialPose) {
-        odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
+        odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), initialPose);
         //odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
     }
 

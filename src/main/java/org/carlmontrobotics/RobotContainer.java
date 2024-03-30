@@ -68,6 +68,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
 import java.io.FileReader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -329,7 +330,7 @@ public class RobotContainer {
       for (int i=0;i<autoNames.length;i++){
         String name = autoNames[i];
 
-        autoCommands.add(new PathPlannerAuto(name));/*new SequentialCommandGroup(
+        autoCommands.add(new SequentialCommandGroup(new InstantCommand(() -> drivetrain.setPose(new Pose2d(1.92, 5.58, new Rotation2d(0.6)))), new PathPlannerAuto(name)));/*new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
             // PathPlannerAuto.getStaringPoseFromAutoFile(name),
             PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
@@ -362,7 +363,7 @@ public class RobotContainer {
       // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
       List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
               currPos,
-              currPos.plus(new Transform2d(5,0,new Rotation2d(0)))
+              currPos.plus(new Transform2d(0,1,new Rotation2d(0)))
       );
       /**
        * PATHPLANNER SETTINGS
@@ -391,7 +392,13 @@ public class RobotContainer {
       //RAW FORWARD command
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
-      autoCommands.add(2, AutoBuilder.followPath(path));//no events so just use path instead of auto
+      autoCommands.add(2, new SequentialCommandGroup(
+        new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
+        new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
+        new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
+        new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
+        AutoBuilder.followPath(path)
+      ));//no events so just use path instead of auto
 
       // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
     }
