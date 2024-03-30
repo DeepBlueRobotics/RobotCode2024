@@ -8,7 +8,8 @@ import edu.wpi.first.util.PixelFormat;
 public class Camera {
     public Camera(){
         UsbCamera usbCamera = new UsbCamera("USB Camera 0", 0);
-        MjpegServer mjpegServer1 = new MjpegServer("serve_USB Camera 0", 1);
+        MjpegServer mjpegServer1 = new MjpegServer("serve_USB Camera 0", 1
+        );
         mjpegServer1.setSource(usbCamera);
 
         // Creates the CvSink and connects it to the UsbCamera

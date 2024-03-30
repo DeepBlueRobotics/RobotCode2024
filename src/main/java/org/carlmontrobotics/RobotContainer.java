@@ -7,6 +7,8 @@ package org.carlmontrobotics;
 
 //199 files
 import org.carlmontrobotics.commands.*;
+import org.carlmontrobotics.lib199.SensorFactory;
+
 import static org.carlmontrobotics.Constants.*;
 
 import org.carlmontrobotics.Constants.Armc;
@@ -83,7 +85,7 @@ public class RobotContainer {
   private final Led led = new Led(intakeShooter);
   private final Arm arm = new Arm();
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Camera camera = new Camera();
+  //private final Camera camera = new Camera();
   /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
   //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
@@ -103,6 +105,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
+      SensorFactory.configureCamera();
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
