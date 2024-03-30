@@ -176,7 +176,7 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("ArmPos", getArmPos());
-        // double currTime = Timer.getFPGATimestamp();
+        double currTime = Timer.getFPGATimestamp();
         // SmartDashboard.putNumber("Current Time", currTime);
         // SmartDashboard.putNumber("Last Update (s)", lastMeasuredTime);
         // setArmTarget(SmartDashboard.getNumber("set arm angle (rad)", 0));
@@ -188,6 +188,7 @@ public class Arm extends SubsystemBase {
         // kV, kA);
         // KG = currG;
         // }
+
         SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
         SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
         SmartDashboard.putNumber("Actual Master Arm Volts",
@@ -196,27 +197,27 @@ public class Arm extends SubsystemBase {
                 armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
 
         // when the value is different
-        /*
-         * double currentArmPos = getArmPos();
-         * if (currentArmPos != lastArmPos) {
-         * lastMeasuredTime = currTime;
-         * lastArmPos = currentArmPos;
-         * }
-         * isArmEncoderConnected = currTime - lastMeasuredTime <
-         * DISCONNECTED_ENCODER_TIMEOUT_SEC;
-         * 
-         * if (isArmEncoderConnected) {
-         * if (callDrive) {
-         * driveArm();
-         * }
-         * } else {
-         * armMotorMaster.set(0);
-         * armMotorFollower.set(0);
-         * }
-         * 
-         * 
-         * autoCancelArmCommand();
-         */
+        
+          double currentArmPos = getArmPos();
+          if (currentArmPos != lastArmPos) {
+          lastMeasuredTime = currTime;
+          lastArmPos = currentArmPos;
+          }
+          isArmEncoderConnected = currTime - lastMeasuredTime <
+          DISCONNECTED_ENCODER_TIMEOUT_SEC;
+          
+          if (isArmEncoderConnected) {
+          if (callDrive) {
+          driveArm();
+          }
+          } else {
+          armMotorMaster.set(0);
+          armMotorFollower.set(0);
+          }
+          
+          
+          autoCancelArmCommand();
+         
 
     }
 

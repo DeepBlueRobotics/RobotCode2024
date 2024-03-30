@@ -19,15 +19,17 @@ public class TeleopEffector extends Command {
   private final DoubleSupplier joystick;
   private final IntakeShooter intake;
   private final GenericHID manipulatorController;
+  private final GenericHID driverController;
   private final Timer timer = new Timer();
   private boolean hasIntaked;
 
   /** Creates a new ArmTeleop. */
-  public TeleopEffector(IntakeShooter effector, DoubleSupplier joystickSupplier, GenericHID manipulatorController) {
+  public TeleopEffector(IntakeShooter effector, DoubleSupplier joystickSupplier, GenericHID manipulatorController, GenericHID driverController) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.intake = effector);
     joystick = joystickSupplier;
     this.manipulatorController = manipulatorController;
+    this.driverController = driverController;
   }
 
   // Called when the command is initially scheduled.
@@ -40,17 +42,23 @@ public class TeleopEffector extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double joystickVal = joystick.getAsDouble();
-    if (joystickVal >= 0) {
-      intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
-    } else if (joystickVal <= 0) {
-      intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
-      intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
-    }
+    // double joystickVal = joystick.getAsDouble();
+    // if (joystickVal >= 0) {
+    //   intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    // } else if (joystickVal <= 0) {
+    //   intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    //   intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
+    // }
     // manipulatorController.setRumble(RumbleType.kBothRumble, 0.5);
     if (intake.intakeDetectsNote()) {
       manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
-    }
+      driverController.setRumble(RumbleType.kBothRumble, 0.4);
+  } else {
+    manipulatorController.setRumble(RumbleType.kBothRumble, 0);
+    driverController.setRumble(RumbleType.kBothRumble, 0);
+  }
+
+
     /*
      * intake.setRPMIntake(MANUAL_RPM_MAX * joystick.getAsDouble());
      * intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
@@ -60,7 +68,7 @@ public class TeleopEffector extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulatorController.setRumble(RumbleType.kBothRumble, 0); // Reasoning: I WANNA TEST WHAT HAPPENS WHEN ANOTHER CMD
+     // Reasoning: I WANNA TEST WHAT HAPPENS WHEN ANOTHER CMD
                                                                 // IS USED OVER DEFAULT
   }
 

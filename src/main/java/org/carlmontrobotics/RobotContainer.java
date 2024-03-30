@@ -126,11 +126,11 @@ public class RobotContainer {
         () -> ProcessedAxisValue(driverController, Axis.kRightX),
         () -> driverController.getRawButton(Driver.slowDriveButton)));
     // TODO: Are we going to use default command for intakeshooter?
-    // intakeShooter.setDefaultCommand(new TeleopEffector(
-    // intakeShooter,
-    // () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
-    // manipulatorController
-    // ));
+    intakeShooter.setDefaultCommand(new TeleopEffector(
+    intakeShooter,
+    () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
+    manipulatorController, driverController
+    ));
 
   }
 

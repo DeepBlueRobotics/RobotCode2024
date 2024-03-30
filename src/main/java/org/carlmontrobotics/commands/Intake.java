@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class Intake extends Command {
   // intake until sees game peice or 4sec has passed
-  private Timer timer;
+  private Timer timer = new Timer();
   private final IntakeShooter intake;
 
   private double endAt = 0;
@@ -40,13 +40,13 @@ public class Intake extends Command {
       index++;
 
       intake.setRPMIntake(0);
-      intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index * increaseAmount);
+     // intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index * increaseAmount);
     }
-    if (intake.outakeDetectsNote()) {
-      // Timer.delay(keepIntakingFor);
+    // if (intake.outakeDetectsNote()) {
+    //   // Timer.delay(keepIntakingFor);
 
-      intake.setRPMIntake(0.0);
-    }
+    //   intake.setRPMIntake(0.0);
+    // }
   }
 
   // Called once the command ends or is interrupted.

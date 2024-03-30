@@ -41,7 +41,7 @@ public class IntakeShooter extends SubsystemBase {
 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
-
+    
     public IntakeShooter() {
         // Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
@@ -58,6 +58,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("intake volts", 0);
         SmartDashboard.putNumber("Vortex volts", 0);
         // setMaxOutakeOverload(1);
+        outakeMotorVortex.setSmartCurrentLimit(60);
 
     }
 
@@ -129,8 +130,11 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("outtake vel", outakeMotorVortex.getEncoder().getVelocity());
 
         // count++;
+        SmartDashboard.putBoolean("Intake detects note", intakeDetectsNote());
+        SmartDashboard.putBoolean("Intake detects note", outakeDetectsNote());
+
         double volts = SmartDashboard.getNumber("Vortex volts", 0);
-        // outakeMotorVortex.set(volts);
+       // outakeMotorVortex.set(volts);
 
         // setMaxOutake();
 
@@ -201,8 +205,10 @@ public class IntakeShooter extends SubsystemBase {
     public void initSendable(SendableBuilder sendableBuilder) {
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
-        sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceIntake, null);
-        sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceOutake, null);
+        sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceOutake, null);
+        sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceIntake, null);
+        sendableBuilder.addBooleanProperty("Outake distance sensor length", this::outakeDetectsNote, null);
+        sendableBuilder.addBooleanProperty("Intake distance sensor length", this::intakeDetectsNote, null);
         sendableBuilder.addDoubleProperty("Period time", this::countPeridoic, null);
         sendableBuilder.addDoubleProperty("Vortex Motor Velocity", this::getVortexRPM, null);
     }

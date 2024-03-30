@@ -21,7 +21,7 @@ public class Eject extends Command {
     // intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
     timer.reset();
     timer.start();
-    intakeShooter.setMaxOutakeOverload(1);
+    intakeShooter.setMaxOutake();
     intakeShooter.setMaxIntake(1);
   }
 
@@ -43,6 +43,6 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.hasElapsed(2) || !intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
+    return (timer.get() > 0.8 || (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()));
   }
 }
