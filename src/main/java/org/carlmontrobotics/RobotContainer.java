@@ -95,7 +95,7 @@ public class RobotContainer {
     {
       // safe auto setup... stuff in setupAutos() is not safe to run here - will break
       // robot
-      registerAutoCommands();
+      
       SmartDashboard.putData(autoSelector);
       SmartDashboard.setPersistent("SendableChooser[0]");
 
@@ -161,12 +161,12 @@ public class RobotContainer {
 
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
-    new JoystickButton(manipulatorController, Manipulator.EJECT_BUTTON).onTrue(new Eject(intakeShooter));
-    new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
+    //new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
 
     new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
-    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
+   // new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
+    //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
             new PassToOutake(intakeShooter));
@@ -182,6 +182,9 @@ public class RobotContainer {
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
     new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
+    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD));
     // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
     // moveClimber(arm));
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
@@ -192,9 +195,7 @@ public class RobotContainer {
 
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
     // MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
-    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
-    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kRightStick.value).onTrue(new MoveToPos(arm, -0.2));
+    
     // NEW BINDINGS(easier for mani
 
     // Xbox left joy Y axis -> raw Intake/Outtake control
@@ -312,6 +313,7 @@ public class RobotContainer {
   // {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
 
   // }
+  /* 
   private void registerAutoCommands() {
     //// AUTO-USABLE COMMANDS
     NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
@@ -335,7 +337,7 @@ public class RobotContainer {
         new InstantCommand(intakeShooter::stopIntake),
         new InstantCommand(intakeShooter::stopOutake)));
   }
-
+*/
   private void setupAutos() {
     //// CREATING PATHS from files
     {
@@ -515,7 +517,7 @@ public class RobotContainer {
    * @param axis  The Axis object to retrieve value from the Joystick.
    * @return A new instance of Trigger based on the given Joystick and Axis
    *         objects.
-   * @throws NullPointerException if either stick or axis is null.
+*   * @throws NullPointerException if either stick or axis is null.
    */
   private Trigger axisTrigger(GenericHID controller, Axis axis) {
     return new Trigger(() -> Math.abs(getStickValue(controller, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);

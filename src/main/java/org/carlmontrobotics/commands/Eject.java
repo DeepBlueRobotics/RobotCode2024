@@ -22,7 +22,7 @@ public class Eject extends Command {
     timer.reset();
     timer.start();
     intakeShooter.setMaxOutake();
-    intakeShooter.setMaxIntake(1);
+    intakeShooter.setMaxIntake(-1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -33,11 +33,11 @@ public class ClimbArmSoftLimit extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        arm.resetGoal();
         arm.stopArm(); // OR maintain small voltage to keep arm in place?
         arm.resetSoftLimit();
         // arm.setArmTarget(arm.getArmPos());
         arm.setBooleanDrive(true);
+        arm.resetGoal();
         
     }
 

@@ -148,7 +148,7 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putData(this);
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
@@ -197,27 +197,24 @@ public class Arm extends SubsystemBase {
                 armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
 
         // when the value is different
-        
-          double currentArmPos = getArmPos();
-          if (currentArmPos != lastArmPos) {
-          lastMeasuredTime = currTime;
-          lastArmPos = currentArmPos;
-          }
-          isArmEncoderConnected = currTime - lastMeasuredTime <
-          DISCONNECTED_ENCODER_TIMEOUT_SEC;
-          
-          if (isArmEncoderConnected) {
-          if (callDrive) {
-          driveArm();
-          }
-          } else {
-          armMotorMaster.set(0);
-          armMotorFollower.set(0);
-          }
-          
-          
-          autoCancelArmCommand();
-         
+
+        double currentArmPos = getArmPos();
+        if (currentArmPos != lastArmPos) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+        }
+        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
+
+        if (isArmEncoderConnected) {
+            if (callDrive) {
+                driveArm();
+            }
+        } else {
+            armMotorMaster.set(0);
+            armMotorFollower.set(0);
+        }
+
+        autoCancelArmCommand();
 
     }
 
@@ -370,7 +367,9 @@ public class Arm extends SubsystemBase {
         return TRAP_CONSTRAINTS.maxVelocity;
     }
 
+    @Override
     public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
         builder.addDoubleProperty("armKp", () -> armPIDMaster.getP(), armPIDMaster::setP);
         builder.addDoubleProperty("armKd", () -> armPIDMaster.getD(), armPIDMaster::setD);
         builder.addDoubleProperty("Current Position", () -> getArmPos(), null);

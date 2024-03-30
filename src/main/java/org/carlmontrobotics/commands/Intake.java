@@ -28,8 +28,8 @@ public class Intake extends Command {
     intake.setRPMIntake(INTAKE_RPM);
     timer.reset();
     timer.start();
-    intake.setCurrentLimit(20);
-
+    intake.resetCurrentLimit();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,16 +37,16 @@ public class Intake extends Command {
   public void execute() {
     // Intake Led
     if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-      index++;
+      //index++;
 
-      intake.setRPMIntake(0);
-     // intake.setRPMIntake(INTAKE_SLOWDOWN_RPM + index * increaseAmount);
+      //intake.setRPMIntake(0);
+     intake.setRPMIntake(0);
     }
-    // if (intake.outakeDetectsNote()) {
-    //   // Timer.delay(keepIntakingFor);
+    if (intake.outakeDetectsNote()) {
+      // Timer.delay(keepIntakingFor);
 
-    //   intake.setRPMIntake(0.0);
-    // }
+      intake.setRPMIntake(0.0);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -54,7 +54,8 @@ public class Intake extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     timer.stop();
-    intake.resetCurrentLimit();
+    index= 0;
+    //intake.resetCurrentLimit();
   }
 
   // Returns true when the command should end.

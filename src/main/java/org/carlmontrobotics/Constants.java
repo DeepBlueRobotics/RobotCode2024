@@ -48,12 +48,12 @@ public final class Constants {
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 		// 0.0001184
-		public static final double[] kP = { /* /Intake/ */ 0.001184, /* /Outake/ */0.0001 };
+		public static final double[] kP = { /* /Intake/ */ 0.020717, /* /Outake/ */0.0001 };
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
-		public static final double[] kS = { /* /Intake/ */0.52174, /* /Outake/ */0.29753 * 2 };
-		public static final double[] kV = { /* /Intake/ */0.064142, /* /Outake/ */0.077913 };
-		public static final double[] kA = { /* /Intake/ */0.0074649, /* /Outake/ */0.05289 };
+		public static final double[] kS = { /* /Intake/ */0.35042, /* /Outake/ */0.29753 * 2 };
+		public static final double[] kV = { /* /Intake/ */0.065239, /* /Outake/ */0.077913 };
+		public static final double[] kA = { /* /Intake/ */0.0062809, /* /Outake/ */0.05289 };
 		public static final int INTAKE_PORT = 9; // port
 		public static final int OUTAKE_PORT = 10; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
@@ -69,10 +69,10 @@ public final class Constants {
 		public static final double PASS_RPM = 5800;
 		public static final double TEST_RPM = 3000;
 
-		public static final double AMP_RPM = 1500;
-		public static final double SPEAKER_RPM = 4500;
-		public static final double SUBWOOFER_RPM = 6000;// WTF FAB ISSUE
-		public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
+		public static final double AMP_RPM = 1000;
+		public static final double SPEAKER_RPM = 2100;
+		//public static final double SUBWOOFER_RPM = 6000;// WTF FAB ISSUE
+		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
 		public static final double EJECT_RPM_INTAKE = -2550;
 		public static final double EJECT_RPM_OUTAKE = -2550;
@@ -116,6 +116,7 @@ public final class Constants {
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double HANG_ANGLE_RAD = Units.degreesToRadians(90);
 		public static final double AMP_ANGLE_RAD = 1.28;
+		public static final double SPEAKER_ANGLE_RAD = -0.2;
 		// -0.427725
 		public static final double GROUND_INTAKE_POS = Units.degreesToRadians(-24.5068373);
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
@@ -234,7 +235,7 @@ public final class Constants {
 		// Forward: 1.72, 1.71, 1.92, 1.94
 		// Backward: 1.92, 1.92, 2.11, 1.89
 		// Order of modules: (FL, FR, BL, BR)
-		public static final double[] drivekP = { 2.75, 2.75, 2.75, 2.75 }; // {1.82/100, 1.815/100, 2.015/100,
+		public static final double[] drivekP = { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
 																			// 1.915/100};
 		public static final double[] drivekI = { 0, 0, 0, 0 };
 		public static final double[] drivekD = { 0, 0, 0, 0 };
@@ -260,8 +261,8 @@ public final class Constants {
 		public static final boolean isGyroReversed = true;
 
 		// PID values are listed in the order kP, kI, and kD
-		public static final double[] xPIDController = { 4, 0.0, 0.0 };
-		public static final double[] yPIDController = { 4, 0.0, 0.0 };
+		public static final double[] xPIDController = { 2, 0.0, 0.0 };
+		public static final double[] yPIDController = { 2, 0.0, 0.0 };
 		public static final double[] thetaPIDController = { 0.1, 0.0, 0.00 };
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu,
