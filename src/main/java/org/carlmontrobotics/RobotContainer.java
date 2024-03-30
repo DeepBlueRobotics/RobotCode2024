@@ -94,8 +94,10 @@ public class RobotContainer {
     /* These are assumed to be equal to the AUTO ames in pathplanner */
     "Left-Amp",
     "Center-Straight",
-    "Middle-Ram"
-
+    "Middle-Ram",
+    "Left-Straight",
+    "Right-Straight",
+    "Left-Safe"
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -327,13 +329,13 @@ public class RobotContainer {
       for (int i=0;i<autoNames.length;i++){
         String name = autoNames[i];
 
-        autoCommands.add(new SequentialCommandGroup(
+        autoCommands.add(new PathPlannerAuto(name));/*new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
             // PathPlannerAuto.getStaringPoseFromAutoFile(name),
             PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
             Autoc.pathConstraints ),
           new PathPlannerAuto(name)
-        ));
+        ));*/
       }
 
       // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
@@ -405,7 +407,7 @@ public class RobotContainer {
       */
       hasSetupAutos=true;
     }
-    return autoCommands.get(1); //hard-coded PP straight auto
+    return autoCommands.get(autoSelector.getSelected()); //hard-coded PP straight auto
     // Integer autoIndex = autoSelector.getSelected();
 
     // if (autoIndex!=null && autoIndex!=0){

@@ -14,6 +14,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
@@ -107,6 +108,8 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule moduleBR;
 
     public Drivetrain() {
+        SmartDashboard.putNumber("set x", 0);
+        SmartDashboard.putNumber("set y", 0);
         // Calibrate Gyro
         {   
             
@@ -251,6 +254,7 @@ public class Drivetrain extends SubsystemBase {
             module.periodic();
            // module.move(0, goal);
         }
+        odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         
 
         {
@@ -260,8 +264,11 @@ public class Drivetrain extends SubsystemBase {
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
             SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
        }
-        // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-        // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        //setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()), SmartDashboard.getNumber("set y", getPose().getTranslation().getY()), Rotation2d.fromDegrees(getHeading())));
+        // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
         SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
@@ -327,7 +334,7 @@ public class Drivetrain extends SubsystemBase {
         }
     }
     
-   public void configurePPLAutoBuilder(){
+   public void configurePPLAutoBuilder() {
     /**
      * PATHPLANNER SETTINGS
      * Robot Width (m): .91
@@ -337,6 +344,38 @@ public class Drivetrain extends SubsystemBase {
      * Max Vel: 1.54, Max Accel: 6.86
      * Max Angvel: 360, Max AngAccel: 180 (guesses!)
      */
+    AutoBuilder.configureHolonomic(
+        this::getPose,
+        this::setPose,
+        this::getSpeeds,
+        (ChassisSpeeds cs) -> drive(
+            cs.vxMetersPerSecond, 
+            -cs.vyMetersPerSecond,
+            /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
+            cs.omegaRadiansPerSecond
+        ),
+        new HolonomicPathFollowerConfig(
+        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
+        new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
+        maxSpeed,
+        swerveRadius,
+        Autoc.replanningConfig,
+        Robot.robot.getPeriod()//robot period
+    ),
+    () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
+      },
+      this
+    );
+
+    /*
      AutoBuilder.configureHolonomic(
     () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
     (Pose2d pose) -> { autoGyroOffset=pose.times(-1); }, //position reset (by subtracting current pos)
@@ -344,7 +383,7 @@ public class Drivetrain extends SubsystemBase {
     (ChassisSpeeds cs) -> drive(
             cs.vxMetersPerSecond, 
             -cs.vyMetersPerSecond,
-            /*flipped because drive assumes up is negative, but PPlanner assumes up is positive*/
+            //flipped because drive assumes up is negative, but PPlanner assumes up is positive
             cs.omegaRadiansPerSecond
     ),
     new HolonomicPathFollowerConfig(
@@ -367,6 +406,7 @@ public class Drivetrain extends SubsystemBase {
       },
       this
     );
+    */
    }
 
    public void autoCancelDtCommand() {
@@ -455,6 +495,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void setPose(Pose2d initialPose) {
         odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
+        //odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
     }
 
     // Resets the gyro, so that the direction the robotic currently faces is
