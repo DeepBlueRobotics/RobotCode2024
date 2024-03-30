@@ -9,6 +9,7 @@ import static org.carlmontrobotics.Constants.Limelightc.MIN_MOVEMENT_RADSPSEC;
 
 import org.carlmontrobotics.Constants.Limelightc;
 import org.carlmontrobotics.subsystems.Drivetrain;
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
@@ -22,12 +23,13 @@ public class AutoMATICALLYGetNote extends Command {
   private Drivetrain dt;
   // private IntakeShooter effector;
   private Limelight ll;
+  private IntakeShooter intake;
   private Timer timer = new Timer();
 
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll /* IntakeShooter effector */) {
+  public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake) {
     addRequirements(this.dt = dt);
-    addRequirements(this.ll = ll);
-    // addRequirements(this.effector = effector);
+    addRequirements(this.intake = intake);
+    //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -35,8 +37,7 @@ public class AutoMATICALLYGetNote extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
-    // new Intake().finallyDo(()->{this.end(false);});
-    SmartDashboard.putBoolean("end", false);
+    new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
   }
 
@@ -61,7 +62,7 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // return timer.get() >= 0.5;
+    return intake.intakeDetectsNote();
+    //return timer.get() >= 0.5;
   }
 }
