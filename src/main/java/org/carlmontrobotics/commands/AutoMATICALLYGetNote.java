@@ -21,13 +21,14 @@ public class AutoMATICALLYGetNote extends Command {
   /** Creates a new AutoMATICALLYGetNote. */
   private Drivetrain dt;
   // private IntakeShooter effector;
-  private Limelight ll = new Limelight(dt);
+  private Limelight ll;
   private IntakeShooter intake;
   //private Timer timer = new Timer();
 
-  public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake) {
+  public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
     addRequirements(this.dt = dt);
     addRequirements(this.intake = intake);
+    addRequirements(this.ll = ll);
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }

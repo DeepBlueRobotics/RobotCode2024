@@ -139,7 +139,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
     new JoystickButton(driverController, 1).whileTrue(new AlignToApriltag(drivetrain)); // button A
     new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); // button b?
-    new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter)); // button x?
+    new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)); // button x?
     // new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new
     // ParallelCommandGroup(
     // new InstantCommand(()->drivetrain.setFieldOriented(false)),
