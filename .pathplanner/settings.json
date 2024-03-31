@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "robotWidth": 0.9144,
+=======
+  "robotWidth": 0.91,
+>>>>>>> bdf283d1689e97ea46f0b13d8ca3fe6f6ad8f060
   "robotLength": 0.94,
   "holonomicMode": true,
   "pathFolders": [],

@@ -17,14 +17,15 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.Constants.OI;
 import org.carlmontrobotics.Constants.OI.Driver;
 import org.carlmontrobotics.Constants.OI.Manipulator;
+import org.carlmontrobotics.Constants.Armc;
 import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
-
+import org.carlmontrobotics.Constants.Effectorc;
 // robotcode2024 imports
 import org.carlmontrobotics.commands.*;
 import org.carlmontrobotics.subsystems.*;
 
-//pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
+//pathplanner
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
@@ -73,46 +74,48 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight(drivetrain);
 
-  /* These must be equal to the pathPlanner path names from the GUI! */
-  // Order matters - but the first one is index 1 on the physical selector - index
-  // 0 is reserved for null command.
-  // the last auto is hard-coded to go straight. since we have __3__ Autos, port 4
-  // is simple straight
+  /* These are assumed to be equal to the AUTO ames in pathplanner */
+    /* These must be equal to the pathPlanner path names from the GUI! */
+  // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
+  //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
   private List<Command> autoCommands = new ArrayList<Command>();
   private SendableChooser<Integer> autoSelector = new SendableChooser<Integer>();
 
   private boolean hasSetupAutos = false;
   private final String[] autoNames = new String[] {
-      /* These are assumed to be equal to the AUTO ames in pathplanner */
-      "Left-Amp",
-      "Center-Straight",
-      "Middle-Ram"
-
+    /* These are assumed to be equal to the AUTO ames in pathplanner */
+    "Left-Amp",
+    "Center-Straight",
+    "Middle-Ram",
+    "Left-Straight",
+    "Right-Straight",
+    "Left-Safe"
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
+
   public RobotContainer() {
     {
-      // safe auto setup... stuff in setupAutos() is not safe to run here - will break
-      // robot
-      
+      //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
+      registerAutoCommands();
       SmartDashboard.putData(autoSelector);
       SmartDashboard.setPersistent("SendableChooser[0]");
 
       autoSelector.addOption("Nothing", 0);
       autoSelector.addOption("Raw Forward", 1);
-      autoSelector.addOption("PP Simple Forward", 2);// index corresponds to index in autoCommands[]
+      autoSelector.addOption("PP Simple Forward", 2);//index corresponds to index in autoCommands[]
 
-      int i = 3;
-      for (String n : autoNames) {
+      int i=3;
+      for (String n:autoNames){
         autoSelector.addOption(n, i);
         i++;
       }
 
       ShuffleboardTab autoSelectorTab = Shuffleboard.getTab("Auto Chooser Tab");
       autoSelectorTab.add(autoSelector)
-          .withSize(2, 1);
+        .withSize(2, 1);
     }
+      
     setDefaultCommands();
     setBindingsDriver();
     setBindingsManipulatorENDEFF();
@@ -313,147 +316,7 @@ public class RobotContainer {
   // {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
 
   // }
-  /* 
-  private void registerAutoCommands() {
-    //// AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
-    NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
-
-    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, SAFE_ZONE_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, PODIUM_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, AMP_ANGLE_RAD));
-
-    NamedCommands.registerCommand("RampRPMSpeakerSafe",
-        new RampToRPM(intakeShooter, SAFE_RPM));
-    NamedCommands.registerCommand("RampRPMSpeakerSubwoofer",
-        new RampToRPM(intakeShooter, SUBWOOFER_RPM));
-
-    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
-    NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
-
-    NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
-    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
-    NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
-        new InstantCommand(intakeShooter::stopIntake),
-        new InstantCommand(intakeShooter::stopOutake)));
-  }
-*/
-  private void setupAutos() {
-    //// CREATING PATHS from files
-    {
-      for (int i = 0; i < autoNames.length; i++) {
-        String name = autoNames[i];
-
-        autoCommands.add(new SequentialCommandGroup(
-            AutoBuilder.pathfindToPose(
-                // PathPlannerAuto.getStaringPoseFromAutoFile(name),
-                PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
-                Autoc.pathConstraints),
-            new PathPlannerAuto(name)));
-      }
-
-      // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
-      // for (String name : autoNames) {
-      // autoPaths.add(PathPlannerPath.fromPathFile(name));
-      // }
-
-      // //AutoBuilder is setup in the drivetrain.
-
-      // //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName)
-      // ???
-      // ////CREATE COMMANDS FROM PATHS
-      // autoCommands = autoPaths.stream().map(
-      // (PathPlannerPath path) -> AutoBuilder.followPath(path)
-      // ).collect(Collectors.toList());
-
-    }
-
-    // AUTOGENERATED AUTO FOR SLOT 2
-    {
-      Pose2d currPos = drivetrain.getPose();
-      // Create a list of bezier points from poses. Each pose represents one waypoint.
-      // The rotation component of the pose should be the direction of travel. Do not
-      // use holonomic rotation.
-      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-          currPos,
-          currPos.plus(new Transform2d(5, 0, new Rotation2d(0))));
-      /**
-       * PATHPLANNER SETTINGS
-       * Robot Width (m): .91
-       * Robot Length(m): .94
-       * Max Module Spd (m/s): 4.30
-       * Default Constraints
-       * Max Vel: 1.54, Max Accel: 6.86
-       * Max Angvel: 360, Max AngAccel: 360 (guesses!)
-       */
-      // Create the path using the bezier points created above
-      PathPlannerPath path = new PathPlannerPath(
-          bezierPoints,
-          /* m/s, m/s^2, rad/s, rad/s^2 */
-          Autoc.pathConstraints,
-          new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using
-                                                     // a differential drivetrain, the rotation will have no effect.
-      );
-      // Prevent the path from being flipped if the coordinates are already correct
-      path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
-      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-        path.flipPath();
-      }
-
-      // NOTHING
-      autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
-      // RAW FORWARD command
-      autoCommands.add(1, new LastResortAuto(drivetrain));
-      // smart forward command
-      autoCommands.add(2, AutoBuilder.followPath(path));// no events so just use path instead of auto
-
-      // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new
-      // FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
-    }
-  }
-
-  public Command getAutonomousCommand() {
-    if (!hasSetupAutos) {
-      setupAutos();
-      /*
-       * //get the funny ports on the robot
-       * for(int a = 0; a < autoSelectors.length; a++)
-       * autoSelectors[a] = new DigitalInput(a);//set up blank list
-       */
-      hasSetupAutos = true;
-    }
-    return autoCommands.get(1); // hard-coded PP straight auto
-    // Integer autoIndex = autoSelector.getSelected();
-
-    // if (autoIndex!=null && autoIndex!=0){
-    // new PrintCommand("Running selected auto: "+autoSelector.toString());
-    // return autoCommands.get(autoIndex.intValue());
-    // }
-    // new PrintCommand("No auto :(");
-    // return null;
-
-    /*
-     * 
-     * //check which ones are short-circuiting
-     * for(int i = 2; i < autoSelectors.length; i++) { // skip index 0, reserved for
-     * null auto
-     * if(!autoSelectors[i].get()) {
-     * String name = autoNames[i-1];
-     * new PrintCommand("Using Path " + i + ": " + name);
-     * return new PathPlannerAuto(name);
-     * }
-     * }
-     * 
-     * if (autoSelectors[1].get())//hard-coded straight auto at index 1
-     * return autoCommands.get(0);
-     * 
-     * //return autoPath == null ? new
-     * PrintCommand("No Autonomous Routine selected") : autoCommand;
-     * return new
-     * PrintCommand("No Auto selected | Auto selector broke :(");//nothing at index
-     * 0
-     */
-  }
+  
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
@@ -522,5 +385,148 @@ public class RobotContainer {
   private Trigger axisTrigger(GenericHID controller, Axis axis) {
     return new Trigger(() -> Math.abs(getStickValue(controller, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);
   }
+
+  private void registerAutoCommands(){
+    ////AUTO-USABLE COMMANDS
+    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
+    NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
+
+    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
+    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
+    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
+
+    // NamedCommands.registerCommand("RampRPMSpeakerSafe",
+    //   new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
+    // NamedCommands.registerCommand("RampRPMSpeakerSubwoofer",
+    //   new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM));
+
+    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
+    NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
+
+    NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
+    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
+    NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
+      new InstantCommand(intakeShooter::stopIntake),
+      new InstantCommand(intakeShooter::stopOutake)
+    ));
+  }
+  private void setupAutos() {
+    ////CREATING PATHS from files
+    {
+      for (int i=0;i<autoNames.length;i++){
+        String name = autoNames[i];
+
+        autoCommands.add(new SequentialCommandGroup(new InstantCommand(() -> drivetrain.setPose(new Pose2d(1.92, 5.58, new Rotation2d(0.6)))), new PathPlannerAuto(name)));/*new SequentialCommandGroup(
+          AutoBuilder.pathfindToPose(
+            // PathPlannerAuto.getStaringPoseFromAutoFile(name),
+            PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
+            Autoc.pathConstraints ),
+          new PathPlannerAuto(name)
+        ));*/
+      }
+
+      // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
+      // for (String name : autoNames) {
+      //   autoPaths.add(PathPlannerPath.fromPathFile(name));
+      // }
+
+
+      // //AutoBuilder is setup in the drivetrain.
+
+      // //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
+      // ////CREATE COMMANDS FROM PATHS
+      // autoCommands = autoPaths.stream().map(
+      //   (PathPlannerPath path) -> AutoBuilder.followPath(path)
+      // ).collect(Collectors.toList());
+
+    }
+
+
+    //AUTOGENERATED AUTO FOR SLOT 2
+    {
+      Pose2d currPos = drivetrain.getPose();
+      // Create a list of bezier points from poses. Each pose represents one waypoint.
+      // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
+      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+              currPos,
+              currPos.plus(new Transform2d(0,1,new Rotation2d(0)))
+      );
+      /**
+       * PATHPLANNER SETTINGS
+       * Robot Width (m): .91
+       * Robot Length(m): .94
+       * Max Module Spd (m/s): 4.30
+       * Default Constraints
+       * Max Vel: 1.54, Max Accel: 6.86
+       * Max Angvel: 360, Max AngAccel: 360 (guesses!)
+       */
+      // Create the path using the bezier points created above
+      PathPlannerPath path = new PathPlannerPath(
+              bezierPoints,
+              /*m/s, m/s^2, rad/s, rad/s^2 */
+              Autoc.pathConstraints,
+              new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+      );
+      // Prevent the path from being flipped if the coordinates are already correct
+      path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+         path.flipPath();
+      }
+
+      //NOTHING
+      autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
+      //RAW FORWARD command
+      autoCommands.add(1, new LastResortAuto(drivetrain));
+      //smart forward command
+      autoCommands.add(2, new SequentialCommandGroup(
+        new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
+        new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
+        new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
+        new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
+        AutoBuilder.followPath(path)
+      ));//no events so just use path instead of auto
+
+      // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
+    }
+  }
+
+  public Command getAutonomousCommand() {
+    if (!hasSetupAutos){
+      setupAutos();
+      /*
+      //get the funny ports on the robot
+      for(int a = 0; a < autoSelectors.length; a++)
+        autoSelectors[a] = new DigitalInput(a);//set up blank list
+      */
+      hasSetupAutos=true;
+    }
+    return autoCommands.get(autoSelector.getSelected()); //hard-coded PP straight auto
+    // Integer autoIndex = autoSelector.getSelected();
+
+    // if (autoIndex!=null && autoIndex!=0){
+    //   new PrintCommand("Running selected auto: "+autoSelector.toString());
+    //   return autoCommands.get(autoIndex.intValue());
+    // }
+    // new PrintCommand("No auto :(");
+    // return null;
+
+    /*
+
+    //check which ones are short-circuiting
+      for(int i = 2; i < autoSelectors.length; i++) { // skip index 0, reserved for null auto
+        if(!autoSelectors[i].get()) {
+          String name = autoNames[i-1];
+          new PrintCommand("Using Path " + i + ": " + name);
+          return new PathPlannerAuto(name);
+        }
+      }
+
+    if (autoSelectors[1].get())//hard-coded straight auto at index 1
+      return autoCommands.get(0);
+
+    //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
+    return new PrintCommand("No Auto selected | Auto selector broke :(");//nothing at index 0
+    */        
+	}
 
 }

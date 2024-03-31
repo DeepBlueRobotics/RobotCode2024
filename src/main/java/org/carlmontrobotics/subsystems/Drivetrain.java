@@ -68,6 +68,8 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule moduleBR;
 
     public Drivetrain() {
+        SmartDashboard.putNumber("set x", 0);
+        SmartDashboard.putNumber("set y", 0);
         // Calibrate Gyro
         {
 
@@ -170,6 +172,10 @@ public class Drivetrain extends SubsystemBase {
 
         // Setup autopath builder
         configurePPLAutoBuilder();
+        SmartDashboard.putNumber("chassis speeds x", 0);
+                        SmartDashboard.putNumber("chassis speeds y", 0);
+
+                                    SmartDashboard.putNumber("chassis speeds theta", 0);
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
@@ -215,18 +221,23 @@ public class Drivetrain extends SubsystemBase {
             // module.move(0, goal);
         }
 
-        odometry.update(Rotation2d.fromDegrees(getHeadingDeg()), getModulePositions());
         field.setRobotPose(odometry.getPoseMeters());
 
-        {
 
+        odometry.update(gyro.getRotation2d(), getModulePositions());
+        //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
+        { 
             SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
             SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
             SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
             SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-        }
-        // // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-        // // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+       }
+        SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        //setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()), SmartDashboard.getNumber("set y", getPose().getTranslation().getY()), Rotation2d.fromDegrees(getHeading())));
+        // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
+        // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
         SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
@@ -293,60 +304,86 @@ public class Drivetrain extends SubsystemBase {
             modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
         }
     }
+    
+   public void configurePPLAutoBuilder() {
+    /**
+     * PATHPLANNER SETTINGS
+     * Robot Width (m): .91
+     * Robot Length(m): .94
+     * Max Module Spd (m/s): 4.30
+     * Default Constraints
+     * Max Vel: 1.54, Max Accel: 6.86
+     * Max Angvel: 360, Max AngAccel: 180 (guesses!)
+     */
+    AutoBuilder.configureHolonomic(
+        this::getPose,
+        this::setPose,
+        this::getSpeeds,
+        (ChassisSpeeds cs) -> {
+            //cs.vxMetersPerSecond = -cs.vxMetersPerSecond;
+            SmartDashboard.putNumber("chassis speeds x", cs.vxMetersPerSecond);
+            SmartDashboard.putNumber("chassis speeds y", cs.vyMetersPerSecond);
+            SmartDashboard.putNumber("chassis speeds theta", cs.omegaRadiansPerSecond);
 
-    public void configurePPLAutoBuilder() {
-        /**
-         * PATHPLANNER SETTINGS
-         * Robot Width (m): .91
-         * Robot Length(m): .94
-         * Max Module Spd (m/s): 4.30
-         * Default Constraints
-         * Max Vel: 1.54, Max Accel: 6.86
-         * Max Angvel: 360, Max AngAccel: 180 (guesses!)
-         */
-        AutoBuilder.configureHolonomic(
-                () -> {
-                    return getPose()
-                            .plus(new Transform2d(autoGyroOffset.getTranslation(), autoGyroOffset.getRotation()));
-                }, // position supplier
-                (Pose2d pose) -> {
-                    autoGyroOffset = pose.times(-1);
-                }, // position reset (by subtracting current pos)
-                this::getSpeeds, // chassisSpeed supplier
-                (ChassisSpeeds cs) -> drive(
-                        cs.vxMetersPerSecond,
-                        -cs.vyMetersPerSecond,
-                        /*
-                         * flipped because drive assumes up is negative, but PPlanner assumes up is
-                         * positive
-                         */
-                        cs.omegaRadiansPerSecond),
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), // translation (drive) pid
-                                                                                          // vals
-                        new PIDConstants(turnkP_avg, 0., 0., turnIzone), // rotation pid vals
-                        maxSpeed,
-                        swerveRadius,
-                        Autoc.replanningConfig,
-                        Robot.robot.getPeriod()// robot period
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent())
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    // else:
-                    return false;
-                },
-                this);
-    }
+            drive(kinematics.toSwerveModuleStates(cs));  
+        },
+        new HolonomicPathFollowerConfig(
+        new PIDConstants(xPIDController[0], xPIDController[1], xPIDController[2], 0), //translation (drive) pid vals
+        new PIDConstants(thetaPIDController[0], thetaPIDController[1], thetaPIDController[2], 0), //rotation pid vals
+        maxSpeed,
+        swerveRadius,
+        Autoc.replanningConfig,
+        Robot.robot.getPeriod()//robot period
+    ),
+    () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
+      },
+      this
+    );
 
-    public void autoCancelDtCommand() {
-        if (!(getDefaultCommand() instanceof TeleopDrive) || DriverStation.isAutonomous())
-            return;
+    /*
+     AutoBuilder.configureHolonomic(
+    () -> getPose().plus(new Transform2d(autoGyroOffset.getTranslation(),autoGyroOffset.getRotation())),//position supplier
+    (Pose2d pose) -> { autoGyroOffset=pose.times(-1); }, //position reset (by subtracting current pos)
+    this::getSpeeds, //chassisSpeed supplier
+    (ChassisSpeeds cs) -> drive(
+            cs.vxMetersPerSecond, 
+            -cs.vyMetersPerSecond,
+            //flipped because drive assumes up is negative, but PPlanner assumes up is positive
+            cs.omegaRadiansPerSecond
+    ),
+    new HolonomicPathFollowerConfig(
+        new PIDConstants(drivekP[0], drivekI[0], drivekD[0], driveIzone), //translation (drive) pid vals
+        new PIDConstants(turnkP_avg, 0., 0., turnIzone), //rotation pid vals
+        maxSpeed,
+        swerveRadius,
+        Autoc.replanningConfig,
+        Robot.robot.getPeriod()//robot period
+    ),
+    () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+            return alliance.get() == DriverStation.Alliance.Red;
+        //else:
+        return false;
+      },
+      this
+    );
+    */
+   }
+
+   public void autoCancelDtCommand() {
+       if(!(getDefaultCommand() instanceof TeleopDrive) || DriverStation.isAutonomous()) return;
 
         // Use hasDriverInput to get around acceleration limiting on slowdown
         if (((TeleopDrive) getDefaultCommand()).hasDriverInput()) {
@@ -430,7 +467,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setPose(Pose2d initialPose) {
-        odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
+        odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), initialPose);
+        //odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
     }
 
     // Resets the gyro, so that the direction the robotic currently faces is

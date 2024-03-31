@@ -5,14 +5,12 @@
 package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class OppositeEject extends Command {
   private final IntakeShooter intake;
   private final Timer timer = new Timer();
-
   /** Creates a new IntactEject. */
   public OppositeEject(IntakeShooter intake) {
     // Use addRequirements() here to declare subsystem dependencies.

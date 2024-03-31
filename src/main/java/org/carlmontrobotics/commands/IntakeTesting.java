@@ -10,12 +10,10 @@ public class IntakeTesting extends Command {
     private int startingRPMWithNote = 5000;
     private double increaseRPM = 500.0;
     private int index = 0;
-
     public IntakeTesting(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
         addRequirements(intakeShooter);
     }
-
     @Override
     public void initialize() {
         intakeShooter.setRPMIntake(startingRPMWithNote);
