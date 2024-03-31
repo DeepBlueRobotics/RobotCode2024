@@ -4,10 +4,9 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Limelightc.MIN_MOVEMENT_METERSPSEC;
-import static org.carlmontrobotics.Constants.Limelightc.MIN_MOVEMENT_RADSPSEC;
+import static org.carlmontrobotics.Constants.Limelightc.*;
+import static org.carlmontrobotics.Constants.Effectorc.*;
 
-import org.carlmontrobotics.Constants.Limelightc;
 import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Limelight;
@@ -22,9 +21,9 @@ public class AutoMATICALLYGetNote extends Command {
   /** Creates a new AutoMATICALLYGetNote. */
   private Drivetrain dt;
   // private IntakeShooter effector;
-  private Limelight ll;
+  private Limelight ll = new Limelight(dt);
   private IntakeShooter intake;
-  private Timer timer = new Timer();
+  //private Timer timer = new Timer();
 
   public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake) {
     addRequirements(this.dt = dt);
@@ -35,21 +34,26 @@ public class AutoMATICALLYGetNote extends Command {
 
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
-    new Intake(intake).finallyDo(()->{this.end(false);});
+    // timer.reset();
+    // timer.start();
+    // new Intake(intake).finallyDo(()->{this.end(false);});
+    intake.resetCurrentLimit();
     dt.setFieldOriented(false);
   }
 
   @Override
   public void execute() {
-    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
+    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNote();
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
     dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
         Math.max(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC), Math.max(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
     // 180deg is about 6.2 rad/sec, min is .5rad/sec
+
+    if (LimelightHelpers.getTX(INTAKE_LL_NAME) == 1) {
+      intake.setRPMIntake(INTAKE_RPM);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -62,7 +66,7 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeDetectsNote();
+    return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
     //return timer.get() >= 0.5;
   }
 }
