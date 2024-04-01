@@ -19,6 +19,7 @@ import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
+import org.carlmontrobotics.lib199.swerve.SwerveModuleSim;
 import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
 import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.commands.RotateToFieldRelativeAngle;
@@ -27,10 +28,12 @@ import org.carlmontrobotics.commands.TeleopDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -74,11 +77,14 @@ import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import edu.wpi.first.wpilibj.examples.rapidreactcommandbot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
+
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
@@ -109,6 +115,9 @@ public class Drivetrain extends SubsystemBase {
 
     private final Field2d field = new Field2d();
 
+    private SwerveModuleSim[] moduleSims;
+    private SimDouble gyroYawSim;
+    private Timer simTimer = new Timer();
 
     public Drivetrain() {
         // Calibrate Gyro
@@ -182,6 +191,14 @@ public class Drivetrain extends SubsystemBase {
                     turnEncoders[3] = SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
+
+            if (RobotBase.isSimulation()) {
+                moduleSims = new SwerveModuleSim[] {
+                    moduleFL.createSim(), moduleFR.createSim(), moduleBL.createSim(), moduleBR.createSim()
+                };
+                gyroYawSim = new SimDeviceSim("navX-Sensor[0]").getDouble("Yaw");
+            }
+
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
@@ -200,9 +217,9 @@ public class Drivetrain extends SubsystemBase {
                  coder.getAbsolutePosition().setUpdateFrequency(500);
                  coder.getPosition().setUpdateFrequency(500);
                  coder.getVelocity().setUpdateFrequency(500);
-
             }
 
+            SmartDashboard.putData("Field", field);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
@@ -214,8 +231,29 @@ public class Drivetrain extends SubsystemBase {
 
         // Setup autopath builder
         configurePPLAutoBuilder();
+    }
 
-        SmartDashboard.putData("Field", field);
+    @Override
+    public void simulationPeriodic() {
+        for (var moduleSim : moduleSims) {
+            moduleSim.update();
+        }
+        SwerveModuleState[] measuredStates =
+            new SwerveModuleState[] {
+                moduleFL.getCurrentState(), moduleFR.getCurrentState(), moduleBL.getCurrentState(), moduleBR.getCurrentState()
+            };
+        ChassisSpeeds speeds = kinematics.toChassisSpeeds(measuredStates);
+
+        double dtSecs = simTimer.get();
+        simTimer.restart();
+
+        Pose2d simPose =
+            getPose().exp(
+                new Twist2d(
+                    speeds.vxMetersPerSecond * dtSecs,
+                    speeds.vyMetersPerSecond * dtSecs,
+                    speeds.omegaRadiansPerSecond * dtSecs));
+        gyroYawSim.set((isGyroReversed ? -1.0 : 1.0) * simPose.getRotation().getDegrees());
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int frontorback) {
