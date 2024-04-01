@@ -13,6 +13,7 @@ import org.carlmontrobotics.subsystems.Arm;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopArm extends Command {
@@ -42,6 +43,7 @@ public class TeleopArm extends Command {
     // use trapazoid math and controllerMoveArm method from arm subsytem to apply
     // voltage to the motor
     double speeds = getRequestedSpeeds();
+    SmartDashboard.putNumber("speeds", speeds);
 
     if (speeds == 0) {// if no input, don't set any goals.
       lastTime = Timer.getFPGATimestamp();// update deltaT even when not running
@@ -55,9 +57,9 @@ public class TeleopArm extends Command {
     double goalArmRad = goalState.position + speeds * deltaT;// speed*time = dist
 
     goalArmRad = MathUtil.clamp(goalArmRad, LOWER_ANGLE_LIMIT_RAD, UPPER_ANGLE_LIMIT_RAD);
-    goalArmRad = MathUtil.clamp(goalArmRad,
-        armSubsystem.getArmPos() + Math.pow(armSubsystem.getMaxVelRad(), 2) / MAX_FF_ACCEL_RAD_P_S,
-        armSubsystem.getArmPos() - Math.pow(armSubsystem.getMaxVelRad(), 2) / MAX_FF_ACCEL_RAD_P_S);
+    // goalArmRad = MathUtil.clamp(goalArmRad,
+    //     armSubsystem.getArmPos() + Math.pow(armSubsystem.getMaxVelRad(), 2) / MAX_FF_ACCEL_RAD_P_S,
+    //     armSubsystem.getArmPos() - Math.pow(armSubsystem.getMaxVelRad(), 2) / MAX_FF_ACCEL_RAD_P_S);
 
     goalState.position = goalArmRad;
     goalState.velocity = 0;

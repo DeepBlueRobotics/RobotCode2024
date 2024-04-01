@@ -15,7 +15,7 @@ public class Intake extends Command {
 
   private double endAt = 0;
   private final double keepIntakingFor = 0.2;
-  int increaseAmount = 750;
+  int increaseAmount = 250;
   int index = 0;
 
   public Intake(IntakeShooter intake) {
@@ -29,6 +29,7 @@ public class Intake extends Command {
     timer.reset();
     timer.start();
     intake.resetCurrentLimit();
+    index=0; 
     
   }
 
@@ -37,10 +38,10 @@ public class Intake extends Command {
   public void execute() {
     // Intake Led
     if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-      //index++;
+      index++;
 
       //intake.setRPMIntake(0);
-     intake.setRPMIntake(0);
+     intake.setRPMIntake(INTAKE_RPM + index*increaseAmount);
     }
     if (intake.outakeDetectsNote()) {
       // Timer.delay(keepIntakingFor);
