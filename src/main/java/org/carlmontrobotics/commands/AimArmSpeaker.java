@@ -4,43 +4,40 @@
 
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.subsystems.IntakeShooter;
-import edu.wpi.first.wpilibj.Timer;
+import org.carlmontrobotics.subsystems.Arm;
+import org.carlmontrobotics.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class OppositeEject extends Command {
-  private final IntakeShooter intake;
-  private final Timer timer = new Timer();
-  /** Creates a new IntactEject. */
-  public OppositeEject(IntakeShooter intake) {
+public class AimArmSpeaker extends Command {
+  private final Arm arm;
+  private final Limelight ll;
+
+  /** Creates a new AimOuttakeSpeaker. */
+  public AimArmSpeaker(Arm arm, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.intake = intake);
+    addRequirements(this.arm = arm);
+    addRequirements(this.ll = ll);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
-    intake.setMaxIntake(-1);
+    double goal = ll.getArmAngleToShootSpeakerRad();
+    arm.setArmTarget(goal);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  }
+}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stopIntake();
-    timer.stop();
-    intake.resetCurrentLimit();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.hasElapsed(1.5));
+    return arm.armAtSetpoint();
   }
 }

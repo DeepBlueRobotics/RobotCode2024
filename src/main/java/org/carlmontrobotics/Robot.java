@@ -24,8 +24,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = this;
     m_robotContainer = new RobotContainer();
-    //SignalLogger.start();
-    
+    // SignalLogger.start();
+
     // Record both DS control and joystick data
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    //SignalLogger.stop();
+    // SignalLogger.stop();
   }
 
   @Override

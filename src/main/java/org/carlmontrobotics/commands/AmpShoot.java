@@ -9,12 +9,12 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class PassToOutake extends Command {
+public class AmpShoot extends Command {
   // pass ring from intake to outtake
   private final IntakeShooter intake;
   Timer timer = new Timer();
 
-  public PassToOutake(IntakeShooter intake) {
+  public AmpShoot(IntakeShooter intake) {
     addRequirements(this.intake = intake);
   }
 
@@ -29,7 +29,7 @@ public class PassToOutake extends Command {
   @Override
   public void execute() {
     // intake.setMaxOutake();
-    if (intake.getOutakeRPM() >= 4000) {// SPEAKER_RPM){
+    if (intake.getOutakeRPM() >= 1000) {// SPEAKER_RPM){
       intake.setMaxIntake(1);
       timer.start();
     }

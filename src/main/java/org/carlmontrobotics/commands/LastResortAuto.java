@@ -4,21 +4,10 @@
 
 package org.carlmontrobotics.commands;
 
-//import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_DRIVE;
-import static org.carlmontrobotics.Constants.Effectorc.MAX_SECONDS_OVERLOAD;
-
-import java.sql.Time;
-
-import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.Drivetrain;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import org.carlmontrobotics.subsystems.Drivetrain;
-import org.carlmontrobotics.Constants.Effectorc;
-
-
 
 public class LastResortAuto extends Command {
   private final Timer timer = new Timer();
@@ -26,7 +15,8 @@ public class LastResortAuto extends Command {
   private final Drivetrain drivetrain;
   private boolean prev;
 
- int MAX_SECONDS_DRIVE = 4;
+  int MAX_SECONDS_DRIVE = 4;
+
   public LastResortAuto(Drivetrain drivetrain) {
     addRequirements(this.drivetrain = drivetrain);
   }
@@ -41,10 +31,10 @@ public class LastResortAuto extends Command {
     drivetrain.drive(1, 0, 0);
   }
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override

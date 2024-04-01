@@ -39,6 +39,7 @@
       "/SmartDashboard/Arm": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/moveClimber": "Command",
       "/SmartDashboard/moveClimber": "Command"
     },
     "windows": {
