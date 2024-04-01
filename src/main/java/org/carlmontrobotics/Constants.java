@@ -346,7 +346,7 @@ public final class Constants {
 
 	public static final class Limelightc {
 		public static final String INTAKE_LL_NAME = "limelight-intake";
-		public static final String SHOOTER_LL_NAME = "shooter-limelight";
+		public static final String SHOOTER_LL_NAME = "limelight-shooter";
 
 		public static final double ERROR_TOLERANCE_RAD = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0;
