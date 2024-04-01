@@ -88,7 +88,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getArmAngleToShootSpeakerRad(){
-    double armRestingHeightToSubwoofer = HEIGHT_FROM_BOTTOM_TO_ARM_RESTING + HEIGHT_FROM_BOTTOM_TO_SUBWOOFER;
+    double armRestingHeightToSubwoofer = HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER;
     double horizontalDistanceMeters = getDistanceToSpeakerMeters();
     return Math.atan(armRestingHeightToSubwoofer/horizontalDistanceMeters);
   }

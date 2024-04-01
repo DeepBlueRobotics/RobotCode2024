@@ -359,13 +359,12 @@ public final class Constants {
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
+		public static final double HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER = Units.inchesToMeters(62.875);
 
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
 			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); // 88.125
-			public static final double HEIGHT_FROM_BOTTOM_TO_ARM_RESTING = Units.inchesToMeters(36.875);
-			public static final double HEIGHT_FROM_BOTTOM_TO_SUBWOOFER = Units.inchesToMeters(26);
 		}
 	}
 
