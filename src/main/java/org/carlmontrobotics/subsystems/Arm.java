@@ -50,7 +50,7 @@ public class Arm extends SubsystemBase {
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
     private static double kDt = 0.02;// what is this?
-
+    private static int numSelector = 0;
     // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
@@ -217,7 +217,12 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
 
     }
-
+    public static void setSelector(int num) {
+        numSelector = num;
+    }
+    public static int getSelector() {
+        return numSelector;
+    }
     public void autoCancelArmCommand() {
         if (!(getDefaultCommand() instanceof TeleopArm) || DriverStation.isAutonomous())
             return;

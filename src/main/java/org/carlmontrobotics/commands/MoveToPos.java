@@ -8,14 +8,17 @@ public class MoveToPos extends Command {
   // return true when close enough
   private final Arm arm;
   private double goal;
+  private int index;
 
-  public MoveToPos(Arm armSubsystem, double goal) {
+  public MoveToPos(Arm armSubsystem, double goal, int index) {
     addRequirements(this.arm = armSubsystem);
     this.goal = goal;
+    this.index = index;
   }
 
   @Override
   public void initialize() {
+    Arm.setSelector(index);
     arm.setArmTarget(goal);
   }
 

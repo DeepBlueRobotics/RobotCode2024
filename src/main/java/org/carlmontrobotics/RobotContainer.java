@@ -36,7 +36,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.math.util.Units;
 // controllers
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -59,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -182,7 +183,7 @@ public class RobotContainer {
     //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
-            new PassToOutake(intakeShooter));
+            new SwitchRPMShoot(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOutake, intakeShooter));
@@ -193,11 +194,12 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD-Units.degreesToRadians(10),0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS,1));
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
+    new POVButton(manipulatorController, 90).onTrue(new MoveToPos(arm, PODIUM_ANGLE_RAD, 2));
     // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
     // moveClimber(arm));
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
@@ -401,9 +403,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
-    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
 
     // NamedCommands.registerCommand("RampRPMSpeakerSafe",
     //   new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
