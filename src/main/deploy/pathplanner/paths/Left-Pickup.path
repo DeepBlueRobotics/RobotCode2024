@@ -3,41 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 1.2933990244570825,
+        "y": 7.102190285805508
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 2.2933990244570834,
+        "y": 7.102190285805508
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.48672249507349,
-        "y": 6.7470807715152326
+        "x": 3.392722917761358,
+        "y": 6.872413541264741
       },
       "prevControl": {
-        "x": 3.330056532886604,
-        "y": 7.008190708493376
+        "x": 3.384712430565263,
+        "y": 7.176812054716363
       },
       "nextControl": {
-        "x": 3.5771981354071207,
-        "y": 6.596288037625849
+        "x": 3.4031673152404833,
+        "y": 6.4755264370579635
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2933990244570825,
-        "y": 5.525086266457521
+        "x": 3.392722917761358,
+        "y": 5.577308253858372
       },
       "prevControl": {
-        "x": 3.9462759841550223,
-        "y": 6.0890837303303105
+        "x": 3.40564609442672,
+        "y": 6.0425426138113885
+      },
+      "nextControl": {
+        "x": 3.3822785202822323,
+        "y": 5.201309944609845
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.460509384123095,
+        "y": 5.577308253858372
+      },
+      "prevControl": {
+        "x": 1.9305072706837536,
+        "y": 4.240425376525054
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,13 +71,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0,
+    "rotation": -177.13759477317393,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -2.0454084893982576,
     "velocity": 0
   },
   "useDefaultConstraints": false
