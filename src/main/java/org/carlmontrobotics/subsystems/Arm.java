@@ -72,7 +72,7 @@ public class Arm extends SubsystemBase {
     private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
 
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
-
+    private boolean setPIDOff; 
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
@@ -87,9 +87,9 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
 
         // ------------------------------------------------------------
-
+        
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
-
+        setPIDOff = false;
         armPIDMaster.setP(kP);
         // //SmartDashboard.putNumber("set KP", kP);
         // //armPIDMaster.setP(SmartDashboard.getNumber("set KP", kP));
@@ -243,8 +243,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             // kg * cos(arm angle) * arm_COM_length
         }
-        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
-
+        if(!setPIDOff) {
+       armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
+        }
         SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         SmartDashboard.putNumber("pid volts",
                 armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
@@ -252,6 +253,7 @@ public class Arm extends SubsystemBase {
 
     public void stopArm() {
         armMotorMaster.set(0);
+        armMotorFollower.set(0);
 
     }
 
@@ -278,7 +280,9 @@ public class Arm extends SubsystemBase {
         goalState.position = targetPos;
         goalState.velocity = 0;
     }
-
+    public void setPIDOff(boolean setter) {
+        setPIDOff = setter;
+    }
     public void resetGoal() {
         double armPos = getArmPos();
         setArmTarget(armPos);
@@ -360,7 +364,8 @@ public class Arm extends SubsystemBase {
     }
 
     public double getMaxAccelRad() {
-        return armFeed.maxAchievableAcceleration(MAX_VOLTAGE, getArmPos(), getArmVel());
+        return 1;
+        //return armFeed.maxAchievableAcceleration(MAX_VOLTAGE, getArmPos(), getArmVel());
     }
 
     public double getMaxVelocity() {

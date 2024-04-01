@@ -4,50 +4,37 @@
 
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.subsystems.IntakeShooter;
-
-import edu.wpi.first.wpilibj.Timer;
+import org.carlmontrobotics.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class PassToOutake extends Command {
-  // pass ring from intake to outtake
-  private final IntakeShooter intake;
-  Timer timer = new Timer();
-
-  public PassToOutake(IntakeShooter intake) {
-    addRequirements(this.intake = intake);
+public class DriveForwardRobotOriented extends Command {
+  private final Drivetrain dt;
+  /** Creates a new DriveForwardRobotOriented. */
+  public DriveForwardRobotOriented(Drivetrain dt) {
+    addRequirements(this.dt = dt);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    intake.setMaxOutake();
+    dt.setFieldOriented(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // intake.setMaxOutake();
-    if (intake.getOutakeRPM() >= 4000) {// SPEAKER_RPM){
-      intake.setMaxIntake(1);
-      timer.start();
-    }
+    dt.drive(0.5, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
-    intake.resetCurrentLimit();
-    timer.stop();
-    intake.stopOutake();
+    dt.setFieldOriented(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!intake.intakeDetectsNote() && !intake.outakeDetectsNote()) || timer.get() > 0.75;
+    return false;
   }
-
 }

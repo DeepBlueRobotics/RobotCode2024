@@ -59,6 +59,7 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putNumber("Vortex volts", 0);
         // setMaxOutakeOverload(1);
         outakeMotorVortex.setSmartCurrentLimit(60);
+        
 
     }
 
@@ -127,6 +128,7 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
+        //intakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
         SmartDashboard.putNumber("outtake vel", outakeMotorVortex.getEncoder().getVelocity());
 
         // count++;
@@ -134,9 +136,10 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("Intake detects note", outakeDetectsNote());
 
         double volts = SmartDashboard.getNumber("Vortex volts", 0);
-       // outakeMotorVortex.set(volts);
+       //outakeMotorVortex.set(volts);
 
         // setMaxOutake();
+
 
     }
 

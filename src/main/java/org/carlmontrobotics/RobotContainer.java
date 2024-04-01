@@ -135,17 +135,24 @@ public class RobotContainer {
     intakeShooter.setDefaultCommand(new TeleopEffector(
     intakeShooter,
     () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
-    manipulatorController, driverController
+    manipulatorController, driverController));
+    arm.setDefaultCommand(new TeleopArm(
+      arm, 
+      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
+    
 
   }
 
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
-    new JoystickButton(driverController, 1).whileTrue(new AlignToApriltag(drivetrain)); // button A
-    new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); // button b?
-    new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)); // button x?
+    //new JoystickButton(driverController, 1).whileTrue(new AlignToApriltag(drivetrain)); // button A
+    //new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); // button b?
+    //new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)); // button x?
+    axisTrigger(driverController, Axis.kRightTrigger)
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"), 
+            new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
     // new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new
     // ParallelCommandGroup(
     // new InstantCommand(()->drivetrain.setFieldOriented(false)),
@@ -170,7 +177,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
     //new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
 
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new AmpShoot(intakeShooter));
    // new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
     //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
@@ -181,8 +188,8 @@ public class RobotContainer {
             new InstantCommand(intakeShooter::stopOutake, intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .onTrue(
-            new Intake(intakeShooter));
+        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"), 
+            new Intake(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));

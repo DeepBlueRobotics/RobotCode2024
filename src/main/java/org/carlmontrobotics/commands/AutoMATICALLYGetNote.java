@@ -24,7 +24,8 @@ public class AutoMATICALLYGetNote extends Command {
   private Limelight ll;
   private IntakeShooter intake;
   //private Timer timer = new Timer();
-
+  private int index;
+  private int increaseAmount = 250;
   public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
     addRequirements(this.dt = dt);
     addRequirements(this.intake = intake);
@@ -40,6 +41,9 @@ public class AutoMATICALLYGetNote extends Command {
     // new Intake(intake).finallyDo(()->{this.end(false);});
     intake.resetCurrentLimit();
     dt.setFieldOriented(false);
+    intake.setRPMIntake(INTAKE_RPM);
+    intake.resetCurrentLimit();
+    index=0; 
   }
 
   @Override
@@ -52,8 +56,19 @@ public class AutoMATICALLYGetNote extends Command {
         Math.max(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC), Math.max(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
     // 180deg is about 6.2 rad/sec, min is .5rad/sec
 
-    if (LimelightHelpers.getTX(INTAKE_LL_NAME) == 1) {
+    if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
       intake.setRPMIntake(INTAKE_RPM);
+    }
+    if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
+      index++;
+
+      //intake.setRPMIntake(0);
+     intake.setRPMIntake(INTAKE_RPM + index*increaseAmount);
+    }
+    if (intake.outakeDetectsNote()) {
+      // Timer.delay(keepIntakingFor);
+
+      intake.setRPMIntake(0.0);
     }
   }
 
@@ -62,6 +77,8 @@ public class AutoMATICALLYGetNote extends Command {
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
     SmartDashboard.putBoolean("end", true);
+    intake.stopIntake();
+   
   }
 
   // Returns true when the command should end.
