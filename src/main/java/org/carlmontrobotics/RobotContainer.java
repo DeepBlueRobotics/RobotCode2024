@@ -89,7 +89,10 @@ public class RobotContainer {
     "Middle-Ram",
     "Left-Straight",
     "Right-Straight",
-    "Left-Safe"
+    "Left-Safe",
+    "Center Shoot",
+    "Left Shoot",
+    "Right Shoot"
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
