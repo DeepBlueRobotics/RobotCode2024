@@ -4,10 +4,8 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Drivetrainc.positionTolerance;
-import static org.carlmontrobotics.Constants.Drivetrainc.thetaPIDController;
-import static org.carlmontrobotics.Constants.Drivetrainc.velocityTolerance;
-import static org.carlmontrobotics.Constants.Limelightc.INTAKE_LL_NAME;
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
 
 import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.LimelightHelpers;

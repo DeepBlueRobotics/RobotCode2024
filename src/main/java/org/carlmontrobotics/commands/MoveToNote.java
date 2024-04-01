@@ -41,7 +41,7 @@ public class MoveToNote extends Command {
   @Override
   public void execute() {
     double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
-    double distErr = ll.getDistanceToNote(); // meters
+    double distErr = ll.getDistanceToNoteMeters(); // meters
     double forwardErr = distErr * Math.cos(radErr);
     // dt.drive(0,0,0);
     dt.drive(Math.max(forwardErr * 2, .5), 0, 0);

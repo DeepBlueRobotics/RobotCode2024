@@ -49,7 +49,7 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void execute() {
     double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(INTAKE_LL_NAME));
-    double forwardDistErrMeters = ll.getDistanceToNote();
+    double forwardDistErrMeters = ll.getDistanceToNoteMeters();
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
     dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),

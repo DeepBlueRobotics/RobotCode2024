@@ -4,8 +4,7 @@
 
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Limelightc.SHOOTER_LL_NAME;
-
+import static org.carlmontrobotics.Constants.Limelightc.*;
 import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
