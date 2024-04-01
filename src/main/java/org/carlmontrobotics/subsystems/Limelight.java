@@ -40,9 +40,9 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
     poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()), drivetrain.getModulePositions());
     updateBotPose3d();
-    getDistanceToTargetSpeaker();
+    getDistanceToSpeakerMeters();
     getCurrentPose();
-    getDistanceToNote();
+    getDistanceToNoteMeters();
   }
 
   public void updateBotPose3d() {
@@ -57,7 +57,7 @@ public class Limelight extends SubsystemBase {
     return estimatedPos;
   }
 
-  public double getDistanceToTargetSpeaker() {
+  public double getDistanceToSpeakerMeters() {
     if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID
         || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID) {
       Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER)
@@ -73,7 +73,7 @@ public class Limelight extends SubsystemBase {
     }
   }
 
-  public double getDistanceToNote() {
+  public double getDistanceToNoteMeters() {
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE)
         .plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
     if (angleToGoal.getDegrees() <= 0) {
@@ -85,6 +85,12 @@ public class Limelight extends SubsystemBase {
       SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
+  }
+
+  public double getArmAngleToShootSpeakerRad(){
+    double armRestingHeightToSubwoofer = HEIGHT_FROM_BOTTOM_TO_ARM_RESTING + HEIGHT_FROM_BOTTOM_TO_SUBWOOFER;
+    double horizontalDistanceMeters = getDistanceToSpeakerMeters();
+    return Math.atan(armRestingHeightToSubwoofer/horizontalDistanceMeters);
   }
 
   // public Pose3d getTargetPose() {
