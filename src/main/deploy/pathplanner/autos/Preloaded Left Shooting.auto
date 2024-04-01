@@ -12,6 +12,37 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Preloaded-Left"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RampRPMSpeakerSubwoofer"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToSpeakerSafe"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOutake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -24,10 +55,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left-Pickup"
+                  "pathName": "Preloaded Left-Pickup"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Preloaded Left-Shoot"
           }
         },
         {
@@ -37,13 +74,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "name": "RampRPMSpeakerSubwoofer"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSubwoofer"
+                  "name": "ArmToSpeakerSafe"
                 }
               }
             ]

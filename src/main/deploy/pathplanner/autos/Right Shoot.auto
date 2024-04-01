@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1993994471449507,
-      "y": 2.0993238933042755
+      "x": 0.7816235479799211,
+      "y": 3.1333192437377244
     },
     "rotation": 0
   },
@@ -25,6 +25,25 @@
                 "type": "path",
                 "data": {
                   "pathName": "Right-Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RampRPMSpeakerSubwoofer"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToSpeakerSafe"
                 }
               }
             ]
