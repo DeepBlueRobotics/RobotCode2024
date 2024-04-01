@@ -16,6 +16,7 @@ public class SwitchRPMShoot extends Command {
     public SwitchRPMShoot(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
         rpmAmount = Constants.Effectorc.RPM_SELECTOR[Arm.getSelector()];
+        addRequirements(intakeShooter);
     }
     @Override
     public void initialize() {
