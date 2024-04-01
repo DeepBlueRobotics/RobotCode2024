@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
+import static org.carlmontrobotics.Constants.Armc.*;
 
 import org.carlmontrobotics.subsystems.Arm;
 

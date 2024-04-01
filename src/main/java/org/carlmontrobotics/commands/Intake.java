@@ -1,7 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import static org.carlmontrobotics.Constants.Effectorc.INTAKE_RPM;
-import static org.carlmontrobotics.Constants.Effectorc.INTAKE_SLOWDOWN_RPM;
+import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
