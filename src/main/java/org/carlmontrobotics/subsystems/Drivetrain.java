@@ -42,23 +42,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Meters;
-
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
-
-import java.util.function.DoubleSupplier;
-import java.util.function.Function;
-
 public class Drivetrain extends SubsystemBase {
     private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
     private Pose2d autoGyroOffset = new Pose2d(0., 0., new Rotation2d(0.));
@@ -309,9 +294,6 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
         // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
         // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-
-        odometry.update(Rotation2d.fromDegrees(getHeadingDeg()), getModulePositions());
-        field.setRobotPose(odometry.getPoseMeters());
     }
 
     @Override
