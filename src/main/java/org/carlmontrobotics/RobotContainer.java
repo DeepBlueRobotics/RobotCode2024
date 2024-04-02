@@ -433,7 +433,10 @@ public class RobotContainer {
       for (int i=0;i<autoNames.length;i++){
         String name = autoNames[i];
 
-        autoCommands.add(new SequentialCommandGroup(new InstantCommand(() -> drivetrain.setPose(new Pose2d(1.92, 5.58, new Rotation2d(0.6)))), new PathPlannerAuto(name)));/*new SequentialCommandGroup(
+        autoCommands.add(new PathPlannerAuto(name));
+        
+        // TODO: Charles' opinion: we shouldn't have it path find to the starting pose at the start of match
+        /*new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
             // PathPlannerAuto.getStaringPoseFromAutoFile(name),
             PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
@@ -441,21 +444,6 @@ public class RobotContainer {
           new PathPlannerAuto(name)
         ));*/
       }
-
-      // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
-      // for (String name : autoNames) {
-      //   autoPaths.add(PathPlannerPath.fromPathFile(name));
-      // }
-
-
-      // //AutoBuilder is setup in the drivetrain.
-
-      // //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
-      // ////CREATE COMMANDS FROM PATHS
-      // autoCommands = autoPaths.stream().map(
-      //   (PathPlannerPath path) -> AutoBuilder.followPath(path)
-      // ).collect(Collectors.toList());
-
     }
 
 
@@ -482,7 +470,7 @@ public class RobotContainer {
               bezierPoints,
               /*m/s, m/s^2, rad/s, rad/s^2 */
               Autoc.pathConstraints,
-              new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+              new GoalEndState(0, currPos.getRotation())
       );
       // Prevent the path from being flipped if the coordinates are already correct
       path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
@@ -496,54 +484,25 @@ public class RobotContainer {
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
       autoCommands.add(2, new SequentialCommandGroup(
-        // new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
-        // new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
-        // new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
-        // new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
         AutoBuilder.followPath(path)
-      ));//no events so just use path instead of auto
+      ));
+      //no events so just use path instead of auto
 
-      // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
     }
   }
 
   public Command getAutonomousCommand() {
     if (!hasSetupAutos){
       setupAutos();
-      /*
-      //get the funny ports on the robot
-      for(int a = 0; a < autoSelectors.length; a++)
-        autoSelectors[a] = new DigitalInput(a);//set up blank list
-      */
       hasSetupAutos=true;
     }
-    return autoCommands.get(autoSelector.getSelected()); //hard-coded PP straight auto
-    // Integer autoIndex = autoSelector.getSelected();
+    Integer autoIndex = autoSelector.getSelected();
 
-    // if (autoIndex!=null && autoIndex!=0){
-    //   new PrintCommand("Running selected auto: "+autoSelector.toString());
-    //   return autoCommands.get(autoIndex.intValue());
-    // }
-    // new PrintCommand("No auto :(");
-    // return null;
-
-    /*
-
-    //check which ones are short-circuiting
-      for(int i = 2; i < autoSelectors.length; i++) { // skip index 0, reserved for null auto
-        if(!autoSelectors[i].get()) {
-          String name = autoNames[i-1];
-          new PrintCommand("Using Path " + i + ": " + name);
-          return new PathPlannerAuto(name);
-        }
-      }
-
-    if (autoSelectors[1].get())//hard-coded straight auto at index 1
-      return autoCommands.get(0);
-
-    //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-    return new PrintCommand("No Auto selected | Auto selector broke :(");//nothing at index 0
-    */        
+    if (autoIndex!=null && autoIndex!=0){
+      new PrintCommand("Running selected auto: "+autoSelector.toString());
+      return autoCommands.get(autoIndex.intValue());
+    }
+    return new PrintCommand("No auto :(");
 	}
 
 }
