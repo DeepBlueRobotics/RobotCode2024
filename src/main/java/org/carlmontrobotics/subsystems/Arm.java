@@ -66,6 +66,7 @@ public class Arm extends SubsystemBase {
 
     private double lastMeasuredTime;
     private double lastArmPos;
+    private double lastArmVel;
 
     private boolean isArmEncoderConnected = false;
 
@@ -133,8 +134,9 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("arm initial position", goalState.position);
         // SmartDashboard.putNumber("set arm angle (rad)", 0);
         // sysid
-
+        lastArmVel = getArmVel();
         lastArmPos = getArmPos();
+        
         lastMeasuredTime = Timer.getFPGATimestamp();
 
         // SmartDashboard.putNumber("ramp rate (s)", 2);
@@ -201,9 +203,11 @@ public class Arm extends SubsystemBase {
         // when the value is different
 
         double currentArmPos = getArmPos();
-        if (currentArmPos != lastArmPos) {
+        double currentAbsoluteArmVel = armMasterEncoder.getVelocity();
+        if (currentArmPos != lastArmPos && currentAbsoluteArmVel!=lastArmVel) {
             lastMeasuredTime = currTime;
             lastArmPos = currentArmPos;
+            lastArmVel = currentAbsoluteArmVel;
         }
         isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
