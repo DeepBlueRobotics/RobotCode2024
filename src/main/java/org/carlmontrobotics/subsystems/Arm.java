@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
@@ -21,6 +22,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -149,11 +151,13 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData(this);
+        SmartDashboard.putNumber("Arm volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
             resetGoal();
-
+        SmartDashboard.putNumber("Switch RPM", RPM_SELECTOR[numSelector]);
+        SmartDashboard.putNumber("Output current ARM", armMotorMaster.getOutputCurrent());
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD =
         // SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD",
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
@@ -267,11 +271,12 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setVoltage(volts); // STARTING WITH SLOWER SPEED FOR TESTING
     }
 
+    
     public void setLimitsForClimbOn() {
         armPIDMaster.setOutputRange(-12, 12);
         armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse,
-                (float) SmartDashboard.getNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS));
-        armMotorMaster.setOpenLoopRampRate(SmartDashboard.getNumber("ramp rate (s)", 2));
+                (float)(CLIMB_FINISH_POS-Units.degreesToRadians(1)));
+        armMotorMaster.setOpenLoopRampRate(1);
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
     }
 

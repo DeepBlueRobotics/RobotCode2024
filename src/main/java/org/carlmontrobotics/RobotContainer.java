@@ -93,7 +93,9 @@ public class RobotContainer {
     "Left-Safe",
     "Center Shoot",
     "Left Shoot",
-    "Right Shoot"
+    "Right Shoot",
+    "Preloaded Left Shooting", 
+    "Preloaded Right Shooting"    
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -195,12 +197,12 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD-Units.degreesToRadians(10),0));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS,1));
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
-    new POVButton(manipulatorController, 90).onTrue(new MoveToPos(arm, PODIUM_ANGLE_RAD, 2));
+    new POVButton(manipulatorController, 90).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
     // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
     // moveClimber(arm));
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new

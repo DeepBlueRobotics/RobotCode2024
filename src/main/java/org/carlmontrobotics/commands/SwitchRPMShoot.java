@@ -15,17 +15,18 @@ public class SwitchRPMShoot extends Command {
     
     public SwitchRPMShoot(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
-        rpmAmount = RPM_SELECTOR[Arm.getSelector()];
+        
         addRequirements(intakeShooter);
     }
     @Override
     public void initialize() {
         intakeShooter.setMaxOutake();
         timer.reset();
-        SmartDashboard.putNumber("RPM amount for current angle", rpmAmount);
+        
     }
     @Override
     public void execute() {
+        rpmAmount = RPM_SELECTOR[Arm.getSelector()];
         if(intakeShooter.getOutakeRPM() >= rpmAmount) {
         intakeShooter.setMaxIntake(1);
         timer.start();

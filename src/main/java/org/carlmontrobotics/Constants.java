@@ -119,9 +119,10 @@ public final class Constants {
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double HANG_ANGLE_RAD = Units.degreesToRadians(90);
 		public static final double AMP_ANGLE_RAD = 1.28;
+		public static final double AMP_ANGLE_RAD_NEW_MOTOR = 1.456;
 		public static final double SPEAKER_ANGLE_RAD = -0.2;
 		// -0.427725
-		public static final double GROUND_INTAKE_POS = -0.33363;
+		public static final double GROUND_INTAKE_POS = -0.34537;
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);// touching the base of the speaker
@@ -145,10 +146,10 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL_RAD_P_S = 53.728 / 4; // rad / s^2
 																		// ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
-
+		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
-
+		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
 		public static final double ARM_MASS_KG = 9.59302503;

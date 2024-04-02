@@ -30,9 +30,7 @@ public class ClimbArmSoftLimit extends Command {
     public void execute() {
         arm.driveArm(-12);
         timer.start();
-        if(timer.get() > 22) {
-            
-        }
+        
     }
     
     @Override
@@ -50,6 +48,6 @@ public class ClimbArmSoftLimit extends Command {
     @Override
     public boolean isFinished() {
         // TODO: Figure out the actual climb position
-        return Math.abs(arm.getArmPos() - GROUND_INTAKE_POS) < Units.degreesToRadians(2) || timer.get() > 25;
+        return arm.getArmPos() - (CLIMB_FINISH_POS) < Units.degreesToRadians(0.1) || timer.get() >= 5;
     }
 }
