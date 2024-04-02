@@ -1,6 +1,6 @@
 package org.carlmontrobotics.commands;
 
-import org.carlmontrobotics.Constants;
+import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
@@ -15,7 +15,7 @@ public class SwitchRPMShoot extends Command {
     
     public SwitchRPMShoot(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
-        rpmAmount = Constants.Effectorc.RPM_SELECTOR[Arm.getSelector()];
+        rpmAmount = RPM_SELECTOR[Arm.getSelector()];
         addRequirements(intakeShooter);
     }
     @Override

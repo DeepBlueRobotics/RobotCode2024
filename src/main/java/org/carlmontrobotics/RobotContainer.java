@@ -178,8 +178,9 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
     //new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
 
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new AmpShoot(intakeShooter));
-   // new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new RampToRPM(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+   //new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
     //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
