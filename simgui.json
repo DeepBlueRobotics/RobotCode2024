@@ -3,48 +3,25 @@
     "Addressable LEDs": {
       "0": {
         "columns": 32
-      },
-      "window": {
-        "visible": true
       }
     },
     "Other Devices": {
-      "CANCoder (v6)[0]": {
-        "header": {
-          "open": true
-        }
-      },
-      "CANCoder (v6)[1]": {
-        "header": {
-          "open": true
-        }
-      },
       "CANCoder (v6)[2]": {
         "header": {
           "open": true
         }
       },
-      "CANCoder (v6)[3]": {
+      "CANCoder[2]": {
         "header": {
           "open": true
         }
       },
-      "SparkMax[11]": {
+      "SparkMax[15]": {
         "header": {
           "open": true
         }
       },
-      "SparkMax[14]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SparkMax[18]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SparkMax[19]": {
+      "navX-Sensor[0]": {
         "header": {
           "open": true
         }
@@ -60,13 +37,44 @@
       "/Shuffleboard/arm SysID/quasistatic backward": "Command",
       "/Shuffleboard/arm SysID/quasistatic forward": "Command",
       "/SmartDashboard/Arm": "Subsystem",
+      "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/moveClimber": "Command"
+    },
+    "windows": {
+      "/Shuffleboard/Auto Chooser Tab/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "BL": {
+          "open": true
+        },
+        "BR": {
+          "open": true
+        },
+        "FL": {
+          "open": true
+        },
+        "FR": {
+          "open": true
+        },
         "open": true
       }
     }
@@ -87,9 +95,12 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 177
+          "height": 263
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

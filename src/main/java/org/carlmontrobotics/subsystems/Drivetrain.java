@@ -19,12 +19,16 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import org.carlmontrobotics.lib199.swerve.SwerveModuleSim;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -40,7 +44,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 public class Drivetrain extends SubsystemBase {
     private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
     private Pose2d autoGyroOffset = new Pose2d(0., 0., new Rotation2d(0.));
@@ -48,7 +53,6 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveDriveKinematics kinematics = null;
     private SwerveDriveOdometry odometry = null;
-    private Field2d field = new Field2d();
 
     private SwerveModule modules[];
     private boolean fieldOriented = true;
@@ -67,6 +71,12 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule moduleFR;
     private SwerveModule moduleBL;
     private SwerveModule moduleBR;
+
+    private final Field2d field = new Field2d();
+
+    private SwerveModuleSim[] moduleSims;
+    private SimDouble gyroYawSim;
+    private Timer simTimer = new Timer();
 
     public Drivetrain() {
         // SmartDashboard.putNumber("set x", 0);
@@ -142,6 +152,14 @@ public class Drivetrain extends SubsystemBase {
                     turnEncoders[3] = SensorFactory.createCANCoder(canCoderPortBR), 3,
                     pitchSupplier, rollSupplier);
             modules = new SwerveModule[] { moduleFL, moduleFR, moduleBL, moduleBR };
+
+            if (RobotBase.isSimulation()) {
+                moduleSims = new SwerveModuleSim[] {
+                    moduleFL.createSim(), moduleFR.createSim(), moduleBL.createSim(), moduleBR.createSim()
+                };
+                gyroYawSim = new SimDeviceSim("navX-Sensor[0]").getDouble("Yaw");
+            }
+
             for (CANSparkMax driveMotor : driveMotors) {
                 driveMotor.setOpenLoopRampRate(secsPer12Volts);
                 driveMotor.getEncoder().setPositionConversionFactor(wheelDiameterMeters * Math.PI / driveGearing);
@@ -163,6 +181,8 @@ public class Drivetrain extends SubsystemBase {
 
             }
 
+            SmartDashboard.putData("Field", field);
+
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
 
@@ -177,6 +197,36 @@ public class Drivetrain extends SubsystemBase {
         //                 SmartDashboard.putNumber("chassis speeds y", 0);
 
         //                             SmartDashboard.putNumber("chassis speeds theta", 0);
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        for (var moduleSim : moduleSims) {
+            moduleSim.update();
+        }
+        SwerveModuleState[] measuredStates =
+            new SwerveModuleState[] {
+                moduleFL.getCurrentState(), moduleFR.getCurrentState(), moduleBL.getCurrentState(), moduleBR.getCurrentState()
+            };
+        ChassisSpeeds speeds = kinematics.toChassisSpeeds(measuredStates);
+
+        double dtSecs = simTimer.get();
+        simTimer.restart();
+
+        Pose2d simPose = field.getRobotPose();
+        simPose = simPose.exp(
+                new Twist2d(
+                    speeds.vxMetersPerSecond * dtSecs,
+                    speeds.vyMetersPerSecond * dtSecs,
+                    speeds.omegaRadiansPerSecond * dtSecs));
+        double newAngleDeg = simPose.getRotation().getDegrees();
+        // Subtract the offset computed the last time setPose() was called because odometry.update() adds it back.
+        newAngleDeg -= simGyroOffset.getDegrees();
+        newAngleDeg *= (isGyroReversed ? -1.0 : 1.0);
+        gyroYawSim.set(newAngleDeg);
+        while (Math.abs(MathUtil.inputModulus(gyro.getAngle() - newAngleDeg, -180.0, 180.0)) > 0.1) {
+            Timer.delay(1.0/gyro.getActualUpdateRate());
+        }
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
@@ -251,7 +301,6 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
         // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
         // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-
     }
 
     @Override
@@ -465,8 +514,13 @@ public class Drivetrain extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    private Rotation2d simGyroOffset = new Rotation2d();
     public void setPose(Pose2d initialPose) {
-        odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), initialPose);
+        Rotation2d gyroRotation = gyro.getRotation2d();
+        odometry.resetPosition(gyroRotation, getModulePositions(), initialPose);
+        // Remember the offset that the above call to resetPosition() will cause the odometry.update() will add to the gyro rotation in the future
+        // We need the offset so that we can compensate for it during simulationPeriodic().
+        simGyroOffset = initialPose.getRotation().minus(gyroRotation);
         //odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
     }
 
