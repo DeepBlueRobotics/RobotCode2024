@@ -24,7 +24,7 @@ public class IntakeTesting extends Command {
         if (!intakeShooter.outakeDetectsNote()) {
             intakeShooter.setRPMIntake(startingRPMWithNote + increaseRPM * index);
             index++;
-            SmartDashboard.putNumber("RPM Used", increaseRPM * index + startingRPMWithNote);
+            //SmartDashboard.putNumber("RPM Used", increaseRPM * index + startingRPMWithNote);
 
         }
     }
@@ -32,7 +32,7 @@ public class IntakeTesting extends Command {
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
-        SmartDashboard.putNumber("finalRPMUsed", increaseRPM * index + startingRPMWithNote);
+        //SmartDashboard.putNumber("finalRPMUsed", increaseRPM * index + startingRPMWithNote);
     }
 
     public boolean isFinished() {

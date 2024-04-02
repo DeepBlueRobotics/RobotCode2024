@@ -1,5 +1,8 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Effectorc.*;
+
+import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -12,16 +15,15 @@ public class RampToRPM extends Command {
   private final IntakeShooter intake;
   private Timer timer;
 
-  public RampToRPM(IntakeShooter intake, double rpm) {
+  public RampToRPM(IntakeShooter intake) {
     addRequirements(this.intake = intake);
-    this.rpm = rpm;
+    rpm = RPM_SELECTOR[Arm.getSelector()];
   }
 
   @Override
   public void initialize() {
-    intake.setRPMOutake(rpm);
-    timer.reset();
-    timer.start();
+    intake.setMaxOutake();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,14 +34,13 @@ public class RampToRPM extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.resetCurrentLimit();
-    timer.stop();
+    intake.stopOutake();
     // resets to defaultColor
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.isWithinTolerance() || timer.hasElapsed(1.5);
+    return false;
   }
 }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -62,16 +63,18 @@ public final class Constants {
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
-
+		
 		public static final double INTAKE_RPM = 6800;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
 		public static final double PASS_RPM = 5800;
 		public static final double TEST_RPM = 3000;
-
 		public static final double AMP_RPM = 1000;
+		public static final double SUBWOOFER_RPM = 2100;
+		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
-		//public static final double SUBWOOFER_RPM = 6000;// WTF FAB ISSUE
+		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM,PODIUM_RPM};
+		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
 		public static final double EJECT_RPM_INTAKE = -2550;
@@ -116,9 +119,10 @@ public final class Constants {
 		public static final double INTAKE_ANGLE_RAD = Units.degreesToRadians(0);
 		public static final double HANG_ANGLE_RAD = Units.degreesToRadians(90);
 		public static final double AMP_ANGLE_RAD = 1.28;
+		public static final double AMP_ANGLE_RAD_NEW_MOTOR = 1.456;
 		public static final double SPEAKER_ANGLE_RAD = -0.2;
 		// -0.427725
-		public static final double GROUND_INTAKE_POS = -0.33363;
+		public static final double GROUND_INTAKE_POS = -0.34537;
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);// touching the base of the speaker
@@ -142,10 +146,10 @@ public final class Constants {
 		public static final double MAX_FF_ACCEL_RAD_P_S = 53.728 / 4; // rad / s^2
 																		// ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
 		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
-
+		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
-
+		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
 		public static final double ARM_MASS_KG = 9.59302503;
@@ -359,13 +363,12 @@ public final class Constants {
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
+		public static final double HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER = Units.inchesToMeters(62.875);
 
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
 			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); // 88.125
-			public static final double HEIGHT_FROM_BOTTOM_TO_ARM_RESTING = Units.inchesToMeters(21.875);
-			public static final double HEIGHT_FROM_BOTTOM_TO_SUBWOOFER = Units.inchesToMeters(26);
 		}
 	}
 
@@ -407,6 +410,7 @@ public final class Constants {
 			public static final int EJECT_RPM = Button.kX.value;
 			public static final int RAISE_CLIMBER = Button.kA.value;
 			public static final int LOWER_CLIMBER = Button.kY.value;
+			
 		}
 
 		public static final double JOY_THRESH = 0.01;

@@ -26,7 +26,7 @@ public class Led extends SubsystemBase {
         led.start();
 
         setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
-        SmartDashboard.putNumber("color", color);
+        // SmartDashboard.putNumber("color", color);
 
     }
 
@@ -43,7 +43,7 @@ public class Led extends SubsystemBase {
     @Override
     public void periodic() {
         // System.err.println("skdjfksd");
-
+        /* 
         // testing for nicholas
         if (SmartDashboard.getNumber("color", color) == 1) {
             setLedColor(DETECT_NOTE_YELLOW, 0, getLength());
@@ -59,23 +59,22 @@ public class Led extends SubsystemBase {
         else if (SmartDashboard.getNumber("color", color) == 3) {
             setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
         }
-        /* 
+         */
         if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote())
-         {
+        {
             setLedColor(DETECT_NOTE_YELLOW, 0,getLength());
          //when intake TOF detects, but outtake TOF does not the bottom half of the
        
         
-         }
-         else if (intakeshooter.intakeDetectsNote() &&intakeshooter.outakeDetectsNote()) {
+        }else if (intakeshooter.intakeDetectsNote() &&intakeshooter.outakeDetectsNote()) {
             setLedColor(HOLDING_GREEN, 0, getLength());
          //when both TOFs detect and the end efforcter is holding the note the LEDS turn green
        
-         }else{
+        }else{
             setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
          //otherwise LEds are blue
-         }
-         */
+        }
+        
 
     }
     // nothing : setLedColor(defaultColr, 0, ledBuffer.getLength())

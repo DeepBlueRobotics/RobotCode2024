@@ -33,7 +33,7 @@ public class MoveToNote extends Command {
     timer.reset();
     timer.start();
     // new Intake().finallyDo(()->{this.end(false);});
-    SmartDashboard.putBoolean("end", false);
+    //SmartDashboard.putBoolean("end", false);
     dt.setFieldOriented(false);
   }
 

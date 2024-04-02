@@ -42,10 +42,10 @@ public class TeleopDrive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("slow turn const", kSlowDriveRotation);
-    SmartDashboard.putNumber("slow speed const", kSlowDriveSpeed);
-    SmartDashboard.putNumber("normal turn const", kNormalDriveRotation);
-    SmartDashboard.putNumber("normal speed const", kNormalDriveSpeed);
+    // SmartDashboard.putNumber("slow turn const", kSlowDriveRotation);
+    // SmartDashboard.putNumber("slow speed const", kSlowDriveSpeed);
+    // SmartDashboard.putNumber("normal turn const", kNormalDriveRotation);
+    // SmartDashboard.putNumber("normal speed const", kNormalDriveSpeed);
     prevTimestamp = Timer.getFPGATimestamp();
   }
 
@@ -55,16 +55,16 @@ public class TeleopDrive extends Command {
     double currentTime = Timer.getFPGATimestamp();
     robotPeriod = currentTime - prevTimestamp;
     double[] speeds = getRequestedSpeeds();
-    SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
+    // SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
     prevTimestamp = currentTime;
-    kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
-    kSlowDriveSpeed = SmartDashboard.getNumber("slow speed const", kSlowDriveSpeed);
-    kNormalDriveRotation = SmartDashboard.getNumber("normal turn const", kNormalDriveRotation);
-    kNormalDriveSpeed = SmartDashboard.getNumber("normal speed const", kNormalDriveSpeed);
+    // kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
+    // kSlowDriveSpeed = SmartDashboard.getNumber("slow speed const", kSlowDriveSpeed);
+    // kNormalDriveRotation = SmartDashboard.getNumber("normal turn const", kNormalDriveRotation);
+    // kNormalDriveSpeed = SmartDashboard.getNumber("normal speed const", kNormalDriveSpeed);
 
-    SmartDashboard.putNumber("fwd", speeds[0]);
-    SmartDashboard.putNumber("strafe", speeds[1]);
-    SmartDashboard.putNumber("turn", speeds[2]);
+    // SmartDashboard.putNumber("fwd", speeds[0]);
+    // SmartDashboard.putNumber("strafe", speeds[1]);
+    // SmartDashboard.putNumber("turn", speeds[2]);
     drivetrain.drive(speeds[0], speeds[1], speeds[2]);
   }
 
@@ -76,9 +76,9 @@ public class TeleopDrive extends Command {
     double forward = fwd.getAsDouble();
     double strafe = str.getAsDouble();
     double rotateClockwise = rcw.getAsDouble();
-    SmartDashboard.putNumber("fwdIN", forward);
-    SmartDashboard.putNumber("strafeIN", strafe);
-    SmartDashboard.putNumber("turnIN", rotateClockwise);
+    // SmartDashboard.putNumber("fwdIN", forward);
+    // SmartDashboard.putNumber("strafeIN", strafe);
+    // SmartDashboard.putNumber("turnIN", rotateClockwise);
     if (Math.abs(forward) <= Constants.OI.JOY_THRESH)
       forward = 0.0;
     else
@@ -105,7 +105,7 @@ public class TeleopDrive extends Command {
     double accelerationX = (forward - currentForwardVel) / robotPeriod;
     double accelerationY = (strafe - currentStrafeVel) / robotPeriod;
     double translationalAcceleration = Math.hypot(accelerationX, accelerationY);
-    SmartDashboard.putNumber("Translational Acceleration", translationalAcceleration);
+    // SmartDashboard.putNumber("Translational Acceleration", translationalAcceleration);
     if (translationalAcceleration > autoMaxAccelMps2 && false) {
       Translation2d limitedAccelerationVector = new Translation2d(autoMaxAccelMps2,
           Rotation2d.fromRadians(Math.atan2(accelerationY, accelerationX)));
@@ -116,7 +116,7 @@ public class TeleopDrive extends Command {
       currentForwardVel = forward;
       currentStrafeVel = strafe;
     }
-    SmartDashboard.putNumber("current velocity", Math.hypot(currentForwardVel, currentStrafeVel));
+    // SmartDashboard.putNumber("current velocity", Math.hypot(currentForwardVel, currentStrafeVel));
 
     // ATM, there is no rotational acceleration limit
     // currentForwardVel = forward;

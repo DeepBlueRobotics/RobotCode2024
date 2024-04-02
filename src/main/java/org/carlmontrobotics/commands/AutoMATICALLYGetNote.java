@@ -76,7 +76,7 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
-    SmartDashboard.putBoolean("end", true);
+    //SmartDashboard.putBoolean("end", true);
     intake.stopIntake();
    
   }

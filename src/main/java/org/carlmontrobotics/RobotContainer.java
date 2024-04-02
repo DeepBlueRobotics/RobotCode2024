@@ -36,7 +36,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.math.util.Units;
 // controllers
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -59,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -92,7 +93,9 @@ public class RobotContainer {
     "Left-Safe",
     "Center Shoot",
     "Left Shoot",
-    "Right Shoot"
+    "Right Shoot",
+    "Preloaded Left Shooting", 
+    "Preloaded Right Shooting"    
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -177,12 +180,13 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
     //new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
 
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new AmpShoot(intakeShooter));
-   // new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new RampToRPM(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+   //new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
     //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
-            new PassToOutake(intakeShooter));
+            new SwitchRPMShoot(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOutake, intakeShooter));
@@ -193,11 +197,12 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS,1));
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new ClimbArmSoftLimit(arm));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
+    new POVButton(manipulatorController, 90).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
     // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
     // moveClimber(arm));
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
@@ -401,9 +406,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
-    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
+    // NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
 
     // NamedCommands.registerCommand("RampRPMSpeakerSafe",
     //   new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
@@ -489,10 +494,10 @@ public class RobotContainer {
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
       autoCommands.add(2, new SequentialCommandGroup(
-        new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
-        new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
-        new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
-        new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
         AutoBuilder.followPath(path)
       ));//no events so just use path instead of auto
 

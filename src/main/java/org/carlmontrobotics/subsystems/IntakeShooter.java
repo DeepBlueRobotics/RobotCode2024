@@ -55,8 +55,8 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putData("Intake Shooter", this);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
-        SmartDashboard.putNumber("intake volts", 0);
-        SmartDashboard.putNumber("Vortex volts", 0);
+        // SmartDashboard.putNumber("intake volts", 0);
+        // SmartDashboard.putNumber("Vortex volts", 0);
         // setMaxOutakeOverload(1);
         outakeMotorVortex.setSmartCurrentLimit(60);
         
@@ -129,13 +129,10 @@ public class IntakeShooter extends SubsystemBase {
     public void periodic() {
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
         //intakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
-        SmartDashboard.putNumber("outtake vel", outakeMotorVortex.getEncoder().getVelocity());
 
         // count++;
-        SmartDashboard.putBoolean("Intake detects note", intakeDetectsNote());
-        SmartDashboard.putBoolean("Intake detects note", outakeDetectsNote());
 
-        double volts = SmartDashboard.getNumber("Vortex volts", 0);
+        // double volts = SmartDashboard.getNumber("Vortex volts", 0);
        //outakeMotorVortex.set(volts);
 
         // setMaxOutake();
@@ -213,7 +210,6 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addBooleanProperty("Outake distance sensor length", this::outakeDetectsNote, null);
         sendableBuilder.addBooleanProperty("Intake distance sensor length", this::intakeDetectsNote, null);
         sendableBuilder.addDoubleProperty("Period time", this::countPeridoic, null);
-        sendableBuilder.addDoubleProperty("Vortex Motor Velocity", this::getVortexRPM, null);
     }
     /*
      * public double calculateRPMAtDistance() {

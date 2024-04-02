@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
@@ -21,6 +22,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -50,7 +52,7 @@ public class Arm extends SubsystemBase {
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
     private static double kDt = 0.02;// what is this?
-
+    private static int numSelector = 0;
     // PID, feedforward, trap profile
 
     // rel offset = starting absolute offset
@@ -128,15 +130,15 @@ public class Arm extends SubsystemBase {
         sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
         sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        SmartDashboard.putNumber("arm initial position", goalState.position);
-        SmartDashboard.putNumber("set arm angle (rad)", 0);
+        // SmartDashboard.putNumber("arm initial position", goalState.position);
+        // SmartDashboard.putNumber("set arm angle (rad)", 0);
         // sysid
 
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
 
-        SmartDashboard.putNumber("ramp rate (s)", 2);
-        SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
+        // SmartDashboard.putNumber("ramp rate (s)", 2);
+        // SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
 
@@ -153,7 +155,7 @@ public class Arm extends SubsystemBase {
         // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
             resetGoal();
-
+        // SmartDashboard.putNumber("Switch RPM", RPM_SELECTOR[numSelector]);
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD =
         // SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD",
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
@@ -189,12 +191,12 @@ public class Arm extends SubsystemBase {
         // KG = currG;
         // }
 
-        SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Actual Master Arm Volts",
-                armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
-        SmartDashboard.putNumber("Actual Follower Arm Volts",
-                armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
+        // SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("Actual Master Arm Volts",
+        //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
+        // SmartDashboard.putNumber("Actual Follower Arm Volts",
+        //         armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
 
         // when the value is different
 
@@ -217,7 +219,12 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
 
     }
-
+    public static void setSelector(int num) {
+        numSelector = num;
+    }
+    public static int getSelector() {
+        return numSelector;
+    }
     public void autoCancelArmCommand() {
         if (!(getDefaultCommand() instanceof TeleopArm) || DriverStation.isAutonomous())
             return;
@@ -235,7 +242,7 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
-        SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
+        // SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
         armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
 
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
@@ -246,9 +253,9 @@ public class Arm extends SubsystemBase {
         if(!setPIDOff) {
        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
         }
-        SmartDashboard.putNumber("feedforward volts", armFeedVolts);
-        SmartDashboard.putNumber("pid volts",
-                armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
+        // SmartDashboard.putNumber("feedforward volts", armFeedVolts);
+        // SmartDashboard.putNumber("pid volts",
+        //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
     public void stopArm() {
@@ -262,11 +269,12 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setVoltage(volts); // STARTING WITH SLOWER SPEED FOR TESTING
     }
 
+    
     public void setLimitsForClimbOn() {
         armPIDMaster.setOutputRange(-12, 12);
         armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse,
-                (float) SmartDashboard.getNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS));
-        armMotorMaster.setOpenLoopRampRate(SmartDashboard.getNumber("ramp rate (s)", 2));
+                (float)(CLIMB_FINISH_POS-Units.degreesToRadians(1)));
+        armMotorMaster.setOpenLoopRampRate(1);
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
     }
 
@@ -384,9 +392,10 @@ public class Arm extends SubsystemBase {
         builder.addDoubleProperty("feedforward volts", () -> armFeedVolts, null);
         builder.addDoubleProperty("pid volts",
                 () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts, null);
+        builder.addDoubleProperty("Arm Volts", () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(), null);
         builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
         builder.addDoubleProperty("setpoint velocity", () -> setpoint.velocity, null);
-
+        builder.addDoubleProperty("Output current ARM", () -> armMotorMaster.getOutputCurrent(), null);
         builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
         // builder.addDoubleProperty("set arm angle (rad)", () ->
         // armMasterEncoder.getPosition(), setArmTarget());
