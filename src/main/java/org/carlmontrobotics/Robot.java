@@ -4,6 +4,8 @@
 
 package org.carlmontrobotics;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -29,7 +31,7 @@ public class Robot extends TimedRobot {
     // Record both DS control and joystick data
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   @Override
