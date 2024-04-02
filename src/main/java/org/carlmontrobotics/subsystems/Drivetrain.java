@@ -224,9 +224,6 @@ public class Drivetrain extends SubsystemBase {
         newAngleDeg -= simGyroOffset.getDegrees();
         newAngleDeg *= (isGyroReversed ? -1.0 : 1.0);
         gyroYawSim.set(newAngleDeg);
-        while (Math.abs(MathUtil.inputModulus(gyro.getAngle() - newAngleDeg, -180.0, 180.0)) > 0.1) {
-            Timer.delay(1.0/gyro.getActualUpdateRate());
-        }
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
