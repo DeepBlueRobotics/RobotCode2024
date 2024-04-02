@@ -130,15 +130,15 @@ public class Arm extends SubsystemBase {
         sysIdTab.add("quasistatic backward", sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         sysIdTab.add("dynamic forward", sysIdDynamic(SysIdRoutine.Direction.kForward));
         sysIdTab.add("dynamic backward", sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        SmartDashboard.putNumber("arm initial position", goalState.position);
-        SmartDashboard.putNumber("set arm angle (rad)", 0);
+        // SmartDashboard.putNumber("arm initial position", goalState.position);
+        // SmartDashboard.putNumber("set arm angle (rad)", 0);
         // sysid
 
         lastArmPos = getArmPos();
         lastMeasuredTime = Timer.getFPGATimestamp();
 
-        SmartDashboard.putNumber("ramp rate (s)", 2);
-        SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
+        // SmartDashboard.putNumber("ramp rate (s)", 2);
+        // SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
 
@@ -151,13 +151,11 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData(this);
-        SmartDashboard.putNumber("Arm volts", armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
             resetGoal();
-        SmartDashboard.putNumber("Switch RPM", RPM_SELECTOR[numSelector]);
-        SmartDashboard.putNumber("Output current ARM", armMotorMaster.getOutputCurrent());
+        // SmartDashboard.putNumber("Switch RPM", RPM_SELECTOR[numSelector]);
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD =
         // SmartDashboard.getNumber("ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD",
         // ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD);
@@ -193,12 +191,12 @@ public class Arm extends SubsystemBase {
         // KG = currG;
         // }
 
-        SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Actual Master Arm Volts",
-                armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
-        SmartDashboard.putNumber("Actual Follower Arm Volts",
-                armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
+        // SmartDashboard.putNumber("Master RPM", armMotorMaster.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("Follower RPM", armMotorFollower.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("Actual Master Arm Volts",
+        //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput());
+        // SmartDashboard.putNumber("Actual Follower Arm Volts",
+        //         armMotorFollower.getBusVoltage() * armMotorFollower.getAppliedOutput());
 
         // when the value is different
 
@@ -244,7 +242,7 @@ public class Arm extends SubsystemBase {
     // #region Drive Methods
     private void driveArm() {
         setpoint = armProfile.calculate(kDt, setpoint, goalState);
-        SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
+        // SmartDashboard.putNumber("setpoint goal (rad)", setpoint.position);
         armFeedVolts = armFeed.calculate(setpoint.position, setpoint.velocity);
 
         if ((getArmPos() < LOWER_ANGLE_LIMIT_RAD)
@@ -255,9 +253,9 @@ public class Arm extends SubsystemBase {
         if(!setPIDOff) {
        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
         }
-        SmartDashboard.putNumber("feedforward volts", armFeedVolts);
-        SmartDashboard.putNumber("pid volts",
-                armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
+        // SmartDashboard.putNumber("feedforward volts", armFeedVolts);
+        // SmartDashboard.putNumber("pid volts",
+        //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
     }
 
     public void stopArm() {
@@ -394,9 +392,10 @@ public class Arm extends SubsystemBase {
         builder.addDoubleProperty("feedforward volts", () -> armFeedVolts, null);
         builder.addDoubleProperty("pid volts",
                 () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts, null);
+        builder.addDoubleProperty("Arm Volts", () -> armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput(), null);
         builder.addDoubleProperty("setpoint goal (rad)", () -> setpoint.position, null);
         builder.addDoubleProperty("setpoint velocity", () -> setpoint.velocity, null);
-
+        builder.addDoubleProperty("Output current ARM", () -> armMotorMaster.getOutputCurrent(), null);
         builder.addDoubleProperty("arm initial position", () -> goalState.position, null);
         // builder.addDoubleProperty("set arm angle (rad)", () ->
         // armMasterEncoder.getPosition(), setArmTarget());

@@ -494,10 +494,10 @@ public class RobotContainer {
       autoCommands.add(1, new LastResortAuto(drivetrain));
       //smart forward command
       autoCommands.add(2, new SequentialCommandGroup(
-        new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
-        new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
-        new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
-        new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("starting x", path.getAllPathPoints().get(0).position.getX())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("starting y", path.getAllPathPoints().get(0).position.getY())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("wanted x", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getX())),
+        // new InstantCommand(() -> SmartDashboard.putNumber("wanted y", path.getAllPathPoints().get(path.getAllPathPoints().size() - 1).position.getY())),
         AutoBuilder.followPath(path)
       ));//no events so just use path instead of auto
 

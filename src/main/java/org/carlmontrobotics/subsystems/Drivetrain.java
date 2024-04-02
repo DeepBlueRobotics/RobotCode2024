@@ -31,6 +31,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
@@ -68,8 +69,8 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule moduleBR;
 
     public Drivetrain() {
-        SmartDashboard.putNumber("set x", 0);
-        SmartDashboard.putNumber("set y", 0);
+        // SmartDashboard.putNumber("set x", 0);
+        // SmartDashboard.putNumber("set y", 0);
         // Calibrate Gyro
         {
 
@@ -172,10 +173,10 @@ public class Drivetrain extends SubsystemBase {
 
         // Setup autopath builder
         configurePPLAutoBuilder();
-        SmartDashboard.putNumber("chassis speeds x", 0);
-                        SmartDashboard.putNumber("chassis speeds y", 0);
+        // SmartDashboard.putNumber("chassis speeds x", 0);
+        //                 SmartDashboard.putNumber("chassis speeds y", 0);
 
-                                    SmartDashboard.putNumber("chassis speeds theta", 0);
+        //                             SmartDashboard.putNumber("chassis speeds theta", 0);
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
@@ -228,26 +229,24 @@ public class Drivetrain extends SubsystemBase {
         //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
         { 
-            SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-            SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-            SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-            SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+            // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
+            // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
+            // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
+            // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
        }
-        SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-        SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
         //setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()), SmartDashboard.getNumber("set y", getPose().getTranslation().getY()), Rotation2d.fromDegrees(getHeading())));
         // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
         // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
-        SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
-        SmartDashboard.putNumber("Robot Heading", getHeading());
+        // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
+        // SmartDashboard.putNumber("Robot Heading", getHeading());
         // // // SmartDashboard.putNumber("AdjRoll", gyro.getPitch() - initPitch);
         // // // SmartDashboard.putNumber("AdjPitch", gyro.getRoll() - initRoll);
-        SmartDashboard.putBoolean("Field Oriented", fieldOriented);
-        SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
+        // SmartDashboard.putBoolean("Field Oriented", fieldOriented);
+        // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
         // SmartDashboard.putNumber("Compass Offset", compassOffset);
-        SmartDashboard.putBoolean("Current Magnetic Field Disturbance", gyro.isMagneticDisturbance());
+        // SmartDashboard.putBoolean("Current Magnetic Field Disturbance", gyro.isMagneticDisturbance());
         // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
         // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
         // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
@@ -259,24 +258,24 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
 
-        // for (SwerveModule module : modules)
-        // SendableRegistry.addChild(this, module);
+        for (SwerveModule module : modules)
+            SendableRegistry.addChild(this, module);
 
-        // builder.addBooleanProperty("Magnetic Field Disturbance",
-        // gyro::isMagneticDisturbance, null);
-        // builder.addBooleanProperty("Gyro Calibrating", gyro::isCalibrating, null);
-        // builder.addBooleanProperty("Field Oriented", () -> fieldOriented,
-        // fieldOriented -> this.fieldOriented = fieldOriented);
-        // builder.addDoubleProperty("Odometry X", () -> getPose().getX(), null);
-        // builder.addDoubleProperty("Odometry Y", () -> getPose().getY(), null);
-        // builder.addDoubleProperty("Odometry Heading", () ->
-        // getPose().getRotation().getDegrees(), null);
-        // builder.addDoubleProperty("Robot Heading", () -> getHeading(), null);
-        // builder.addDoubleProperty("Raw Gyro Angle", gyro::getAngle, null);
-        // builder.addDoubleProperty("Pitch", gyro::getPitch, null);
-        // builder.addDoubleProperty("Roll", gyro::getRoll, null);
-        // builder.addDoubleProperty("Field Offset", () -> fieldOffset, fieldOffset ->
-        // this.fieldOffset = fieldOffset);
+        builder.addBooleanProperty("Magnetic Field Disturbance",
+        gyro::isMagneticDisturbance, null);
+        builder.addBooleanProperty("Gyro Calibrating", gyro::isCalibrating, null);
+        builder.addBooleanProperty("Field Oriented", () -> fieldOriented,
+        fieldOriented -> this.fieldOriented = fieldOriented);
+        builder.addDoubleProperty("Odometry X", () -> getPose().getX(), null);
+        builder.addDoubleProperty("Odometry Y", () -> getPose().getY(), null);
+        builder.addDoubleProperty("Odometry Heading", () ->
+        getPose().getRotation().getDegrees(), null);
+        builder.addDoubleProperty("Robot Heading", () -> getHeading(), null);
+        builder.addDoubleProperty("Raw Gyro Angle", gyro::getAngle, null);
+        builder.addDoubleProperty("Pitch", gyro::getPitch, null);
+        builder.addDoubleProperty("Roll", gyro::getRoll, null);
+        builder.addDoubleProperty("Field Offset", () -> fieldOffset, fieldOffset ->
+        this.fieldOffset = fieldOffset);
     }
 
     // #region Drive Methods
@@ -296,10 +295,10 @@ public class Drivetrain extends SubsystemBase {
     public void drive(SwerveModuleState[] moduleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, maxSpeed);
         for (int i = 0; i < 4; i++) {
-            SmartDashboard.putNumber("moduleIn" + Integer.toString(i), moduleStates[i].angle.getDegrees());
+            // SmartDashboard.putNumber("moduleIn" + Integer.toString(i), moduleStates[i].angle.getDegrees());
             moduleStates[i] = SwerveModuleState.optimize(moduleStates[i],
                     Rotation2d.fromDegrees(modules[i].getModuleAngle()));
-            SmartDashboard.putNumber("moduleOT" + Integer.toString(i), moduleStates[i].angle.getDegrees());
+            // SmartDashboard.putNumber("moduleOT" + Integer.toString(i), moduleStates[i].angle.getDegrees());
 
             modules[i].move(moduleStates[i].speedMetersPerSecond, moduleStates[i].angle.getDegrees());
         }
@@ -321,9 +320,9 @@ public class Drivetrain extends SubsystemBase {
         this::getSpeeds,
         (ChassisSpeeds cs) -> {
             //cs.vxMetersPerSecond = -cs.vxMetersPerSecond;
-            SmartDashboard.putNumber("chassis speeds x", cs.vxMetersPerSecond);
-            SmartDashboard.putNumber("chassis speeds y", cs.vyMetersPerSecond);
-            SmartDashboard.putNumber("chassis speeds theta", cs.omegaRadiansPerSecond);
+            // SmartDashboard.putNumber("chassis speeds x", cs.vxMetersPerSecond);
+            // SmartDashboard.putNumber("chassis speeds y", cs.vyMetersPerSecond);
+            // SmartDashboard.putNumber("chassis speeds theta", cs.omegaRadiansPerSecond);
 
             drive(kinematics.toSwerveModuleStates(cs));  
         },

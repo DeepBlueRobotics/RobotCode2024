@@ -51,9 +51,9 @@ public class Limelight extends SubsystemBase {
 
   public Pose2d getCurrentPose() {
     Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
-    SmartDashboard.putNumber("estimated x", estimatedPos.getX());
-    SmartDashboard.putNumber("estimated y", estimatedPos.getY());
-    SmartDashboard.putNumber("estimated rotation (deg)", estimatedPos.getRotation().getDegrees());
+    // SmartDashboard.putNumber("estimated x", estimatedPos.getX());
+    // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
+    // SmartDashboard.putNumber("estimated rotation (deg)", estimatedPos.getRotation().getDegrees());
     return estimatedPos;
   }
 
@@ -79,10 +79,10 @@ public class Limelight extends SubsystemBase {
     if (angleToGoal.getDegrees() <= 0) {
       double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));
       ;
-      SmartDashboard.putNumber("limelight distance", distance);
+      // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     } else {
-      SmartDashboard.putNumber("limelight distance", -1);
+      // SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
   }

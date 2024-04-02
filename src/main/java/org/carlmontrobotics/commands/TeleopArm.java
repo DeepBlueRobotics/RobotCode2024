@@ -43,7 +43,7 @@ public class TeleopArm extends Command {
     // use trapazoid math and controllerMoveArm method from arm subsytem to apply
     // voltage to the motor
     double speeds = getRequestedSpeeds();
-    SmartDashboard.putNumber("speeds", speeds);
+    //SmartDashboard.putNumber("speeds", speeds);
 
     if (speeds == 0) {// if no input, don't set any goals.
       lastTime = Timer.getFPGATimestamp();// update deltaT even when not running

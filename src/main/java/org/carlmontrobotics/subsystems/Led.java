@@ -26,7 +26,7 @@ public class Led extends SubsystemBase {
         led.start();
 
         setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
-        SmartDashboard.putNumber("color", color);
+        // SmartDashboard.putNumber("color", color);
 
     }
 

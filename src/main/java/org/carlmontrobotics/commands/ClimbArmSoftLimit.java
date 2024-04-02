@@ -17,7 +17,7 @@ public class ClimbArmSoftLimit extends Command {
     public ClimbArmSoftLimit(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
-        SmartDashboard.putNumber("climber volts", 0);
+        //SmartDashboard.putNumber("climber volts", 0);
     }
 
     @Override

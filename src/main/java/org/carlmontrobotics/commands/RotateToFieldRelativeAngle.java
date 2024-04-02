@@ -45,8 +45,8 @@ public class RotateToFieldRelativeAngle extends Command {
 
     @Override
     public boolean isFinished() {
-        SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
-        SmartDashboard.putNumber("Error", rotationPID.getPositionError());
+        //SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
+        //SmartDashboard.putNumber("Error", rotationPID.getPositionError());
         return rotationPID.atSetpoint();
     }
 }
