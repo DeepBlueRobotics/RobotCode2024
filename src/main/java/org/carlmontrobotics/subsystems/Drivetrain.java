@@ -23,6 +23,7 @@ import org.carlmontrobotics.lib199.swerve.SwerveModuleSim;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -211,13 +212,20 @@ public class Drivetrain extends SubsystemBase {
         double dtSecs = simTimer.get();
         simTimer.restart();
 
-        Pose2d simPose =
-            getPose().exp(
+        Pose2d simPose = field.getRobotPose();
+        simPose = simPose.exp(
                 new Twist2d(
                     speeds.vxMetersPerSecond * dtSecs,
                     speeds.vyMetersPerSecond * dtSecs,
                     speeds.omegaRadiansPerSecond * dtSecs));
-        gyroYawSim.set((isGyroReversed ? -1.0 : 1.0) * simPose.getRotation().getDegrees());
+        double newAngleDeg = simPose.getRotation().getDegrees();
+        // Subtract the offset computed the last time setPose() was called because odometry.update() adds it back.
+        newAngleDeg -= simGyroOffset.getDegrees();
+        newAngleDeg *= (isGyroReversed ? -1.0 : 1.0);
+        gyroYawSim.set(newAngleDeg);
+        while (Math.abs(MathUtil.inputModulus(gyro.getAngle() - newAngleDeg, -180.0, 180.0)) > 0.1) {
+            Timer.delay(1.0/gyro.getActualUpdateRate());
+        }
     }
 
     // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
@@ -507,8 +515,13 @@ public class Drivetrain extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    private Rotation2d simGyroOffset = new Rotation2d();
     public void setPose(Pose2d initialPose) {
-        odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), initialPose);
+        Rotation2d gyroRotation = gyro.getRotation2d();
+        odometry.resetPosition(gyroRotation, getModulePositions(), initialPose);
+        // Remember the offset that the above call to resetPosition() will cause the odometry.update() will add to the gyro rotation in the future
+        // We need the offset so that we can compensate for it during simulationPeriodic().
+        simGyroOffset = initialPose.getRotation().minus(gyroRotation);
         //odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), initialPose);
     }
 
