@@ -62,7 +62,9 @@ public class IntakeShooter extends SubsystemBase {
         
 
     }
-
+    public boolean intakeIsOverTemp() {
+        return intakeMotor.getMotorTemperature() >= 39;
+    }
     // ---------------------------------------------------------------------------------------------------
     // checking whether RPM is within tolerance
     public boolean isWithinTolerance() {

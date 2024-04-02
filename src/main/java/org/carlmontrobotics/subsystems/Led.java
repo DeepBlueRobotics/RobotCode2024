@@ -42,6 +42,10 @@ public class Led extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if(intakeshooter.intakeIsOverTemp()) {
+            setLedColor(RED_NEO_550_MOTOR, 0, getLength());
+            return;
+        }
         // System.err.println("skdjfksd");
         /* 
         // testing for nicholas
