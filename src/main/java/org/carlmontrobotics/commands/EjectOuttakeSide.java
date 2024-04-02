@@ -5,34 +5,36 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class GETOUT extends Command {
+public class EjectOuttakeSide extends Command {
     private IntakeShooter intakeShooter;
-    Timer timer = new Timer();
-
-    public GETOUT(IntakeShooter intakeShooter) {
+    private Timer timer;
+    public EjectOuttakeSide(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
+        addRequirements(intakeShooter);
+        timer = new Timer();
     }
-
     @Override
     public void initialize() {
-        timer.start();
         intakeShooter.setMaxIntake(1);
+        intakeShooter.setMaxOutakeOverload();
+        timer.reset();
+        timer.start();
     }
-
     @Override
-    public void execute() {
+    public void execute(){ 
+
 
     }
-
     @Override
     public void end(boolean interrupted) {
+        intakeShooter.stopIntake();
+        intakeShooter.stopOutake();
         timer.stop();
-        timer.reset();
-        intakeShooter.setCurrentLimit(20);
-    }
 
+
+    }
     @Override
     public boolean isFinished() {
-        return timer.get() > 0.8;
+        return timer.get()>=0.8;
     }
 }

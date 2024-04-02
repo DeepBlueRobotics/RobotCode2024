@@ -164,10 +164,14 @@ public class IntakeShooter extends SubsystemBase {
     public void setMaxOutake() {
         outakeMotorVortex.set(1);
     }
-
+    public void setMaxOutakeOverload() {
+        outakeMotorVortex.setSmartCurrentLimit(80);
+        outakeMotorVortex.set(1);
+    }
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
-        // outakeMotorVortex.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
+        outakeMotorVortex.setSmartCurrentLimit(60);
+        
         // intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
 
@@ -199,8 +203,8 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public double getVortexRPM() {
-        return 0;
-        // return outakeMotorVortex.getEncoder().getVelocity();
+       
+        return outakeMotorVortex.getEncoder().getVelocity();
     }
 
     @Override
