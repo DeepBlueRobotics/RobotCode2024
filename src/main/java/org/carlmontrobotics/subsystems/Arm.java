@@ -254,9 +254,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             // kg * cos(arm angle) * arm_COM_length
         }
-        if(!setPIDOff) {
+        
        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
-        }
+        
         // SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         // SmartDashboard.putNumber("pid volts",
         //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
@@ -275,7 +275,7 @@ public class Arm extends SubsystemBase {
 
     
     public void setLimitsForClimbOn() {
-        armPIDMaster.setOutputRange(-12, 12);
+        armPIDMaster.setOutputRange(-1, 1);
         armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse,
                 (float)(CLIMB_FINISH_POS-Units.degreesToRadians(1)));
         armMotorMaster.setOpenLoopRampRate(1);
@@ -352,7 +352,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetSoftLimit() {
-        armPIDMaster.setOutputRange(MIN_VOLTAGE / -12, MAX_VOLTAGE / 12);
+        armPIDMaster.setOutputRange(MIN_VOLTAGE / 12, MAX_VOLTAGE / 12);
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, false);
         armMotorMaster.setOpenLoopRampRate(0);
     }
