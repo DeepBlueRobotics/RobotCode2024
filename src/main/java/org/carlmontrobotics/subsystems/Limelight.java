@@ -18,9 +18,6 @@ public class Limelight extends SubsystemBase {
   // private double[] targetPose = null;
   private Pose3d botPose;
 
-  // private double distOffset, horizOffset;
-  // private double horizHeadingError, horizAdjust;
-
   public Limelight(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     poseEstimator = new SwerveDrivePoseEstimator(
@@ -28,12 +25,6 @@ public class Limelight extends SubsystemBase {
         Rotation2d.fromDegrees(drivetrain.getHeading()),
         drivetrain.getModulePositions(),
         new Pose2d());
-
-    // rawBotPose =
-    // NetworkTableInstance.getDefault().getTable(SHOOTER_LL_NAME).getEntry("botpose").getDoubleArray(new
-    // double[7]);
-    // targetPose = table.getEntry("targetpose_fieldspace").getDoubleArray(new
-    // double[7]);
   }
 
   @Override
@@ -88,15 +79,8 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getArmAngleToShootSpeakerRad(){
-    double armRestingHeightToSubwoofer = HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER;
-    double horizontalDistanceMeters = getDistanceToSpeakerMeters();
-    return Math.atan(armRestingHeightToSubwoofer/horizontalDistanceMeters);
+    double armRestingHeightToSubwooferMeters = HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER;
+    double horizontalDistanceMeters = getDistanceToNoteMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
+    return Math.toRadians(65) - Math.atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
   }
-
-  // public Pose3d getTargetPose() {
-  // double[] poseArray =
-  // LimelightHelpers.getLimelightNTDoubleArray(SHOOTER_LL_NAME,
-  // "targetpose_robotspace");
-  // return LimelightHelpers.toPose3D(poseArray);
-  // }
 }
