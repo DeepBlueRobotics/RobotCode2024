@@ -95,7 +95,10 @@ public class RobotContainer {
     "Left Shoot",
     "Right Shoot",
     "Preloaded Left Shooting", 
-    "Preloaded Right Shooting"    
+    "Preloaded Right Shooting",
+    "Left-Auto Ruiner",    
+    "Right-Auto Ruiner",
+    "Center-Auto Ruiner"    
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
