@@ -364,8 +364,9 @@ public final class Constants {
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
-		public static final double HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER = Units.inchesToMeters(65.5675);
+		public static final double HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS = Units.inchesToMeters(65.5675);
 		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(19.5);
+		public static final double END_EFFECTOR_BASE_ANGLE_RADS = Units.degreesToRadians(65);
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
