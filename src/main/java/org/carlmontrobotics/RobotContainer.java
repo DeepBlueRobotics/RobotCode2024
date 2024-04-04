@@ -106,7 +106,7 @@ public class RobotContainer {
   public RobotContainer() {
     {
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
-      registerAutoCommands();
+      //TODO: registerAutoCommands();
       SmartDashboard.putData(autoSelector);
       SmartDashboard.setPersistent("SendableChooser[0]");
 
@@ -276,7 +276,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
-    // NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
+     NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
     // NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
     // NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
     NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD, 0));
@@ -285,7 +285,9 @@ public class RobotContainer {
     //   new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
     // NamedCommands.registerCommand("RampRPMSpeakerSubwoofer",
     //   new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM));
-
+    
+    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShoot(intakeShooter));
+    
     NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
     NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
 
