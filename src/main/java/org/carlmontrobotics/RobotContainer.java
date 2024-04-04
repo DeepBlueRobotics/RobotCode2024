@@ -153,20 +153,10 @@ public class RobotContainer {
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
-    //new JoystickButton(driverController, 1).whileTrue(new AlignToApriltag(drivetrain)); // button A
-    //new JoystickButton(driverController, 2).whileTrue(new AlignToNote(drivetrain)); // button b?
-    //new JoystickButton(driverController, 3).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)); // button x?
     axisTrigger(driverController, Axis.kRightTrigger)
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"), 
             new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
-    // new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new
-    // ParallelCommandGroup(
-    // new InstantCommand(()->drivetrain.setFieldOriented(false)),
-    // new PrintCommand("Setting to ROBOT ORIENTED!!\nRO\nRO\nRO\n"))
-    // ).onFalse(new ParallelCommandGroup(
-    // new InstantCommand(()->drivetrain.setFieldOriented(true)),
-    // new PrintCommand("Setting to FIELD FORI!!\nFO\nFO\nFO\n"))
-    // );
+    
 
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
@@ -181,12 +171,12 @@ public class RobotContainer {
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
-    //new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
+    
 
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampToRPM(intakeShooter));
     new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
-    //new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
+  
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
             new SwitchRPMShoot(intakeShooter));
@@ -208,134 +198,9 @@ public class RobotContainer {
     //TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 180).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
     new POVButton(manipulatorController, 360).onTrue(new ClimbArmSoftLimit(arm));
-    // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
-    // moveClimber(arm));
-    // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
-    // IntakeTesting(intakeShooter));
-    // new WaitCommand(.5),
-    // new MoveToPos(arm, GROUND_INTAKE_POS)
-    // MoveToPos(arm, GROUND_INTAKE_POS));
-
-    // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
-    // MoveToPos(arm, Armc.UPPER_ANGLE_LIMIT_RAD));
     
-    // NEW BINDINGS(easier for mani
-
-    // Xbox left joy Y axis -> raw Intake/Outtake control
-    // Xbox right joy Y axis -> raw Arm control
-    // Xbox right trigger axis -> Intake pos + intake
-    // Xbox left trigger axis -> amp pos , eject into amp
-    // Xbox left bumper button -> CLOSE Speaker pos , Fire
-    // Xbox right bumper button -> SAFE Speaker pos , Fire
-    // Xbox X button -> goto Intake pos
-    // Xbox Y button -> Eject rpm
-
-    /* /Multi-commands/ */
-    /*
-     * axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
-     * .onTrue(new SequentialCommandGroup(
-     * new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
-     * new Intake(intakeShooter)
-     * ));
-     * /
-     *//*
-        * /
-        * new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka
-        * podium
-        * .onTrue(new SequentialCommandGroup(
-        * new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
-        * new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM),
-        * new PassToOutake(intakeShooter),
-        * new WaitCommand(1),
-        * new InstantCommand(intakeShooter::stopOutake)
-        * ));
-        * new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
-        * .onTrue(new SequentialCommandGroup(
-        * new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
-        * new RampToRPM(intakeShooter, Effectorc.SAFE_RPM),
-        * new PassToOutake(intakeShooter),
-        * new WaitCommand(1),
-        * new InstantCommand(intakeShooter::stopOutake)
-        * ));
-        * axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
-        * .onTrue(new SequentialCommandGroup(
-        * //new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
-        * new Eject(intakeShooter)
-        * ));
-        * /
-        *//*
-           * /
-           * new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_POS)
-           * .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
-           * new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
-           * .onTrue(new Eject(intakeShooter));
-           * new JoystickButton(manipulatorController, OI.Manipulator.RAISE_CLIMBER)
-           * .onTrue(new MoveToPos(arm, Armc.CLIMBER_UP_ANGLE_RAD));
-           * new JoystickButton(manipulatorController, OI.Manipulator.LOWER_CLIMBER)
-           * .onTrue(new MoveToPos(arm, Armc.CLIMBER_DOWN_ANGLE_RAD));
-           * // new JoystickButton(manipulatorController, Button.kLeftStick.value)
-           * // .onTrue(new InstantCommand(() ->
-           * {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
-           * 
-           */
-    // TODO: ask charles if passing in controller is okay
-    // SmartDashboard.putData(new moveClimber(arm));
   }
-  // private void setBindingsManipulatorARM() {
-  // //NEW BINDINGS(easier for manipulator)
-  // //Xbox left joy Y axis -> raw Intake/Outtake control
-  // //Xbox right joy Y axis -> raw Arm control
-  // //Xbox right trigger axis -> Intake pos + intake
-  // //Xbox left trigger axis -> amp pos , eject into amp
-  // //Xbox left bumper button -> CLOSE Speaker pos , Fire
-  // //Xbox right bumper button -> SAFE Speaker pos , Fire
-  // //Xbox X button -> goto Intake pos
-  // //Xbox Y button -> Eject rpm
-
-  // /*/Multi-commands/*/
-
-  // axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
-  // .onTrue(new SequentialCommandGroup(
-  // new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
-  // new Intake(intakeShooter)
-  // ));
-  // /*//*/
-  // new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka
-  // podium
-  // .onTrue(new SequentialCommandGroup(
-  // new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
-  // new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM),
-  // new PassToOutake(intakeShooter),
-  // new WaitCommand(1),
-  // new InstantCommand(intakeShooter::stopOutake)
-  // ));
-  // new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
-  // .onTrue(new SequentialCommandGroup(
-  // new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
-  // new RampToRPM(intakeShooter, Effectorc.SAFE_RPM),
-  // new PassToOutake(intakeShooter),
-  // new WaitCommand(1),
-  // new InstantCommand(intakeShooter::stopOutake)
-  // ));
-  // axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
-  // .onTrue(new SequentialCommandGroup(
-  // new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
-  // new Eject(intakeShooter)
-  // ));
-  // /*//*/
-  // new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_POS)
-  // .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
-  // new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
-  // .onTrue(new Eject(intakeShooter));
-  // new JoystickButton(manipulatorController, OI.Manipulator.RAISE_CLIMBER)
-  // .onTrue(new MoveToPos(arm, Armc.CLIMBER_UP_ANGLE_RAD));
-  // new JoystickButton(manipulatorController, OI.Manipulator.LOWER_CLIMBER)
-  // .onTrue(new MoveToPos(arm, Armc.CLIMBER_DOWN_ANGLE_RAD));
-  // // new JoystickButton(manipulatorController, Button.kLeftStick.value)
-  // // .onTrue(new InstantCommand(() ->
-  // {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
-
-  // }
+ 
   
 
   /**
