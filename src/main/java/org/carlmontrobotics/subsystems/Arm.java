@@ -205,12 +205,19 @@ public class Arm extends SubsystemBase {
         double currentArmPos = getArmPos();
         double currentAbsoluteArmVel = armMasterEncoder.getVelocity();
         double currentRelativeArmVel = armMotorMaster.getEncoder().getVelocity();
+        /*
         if (currentArmPos != lastArmPos) {
             lastMeasuredTime = currTime;
             lastArmPos = currentArmPos;
             lastArmVel = currentAbsoluteArmVel;
         }
-        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC && currentAbsoluteArmVel==0 && currentRelativeArmVel != 0;
+        */
+        if((currentAbsoluteArmVel == currentRelativeArmVel) || !(currentAbsoluteArmVel != 0 && currentRelativeArmVel == 0)) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+            lastArmVel = currentAbsoluteArmVel;
+        }
+        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
         if (isArmEncoderConnected) {
             if (callDrive) {
