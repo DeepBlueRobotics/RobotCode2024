@@ -69,7 +69,6 @@ public class Limelight extends SubsystemBase {
         .plus(Rotation2d.fromDegrees(LimelightHelpers.getTY(INTAKE_LL_NAME)));
     if (angleToGoal.getDegrees() <= 0) {
       double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));
-      ;
       // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     } else {
@@ -79,8 +78,8 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getArmAngleToShootSpeakerRad(){
-    double armRestingHeightToSubwooferMeters = HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER;
-    double horizontalDistanceMeters = getDistanceToNoteMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
-    return Math.toRadians(65) - Math.atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
+    double armRestingHeightToSubwooferMeters = HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS;
+    double horizontalDistanceMeters = getDistanceToSpeakerMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
+    return END_EFFECTOR_BASE_ANGLE_RADS - Math.atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
   }
 }
