@@ -414,6 +414,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
     // NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
     // NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
+    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD, 0));
 
     // NamedCommands.registerCommand("RampRPMSpeakerSafe",
     //   new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
