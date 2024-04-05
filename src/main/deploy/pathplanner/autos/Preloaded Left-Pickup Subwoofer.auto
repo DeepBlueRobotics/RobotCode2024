@@ -2,15 +2,34 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7023114046228096,
-      "y": 6.71281009228685
+      "x": 0.7308159060762569,
+      "y": 6.641548838653233
     },
-    "rotation": 65.7722546820459
+    "rotation": 60.25511870305776
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToSubwoofer"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchRPMShoot"
+                }
+              }
+            ]
+          }
+        },
         {
           "type": "parallel",
           "data": {
@@ -24,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left-Pickup"
+                  "pathName": "Preloaded Left-Pickup Subwoofer"
                 }
               }
             ]
