@@ -3,54 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7816235479799211,
-        "y": 3.1333192437377244
+        "x": 1.2933990244570825,
+        "y": 7.102190285805508
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4231798645087776,
-        "y": 5.187856735112029
+        "x": 2.2933990244570834,
+        "y": 7.102190285805508
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.64144771657007,
-        "y": 6.041773072766347
+        "x": 3.392722917761358,
+        "y": 6.872413541264741
       },
       "prevControl": {
-        "x": 4.989157227496755,
-        "y": 6.066231299013617
+        "x": 3.5739720261460093,
+        "y": 7.1170998375840195
       },
       "nextControl": {
-        "x": 1.8611575545563772,
-        "y": 6.033644080132366
+        "x": 3.1838349681788425,
+        "y": 6.590414809328347
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3366633613457033,
-        "y": 5.511817049731372
+        "x": 1.2933990244570825,
+        "y": 5.389309099228886
       },
       "prevControl": {
-        "x": 1.338076445520728,
-        "y": 5.512258478987455
+        "x": 2.2960611824531547,
+        "y": 6.078639332851185
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.65,
-      "rotationDegrees": 31.891193556271833,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -61,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -66.12079139727523,
+    "rotation": -69.54669901592003,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -2.0454084893982576,
     "velocity": 0
   },
   "useDefaultConstraints": true
