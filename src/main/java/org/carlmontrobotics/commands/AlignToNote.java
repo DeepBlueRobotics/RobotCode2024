@@ -34,7 +34,6 @@ public class AlignToNote extends Command {
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
         rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
         SendableRegistry.addChild(this, rotationPID);
-        // SmartDashboard.pu
 
         addRequirements(drivetrain);
     }
