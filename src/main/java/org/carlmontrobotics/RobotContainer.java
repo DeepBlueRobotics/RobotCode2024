@@ -173,7 +173,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
     
 
-    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampToRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
     new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
   
@@ -192,11 +192,11 @@ public class RobotContainer {
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
     new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS,1));
-    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new ForceEjectNoteToOuttake(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
     //TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
-    new POVButton(manipulatorController, 180).onTrue(new ClimbArmSoftLimit(arm));
+    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
    
     
   }
@@ -288,8 +288,6 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShoot(intakeShooter));
     
-    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
-    NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
     NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
