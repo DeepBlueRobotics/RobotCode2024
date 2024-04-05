@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 // TODO: where do we use this command?
-public class RampToRPM extends Command {
+public class RampMaxRPM extends Command {
   // intake until sees game peice or 4sec has passed
   private final double rpm;
   private final IntakeShooter intake;
   private Timer timer;
 
-  public RampToRPM(IntakeShooter intake) {
+  public RampMaxRPM(IntakeShooter intake) {
     addRequirements(this.intake = intake);
     rpm = RPM_SELECTOR[Arm.getSelector()];
   }
