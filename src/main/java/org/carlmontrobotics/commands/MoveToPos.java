@@ -10,6 +10,7 @@ public class MoveToPos extends Command {
   private double goal;
   private int index;
 
+  // TODO: don't have an index parameter
   public MoveToPos(Arm armSubsystem, double goal, int index) {
     addRequirements(this.arm = armSubsystem);
     this.goal = goal;

@@ -57,7 +57,7 @@ public class Intake extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     timer.stop();
-    index= 0;
+    index = 0;
     //intake.resetCurrentLimit();
   }
 
