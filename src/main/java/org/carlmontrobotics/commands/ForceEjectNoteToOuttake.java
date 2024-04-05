@@ -5,11 +5,11 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class GETOUT extends Command {
+public class ForceEjectNoteToOuttake extends Command {
     private IntakeShooter intakeShooter;
     Timer timer = new Timer();
 
-    public GETOUT(IntakeShooter intakeShooter) {
+    public ForceEjectNoteToOuttake(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
     }
 

@@ -94,11 +94,11 @@ public class RobotContainer {
     "Center Shoot",
     "Left Shoot",
     "Right Shoot",
-    "Preloaded Left Shooting", 
+    "Preloaded Left Shooting",
     "Preloaded Right Shooting",
-    "Left-Auto Ruiner",    
+    "Left-Auto Ruiner",
     "Right-Auto Ruiner",
-    "Center-Auto Ruiner"    
+    "Center-Auto Ruiner"
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -124,7 +124,7 @@ public class RobotContainer {
       autoSelectorTab.add(autoSelector)
         .withSize(2, 1);
     }
-      
+
     setDefaultCommands();
     setBindingsDriver();
     setBindingsManipulatorENDEFF();
@@ -143,10 +143,10 @@ public class RobotContainer {
     () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
     manipulatorController, driverController));
     arm.setDefaultCommand(new TeleopArm(
-      arm, 
+      arm,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
-    
+
 
   }
 
@@ -154,9 +154,9 @@ public class RobotContainer {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
     axisTrigger(driverController, Axis.kRightTrigger)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"), 
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
-    
+
 
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
@@ -171,12 +171,12 @@ public class RobotContainer {
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
-    
 
-    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampToRPM(intakeShooter));
+
+    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
     new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
-  
+
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
             new SwitchRPMShoot(intakeShooter));
@@ -185,23 +185,23 @@ public class RobotContainer {
             new InstantCommand(intakeShooter::stopOutake, intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"), 
+        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new Intake(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
     new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS,1));
-    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new ForceEjectNoteToOuttake(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
     //TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
-    new POVButton(manipulatorController, 180).onTrue(new ClimbArmSoftLimit(arm));
-   
-    
+    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
+
+
   }
- 
-  
+
+
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
@@ -282,9 +282,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD, 2));
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShoot(intakeShooter));
-    
-    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
-    // NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
+
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
     NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
@@ -300,7 +298,7 @@ public class RobotContainer {
         String name = autoNames[i];
 
         autoCommands.add(new PathPlannerAuto(name));
-        
+
 
         // TODO: Charles' opinion: we shouldn't have it path find to the starting pose at the start of match
         /*new SequentialCommandGroup(
