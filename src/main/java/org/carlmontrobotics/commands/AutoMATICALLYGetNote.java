@@ -29,7 +29,7 @@ public class AutoMATICALLYGetNote extends Command {
   public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
     addRequirements(this.dt = dt);
     addRequirements(this.intake = intake);
-    addRequirements(this.ll = ll);
+    this.ll = ll;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
