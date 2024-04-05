@@ -65,7 +65,7 @@ public final class Constants {
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
-		public static final double INTAKE_RPM = 6800;
+		public static final double INTAKE_RPM = 6650;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
 		public static final double PASS_RPM = 5800;

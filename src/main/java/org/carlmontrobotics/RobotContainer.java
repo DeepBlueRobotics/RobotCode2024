@@ -203,8 +203,8 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new GETOUT(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value).onTrue(new MoveToPos(arm, SPEAKER_ANGLE_RAD,1));
     //TODO: test angles for pov button BEFORE climbing
-    new POVButton(manipulatorController, 180).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
-    new POVButton(manipulatorController, 360).onTrue(new ClimbArmSoftLimit(arm));
+    new POVButton(manipulatorController, 0).onTrue(new MoveToPos(arm, CLIMB_POS, 0));
+    new POVButton(manipulatorController, 180).onTrue(new ClimbArmSoftLimit(arm));
     // new JoystickButton(manipulatorController, Button.kB.value).onTrue(new
     // moveClimber(arm));
     // new JoystickButton(manipulatorController, Button.kX.value).onTrue(new
@@ -435,6 +435,7 @@ public class RobotContainer {
 
         autoCommands.add(new PathPlannerAuto(name));
         
+
         // TODO: Charles' opinion: we shouldn't have it path find to the starting pose at the start of match
         /*new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
