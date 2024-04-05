@@ -1,5 +1,6 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.SMART_CURRENT_LIMIT_TIMEOUT;
 import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.IntakeShooter;
@@ -20,7 +21,7 @@ public class SwitchRPMShoot extends Command {
     }
     @Override
     public void initialize() {
-        intakeShooter.setMaxOutake();
+        intakeShooter.setMaxOutake(1);
         timer.reset();
         
     }
@@ -41,6 +42,6 @@ public class SwitchRPMShoot extends Command {
     }
     @Override
     public boolean isFinished() {
-        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>0.9;
+        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>SMART_CURRENT_LIMIT_TIMEOUT;
     }
 }

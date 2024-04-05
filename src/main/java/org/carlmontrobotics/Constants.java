@@ -175,6 +175,7 @@ public final class Constants {
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.5;
+		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
 		// Arm buttons
 	}
 

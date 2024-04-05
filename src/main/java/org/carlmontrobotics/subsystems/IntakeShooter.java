@@ -97,35 +97,7 @@ public class IntakeShooter extends SubsystemBase {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
 
-    // Aaron will work on this
-
-    // //Find offset of note from the center line using big mathy mathy, god I hope
-    // this works chatgpt gave me the formulas :))))))
-    // //find out what this means
-    // public double calculateDistanceSensorNotes() {
-    // double center = 11.485;// center line between the 2 side plates (in)
-    // double d1 = getGamePieceDistanceIntake();
-    // double d2 = getGamePieceDistanceOutake();
-    // double r = 7;
-    // double ym = (d1+d2)/2; //Y midpoint between 2 points
-    // double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) *
-    // (DISTANCE_BETWEEN_SENSORS))/r;// y cord of center
-    // //Take into note that in reality, the 2 points can return 2 possible centers
-    // return k - center; //<- offset from the center
-    // }
-    // //find out what this means
-    // public double calculateIntakeAmount(){
-    // //Literatly just calcDistanceSensorNotes but instead of solving for k, we are
-    // solving for h
-    // double d1 = getGamePieceDistanceIntake();
-    // double d2 = getGamePieceDistanceOutake();
-    // double r = 7;
-
-    // double xm = (DISTANCE_BETWEEN_SENSORS)/2;
-
-    // double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r;
-    // return h;
-    // }
+    
 
     @Override
     public void periodic() {
@@ -156,17 +128,14 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
-    public void setMaxOutakeOverload(int direction) {
-        // outakeMotor.setSmartCurrentLimit(40);
-        // outakeMotor.setSmartCurrentLimit(1*direction);
-    }
+   
 
-    public void setMaxOutake() {
-        outakeMotorVortex.set(1);
+    public void setMaxOutake(int direction) {
+        outakeMotorVortex.set(1 * direction);
     }
-    public void setMaxOutakeOverload() {
+    public void setMaxOutakeOverload(int direction) {
         outakeMotorVortex.setSmartCurrentLimit(80);
-        outakeMotorVortex.set(1);
+        outakeMotorVortex.set(1 * direction);
     }
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);

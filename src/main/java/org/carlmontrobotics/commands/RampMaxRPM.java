@@ -22,7 +22,7 @@ public class RampMaxRPM extends Command {
 
   @Override
   public void initialize() {
-    intake.setMaxOutake();
+    intake.setMaxOutake(1);
     
   }
 
