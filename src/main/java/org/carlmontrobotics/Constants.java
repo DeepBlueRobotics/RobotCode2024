@@ -65,7 +65,7 @@ public final class Constants {
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
-		public static final double INTAKE_RPM = 6650;
+		public static final double INTAKE_RPM = 6300;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
 		public static final double PASS_RPM = 2000;
@@ -122,13 +122,14 @@ public final class Constants {
 		public static final double AMP_ANGLE_RAD = 1.28;
 		public static final double AMP_ANGLE_RAD_NEW_MOTOR = 1.456;
 		public static final double SPEAKER_ANGLE_RAD = -0.2;
+		public static final double PODIUM_ANGLE_RAD = -0.2 + Units.degreesToRadians(7.5);
 		// -0.427725
 		public static final double GROUND_INTAKE_POS = -0.34537;
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
 		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);// touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);// touching the white line
-		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
+		//public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
 
 		// 0.4 rad for shooting at podium
 

@@ -217,7 +217,7 @@ public class Arm extends SubsystemBase {
             lastArmPos = currentArmPos;
             lastArmVel = currentAbsoluteArmVel;
         }
-        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
+        isArmEncoderConnected = true;//currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
         if (isArmEncoderConnected) {
             if (callDrive) {

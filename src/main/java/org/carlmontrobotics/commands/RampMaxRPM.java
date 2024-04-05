@@ -32,7 +32,7 @@ public class RampMaxRPM extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopOutake();
+    //intake.stopOutake();
     // resets to defaultColor
   }
 

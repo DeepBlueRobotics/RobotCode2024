@@ -102,7 +102,6 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
-        //intakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
 
@@ -123,7 +122,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void setMaxIntake(int direction) {
-        intakeMotor.setSmartCurrentLimit(35);
+        intakeMotor.setSmartCurrentLimit(60);
         intakeMotor.set(1 * direction);
 
     }
@@ -143,7 +142,9 @@ public class IntakeShooter extends SubsystemBase {
         
         // intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
-
+    public void turnOffIntakeMotor() {
+        intakeMotor.setSmartCurrentLimit(1);
+    }
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0,
                 outakeFeedforward.calculate(rpm / 60.0));
@@ -178,6 +179,7 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
+        super.initSendable(sendableBuilder);
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
         sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceOutake, null);

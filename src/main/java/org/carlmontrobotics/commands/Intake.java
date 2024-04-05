@@ -14,7 +14,7 @@ public class Intake extends Command {
 
   private double endAt = 0;
   private final double keepIntakingFor = 0.2;
-  int increaseAmount = 250;
+  int increaseAmount = 750;
   int index = 0;
 
   public Intake(IntakeShooter intake) {

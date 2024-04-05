@@ -116,7 +116,7 @@ public class RobotContainer {
   public RobotContainer() {
     {
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
-      //TODO: registerAutoCommands();
+      registerAutoCommands();
       SmartDashboard.putData(autoSelector);
       SmartDashboard.setPersistent("SendableChooser[0]");
 
@@ -207,6 +207,7 @@ public class RobotContainer {
     //TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
     new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
 
 
   }
@@ -309,15 +310,14 @@ public class RobotContainer {
 
         autoCommands.add(new PathPlannerAuto(name));
 
-
-        // TODO: Charles' opinion: we shouldn't have it path find to the starting pose at the start of match
-        /*new SequentialCommandGroup(
+        /*         // TODO: Charles' opinion: we shouldn't 7689[n' hhave it path find to the starting pose at the start of match
+        /*/new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
             // PathPlannerAuto.getStaringPoseFromAutoFile(name),
             PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
             Autoc.pathConstraints ),
           new PathPlannerAuto(name)
-        ));*/
+        );
       }
     }
 
