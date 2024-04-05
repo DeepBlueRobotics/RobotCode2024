@@ -101,7 +101,12 @@ public class RobotContainer {
     "Center Shoot",
     "Right Shoot",
 
+    "Left-Shoot For Left Subwoofer",
+    "Right-Shoot For Right Subwoofer",
+
+
     "Left-Amp"
+  
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
