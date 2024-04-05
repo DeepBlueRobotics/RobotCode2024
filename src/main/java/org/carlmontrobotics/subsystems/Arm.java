@@ -392,6 +392,7 @@ public class Arm extends SubsystemBase {
         return TRAP_CONSTRAINTS.maxVelocity;
     }
 
+
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
