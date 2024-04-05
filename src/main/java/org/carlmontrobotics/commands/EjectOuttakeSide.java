@@ -1,5 +1,7 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.SMART_CURRENT_LIMIT_TIMEOUT;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -34,6 +36,6 @@ public class EjectOuttakeSide extends Command {
     }
     @Override
     public boolean isFinished() {
-        return timer.get()>=0.8;
+        return timer.get() >= SMART_CURRENT_LIMIT_TIMEOUT;
     }
 }

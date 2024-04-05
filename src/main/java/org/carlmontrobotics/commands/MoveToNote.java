@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
+// TODO: Useless, ask Karena to delete
 public class MoveToNote extends Command {
   private final Drivetrain dt;
   private final Limelight ll;
@@ -29,6 +30,7 @@ public class MoveToNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // TODO: Also doesn't work
     new AlignToNote(dt);
     timer.reset();
     timer.start();
