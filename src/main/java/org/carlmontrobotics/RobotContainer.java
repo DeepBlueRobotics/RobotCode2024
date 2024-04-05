@@ -85,20 +85,23 @@ public class RobotContainer {
   private boolean hasSetupAutos = false;
   private final String[] autoNames = new String[] {
     /* These are assumed to be equal to the AUTO ames in pathplanner */
-    "Left-Amp",
-    "Center-Straight",
-    "Middle-Ram",
     "Left-Straight",
+    "Center-Straight",
     "Right-Straight",
-    "Left-Safe",
-    "Center Shoot",
-    "Left Shoot",
-    "Right Shoot",
+    "Middle-Ram",
+
+    "Left-Auto Ruiner",
+    "Center-Auto Ruiner",
+    "Right-Auto Ruiner",
+
     "Preloaded Left Shooting",
     "Preloaded Right Shooting",
-    "Left-Auto Ruiner",
-    "Right-Auto Ruiner",
-    "Center-Auto Ruiner"
+    
+    "Left Shoot",
+    "Center Shoot",
+    "Right Shoot",
+
+    "Left-Amp"
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
