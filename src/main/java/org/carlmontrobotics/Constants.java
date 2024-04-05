@@ -68,13 +68,13 @@ public final class Constants {
 		public static final double INTAKE_RPM = 6650;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
-		public static final double PASS_RPM = 5800;
+		public static final double PASS_RPM = 2000;
 		public static final double TEST_RPM = 3000;
 		public static final double AMP_RPM = 1000;
 		public static final double SUBWOOFER_RPM = 2100;
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
-		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM,PODIUM_RPM};
+		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM, PODIUM_RPM};
 		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 

@@ -37,13 +37,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "name": "ArmToSubwoofer"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSafe"
+                  "name": "SwitchRPMShoot"
                 }
               }
             ]

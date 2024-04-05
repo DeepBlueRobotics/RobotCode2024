@@ -24,13 +24,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSubwoofer"
+                  "name": "ArmToSubwoofer"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "name": "SwitchRPMShoot"
                 }
               }
             ]
@@ -74,13 +74,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSubwoofer"
+                  "name": "ArmToSubwoofer"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "name": "SwitchRPMShoot"
                 }
               }
             ]
