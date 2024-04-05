@@ -204,7 +204,15 @@ public class Arm extends SubsystemBase {
 
         double currentArmPos = getArmPos();
         double currentAbsoluteArmVel = armMasterEncoder.getVelocity();
-        if (currentArmPos != lastArmPos && currentAbsoluteArmVel!=lastArmVel) {
+        double currentRelativeArmVel = armMotorMaster.getEncoder().getVelocity();
+        /*
+        if (currentArmPos != lastArmPos) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+            lastArmVel = currentAbsoluteArmVel;
+        }
+        */
+        if((currentAbsoluteArmVel == currentRelativeArmVel) || !(currentAbsoluteArmVel != 0 && currentRelativeArmVel == 0)) {
             lastMeasuredTime = currTime;
             lastArmPos = currentArmPos;
             lastArmVel = currentAbsoluteArmVel;
