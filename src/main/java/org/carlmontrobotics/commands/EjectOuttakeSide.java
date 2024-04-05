@@ -7,11 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class EjectOuttakeSide extends Command {
     private IntakeShooter intakeShooter;
-    private Timer timer;
+    private Timer timer = new Timer();
     public EjectOuttakeSide(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
         addRequirements(intakeShooter);
-        timer = new Timer();
     }
     @Override
     public void initialize() {
