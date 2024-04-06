@@ -17,7 +17,7 @@ public class EjectOuttakeSide extends Command {
     @Override
     public void initialize() {
         intakeShooter.setMaxIntake(1);
-        intakeShooter.setMaxOutakeOverload(1);
+        intakeShooter.setMaxOutake(1);
         timer.reset();
         timer.start();
     }
@@ -36,6 +36,6 @@ public class EjectOuttakeSide extends Command {
     }
     @Override
     public boolean isFinished() {
-        return timer.get() >= SMART_CURRENT_LIMIT_TIMEOUT;
+        return timer.get() >= 4 || (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
     }
 }

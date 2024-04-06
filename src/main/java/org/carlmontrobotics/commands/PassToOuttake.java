@@ -28,7 +28,7 @@ public class PassToOuttake extends Command {
     public void end(boolean interrupted) {
         timer.stop();
         timer.reset();
-        intakeShooter.setCurrentLimit(20);
+        intakeShooter.resetCurrentLimit();
     }
 
     @Override

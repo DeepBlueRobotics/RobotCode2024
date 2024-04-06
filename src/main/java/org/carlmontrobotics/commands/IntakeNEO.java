@@ -11,9 +11,6 @@ public class IntakeNEO extends Command {
   // intake until sees game peice or 4sec has passed
   private Timer timer = new Timer();
   private final IntakeShooter intake;
-
-  private double endAt = 0;
-  private final double keepIntakingFor = 0.2;
   int increaseAmount = 750;
   int index = 0;
 

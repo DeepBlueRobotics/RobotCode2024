@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class SwitchRPMShootNEO extends Command {
     private IntakeShooter intakeShooter;
     private double rpmAmount;
+    private Timer timer = new Timer();
    
     
     public SwitchRPMShootNEO(IntakeShooter intakeShooter) {
@@ -21,14 +22,14 @@ public class SwitchRPMShootNEO extends Command {
     @Override
     public void initialize() {
         intakeShooter.setMaxOutake(1);
-        
+        timer.reset();
     }
     @Override
     public void execute() {
         rpmAmount = RPM_SELECTOR[Arm.getSelector()];
         if(intakeShooter.getOutakeRPM() >= rpmAmount) {
         intakeShooter.setMaxIntake(1);
-       
+        timer.start();
         }
     }
     @Override
@@ -36,11 +37,11 @@ public class SwitchRPMShootNEO extends Command {
         intakeShooter.stopIntake();
         intakeShooter.stopOutake();
         intakeShooter.resetCurrentLimit();
-      
+        timer.stop();
         
     }
     @Override
     public boolean isFinished() {
-        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote());
+        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get() > 10;
     }
 }
