@@ -82,7 +82,7 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches(intakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
     }
 
-    public void motorSetOutake(int speed) {
+    public void motorSetOutake(double speed) {
         outakeMotorVortex.set(speed);
     }
     public void motorSetIntake(double speed) {

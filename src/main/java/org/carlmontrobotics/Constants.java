@@ -127,7 +127,7 @@ public final class Constants {
 		public static final double GROUND_INTAKE_POS = -0.34537;
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
-		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);// touching the base of the speaker
+		public static final double SUBWOOFER_ANGLE_RAD = -0.22;// touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);// touching the white line
 		//public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
 
@@ -163,7 +163,7 @@ public final class Constants {
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
-		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(3); //Math.PI / 512; // placeholder //Whether or not this is the actual
+		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(5); // placeholder //Whether or not this is the actual
 																		// account
 		// idk TODO: test on actual encoder without a conversion
 		// factor

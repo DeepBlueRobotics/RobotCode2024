@@ -204,6 +204,7 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
     new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kRightStick.value).whileTrue(new PassToIntake(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
     //TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
