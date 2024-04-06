@@ -2,6 +2,7 @@ package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.Arm;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ArmToPos extends Command {
@@ -31,6 +32,7 @@ public class ArmToPos extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("arm is at pos", true);
   }
 
   // Returns true when the command should end.

@@ -36,6 +36,7 @@ public class Intake extends Command {
   @Override
   public void execute() {
     // Intake Led
+    intake.resetCurrentLimit();
     if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
       index++;
 

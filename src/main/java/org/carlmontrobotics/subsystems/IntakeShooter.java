@@ -60,6 +60,7 @@ public class IntakeShooter extends SubsystemBase {
         // setMaxOutakeOverload(1);
         outakeMotorVortex.setSmartCurrentLimit(60);
         
+        
 
     }
     public boolean intakeIsOverTemp() {
@@ -101,6 +102,7 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+    //intakeMotor.set(0.1);
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
@@ -110,7 +112,7 @@ public class IntakeShooter extends SubsystemBase {
 
         // setMaxOutake();
 
-
+        SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());
     }
 
     public void driveMotor(double volts) {

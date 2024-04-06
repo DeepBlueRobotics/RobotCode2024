@@ -144,6 +144,7 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
 
+        SmartDashboard.putBoolean("arm is at pos", false);
     }
 
     public void setBooleanDrive(boolean climb) {
