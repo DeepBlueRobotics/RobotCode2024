@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
+    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
     private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10, MotorType.kBrushless);
@@ -85,7 +85,9 @@ public class IntakeShooter extends SubsystemBase {
     public void motorSetOutake(int speed) {
         outakeMotorVortex.set(speed);
     }
-
+    public void motorSetIntake(double speed) {
+        intakeMotor.set(speed);
+    }
     private double getGamePieceDistanceOutake() {
         return Units.metersToInches(OutakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
     }
@@ -139,7 +141,7 @@ public class IntakeShooter extends SubsystemBase {
         outakeMotorVortex.set(1 * direction);
     }
     public void resetCurrentLimit() {
-        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
+        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
         outakeMotorVortex.setSmartCurrentLimit(60);
         
         // intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);

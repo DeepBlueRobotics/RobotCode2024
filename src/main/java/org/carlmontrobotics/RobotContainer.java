@@ -137,7 +137,8 @@ public class RobotContainer {
 
     setDefaultCommands();
     setBindingsDriver();
-    setBindingsManipulatorENDEFF();
+    //setBindingsManipulatorENDEFF();
+    setBindingsManipulatorNEO();
   }
 
   private void setDefaultCommands() {
@@ -180,7 +181,36 @@ public class RobotContainer {
     new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
   }
+  private void setBindingsManipulatorNEO() {
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
+
+    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+   new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
+
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+        .onTrue(
+            new SwitchRPMShootNEO(intakeShooter));
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+        .onFalse(
+            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+            new IntakeNEO(intakeShooter)));
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+        .onFalse(
+            new InstantCommand(intakeShooter::stopIntake, intakeShooter));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
+    //TODO: test angles for pov button BEFORE climbing
+    new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
+    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
+  }
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));

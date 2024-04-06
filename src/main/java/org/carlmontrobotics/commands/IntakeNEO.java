@@ -7,7 +7,7 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class Intake extends Command {
+public class IntakeNEO extends Command {
   // intake until sees game peice or 4sec has passed
   private Timer timer = new Timer();
   private final IntakeShooter intake;
@@ -17,14 +17,15 @@ public class Intake extends Command {
   int increaseAmount = 750;
   int index = 0;
 
-  public Intake(IntakeShooter intake) {
+  public IntakeNEO(IntakeShooter intake) {
     addRequirements(this.intake = intake);
 
   }
 
   @Override
   public void initialize() {
-    intake.setRPMIntake(INTAKE_RPM);
+    //TODO: Adjust speed or add in an index
+    intake.motorSetIntake(0.5);
     intake.resetCurrentLimit();
     index=0; 
     
@@ -35,20 +36,7 @@ public class Intake extends Command {
   public void execute() {
     // Intake Led
     
-    if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-      index++;
-
-      //intake.setRPMIntake(0);
-     intake.setRPMIntake(INTAKE_RPM + index*increaseAmount);
-    }
-    if (intake.outakeDetectsNote()) {
-      // Timer.delay(keepIntakingFor);
-
-      intake.setRPMIntake(0.0);
-    }
-    if(!intake.intakeDetectsNote()) {
-      intake.setRPMIntake(INTAKE_RPM);
-    }
+   
     
   }
 
