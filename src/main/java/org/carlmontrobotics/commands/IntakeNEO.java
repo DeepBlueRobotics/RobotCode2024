@@ -11,7 +11,7 @@ public class IntakeNEO extends Command {
   // intake until sees game peice or 4sec has passed
   private Timer timer = new Timer();
   private final IntakeShooter intake;
-  int increaseAmount = 750;
+  double increaseAmount = 0.05;
   int index = 0;
 
   public IntakeNEO(IntakeShooter intake) {
@@ -32,8 +32,15 @@ public class IntakeNEO extends Command {
   @Override
   public void execute() {
     // Intake Led
-    
-   
+    if(!intake.outakeDetectsNote() && intake.intakeDetectsNote()) {
+      index++;
+    }
+    if(!intake.intakeDetectsNote()) {
+      intake.motorSetIntake(0.5);
+    }
+    if(0.5 + index*increaseAmount < 1) {
+    intake.motorSetIntake(0.5 + index*increaseAmount);
+    }
     
   }
 

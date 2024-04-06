@@ -33,7 +33,7 @@ public class SwitchRPMShoot extends Command {
         if(intakeShooter.getOutakeRPM() >= rpmAmount) {
         intakeShooter.setMaxIntake(1);
         timer.start();
-        timer.reset();
+        
         }
     }
     @Override
@@ -42,7 +42,7 @@ public class SwitchRPMShoot extends Command {
         intakeShooter.stopOutake();
         intakeShooter.resetCurrentLimit();
         timer.stop();
-        timer2.start();
+       
     }
     @Override
     public boolean isFinished() {
