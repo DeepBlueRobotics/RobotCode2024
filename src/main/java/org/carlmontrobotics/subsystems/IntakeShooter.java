@@ -22,8 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
-    // private final CANSparkMax outakeMotor =
-    // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
+    // private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
     private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10, MotorType.kBrushless);
     private final RelativeEncoder outakeEncoder = outakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
@@ -64,8 +63,9 @@ public class IntakeShooter extends SubsystemBase {
 
     }
     public boolean intakeIsOverTemp() {
-        return intakeMotor.getMotorTemperature() >= 39;
+        return intakeMotor.getMotorTemperature() >= MotorConfig.NEO.temperatureLimitCelsius;
     }
+
     // ---------------------------------------------------------------------------------------------------
     // checking whether RPM is within tolerance
     public boolean isWithinTolerance() {
@@ -115,6 +115,12 @@ public class IntakeShooter extends SubsystemBase {
         // setMaxOutake();
 
         SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());
+
+        if (intakeIsOverTemp()){
+            turnOffIntakeMotor();
+            stopIntake();
+            System.err.println("INTAKE IS OVER TEMP!!!!\nBIG BAD\nOOPSY WOOPSY\nTURN IT OFF");
+        }
     }
 
     public void driveMotor(double volts) {
