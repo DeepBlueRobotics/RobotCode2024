@@ -167,6 +167,9 @@ public class RobotContainer {
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
 
+    axisTrigger(driverController, Axis.kLeftTrigger)
+        .onTrue(new AlignToApriltag(drivetrain, limelight));
+
 
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
