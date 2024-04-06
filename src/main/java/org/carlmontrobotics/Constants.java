@@ -163,7 +163,7 @@ public final class Constants {
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
-		public static final double POS_TOLERANCE_RAD = Math.PI / 512; // placeholder //Whether or not this is the actual
+		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(3); //Math.PI / 512; // placeholder //Whether or not this is the actual
 																		// account
 		// idk TODO: test on actual encoder without a conversion
 		// factor
