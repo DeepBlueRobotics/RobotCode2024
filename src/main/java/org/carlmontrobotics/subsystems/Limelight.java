@@ -43,7 +43,7 @@ public class Limelight extends SubsystemBase {
 
   public Pose2d getCurrentPose() {
     Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
-    SmartDashboard.putNumber("estimated x", estimatedPos.getX());
+    // SmartDashboard.putNumber("estimated x", estimatedPos.getX());
     // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
     // SmartDashboard.putNumber("estimated rotation (deg)", estimatedPos.getRotation().getDegrees());
     return estimatedPos;

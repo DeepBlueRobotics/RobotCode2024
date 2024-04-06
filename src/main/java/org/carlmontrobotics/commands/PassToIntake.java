@@ -19,7 +19,6 @@ public class PassToIntake extends Command{
         intakeShooter.stopIntake();
         intakeShooter.stopOutake();
     }
-    
     @Override
     public boolean isFinished() {
         return intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote();

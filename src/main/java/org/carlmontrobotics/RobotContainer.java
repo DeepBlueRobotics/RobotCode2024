@@ -169,9 +169,7 @@ public class RobotContainer {
             new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
 
     axisTrigger(driverController, Axis.kLeftTrigger)
-        //.onTrue(new AlignToApriltag(drivetrain, limelight));
-        .onTrue(new InstantCommand(()->drivetrain.setFieldOriented(false)))
-        .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
+        .onTrue(new AlignToApriltag(drivetrain, limelight));
 
 
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
@@ -188,7 +186,7 @@ public class RobotContainer {
 
 
     new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
-   new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
+   new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
@@ -319,7 +317,7 @@ public class RobotContainer {
 
   private void registerAutoCommands(){
     ////AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
+    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
     //  NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
@@ -327,7 +325,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToSubwoofer", new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD,1));
     NamedCommands.registerCommand("ArmToPodium", new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD, 2));
 
-    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
+    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShoot(intakeShooter));
 
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
