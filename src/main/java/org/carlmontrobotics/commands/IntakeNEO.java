@@ -32,15 +32,6 @@ public class IntakeNEO extends Command {
   @Override
   public void execute() {
     // Intake Led
-    if(!intake.outakeDetectsNote() && intake.intakeDetectsNote()) {
-      index++;
-    }
-    if(!intake.intakeDetectsNote()) {
-      intake.motorSetIntake(0.5);
-    }
-    if(0.5 + index*increaseAmount < 1) {
-    intake.motorSetIntake(0.5 + index*increaseAmount);
-    }
     
   }
 
@@ -56,7 +47,7 @@ public class IntakeNEO extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
+    return (intake.intakeDetectsNote()) ;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
 
   }

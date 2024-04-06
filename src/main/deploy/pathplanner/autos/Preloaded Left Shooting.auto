@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Preloaded-Left"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -37,12 +31,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "PassToOutake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -55,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Preloaded Left-Pickup"
+                  "pathName": "Preloaded Left Hug"
                 }
               }
             ]
