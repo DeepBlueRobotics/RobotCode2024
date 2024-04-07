@@ -11,8 +11,8 @@ public class PassToIntake extends Command{
     }
     @Override
     public void execute() {
-        intakeShooter.motorSetIntake(-0.8);
-        intakeShooter.motorSetOutake(-0.6);
+        intakeShooter.motorSetIntake(-0.5);
+        intakeShooter.motorSetOutake(-0.5);
     }
     @Override
     public void end(boolean interrupted) {

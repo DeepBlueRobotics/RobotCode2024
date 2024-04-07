@@ -107,7 +107,9 @@ public class RobotContainer {
     // "Preloaded Left-Pickup Subwoofer",
     // "Preloaded Right-Pickup Subwoofer",
 
-    "Left-Amp"
+    "Left-Amp",
+    "Shoot-on-Right",
+    "Shoot-Center"
   
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
@@ -164,16 +166,18 @@ public class RobotContainer {
   private void setBindingsDriver() {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
-    axisTrigger(driverController, Axis.kRightTrigger)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
-
+    // axisTrigger(driverController, Axis.kRightTrigger)
+    //     .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+    //         new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
+    new POVButton(driverController, 0).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight));
     axisTrigger(driverController, Axis.kLeftTrigger)
         //.onTrue(new AlignToApriltag(drivetrain, limelight));
         .onTrue(new InstantCommand(()->drivetrain.setFieldOriented(false)))
         .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
 
-
+    axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+            new IntakeNEO(intakeShooter)));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
