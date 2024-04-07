@@ -108,8 +108,8 @@ public class RobotContainer {
     // "Preloaded Right-Pickup Subwoofer",
 
     "Left-Amp",
-    "Shoot-on-Right",
-    "Shoot-Center"
+    "Shoot on Right",
+    "Shoot Center"
   
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
@@ -350,13 +350,13 @@ public class RobotContainer {
         autoCommands.add(new PathPlannerAuto(name));
 
         /*         // TODO: Charles' opinion: we shouldn't 7689[n' hhave it path find to the starting pose at the start of match
-        /*/new SequentialCommandGroup(
+        new SequentialCommandGroup(
           AutoBuilder.pathfindToPose(
             // PathPlannerAuto.getStaringPoseFromAutoFile(name),
             PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
             Autoc.pathConstraints ),
           new PathPlannerAuto(name)
-        );
+        );*/
       }
     }
 

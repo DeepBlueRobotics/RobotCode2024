@@ -26,6 +26,7 @@ public class AutoMATICALLYGetNote extends Command {
   //private Timer timer = new Timer();
   private int index;
   private int increaseAmount = 250;
+  Timer timer = new Timer();
   public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
     addRequirements(this.dt = dt);
     addRequirements(this.intake = intake);
@@ -40,7 +41,7 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
-    intake.motorSetIntake(0.5);
+    intake.motorSetIntake(0.6);
     
   }
 
@@ -57,7 +58,12 @@ public class AutoMATICALLYGetNote extends Command {
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
       intake.motorSetIntake(0.5);
     }
-    
+    if(intake.intakeDetectsNote()) {
+      timer.start();
+    } else {
+      timer.stop();
+      timer.reset();
+    }
     
   }
 
@@ -73,7 +79,7 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote());
+    return (intake.intakeDetectsNote() && timer.get()>0.1);
     //return timer.get() >= 0.5;
   }
 }

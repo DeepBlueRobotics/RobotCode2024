@@ -23,7 +23,7 @@ public class IntakeNEO extends Command {
   public void initialize() {
     //TODO: Adjust speed or add in an index
     timer.reset();
-    intake.motorSetIntake(0.7);
+    intake.motorSetIntake(0.6);
     intake.resetCurrentLimit();
     index=0; 
     
@@ -53,7 +53,7 @@ public class IntakeNEO extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>0.25 && intake.intakeDetectsNote();
+    return intake.intakeDetectsNote() && timer.get()>0.1;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
 
   }
