@@ -330,6 +330,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToAmp", new ArmToPos(arm, Armc.AMP_ANGLE_RAD,0));
     NamedCommands.registerCommand("ArmToSubwoofer", new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD,1));
     NamedCommands.registerCommand("ArmToPodium", new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD, 2));
+    NamedCommands.registerCommand("ArmToGround", new ArmToPos(arm, GROUND_INTAKE_POS, 1));
+
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
 
