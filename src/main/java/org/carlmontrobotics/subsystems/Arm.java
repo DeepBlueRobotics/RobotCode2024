@@ -46,7 +46,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 public class Arm extends SubsystemBase {
-    private double pidMultiplier = 1;
+    
     private boolean callDrive = true;
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
@@ -116,14 +116,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput((3 * Math.PI) / 2);
         armPIDMaster.setIZone(IZONE_RAD);
 
-        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                (babyMode)? MAX_FF_VEL_RAD_P_S_BABY: MAX_FF_VEL_RAD_P_S,
-                (babyMode)?MAX_FF_ACCEL_RAD_P_S_BABY: MAX_FF_ACCEL_RAD_P_S);
-
         
-        // ^ worst case scenario
-        // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
-        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
 
         SmartDashboard.putData("Arm", this);
 
@@ -160,6 +153,14 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                (babyMode)? MAX_FF_VEL_RAD_P_S_BABY: MAX_FF_VEL_RAD_P_S,
+                (babyMode)?MAX_FF_ACCEL_RAD_P_S_BABY: MAX_FF_ACCEL_RAD_P_S);
+
+        
+        // ^ worst case scenario
+        // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putData(this);
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
