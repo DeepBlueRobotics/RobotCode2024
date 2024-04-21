@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.subsystems.Drivetrain;
+import static org.carlmontrobotics.RobotContainer.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -94,6 +95,10 @@ public class TeleopDrive extends Command {
 
     double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
     double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
+    if(babyMode == true){
+      driveMultiplier = kBabyDriveSpeed;
+      rotationMultiplier = kBabyDriveRotation;
+    }
     // double driveMultiplier = kNormalDriveSpeed;
     // double rotationMultiplier = kNormalDriveRotation;
 

@@ -11,6 +11,9 @@ import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import static org.carlmontrobotics.RobotContainer.*;
+
+import org.carlmontrobotics.RobotContainer;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -113,8 +116,8 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setIZone(IZONE_RAD);
 
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                Math.PI * .5,
-                MAX_FF_ACCEL_RAD_P_S);
+                (babyMode)? MAX_FF_VEL_RAD_P_S_BABY: MAX_FF_VEL_RAD_P_S,
+                (babyMode)?MAX_FF_ACCEL_RAD_P_S_BABY: MAX_FF_ACCEL_RAD_P_S);
         // ^ worst case scenario
         // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
