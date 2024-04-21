@@ -158,6 +158,8 @@ public final class Constants {
 		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE_BABY = MIN_VOLTAGE/12 *0.7;
+		public static final double MAX_VOLTAGE_BABY = MAX_VOLTAGE/12*0.7;
 		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
