@@ -119,7 +119,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
-      SmartDashboard.putBoolean("babymode", babyMode);
+      SmartDashboard.setDefaultBoolean("babymode", babyMode);
       SmartDashboard.setPersistent("babymode");
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
