@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2933990244570825,
-      "y": 7.102190285805508
+      "x": 0.7816235479799211,
+      "y": 3.1333192437377244
     },
     "rotation": 0
   },
@@ -16,47 +16,22 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "ArmToSubwoofer"
+                  "pathName": "Right-Pickup For Right Subwoofer"
                 }
               },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SwitchRPMShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Preloaded Left Hug"
-                }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Preloaded Left-Shoot"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -72,12 +47,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PassToOutake"
           }
         }
       ]

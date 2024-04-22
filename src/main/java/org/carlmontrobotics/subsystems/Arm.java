@@ -150,6 +150,7 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
 
+        SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
             rotationsSim = new SimDeviceSim("AbsoluteEncoder", ARM_MOTOR_PORT_MASTER).getDouble("rotations");
         }
@@ -213,12 +214,20 @@ public class Arm extends SubsystemBase {
 
         double currentArmPos = getArmPos();
         double currentAbsoluteArmVel = armMasterEncoder.getVelocity();
-        if (currentArmPos != lastArmPos && currentAbsoluteArmVel!=lastArmVel) {
+        double currentRelativeArmVel = armMotorMaster.getEncoder().getVelocity();
+        /*
+        if (currentArmPos != lastArmPos) {
             lastMeasuredTime = currTime;
             lastArmPos = currentArmPos;
             lastArmVel = currentAbsoluteArmVel;
         }
-        isArmEncoderConnected = currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
+        */
+        if((currentAbsoluteArmVel == currentRelativeArmVel) || !(currentAbsoluteArmVel != 0 && currentRelativeArmVel == 0)) {
+            lastMeasuredTime = currTime;
+            lastArmPos = currentArmPos;
+            lastArmVel = currentAbsoluteArmVel;
+        }
+        isArmEncoderConnected = true;//currTime - lastMeasuredTime < DISCONNECTED_ENCODER_TIMEOUT_SEC;
 
         if (isArmEncoderConnected) {
             if (callDrive) {
@@ -263,9 +272,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             // kg * cos(arm angle) * arm_COM_length
         }
-        if(!setPIDOff) {
+        
        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
-        }
+        
         // SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         // SmartDashboard.putNumber("pid volts",
         //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
@@ -284,7 +293,7 @@ public class Arm extends SubsystemBase {
 
     
     public void setLimitsForClimbOn() {
-        armPIDMaster.setOutputRange(-12, 12);
+        armPIDMaster.setOutputRange(-1, 1);
         armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse,
                 (float)(CLIMB_FINISH_POS-Units.degreesToRadians(1)));
         armMotorMaster.setOpenLoopRampRate(1);
@@ -361,7 +370,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetSoftLimit() {
-        armPIDMaster.setOutputRange(MIN_VOLTAGE / -12, MAX_VOLTAGE / 12);
+        armPIDMaster.setOutputRange(MIN_VOLTAGE / 12, MAX_VOLTAGE / 12);
         armMotorMaster.enableSoftLimit(SoftLimitDirection.kReverse, false);
         armMotorMaster.setOpenLoopRampRate(0);
     }
@@ -392,6 +401,7 @@ public class Arm extends SubsystemBase {
     public double getMaxVelocity() {
         return TRAP_CONSTRAINTS.maxVelocity;
     }
+
 
     @Override
     public void initSendable(SendableBuilder builder) {

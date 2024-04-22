@@ -5,11 +5,11 @@ import org.carlmontrobotics.subsystems.IntakeShooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class GETOUT extends Command {
+public class PassToOuttake extends Command {
     private IntakeShooter intakeShooter;
     Timer timer = new Timer();
 
-    public GETOUT(IntakeShooter intakeShooter) {
+    public PassToOuttake(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
     }
 
@@ -28,7 +28,7 @@ public class GETOUT extends Command {
     public void end(boolean interrupted) {
         timer.stop();
         timer.reset();
-        intakeShooter.setCurrentLimit(20);
+        intakeShooter.resetCurrentLimit();
     }
 
     @Override

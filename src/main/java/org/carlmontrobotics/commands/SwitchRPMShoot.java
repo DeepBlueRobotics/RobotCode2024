@@ -1,5 +1,6 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.SMART_CURRENT_LIMIT_TIMEOUT;
 import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.IntakeShooter;
@@ -12,15 +13,17 @@ public class SwitchRPMShoot extends Command {
     private IntakeShooter intakeShooter;
     private double rpmAmount;
     private Timer timer = new Timer();
+    private static Timer timer2 = new Timer();
     
     public SwitchRPMShoot(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
-        
+        timer2.stop();
+        timer2.reset();
         addRequirements(intakeShooter);
     }
     @Override
     public void initialize() {
-        intakeShooter.setMaxOutake();
+        intakeShooter.setMaxOutake(1);
         timer.reset();
         
     }
@@ -30,6 +33,7 @@ public class SwitchRPMShoot extends Command {
         if(intakeShooter.getOutakeRPM() >= rpmAmount) {
         intakeShooter.setMaxIntake(1);
         timer.start();
+        
         }
     }
     @Override
@@ -38,9 +42,10 @@ public class SwitchRPMShoot extends Command {
         intakeShooter.stopOutake();
         intakeShooter.resetCurrentLimit();
         timer.stop();
+       
     }
     @Override
     public boolean isFinished() {
-        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>0.9;
+        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>SMART_CURRENT_LIMIT_TIMEOUT;
     }
 }

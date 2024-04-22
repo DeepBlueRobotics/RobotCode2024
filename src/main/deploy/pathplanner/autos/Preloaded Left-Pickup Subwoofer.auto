@@ -2,17 +2,17 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2933990244570825,
-      "y": 7.102190285805508
+      "x": 0.7308159060762569,
+      "y": 6.641548838653233
     },
-    "rotation": 0
+    "rotation": 60.25511870305776
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -43,20 +43,14 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Preloaded Left Hug"
+                  "pathName": "Left-Safe"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Preloaded Left-Shoot"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -72,12 +66,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PassToOutake"
           }
         }
       ]

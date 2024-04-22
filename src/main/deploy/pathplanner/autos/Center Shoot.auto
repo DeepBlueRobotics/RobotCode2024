@@ -18,28 +18,41 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSubwoofer"
+                  "name": "ArmToSubwoofer"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SwitchRPMShoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "PassToOutake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToGround"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -62,22 +75,29 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampRPMSpeakerSubwoofer"
+                  "name": "ArmToSubwoofer"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SwitchRPMShoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PassToOutake"
           }
         }
       ]

@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ClimbArmSoftLimit extends Command {
+public class Climb extends Command {
     // TODO: Debug this entire thing because it is 1 am and no way i did this
     // correctly
     private Arm arm;
     private Timer timer = new Timer();
-    public ClimbArmSoftLimit(Arm arm) {
+    public Climb(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
         //SmartDashboard.putNumber("climber volts", 0);

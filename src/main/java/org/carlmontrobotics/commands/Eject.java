@@ -1,5 +1,7 @@
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.SMART_CURRENT_LIMIT_TIMEOUT;
+
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -21,7 +23,7 @@ public class Eject extends Command {
     // intakeShooter.setRPMOutake(EJECT_RPM_OUTAKE);
     timer.reset();
     timer.start();
-    intakeShooter.setMaxOutake();
+    intakeShooter.setMaxOutake(-1);
     intakeShooter.setMaxIntake(-1);
   }
 
@@ -43,6 +45,6 @@ public class Eject extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.get() > 0.8 || (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()));
+    return (timer.get() > SMART_CURRENT_LIMIT_TIMEOUT || (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()));
   }
 }

@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class AimArmSpeaker extends Command {
   private final Arm arm;
-  private final Limelight ll;
+  private final Limelight ll; //Shooter ll
 
   /** Creates a new AimOuttakeSpeaker. */
   public AimArmSpeaker(Arm arm, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.arm = arm);
-    addRequirements(this.ll = ll);
+    this.ll = ll;
   }
 
   // Called when the command is initially scheduled.

@@ -26,10 +26,11 @@ public class AutoMATICALLYGetNote extends Command {
   //private Timer timer = new Timer();
   private int index;
   private int increaseAmount = 250;
+  Timer timer = new Timer();
   public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
     addRequirements(this.dt = dt);
     addRequirements(this.intake = intake);
-    addRequirements(this.ll = ll);
+    this.ll = ll;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -39,11 +40,9 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.reset();
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
-    intake.resetCurrentLimit();
     dt.setFieldOriented(false);
-    intake.setRPMIntake(INTAKE_RPM);
-    intake.resetCurrentLimit();
-    index=0; 
+    intake.motorSetIntake(0.6);
+    
   }
 
   @Override
@@ -57,19 +56,15 @@ public class AutoMATICALLYGetNote extends Command {
     // 180deg is about 6.2 rad/sec, min is .5rad/sec
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
-      intake.setRPMIntake(INTAKE_RPM);
+      intake.motorSetIntake(0.5);
     }
-    if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
-      index++;
-
-      //intake.setRPMIntake(0);
-     intake.setRPMIntake(INTAKE_RPM + index*increaseAmount);
+    if(intake.intakeDetectsNote()) {
+      timer.start();
+    } else {
+      timer.stop();
+      timer.reset();
     }
-    if (intake.outakeDetectsNote()) {
-      // Timer.delay(keepIntakingFor);
-
-      intake.setRPMIntake(0.0);
-    }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -84,7 +79,7 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
+    return (intake.intakeDetectsNote() && timer.get()>0.1);
     //return timer.get() >= 0.5;
   }
 }

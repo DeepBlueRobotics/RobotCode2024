@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7023114046228096,
-      "y": 6.71281009228685
+      "x": 0.7,
+      "y": 6.69
     },
-    "rotation": 65.7722546820459
+    "rotation": 147.0
   },
   "command": {
     "type": "sequential",
@@ -13,25 +13,6 @@
       "commands": [
         {
           "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left-Pickup"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
           "data": {
             "commands": [
               {

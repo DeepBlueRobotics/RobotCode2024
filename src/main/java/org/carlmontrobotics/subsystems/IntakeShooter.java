@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO_550);
-    // private final CANSparkMax outakeMotor =
-    // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
+    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
+    // private final CANSparkMax outakeMotor = MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
     private final CANSparkFlex outakeMotorVortex = new CANSparkFlex(10, MotorType.kBrushless);
     private final RelativeEncoder outakeEncoder = outakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
@@ -60,11 +59,13 @@ public class IntakeShooter extends SubsystemBase {
         // setMaxOutakeOverload(1);
         outakeMotorVortex.setSmartCurrentLimit(60);
         
+        
 
     }
     public boolean intakeIsOverTemp() {
-        return intakeMotor.getMotorTemperature() >= 39;
+        return intakeMotor.getMotorTemperature() >= MotorConfig.NEO.temperatureLimitCelsius;
     }
+
     // ---------------------------------------------------------------------------------------------------
     // checking whether RPM is within tolerance
     public boolean isWithinTolerance() {
@@ -81,10 +82,12 @@ public class IntakeShooter extends SubsystemBase {
         return Units.metersToInches(intakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
     }
 
-    public void motorSetOutake(int speed) {
+    public void motorSetOutake(double speed) {
         outakeMotorVortex.set(speed);
     }
-
+    public void motorSetIntake(double speed) {
+        intakeMotor.set(speed);
+    }
     private double getGamePieceDistanceOutake() {
         return Units.metersToInches(OutakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
     }
@@ -97,40 +100,12 @@ public class IntakeShooter extends SubsystemBase {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
 
-    // Aaron will work on this
-
-    // //Find offset of note from the center line using big mathy mathy, god I hope
-    // this works chatgpt gave me the formulas :))))))
-    // //find out what this means
-    // public double calculateDistanceSensorNotes() {
-    // double center = 11.485;// center line between the 2 side plates (in)
-    // double d1 = getGamePieceDistanceIntake();
-    // double d2 = getGamePieceDistanceOutake();
-    // double r = 7;
-    // double ym = (d1+d2)/2; //Y midpoint between 2 points
-    // double k = ym + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2, 2)) *
-    // (DISTANCE_BETWEEN_SENSORS))/r;// y cord of center
-    // //Take into note that in reality, the 2 points can return 2 possible centers
-    // return k - center; //<- offset from the center
-    // }
-    // //find out what this means
-    // public double calculateIntakeAmount(){
-    // //Literatly just calcDistanceSensorNotes but instead of solving for k, we are
-    // solving for h
-    // double d1 = getGamePieceDistanceIntake();
-    // double d2 = getGamePieceDistanceOutake();
-    // double r = 7;
-
-    // double xm = (DISTANCE_BETWEEN_SENSORS)/2;
-
-    // double h = xm + (Math.sqrt(Math.pow(r,2) - Math.pow(r/2,2)) * (d1-d2))/r;
-    // return h;
-    // }
+    
 
     @Override
     public void periodic() {
+    //intakeMotor.set(0.1);
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
-        //intakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
 
@@ -139,7 +114,13 @@ public class IntakeShooter extends SubsystemBase {
 
         // setMaxOutake();
 
+        SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());
 
+        if (intakeIsOverTemp()){
+            turnOffIntakeMotor();
+            stopIntake();
+            System.err.println("INTAKE IS OVER TEMP!!!!\nBIG BAD\nOOPSY WOOPSY\nTURN IT OFF");
+        }
     }
 
     public void driveMotor(double volts) {
@@ -156,25 +137,24 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
-    public void setMaxOutakeOverload(int direction) {
-        // outakeMotor.setSmartCurrentLimit(40);
-        // outakeMotor.setSmartCurrentLimit(1*direction);
-    }
+   
 
-    public void setMaxOutake() {
-        outakeMotorVortex.set(1);
+    public void setMaxOutake(int direction) {
+        outakeMotorVortex.set(1 * direction);
     }
-    public void setMaxOutakeOverload() {
+    public void setMaxOutakeOverload(int direction) {
         outakeMotorVortex.setSmartCurrentLimit(80);
-        outakeMotorVortex.set(1);
+        outakeMotorVortex.set(1 * direction);
     }
     public void resetCurrentLimit() {
-        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
+        intakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
         outakeMotorVortex.setSmartCurrentLimit(60);
         
         // intakeMotor.setSmartCurrentLimit(MotorConfig.NEO_550.currentLimitAmps);
     }
-
+    public void turnOffIntakeMotor() {
+        intakeMotor.setSmartCurrentLimit(1);
+    }
     public void setRPMOutake(double rpm) {
         pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0,
                 outakeFeedforward.calculate(rpm / 60.0));
@@ -209,6 +189,7 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
+        super.initSendable(sendableBuilder);
         sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOutakeRPM, null);
         sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
         sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceOutake, null);

@@ -65,16 +65,16 @@ public final class Constants {
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
 		
-		public static final double INTAKE_RPM = 6800;
+		public static final double INTAKE_RPM = 6300;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
-		public static final double PASS_RPM = 5800;
+		public static final double PASS_RPM = 2000;
 		public static final double TEST_RPM = 3000;
 		public static final double AMP_RPM = 1000;
 		public static final double SUBWOOFER_RPM = 2100;
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
-		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM,PODIUM_RPM};
+		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM, PODIUM_RPM};
 		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
@@ -122,13 +122,14 @@ public final class Constants {
 		public static final double AMP_ANGLE_RAD = 1.28;
 		public static final double AMP_ANGLE_RAD_NEW_MOTOR = 1.456;
 		public static final double SPEAKER_ANGLE_RAD = -0.2;
+		public static final double PODIUM_ANGLE_RAD = -0.2 + Units.degreesToRadians(7.5);
 		// -0.427725
 		public static final double GROUND_INTAKE_POS = -0.34537;
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
-		public static final double SUBWOOFER_ANGLE_RAD = Units.degreesToRadians(0);// touching the base of the speaker
+		public static final double SUBWOOFER_ANGLE_RAD = -0.22;// touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);// touching the white line
-		public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
+		//public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
 
 		// 0.4 rad for shooting at podium
 
@@ -162,7 +163,7 @@ public final class Constants {
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
-		public static final double POS_TOLERANCE_RAD = Math.PI / 512; // placeholder //Whether or not this is the actual
+		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(5); // placeholder //Whether or not this is the actual
 																		// account
 		// idk TODO: test on actual encoder without a conversion
 		// factor
@@ -175,6 +176,7 @@ public final class Constants {
 		public static final double ARM_DISCONT_RAD = (LOWER_ANGLE_LIMIT_RAD + UPPER_ANGLE_LIMIT_RAD) / 2 - Math.PI;
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.5;
+		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
 		// Arm buttons
 	}
 
@@ -356,16 +358,18 @@ public final class Constants {
 		public static final double ERROR_TOLERANCE_RAD = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0;
 		public static final double RESOLUTION_WIDTH_PIX = 640;
-		public static final double MOUNT_ANGLE_DEG_SHOOTER = 25; // 23.228
+		public static final double MOUNT_ANGLE_DEG_SHOOTER = 42.5; 
 		public static final double MOUNT_ANGLE_DEG_INTAKE = -22; // 23.228
-		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(56); // 16.6
+		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(11.5); // 16.6
 		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); // 16.6
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115;
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
-		public static final double HEIGHT_FROM_RESTING_ARM_TO_SUBWOOFER = Units.inchesToMeters(62.875);
-
+		public static final double HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS = Units.inchesToMeters(65.5675);
+		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(19.5);
+		public static final double END_EFFECTOR_BASE_ANGLE_RADS = Units.degreesToRadians(75);
+		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65);
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;

@@ -18,23 +18,20 @@ public class IntakeTesting extends Command {
     public void initialize() {
         intakeShooter.setRPMIntake(startingRPMWithNote);
     }
-
     @Override
     public void execute() {
-        if (!intakeShooter.outakeDetectsNote()) {
-            intakeShooter.setRPMIntake(startingRPMWithNote + increaseRPM * index);
+        if(!intakeShooter.outakeDetectsNote()) {
+            intakeShooter.setRPMIntake(startingRPMWithNote+increaseRPM*index);
             index++;
-            //SmartDashboard.putNumber("RPM Used", increaseRPM * index + startingRPMWithNote);
+            SmartDashboard.putNumber("RPM Used", increaseRPM*index + startingRPMWithNote);
 
         }
     }
-
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
-        //SmartDashboard.putNumber("finalRPMUsed", increaseRPM * index + startingRPMWithNote);
+        SmartDashboard.putNumber("finalRPMUsed", increaseRPM*index + startingRPMWithNote);
     }
-
     public boolean isFinished() {
         return intakeShooter.outakeDetectsNote();
     }
