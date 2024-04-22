@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.3.2"
 }
 
 java {
@@ -79,7 +79,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    implementation "com.github.deepbluerobotics:lib199:cc93080eab462da161d0d47eda253ac8b31495ee"
+    implementation "com.github.deepbluerobotics:lib199:0e5932a4219f3439ef2be3981a9189baf777f61e"
 }
 
 test {

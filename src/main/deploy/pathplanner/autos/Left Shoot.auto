@@ -1,0 +1,57 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7023114046228096,
+      "y": 6.71281009228685
+    },
+    "rotation": 65.7722546820459
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left-Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToSubwoofer"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchRPMShoot"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

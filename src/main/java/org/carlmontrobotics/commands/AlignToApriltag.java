@@ -4,18 +4,61 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 import static org.carlmontrobotics.Constants.Limelightc.*;
+
 import org.carlmontrobotics.subsystems.Drivetrain;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
-public class AlignToApriltag extends ProxyCommand {
-     
-     public AlignToApriltag(Drivetrain dt) {
-          super(() -> {
-               Rotation2d fieldOrientedTargetAngle = Rotation2d.fromDegrees(LimelightHelpers.getTX(SHOOTER_LL_NAME)).plus(Rotation2d.fromDegrees(dt.getHeading()));
-               return new RotateToFieldRelativeAngle(fieldOrientedTargetAngle, dt);
-          });
-     }
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj2.command.Command;
+
+public class AlignToApriltag extends Command {
+
+    public final TeleopDrive teleopDrive;
+    public final Drivetrain drivetrain;
+    private Limelight limelight;
+
+    public final PIDController rotationPID = new PIDController(thetaPIDController[0], thetaPIDController[1],
+            thetaPIDController[2]);
+
+    public AlignToApriltag(Drivetrain drivetrain, Limelight limelight) {
+        this.limelight = limelight;  
+        this.drivetrain = drivetrain;
+        this.teleopDrive = (TeleopDrive) drivetrain.getDefaultCommand();
+
+        rotationPID.enableContinuousInput(-180, 180);
+        Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
+                .minus(Rotation2d.fromDegrees(limelight.getRotateAngleDeg()));
+        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+        rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
+        SendableRegistry.addChild(this, rotationPID);
+        addRequirements(drivetrain);
+    }
+
+    @Override
+    public void execute() {
+        Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
+                .minus(Rotation2d.fromDegrees(limelight.getRotateAngleDeg()));
+        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+        if (teleopDrive == null)
+            drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
+        else {
+            double[] driverRequestedSpeeds = teleopDrive.getRequestedSpeeds();
+            drivetrain.drive(driverRequestedSpeeds[0], driverRequestedSpeeds[1],
+                    rotationPID.calculate(drivetrain.getHeading()));
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+        // SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
+        // SmartDashboard.putNumber("Error", rotationPID.getPositionError());
+        // return rotationPID.atSetpoint();
+    }
 }
