@@ -335,6 +335,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
 
+    NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
     NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
