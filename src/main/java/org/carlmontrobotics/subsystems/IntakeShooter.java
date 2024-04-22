@@ -4,6 +4,7 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.SensorFactory;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkBase;
@@ -38,8 +39,8 @@ public class IntakeShooter extends SubsystemBase {
 
     private double goalOutakeRPM = outakeEncoder.getVelocity();
 
-    private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
-    private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
+    private TimeOfFlight intakeDistanceSensor = SensorFactory.createPlayingWithFusionTimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
+    private TimeOfFlight OutakeDistanceSensor = SensorFactory.createPlayingWithFusionTimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
     
     public IntakeShooter() {
         // Figure out which ones to set inverted

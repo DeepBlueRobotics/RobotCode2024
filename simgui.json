@@ -16,6 +16,11 @@
           "open": true
         }
       },
+      "PlayingWithFusionTimeOfFlight[11]": {
+        "header": {
+          "open": true
+        }
+      },
       "SparkMax[15]": {
         "header": {
           "open": true
@@ -38,6 +43,7 @@
       "/Shuffleboard/arm SysID/quasistatic forward": "Command",
       "/SmartDashboard/Arm": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Intake Shooter": "Subsystem",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/moveClimber": "Command"
     },
@@ -63,6 +69,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Arm": {
+          "open": true
+        },
         "BL": {
           "open": true
         },
