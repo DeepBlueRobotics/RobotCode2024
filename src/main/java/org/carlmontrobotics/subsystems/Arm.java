@@ -77,7 +77,7 @@ public class Arm extends SubsystemBase {
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(RadiansPerSecond.of(0));
     private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
-
+    private static boolean babyMode;
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
     private boolean setPIDOff; 
     public Arm() {
@@ -153,11 +153,12 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        babyMode = SmartDashboard.getBoolean("babymode", false);
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                (babyMode)? MAX_FF_VEL_RAD_P_S_BABY: MAX_FF_VEL_RAD_P_S,
-                (babyMode)?MAX_FF_ACCEL_RAD_P_S_BABY: MAX_FF_ACCEL_RAD_P_S);
+                (MAX_FF_VEL_RAD_P_S),
+                (MAX_FF_ACCEL_RAD_P_S));
 
-        
+        //Aaron was here
         // ^ worst case scenario
         // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
@@ -243,11 +244,12 @@ public class Arm extends SubsystemBase {
         autoCancelArmCommand();
 
         if(SmartDashboard.getBoolean("babymode", babyMode) == true){
-            armPIDMaster.setOutputRange(MIN_VOLTAGE_BABY, MAX_VOLTAGE_BABY);
+            armPIDMaster.setOutputRange(-0.4/12, 0.4/12);
         }
         else{
-            armPIDMaster.setOutputRange(MIN_VOLTAGE, MAX_VOLTAGE);
+            armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
         }
+
 
     }
     public static void setSelector(int num) {
