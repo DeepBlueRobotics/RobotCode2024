@@ -4,6 +4,8 @@
 
 package org.carlmontrobotics;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -31,13 +33,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = this;
     m_robotContainer = new RobotContainer();
-  
-    //creates usb camera 
-    
-   
+    // SignalLogger.start();
+    // creates usb camera
+    // Record both DS control and joystick data
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   @Override
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    //SignalLogger.stop();
+    // SignalLogger.stop();
   }
 
   @Override

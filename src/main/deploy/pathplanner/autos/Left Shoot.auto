@@ -1,16 +1,16 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.7023114046228096,
+      "y": 6.71281009228685
+    },
+    "rotation": 65.7722546820459
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left-Safe"
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -18,34 +18,35 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmToSpeakerSafe"
+                  "name": "Intake"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RampRPMSpeakerSafe"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "StopRollers"
+                  "pathName": "Left-Pickup"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "PassToOutake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmToSubwoofer"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SwitchRPMShoot"
+                }
+              }
+            ]
           }
         }
       ]

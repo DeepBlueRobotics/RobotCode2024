@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7308159060762569,
+      "y": 4.432449976011063
+    },
+    "rotation": -56.76828893202063
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToSubwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SwitchRPMShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Preloaded Right-Pickup Subwoofer"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

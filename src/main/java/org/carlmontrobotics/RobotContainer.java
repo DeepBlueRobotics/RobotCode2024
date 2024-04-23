@@ -4,57 +4,63 @@
 
 package org.carlmontrobotics;
 
+// java
+import java.util.ArrayList;
+import java.util.List;
 
-//199 files
+// constants
+import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.OI.Manipulator.*;
+import static org.carlmontrobotics.Constants.Effectorc.*;
+
+// non static constants
+import org.carlmontrobotics.Constants.OI;
+import org.carlmontrobotics.Constants.OI.Driver;
+import org.carlmontrobotics.Constants.OI.Manipulator;
+import org.carlmontrobotics.Constants.Armc;
+import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
+import org.carlmontrobotics.Constants.Effectorc;
+// robotcode2024 imports
 import org.carlmontrobotics.commands.*;
 import org.carlmontrobotics.lib199.SensorFactory;
-
-import static org.carlmontrobotics.Constants.*;
-
-import org.carlmontrobotics.Constants.Armc;
-import org.carlmontrobotics.Constants.Effectorc;
-import org.carlmontrobotics.Constants.OI;
-import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
-import org.carlmontrobotics.Constants.OI.*;
-//subsystems
 import org.carlmontrobotics.subsystems.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-//199 files
-import org.carlmontrobotics.subsystems.*;
-import org.carlmontrobotics.commands.*;
 
-import static org.carlmontrobotics.Constants.OI;
-import static org.carlmontrobotics.Constants.Armc.AMP_ANGLE_RAD;
-import static org.carlmontrobotics.Constants.Armc.GROUND_INTAKE_POS;
-import static org.carlmontrobotics.Constants.OI.Manipulator.*;
+import com.pathplanner.lib.auto.AutoBuilder;
+//pathplanner
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathPlannerPath;
 
+// wpilib geometry classes
 import edu.wpi.first.math.geometry.Pose2d;
-//wpi
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-//controllers
+import edu.wpi.first.math.util.Units;
+// controllers
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+
+// dashboards
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//commands
+
+// commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-//control bindings
+
+// control bindings
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //pathplanner
@@ -79,26 +85,53 @@ import java.util.stream.Collectors;
 public class RobotContainer {
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
-  public final GenericHID driverController = new GenericHID(OI.Driver.port);
-  public final GenericHID manipulatorController = new GenericHID(OI.Manipulator.port);
+  public final GenericHID driverController = new GenericHID(Driver.port);
+  public final GenericHID manipulatorController = new GenericHID(Manipulator.port);
   private final IntakeShooter intakeShooter = new IntakeShooter();
+
+  // ignore warning, LED must be initialized
   private final Led led = new Led(intakeShooter);
   private final Arm arm = new Arm();
   private final Drivetrain drivetrain = new Drivetrain();
+  private final Limelight limelight = new Limelight(drivetrain);
   //private final Camera camera = new Camera();
-  /* These must be equal to the pathPlanner path names from the GUI! */
+
+  /* These are assumed to be equal to the AUTO ames in pathplanner */
+    /* These must be equal to the pathPlanner path names from the GUI! */
   // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
   //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
   private List<Command> autoCommands = new ArrayList<Command>();
   private SendableChooser<Integer> autoSelector = new SendableChooser<Integer>();
 
   private boolean hasSetupAutos = false;
-  private final String[] autoNames = new String[] { 
+  private final String[] autoNames = new String[] {
     /* These are assumed to be equal to the AUTO ames in pathplanner */
-    "Left-Amp",
+    "Left-Straight",
     "Center-Straight",
-    "Middle-Ram"
-      
+    "Right-Straight",
+    "Middle-Ram",
+
+    "Left-Auto Ruiner",
+    "Center-Auto Ruiner",
+    "Right-Auto Ruiner",
+
+    "Preloaded Left Shooting",
+    "Preloaded Right Shooting",
+
+    "Left Shoot",
+    "Center Shoot",
+    "Right Shoot",
+
+    "Left-Shoot For Left Subwoofer",
+    "Right-Shoot For Right Subwoofer",
+
+    // "Preloaded Left-Pickup Subwoofer",
+    // "Preloaded Right-Pickup Subwoofer",
+
+    "Left-Amp",
+    "Shoot on Right",
+    "Shoot Center"
+  
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -125,318 +158,122 @@ public class RobotContainer {
       autoSelectorTab.add(autoSelector)
         .withSize(2, 1);
     }
-		setDefaultCommands();
-		setBindingsDriver();
-		setBindingsManipulatorENDEFF();
+
+    setDefaultCommands();
+    setBindingsDriver();
+    //setBindingsManipulatorENDEFF();
+    setBindingsManipulatorNEO();
   }
 
-	private void setDefaultCommands() {
+  private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new TeleopDrive(
-      drivetrain,
-      () -> ProcessedAxisValue(driverController, Axis.kLeftY),
-      () -> ProcessedAxisValue(driverController, Axis.kLeftX),
-      () -> ProcessedAxisValue(driverController, Axis.kRightX),
-      () -> driverController.getRawButton(OI.Driver.slowDriveButton)
-    ));
+        drivetrain,
+        () -> ProcessedAxisValue(driverController, Axis.kLeftY),
+        () -> ProcessedAxisValue(driverController, Axis.kLeftX),
+        () -> ProcessedAxisValue(driverController, Axis.kRightX),
+        () -> driverController.getRawButton(Driver.slowDriveButton)));
+    // TODO: Are we going to use default command for intakeshooter?
     intakeShooter.setDefaultCommand(new TeleopEffector(
-      intakeShooter,
+    intakeShooter,
+    () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
+    manipulatorController, driverController));
+    arm.setDefaultCommand(new TeleopArm(
+      arm,
       () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
     ));
-  
-    
+
+
   }
+
   private void setBindingsDriver() {
-    new JoystickButton(driverController, Driver.resetFieldOrientationButton).onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
-    
-    // new JoystickButton(driverController, OI.Driver.slowDriveButton).onTrue(new ParallelCommandGroup(
-    //   new InstantCommand(()->drivetrain.setFieldOriented(false)),
-    //   new PrintCommand("Setting to ROBOT ORIENTED!!\nRO\nRO\nRO\n"))
-    // ).onFalse(new ParallelCommandGroup(
-    //   new InstantCommand(()->drivetrain.setFieldOriented(true)),
-    //   new PrintCommand("Setting to FIELD FORI!!\nFO\nFO\nFO\n"))
-    // );
+    new JoystickButton(driverController, Driver.resetFieldOrientationButton)
+        .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
+    // axisTrigger(driverController, Axis.kRightTrigger)
+    //     .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+    //         new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
+    new POVButton(driverController, 0).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight));
+    axisTrigger(driverController, Axis.kLeftTrigger)
+        //.onTrue(new AlignToApriltag(drivetrain, limelight));
+        .onTrue(new InstantCommand(()->drivetrain.setFieldOriented(false)))
+        .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
 
-    new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0),drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(270),drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative180Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180),drivetrain));
-    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg).onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90),drivetrain));
+    axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+            new IntakeNEO(intakeShooter)));
+    new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
+        .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
+        .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(270), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative180Deg)
+        .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(180), drivetrain));
+    new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
+        .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
   }
+  private void setBindingsManipulatorNEO() {
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
+
+    new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
+   new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
+
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+        .onTrue(
+            new SwitchRPMShootNEO(intakeShooter));
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+        .onFalse(
+            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+            new IntakeNEO(intakeShooter)));
+    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+        .onFalse(
+            new InstantCommand(intakeShooter::stopIntake, intakeShooter));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kRightStick.value).whileTrue(new PassToIntake(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
+    //TODO: test angles for pov button BEFORE climbing
+    new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
+    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
+  }
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
-    new JoystickButton(manipulatorController, Manipulator.EJECT_BUTTON).onTrue(new Eject(intakeShooter));
-    new JoystickButton(manipulatorController, EJECT_BUTTON).onFalse(new InstantCommand());
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
-    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new PassToOutake(intakeShooter));
-    new JoystickButton(manipulatorController, AMP_BUTTON).onFalse(new InstantCommand());
-    new JoystickButton(manipulatorController, Button.kLeftBumper.value).onTrue(new OppositeEject(intakeShooter));
+
+    new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+   new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
+
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-      .onTrue(
-        new PassToOutake(intakeShooter)
-      );
+        .onTrue(
+            new SwitchRPMShoot(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-      .onFalse(
-        new InstantCommand(intakeShooter::stopOutake, intakeShooter)
-      );
+        .onFalse(
+            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-      .onTrue(
-        new Intake(intakeShooter)
-      );
+        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+            new Intake(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-      .onFalse(
-        new InstantCommand(intakeShooter::stopIntake, intakeShooter)
-      );
-      new JoystickButton(manipulatorController, Button.kY.value).onTrue(new MoveToPos(arm, AMP_ANGLE_RAD));
-      new JoystickButton(manipulatorController, Button.kA.value).onTrue(new MoveToPos(arm, GROUND_INTAKE_POS));
-      new JoystickButton(manipulatorController, Button.kX.value).onTrue(new IntakeTesting(intakeShooter));
-        //new WaitCommand(.5),
-        //new MoveToPos(arm, GROUND_INTAKE_POS)
-       //MoveToPos(arm, GROUND_INTAKE_POS));
-      
-    //NEW BINDINGS(easier for manipulator)
-    //Xbox left joy Y axis -> raw Intake/Outtake control
-    //Xbox right joy Y axis -> raw Arm control
-    //Xbox right trigger axis -> Intake pos + intake
-    //Xbox left trigger axis -> amp pos , eject into amp
-    //Xbox left bumper button -> CLOSE Speaker pos , Fire
-    //Xbox right bumper button -> SAFE  Speaker pos , Fire
-    //Xbox X button -> goto Intake pos
-    //Xbox Y button -> Eject rpm
-
-    /*/Multi-commands/*/
-    /*
-    axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
-      .onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
-        new Intake(intakeShooter)
-      ));
-    /*//*/
-    new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka podium
-      .onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
-        new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM),
-        new PassToOutake(intakeShooter),
-        new WaitCommand(1),
-        new InstantCommand(intakeShooter::stopOutake)
-      ));
-    new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
-      .onTrue(new SequentialCommandGroup(
-        new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
-        new RampToRPM(intakeShooter, Effectorc.SAFE_RPM),
-        new PassToOutake(intakeShooter),
-        new WaitCommand(1),
-        new InstantCommand(intakeShooter::stopOutake)
-      ));
-    axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
-      .onTrue(new SequentialCommandGroup(
-        //new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
-        new Eject(intakeShooter)
-      ));
-    /*//*/
-    new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_POS)
-      .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
-    new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
-      .onTrue(new Eject(intakeShooter));
-    new JoystickButton(manipulatorController, OI.Manipulator.RAISE_CLIMBER)
-      .onTrue(new MoveToPos(arm, Armc.CLIMBER_UP_ANGLE_RAD));
-    new JoystickButton(manipulatorController, OI.Manipulator.LOWER_CLIMBER)
-      .onTrue(new MoveToPos(arm, Armc.CLIMBER_DOWN_ANGLE_RAD));
-    // new JoystickButton(manipulatorController, Button.kLeftStick.value)
-    //   .onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
-
-*/
-    //TODO: ask charles if passing in controller is okay
-  }
-  // private void setBindingsManipulatorARM() {
-	// //NEW BINDINGS(easier for manipulator)
-  //   //Xbox left joy Y axis -> raw Intake/Outtake control
-  //   //Xbox right joy Y axis -> raw Arm control
-  //   //Xbox right trigger axis -> Intake pos + intake
-  //   //Xbox left trigger axis -> amp pos , eject into amp
-  //   //Xbox left bumper button -> CLOSE Speaker pos , Fire
-  //   //Xbox right bumper button -> SAFE  Speaker pos , Fire
-  //   //Xbox X button -> goto Intake pos
-  //   //Xbox Y button -> Eject rpm
-
-  //   /*/Multi-commands/*/
-    
-  //   axisTrigger(manipulatorController, OI.Manipulator.INTAKE_AX)
-  //     .onTrue(new SequentialCommandGroup(
-  //       new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD),
-  //       new Intake(intakeShooter)
-  //     ));
-  //   /*//*/
-  //   new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_CLOSE)//aka podium
-  //     .onTrue(new SequentialCommandGroup(
-  //       new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD),
-  //       new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM),
-  //       new PassToOutake(intakeShooter),
-  //       new WaitCommand(1),
-  //       new InstantCommand(intakeShooter::stopOutake)
-  //     ));
-  //   new JoystickButton(manipulatorController, OI.Manipulator.SPEAKER_SAFE)
-  //     .onTrue(new SequentialCommandGroup(
-  //       new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD),
-  //       new RampToRPM(intakeShooter, Effectorc.SAFE_RPM),
-  //       new PassToOutake(intakeShooter),
-  //       new WaitCommand(1),
-  //       new InstantCommand(intakeShooter::stopOutake)
-  //     ));
-  //   axisTrigger(manipulatorController, OI.Manipulator.AMP_AX)//MELEE ATTACK
-  //     .onTrue(new SequentialCommandGroup(
-  //       new MoveToPos(arm, Armc.AMP_ANGLE_RAD),
-  //       new Eject(intakeShooter)
-  //     ));
-  //   /*//*/
-  //   new JoystickButton(manipulatorController, OI.Manipulator.INTAKE_POS)
-  //     .onTrue(new MoveToPos(arm, Armc.INTAKE_ANGLE_RAD));
-  //   new JoystickButton(manipulatorController, OI.Manipulator.EJECT_RPM)
-  //     .onTrue(new Eject(intakeShooter));
-  //   new JoystickButton(manipulatorController, OI.Manipulator.RAISE_CLIMBER)
-  //     .onTrue(new MoveToPos(arm, Armc.CLIMBER_UP_ANGLE_RAD));
-  //   new JoystickButton(manipulatorController, OI.Manipulator.LOWER_CLIMBER)
-  //     .onTrue(new MoveToPos(arm, Armc.CLIMBER_DOWN_ANGLE_RAD));
-  //   // new JoystickButton(manipulatorController, Button.kLeftStick.value)
-  //   //   .onTrue(new InstantCommand(() -> {manipulatorController.setRumble(RumbleType.kBothRumble, 1);}));
-	
-  // }
-  private void registerAutoCommands(){
-    ////AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
-    NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
-
-    NamedCommands.registerCommand("ArmToSpeakerSafe", new MoveToPos(arm, Armc.SAFE_ZONE_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToSpeakerPodium", new MoveToPos(arm, Armc.PODIUM_ANGLE_RAD));
-    NamedCommands.registerCommand("ArmToAmp", new MoveToPos(arm, Armc.AMP_ANGLE_RAD));
-
-    NamedCommands.registerCommand("RampRPMSpeakerSafe",
-      new RampToRPM(intakeShooter, Effectorc.SAFE_RPM));
-    NamedCommands.registerCommand("RampRPMSpeakerSubwoofer",
-      new RampToRPM(intakeShooter, Effectorc.SUBWOOFER_RPM));
-
-    NamedCommands.registerCommand("PassToOutake", new PassToOutake(intakeShooter));
-    NamedCommands.registerCommand("PassToIntake", new PassToIntake(intakeShooter));
-
-    NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
-    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
-    NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
-      new InstantCommand(intakeShooter::stopIntake),
-      new InstantCommand(intakeShooter::stopOutake)
-    ));
-  }
-  private void setupAutos() {
-    ////CREATING PATHS from files
-    {
-      for (int i=0;i<autoNames.length;i++){
-        String name = autoNames[i];
-        
-        autoCommands.add(new SequentialCommandGroup(
-          AutoBuilder.pathfindToPose(
-            // PathPlannerAuto.getStaringPoseFromAutoFile(name), 
-            PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
-            Autoc.pathConstraints ),
-          new PathPlannerAuto(name)
-        ));
-      }
-      
-      // ArrayList<PathPlannerPath> autoPaths = new ArrayList<PathPlannerPath>();
-      // for (String name : autoNames) {
-      //   autoPaths.add(PathPlannerPath.fromPathFile(name));
-      // }
+        .onFalse(
+            new InstantCommand(intakeShooter::stopIntake, intakeShooter));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
+    //TODO: test angles for pov button BEFORE climbing
+    new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
+    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
 
 
-      // //AutoBuilder is setup in the drivetrain.
-
-      // //note: is it .followPath or .buildAuto(name) + PathPlannerAuto​(autoName) ???
-      // ////CREATE COMMANDS FROM PATHS
-      // autoCommands = autoPaths.stream().map(
-      //   (PathPlannerPath path) -> AutoBuilder.followPath(path)
-      // ).collect(Collectors.toList());
-
-    }
-    
-
-    //AUTOGENERATED AUTO FOR SLOT 2
-    {
-      Pose2d currPos = drivetrain.getPose();
-      // Create a list of bezier points from poses. Each pose represents one waypoint.
-      // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-              currPos,
-              currPos.plus(new Transform2d(5,0,new Rotation2d(0)))
-      );
-      /**
-       * PATHPLANNER SETTINGS
-       * Robot Width (m): .91
-       * Robot Length(m): .94
-       * Max Module Spd (m/s): 4.30
-       * Default Constraints
-       * Max Vel: 1.54, Max Accel: 6.86
-       * Max Angvel: 360, Max AngAccel: 360 (guesses!)
-       */
-      // Create the path using the bezier points created above
-      PathPlannerPath path = new PathPlannerPath(
-              bezierPoints,
-              /*m/s, m/s^2, rad/s, rad/s^2 */
-              Autoc.pathConstraints,
-              new GoalEndState(0, currPos.getRotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-      );
-      // Prevent the path from being flipped if the coordinates are already correct
-      path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
-      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-         path.flipPath();
-      }
-
-      //NOTHING
-      autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
-      //RAW FORWARD command
-      autoCommands.add(1, new LastResortAuto(drivetrain));
-      //smart forward command
-      autoCommands.add(2, AutoBuilder.followPath(path));//no events so just use path instead of auto
-      
-      // AutoBuilder.getAutoCommandFromJson((JSONObject) parser.parse(new FileReader("../deploy/pathplanner/autos/"+"Left-Straight"+".auto")));
-    }
   }
 
-  public Command getAutonomousCommand() { 
-    if (!hasSetupAutos){
-      setupAutos();
-      /*
-      //get the funny ports on the robot
-      for(int a = 0; a < autoSelectors.length; a++) 
-        autoSelectors[a] = new DigitalInput(a);//set up blank list
-      */
-      hasSetupAutos=true;
-    }
-    return autoCommands.get(1); //hard-coded PP straight auto
-    // Integer autoIndex = autoSelector.getSelected();
 
-    // if (autoIndex!=null && autoIndex!=0){
-    //   new PrintCommand("Running selected auto: "+autoSelector.toString());
-    //   return autoCommands.get(autoIndex.intValue());
-    // }
-    // new PrintCommand("No auto :(");
-    // return null;
-
-    /*
-
-    //check which ones are short-circuiting
-      for(int i = 2; i < autoSelectors.length; i++) { // skip index 0, reserved for null auto
-        if(!autoSelectors[i].get()) {
-          String name = autoNames[i-1];
-          new PrintCommand("Using Path " + i + ": " + name);
-          return new PathPlannerAuto(name);
-        }
-      }
-
-    if (autoSelectors[1].get())//hard-coded straight auto at index 1
-      return autoCommands.get(0);
-
-    //return autoPath == null ? new PrintCommand("No Autonomous Routine selected") : autoCommand;
-    return new PrintCommand("No Auto selected | Auto selector broke :(");//nothing at index 0
-    */
-	}
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
@@ -489,18 +326,122 @@ public class RobotContainer {
     return (Math.abs(axOut) <= OI.JOY_THRESH) ? 0.0 : axOut;
   }
 
-    /**
-   * Returns a new instance of Trigger based on the given Joystick and Axis objects.
-   * The Trigger is triggered when the absolute value of the stick value on the specified axis
+  /**
+   * Returns a new instance of Trigger based on the given Joystick and Axis
+   * objects.
+   * The Trigger is triggered when the absolute value of the stick value on the
+   * specified axis
    * exceeds a minimum threshold value.
    *
    * @param stick The Joystick object to retrieve stick value from.
-   * @param axis The Axis object to retrieve value from the Joystick.
-   * @return A new instance of Trigger based on the given Joystick and Axis objects.
-   * @throws NullPointerException if either stick or axis is null.
+   * @param axis  The Axis object to retrieve value from the Joystick.
+   * @return A new instance of Trigger based on the given Joystick and Axis
+   *         objects.
+*   * @throws NullPointerException if either stick or axis is null.
    */
   private Trigger axisTrigger(GenericHID controller, Axis axis) {
     return new Trigger(() -> Math.abs(getStickValue(controller, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);
   }
+
+  private void registerAutoCommands(){
+    ////AUTO-USABLE COMMANDS
+    NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
+    NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
+
+    //  NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
+    NamedCommands.registerCommand("ArmToAmp", new ArmToPos(arm, Armc.AMP_ANGLE_RAD,0));
+    NamedCommands.registerCommand("ArmToSubwoofer", new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD,1));
+    NamedCommands.registerCommand("ArmToPodium", new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD, 2));
+    NamedCommands.registerCommand("ArmToGround", new ArmToPos(arm, GROUND_INTAKE_POS, 1));
+
+
+    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
+
+    NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
+
+    NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
+    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
+    NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
+      new InstantCommand(intakeShooter::stopIntake),
+      new InstantCommand(intakeShooter::stopOutake)
+    ));
+  }
+  private void setupAutos() {
+    ////CREATING PATHS from files
+    {
+      for (int i=0;i<autoNames.length;i++){
+        String name = autoNames[i];
+
+        autoCommands.add(new PathPlannerAuto(name));
+
+        /*         // TODO: Charles' opinion: we shouldn't 7689[n' hhave it path find to the starting pose at the start of match
+        new SequentialCommandGroup(
+          AutoBuilder.pathfindToPose(
+            // PathPlannerAuto.getStaringPoseFromAutoFile(name),
+            PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
+            Autoc.pathConstraints ),
+          new PathPlannerAuto(name)
+        );*/
+      }
+    }
+
+
+    //AUTOGENERATED AUTO FOR SLOT 2
+    {
+      Pose2d currPos = drivetrain.getPose();
+      // Create a list of bezier points from poses. Each pose represents one waypoint.
+      // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
+      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+              currPos,
+              currPos.plus(new Transform2d(0,1,new Rotation2d(0)))
+      );
+      /**
+       * PATHPLANNER SETTINGS
+       * Robot Width (m): .91
+       * Robot Length(m): .94
+       * Max Module Spd (m/s): 4.30
+       * Default Constraints
+       * Max Vel: 1.54, Max Accel: 6.86
+       * Max Angvel: 360, Max AngAccel: 360 (guesses!)
+       */
+      // Create the path using the bezier points created above
+      PathPlannerPath path = new PathPlannerPath(
+              bezierPoints,
+              /*m/s, m/s^2, rad/s, rad/s^2 */
+              Autoc.pathConstraints,
+              new GoalEndState(0, currPos.getRotation())
+      );
+      // Prevent the path from being flipped if the coordinates are already correct
+      path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+         path.flipPath();
+      }
+
+      //NOTHING
+      autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
+      //RAW FORWARD command
+      autoCommands.add(1, new LastResortAuto(drivetrain));
+      //smart forward command
+      autoCommands.add(2, new SequentialCommandGroup(
+        AutoBuilder.followPath(path)
+      ));
+      //no events so just use path instead of auto
+
+    }
+  }
+
+  public Command getAutonomousCommand() {
+    if (!hasSetupAutos){
+      setupAutos();
+      hasSetupAutos=true;
+    }
+    Integer autoIndex = autoSelector.getSelected();
+
+    if (autoIndex!=null && autoIndex!=0){
+      new PrintCommand("Running selected auto: "+autoSelector.toString());
+      return autoCommands.get(autoIndex.intValue());
+    }
+    return new PrintCommand("No auto :(");
+	}
 
 }

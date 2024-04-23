@@ -30,7 +30,8 @@ public class TeleopDrive extends Command {
   /**
    * Creates a new TeleopDrive.
    */
-  public TeleopDrive(Drivetrain drivetrain, DoubleSupplier fwd, DoubleSupplier str, DoubleSupplier rcw, BooleanSupplier slow) {
+  public TeleopDrive(Drivetrain drivetrain, DoubleSupplier fwd, DoubleSupplier str, DoubleSupplier rcw,
+      BooleanSupplier slow) {
     addRequirements(this.drivetrain = drivetrain);
     this.fwd = fwd;
     this.str = str;
@@ -41,10 +42,10 @@ public class TeleopDrive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("slow turn const", kSlowDriveRotation);
-    SmartDashboard.putNumber("slow speed const", kSlowDriveSpeed);
-    SmartDashboard.putNumber("normal turn const", kNormalDriveRotation);
-    SmartDashboard.putNumber("normal speed const", kNormalDriveSpeed);
+    // SmartDashboard.putNumber("slow turn const", kSlowDriveRotation);
+    // SmartDashboard.putNumber("slow speed const", kSlowDriveSpeed);
+    // SmartDashboard.putNumber("normal turn const", kNormalDriveRotation);
+    // SmartDashboard.putNumber("normal speed const", kNormalDriveSpeed);
     prevTimestamp = Timer.getFPGATimestamp();
   }
 
@@ -54,35 +55,42 @@ public class TeleopDrive extends Command {
     double currentTime = Timer.getFPGATimestamp();
     robotPeriod = currentTime - prevTimestamp;
     double[] speeds = getRequestedSpeeds();
-    SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
+    // SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
     prevTimestamp = currentTime;
-    kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
-    kSlowDriveSpeed = SmartDashboard.getNumber("slow speed const", kSlowDriveSpeed);
-    kNormalDriveRotation = SmartDashboard.getNumber("normal turn const", kNormalDriveRotation);
-    kNormalDriveSpeed = SmartDashboard.getNumber("normal speed const", kNormalDriveSpeed);
+    // kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
+    // kSlowDriveSpeed = SmartDashboard.getNumber("slow speed const", kSlowDriveSpeed);
+    // kNormalDriveRotation = SmartDashboard.getNumber("normal turn const", kNormalDriveRotation);
+    // kNormalDriveSpeed = SmartDashboard.getNumber("normal speed const", kNormalDriveSpeed);
 
-
-    SmartDashboard.putNumber("fwd", speeds[0]);
-    SmartDashboard.putNumber("strafe", speeds[1]);
-    SmartDashboard.putNumber("turn", speeds[2]);
+    // SmartDashboard.putNumber("fwd", speeds[0]);
+    // SmartDashboard.putNumber("strafe", speeds[1]);
+    // SmartDashboard.putNumber("turn", speeds[2]);
     drivetrain.drive(speeds[0], speeds[1], speeds[2]);
   }
 
   public double[] getRequestedSpeeds() {
-    // Sets all values less than or equal to a very small value (determined by the idle joystick state) to zero.
-    // Used to make sure that the robot does not try to change its angle unless it is moving,
+    // Sets all values less than or equal to a very small value (determined by the
+    // idle joystick state) to zero.
+    // Used to make sure that the robot does not try to change its angle unless it
+    // is moving,
     double forward = fwd.getAsDouble();
     double strafe = str.getAsDouble();
     double rotateClockwise = rcw.getAsDouble();
-    SmartDashboard.putNumber("fwdIN", forward);
-    SmartDashboard.putNumber("strafeIN", strafe);
-    SmartDashboard.putNumber("turnIN", rotateClockwise);
-    if (Math.abs(forward) <= Constants.OI.JOY_THRESH) forward = 0.0;
-    else forward *= maxForward;
-    if (Math.abs(strafe) <= Constants.OI.JOY_THRESH) strafe = 0.0;
-    else strafe *= maxStrafe;
-    if (Math.abs(rotateClockwise) <= Constants.OI.JOY_THRESH) rotateClockwise = 0.0;
-    else rotateClockwise *= maxRCW;
+    // SmartDashboard.putNumber("fwdIN", forward);
+    // SmartDashboard.putNumber("strafeIN", strafe);
+    // SmartDashboard.putNumber("turnIN", rotateClockwise);
+    if (Math.abs(forward) <= Constants.OI.JOY_THRESH)
+      forward = 0.0;
+    else
+      forward *= maxForward;
+    if (Math.abs(strafe) <= Constants.OI.JOY_THRESH)
+      strafe = 0.0;
+    else
+      strafe *= maxStrafe;
+    if (Math.abs(rotateClockwise) <= Constants.OI.JOY_THRESH)
+      rotateClockwise = 0.0;
+    else
+      rotateClockwise *= maxRCW;
 
     double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
     double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
@@ -97,9 +105,10 @@ public class TeleopDrive extends Command {
     double accelerationX = (forward - currentForwardVel) / robotPeriod;
     double accelerationY = (strafe - currentStrafeVel) / robotPeriod;
     double translationalAcceleration = Math.hypot(accelerationX, accelerationY);
-    SmartDashboard.putNumber("Translational Acceleration", translationalAcceleration);
-    if(translationalAcceleration > autoMaxAccelMps2) {
-      Translation2d limitedAccelerationVector = new Translation2d(autoMaxAccelMps2, Rotation2d.fromRadians(Math.atan2(accelerationY, accelerationX)));
+    // SmartDashboard.putNumber("Translational Acceleration", translationalAcceleration);
+    if (translationalAcceleration > autoMaxAccelMps2 && false) {
+      Translation2d limitedAccelerationVector = new Translation2d(autoMaxAccelMps2,
+          Rotation2d.fromRadians(Math.atan2(accelerationY, accelerationX)));
       Translation2d limitedVelocityVector = limitedAccelerationVector.times(robotPeriod);
       currentForwardVel += limitedVelocityVector.getX();
       currentStrafeVel += limitedVelocityVector.getY();
@@ -107,18 +116,21 @@ public class TeleopDrive extends Command {
       currentForwardVel = forward;
       currentStrafeVel = strafe;
     }
-    SmartDashboard.putNumber("current velocity", Math.hypot(currentForwardVel, currentStrafeVel));
+    // SmartDashboard.putNumber("current velocity", Math.hypot(currentForwardVel, currentStrafeVel));
 
     // ATM, there is no rotational acceleration limit
     // currentForwardVel = forward;
     // currentStrafeVel = strafe;
-    // If the above math works, no velocity should be greater than the max velocity, so we don't need to limit it.
+    // If the above math works, no velocity should be greater than the max velocity,
+    // so we don't need to limit it.
 
-    return new double[] {currentForwardVel, currentStrafeVel, -rotateClockwise};
+    return new double[] { currentForwardVel, currentStrafeVel, -rotateClockwise };
   }
 
   public boolean hasDriverInput() {
-    return Math.abs(fwd.getAsDouble()) > Constants.OI.JOY_THRESH || Math.abs(str.getAsDouble()) > Constants.OI.JOY_THRESH || Math.abs(rcw.getAsDouble()) > Constants.OI.JOY_THRESH;
+    return Math.abs(fwd.getAsDouble()) > Constants.OI.JOY_THRESH
+        || Math.abs(str.getAsDouble()) > Constants.OI.JOY_THRESH
+        || Math.abs(rcw.getAsDouble()) > Constants.OI.JOY_THRESH;
   }
 
   // Called once the command ends or is interrupted.
