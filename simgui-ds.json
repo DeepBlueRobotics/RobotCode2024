@@ -52,7 +52,7 @@
           "incKey": 75
         }
       ],
-      "axisCount": 2,
+      "axisCount": 5,
       "buttonCount": 4,
       "buttonKeys": [
         77,
@@ -60,7 +60,7 @@
         46,
         47
       ],
-      "povCount": 0
+      "povCount": 1
     },
     {
       "axisConfig": [
@@ -97,7 +97,8 @@
       "useGamepad": true
     },
     {
-      "guid": "Keyboard1"
+      "guid": "Keyboard1",
+      "name": "Manipulator"
     }
   ]
 }
