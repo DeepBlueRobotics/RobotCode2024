@@ -17,22 +17,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class MoveToNote extends Command {
   private final Drivetrain dt;
   private final Limelight ll;
-    private Timer timer = new Timer();
+  private Timer timer = new Timer();
+  private boolean originalFieldOrientation;
   /** Creates a new MoveToNote. */
   public MoveToNote(Drivetrain dt, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.dt=dt);
-    addRequirements(this.ll=ll);
+    this.ll = ll;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    new AlignToNote(dt);
+    originalFieldOrientation = dt.getFieldOriented();
     timer.reset();
     timer.start();
-    //new Intake().finallyDo(()->{this.end(false);});
-    SmartDashboard.putBoolean("end", false);
     dt.setFieldOriented(false);
   }
 
@@ -42,7 +41,6 @@ public class MoveToNote extends Command {
     double radErr = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double distErr = ll.getDistanceToNoteMeters(); //meters
     double forwardErr = distErr * Math.cos(radErr);
-    // dt.drive(0,0,0);
     dt.drive(Math.max(forwardErr*2, .5), 0, 0);
     //180deg is about 6.2 rad/sec, min is .5rad/sec
   }
@@ -50,7 +48,7 @@ public class MoveToNote extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    dt.setFieldOriented(true);
+    dt.setFieldOriented(originalFieldOrientation);
   }
 
   // Returns true when the command should end.
