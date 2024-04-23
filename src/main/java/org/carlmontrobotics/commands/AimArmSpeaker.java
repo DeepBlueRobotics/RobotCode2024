@@ -19,14 +19,14 @@ public class AimArmSpeaker extends Command {
   public AimArmSpeaker(Arm arm, Limelight ll) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.arm = arm);
-    addRequirements(this.ll = ll);
+    this.ll = ll;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     double goal = ll.getArmAngleToShootSpeakerRad();
-    //arm.setArmTarget(goal);
+    arm.setArmTarget(goal);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,7 +41,6 @@ public class AimArmSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return arm.armAtSetpoint();
     return false;
   }
 }
