@@ -5,6 +5,9 @@
 package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.Limelightc.*;
+
+import org.carlmontrobotics.Constants.Limelightc;
+
 import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import org.carlmontrobotics.subsystems.Drivetrain;
@@ -47,8 +50,8 @@ public class AutoMATICALLYGetNote extends Command {
 
   @Override
   public void execute() {
-    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(INTAKE_LL_NAME));
-    double forwardDistErrMeters = ll.getDistanceToNoteMeters();
+    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
+    double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
     dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
