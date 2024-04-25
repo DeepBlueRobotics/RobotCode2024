@@ -117,6 +117,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
+      // Put any configuration overrides to the dashboard and the terminal
+      SmartDashboard.putData("CONFIG overrides", Config.CONFIG);
+      System.out.println(Config.CONFIG);
+
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
