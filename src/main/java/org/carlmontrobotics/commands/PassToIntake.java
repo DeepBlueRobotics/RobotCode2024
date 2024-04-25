@@ -1,12 +1,6 @@
 package org.carlmontrobotics.commands;
 
-
-import static org.carlmontrobotics.Constants.Effectorc.*;
-import static org.carlmontrobotics.Constants.Led.*;
-
-import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToIntake extends Command{

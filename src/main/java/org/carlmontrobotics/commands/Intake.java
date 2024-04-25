@@ -1,15 +1,10 @@
 package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.Effectorc.*;
-
-import org.carlmontrobotics.Constants;
-
 import org.carlmontrobotics.subsystems.IntakeShooter;
-import org.carlmontrobotics.subsystems.Led;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+
 public class Intake extends Command {
   // intake until sees game peice or 4sec has passed
   private Timer timer = new Timer();
