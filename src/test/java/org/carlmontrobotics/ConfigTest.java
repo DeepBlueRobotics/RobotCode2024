@@ -65,7 +65,7 @@ public class ConfigTest {
 
     @Test
     @EnabledIfEnvironmentVariable(named = "testCONFIGIsDefault", matches = "true", disabledReason = "not trying to modify GitHub master")
-    public void testCONFIGIsDefault() throws Exception {
+    public void testNoConfigSettingsOverridden() throws Exception {
         var publishedStrings = new HashMap<String, String>();
         try (SendableBuilder testBuilder = new SendableBuilderImpl() {
             @Override

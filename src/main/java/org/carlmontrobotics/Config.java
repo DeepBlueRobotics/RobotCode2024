@@ -12,7 +12,11 @@ abstract class Config implements Sendable {
     public static final Config CONFIG = new Config() {
         {
             // Override config settings here, like this:
-            this.exampleFlagEnabled = true;
+            // this.exampleFlagEnabled = true;
+
+            // NOTE: PRs with overrides will NOT be merged because we don't want them
+            // polluting the master branch.
+            // Feel free to add them when testing, but remove them before pushing.
         }
     };
 
