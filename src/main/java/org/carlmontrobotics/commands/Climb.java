@@ -14,6 +14,7 @@ public class Climb extends Command {
     // correctly
     private Arm arm;
     private Timer timer = new Timer();
+    private boolean babyMode;
     public Climb(Arm arm) {
         this.arm = arm;
         addRequirements(arm);
@@ -22,15 +23,17 @@ public class Climb extends Command {
 
     @Override
     public void initialize() {
+        babyMode = SmartDashboard.getBoolean("babymode", false);
         arm.setLimitsForClimbOn();
         arm.setBooleanDrive(false);
     }
 
     @Override
     public void execute() {
+        if(!babyMode) {
         arm.driveArm(-12);
         timer.start();
-        
+        }
     }
     
     @Override
@@ -48,6 +51,6 @@ public class Climb extends Command {
     @Override
     public boolean isFinished() {
         // TODO: Figure out the actual climb position
-        return arm.getArmPos() - (CLIMB_FINISH_POS) < Units.degreesToRadians(0.1) || timer.get() >= 5;
+        return arm.getArmPos() - (CLIMB_FINISH_POS) < Units.degreesToRadians(0.1) || timer.get() >= 10 || babyMode;
     }
 }

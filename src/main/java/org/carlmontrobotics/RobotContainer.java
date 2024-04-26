@@ -63,6 +63,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  private static boolean babyMode = false;
+  
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(Driver.port);
@@ -117,6 +119,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
+      SmartDashboard.setDefaultBoolean("babymode", babyMode);
+      SmartDashboard.setPersistent("babymode");
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
@@ -142,6 +146,9 @@ public class RobotContainer {
     //setBindingsManipulatorENDEFF();
     setBindingsManipulatorNEO();
   }
+  
+
+ 
 
   private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new TeleopDrive(
