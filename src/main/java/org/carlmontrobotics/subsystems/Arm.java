@@ -157,10 +157,12 @@ public class Arm extends SubsystemBase {
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 (MAX_FF_VEL_RAD_P_S),
                 (MAX_FF_ACCEL_RAD_P_S));
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
             rotationsSim = new SimDeviceSim("AbsoluteEncoder", ARM_MOTOR_PORT_MASTER).getDouble("rotations");
         }
+
     }
     
 
@@ -176,7 +178,7 @@ public class Arm extends SubsystemBase {
         //Aaron was here
         // ^ worst case scenario
         // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
-        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
+
         SmartDashboard.putData(this);
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
