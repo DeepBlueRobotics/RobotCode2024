@@ -120,7 +120,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
-      SensorFactory.configureCamera();
+      // SensorFactory.configureCamera();
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
