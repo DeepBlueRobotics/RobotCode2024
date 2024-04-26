@@ -1,7 +1,6 @@
 package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToIntake extends Command{

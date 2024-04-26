@@ -119,6 +119,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
+      // SensorFactory.configureCamera();
       SmartDashboard.setDefaultBoolean("babymode", babyMode);
       SmartDashboard.setPersistent("babymode");
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot

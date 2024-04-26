@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     robot = this;
     m_robotContainer = new RobotContainer();
     // SignalLogger.start();
-
+    // creates usb camera
     // Record both DS control and joystick data
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
