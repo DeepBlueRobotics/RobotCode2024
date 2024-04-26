@@ -142,7 +142,15 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
-
+        if(SmartDashboard.getBoolean("babymode", babyMode) == true){
+            armPIDMaster.setOutputRange(-0.3/12, 0.3/12);
+        }
+        else{
+            armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
+        }
+        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                (MAX_FF_VEL_RAD_P_S),
+                (MAX_FF_ACCEL_RAD_P_S));
         SmartDashboard.putBoolean("arm is at pos", false);
     }
     
@@ -154,9 +162,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         babyMode = SmartDashboard.getBoolean("babymode", false);
-        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                (MAX_FF_VEL_RAD_P_S),
-                (MAX_FF_ACCEL_RAD_P_S));
+        
 
         //Aaron was here
         // ^ worst case scenario
@@ -242,13 +248,6 @@ public class Arm extends SubsystemBase {
         
 
         autoCancelArmCommand();
-
-        if(SmartDashboard.getBoolean("babymode", babyMode) == true){
-            armPIDMaster.setOutputRange(-0.4/12, 0.4/12);
-        }
-        else{
-            armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
-        }
 
 
     }
