@@ -1,7 +1,6 @@
 package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
