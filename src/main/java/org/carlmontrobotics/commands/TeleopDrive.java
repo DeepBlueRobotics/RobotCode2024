@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.Robot;
 import org.carlmontrobotics.subsystems.Drivetrain;
+import static org.carlmontrobotics.RobotContainer.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,7 +27,7 @@ public class TeleopDrive extends Command {
   private double currentForwardVel = 0;
   private double currentStrafeVel = 0;
   private double prevTimestamp;
-
+  private boolean babyMode;
   /**
    * Creates a new TeleopDrive.
    */
@@ -57,6 +58,7 @@ public class TeleopDrive extends Command {
     double[] speeds = getRequestedSpeeds();
     // SmartDashboard.putNumber("Elapsed time", currentTime - prevTimestamp);
     prevTimestamp = currentTime;
+    babyMode = SmartDashboard.getBoolean("babymode", false);
     // kSlowDriveRotation = SmartDashboard.getNumber("slow turn const", kSlowDriveRotation);
     // kSlowDriveSpeed = SmartDashboard.getNumber("slow speed const", kSlowDriveSpeed);
     // kNormalDriveRotation = SmartDashboard.getNumber("normal turn const", kNormalDriveRotation);
@@ -94,6 +96,10 @@ public class TeleopDrive extends Command {
 
     double driveMultiplier = slow.getAsBoolean() ? kSlowDriveSpeed : kNormalDriveSpeed;
     double rotationMultiplier = slow.getAsBoolean() ? kSlowDriveRotation : kNormalDriveRotation;
+    if(babyMode == true){
+      driveMultiplier = kBabyDriveSpeed;
+      rotationMultiplier = kBabyDriveRotation;
+    }
     // double driveMultiplier = kNormalDriveSpeed;
     // double rotationMultiplier = kNormalDriveRotation;
 
