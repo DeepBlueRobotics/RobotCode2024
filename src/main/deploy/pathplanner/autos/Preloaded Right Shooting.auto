@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PassToOutake"
+            "name": "PassToOuttake"
           }
         },
         {
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PassToOutake"
+            "name": "PassToOuttake"
           }
         }
       ]

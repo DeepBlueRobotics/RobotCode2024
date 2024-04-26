@@ -6,11 +6,14 @@ package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.Limelight;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AimArmSpeaker extends Command {
   private final Arm arm;
-  private final Limelight ll; //Shooter ll
+  private final Limelight ll;
 
   /** Creates a new AimOuttakeSpeaker. */
   public AimArmSpeaker(Arm arm, Limelight ll) {
@@ -38,6 +41,6 @@ public class AimArmSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.armAtSetpoint();
+    return false;
   }
 }

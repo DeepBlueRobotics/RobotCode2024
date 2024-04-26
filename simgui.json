@@ -6,6 +6,11 @@
       }
     },
     "Other Devices": {
+      "AbsoluteEncoder[13]": {
+        "header": {
+          "open": true
+        }
+      },
       "CANCoder (v6)[2]": {
         "header": {
           "open": true
@@ -63,6 +68,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Arm": {
+          "open": true
+        },
         "BL": {
           "open": true
         },

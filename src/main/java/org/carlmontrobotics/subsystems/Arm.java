@@ -22,6 +22,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -33,9 +34,11 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -80,6 +83,9 @@ public class Arm extends SubsystemBase {
     private static boolean babyMode;
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
     private boolean setPIDOff; 
+
+    private SimDouble rotationsSim;
+
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
@@ -144,6 +150,9 @@ public class Arm extends SubsystemBase {
         armMotorFollower.setSmartCurrentLimit(80);
 
         SmartDashboard.putBoolean("arm is at pos", false);
+        if (RobotBase.isSimulation()) {
+            rotationsSim = new SimDeviceSim("AbsoluteEncoder", ARM_MOTOR_PORT_MASTER).getDouble("rotations");
+        }
     }
     
 
@@ -449,5 +458,11 @@ public class Arm extends SubsystemBase {
     public void setDefaultCommand(TeleopArm teleopArm, Object object) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        // Fake goaling to the goal instantaneously
+        rotationsSim.set((goalState.position + armMasterEncoder.getZeroOffset()) / armMasterEncoder.getPositionConversionFactor());
     }
 }
