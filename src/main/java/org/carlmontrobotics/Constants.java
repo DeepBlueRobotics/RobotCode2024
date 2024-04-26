@@ -146,12 +146,21 @@ public final class Constants {
 		// fine for now, change it later before use - ("Incorect use of setIZone()"
 		// Issue #22)
 		// public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
+		public static final double MAX_FF_VEL_RAD_P_S = Math.PI * .5;
 		public static final double MAX_FF_ACCEL_RAD_P_S = 53.728 / 4; // rad / s^2
 																		// ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
+
+		public static final double MAX_FF_VEL_RAD_P_S_BABY = 0;
+		public static final double MAX_FF_ACCEL_RAD_P_S_BABY = 0;
+		//TODO: determine these values^
+
+
 		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
 		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE_BABY = MIN_VOLTAGE/12 *0.7;
+		public static final double MAX_VOLTAGE_BABY = MAX_VOLTAGE/12*0.7;
 		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
@@ -310,6 +319,10 @@ public final class Constants {
 		public static double kNormalDriveRotation = 0.5; // Percent Multiplier
 		public static double kSlowDriveSpeed = 0.4; // Percent Multiplier
 		public static double kSlowDriveRotation = 0.250; // Percent Multiplier
+
+		//baby speed values, i just guessed the percent multiplier. TODO: find actual ones we wana use
+		public static double kBabyDriveSpeed = 0.3;
+		public static double kBabyDriveRotation = 0.2;
 		public static double kAlignMultiplier = 1D / 3D;
 		public static final double kAlignForward = 0.6;
 

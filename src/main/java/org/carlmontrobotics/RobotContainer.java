@@ -66,6 +66,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.carlmontrobotics.subsystems.Led;
 
 public class RobotContainer {
+  private static boolean babyMode = false;
+
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(Driver.port);
@@ -79,71 +81,75 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight(drivetrain);
 
   /* These are assumed to be equal to the AUTO ames in pathplanner */
-    /* These must be equal to the pathPlanner path names from the GUI! */
-  // Order matters - but the first one is index 1 on the physical selector - index 0 is reserved for null command.
-  //the last auto is hard-coded to go straight. since we have __3__ Autos, port 4 is simple straight
+  /* These must be equal to the pathPlanner path names from the GUI! */
+  // Order matters - but the first one is index 1 on the physical selector - index
+  // 0 is reserved for null command.
+  // the last auto is hard-coded to go straight. since we have __3__ Autos, port 4
+  // is simple straight
   private List<Command> autoCommands = new ArrayList<Command>();
   private SendableChooser<Integer> autoSelector = new SendableChooser<Integer>();
 
   private boolean hasSetupAutos = false;
   private final String[] autoNames = new String[] {
-    /* These are assumed to be equal to the AUTO ames in pathplanner */
-    "Left-Straight",
-    "Center-Straight",
-    "Right-Straight",
-    "Middle-Ram",
+      /* These are assumed to be equal to the AUTO ames in pathplanner */
+      "Left-Straight",
+      "Center-Straight",
+      "Right-Straight",
+      "Middle-Ram",
 
-    "Left-Auto Ruiner",
-    "Center-Auto Ruiner",
-    "Right-Auto Ruiner",
+      "Left-Auto Ruiner",
+      "Center-Auto Ruiner",
+      "Right-Auto Ruiner",
 
-    "Preloaded Left Shooting",
-    "Preloaded Right Shooting",
+      "Preloaded Left Shooting",
+      "Preloaded Right Shooting",
 
-    "Left Shoot",
-    "Center Shoot",
-    "Right Shoot",
+      "Left Shoot",
+      "Center Shoot",
+      "Right Shoot",
 
-    "Left-Shoot For Left Subwoofer",
-    "Right-Shoot For Right Subwoofer",
+      "Left-Shoot For Left Subwoofer",
+      "Right-Shoot For Right Subwoofer",
 
-    // "Preloaded Left-Pickup Subwoofer",
-    // "Preloaded Right-Pickup Subwoofer",
+      // "Preloaded Left-Pickup Subwoofer",
+      // "Preloaded Right-Pickup Subwoofer",
 
-    "Left-Amp",
-    "Shoot on Right",
-    "Shoot Center"
-  
+      "Left-Amp",
+      "Shoot on Right",
+      "Shoot Center"
+
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
-
 
   public RobotContainer() {
     {
       // SensorFactory.configureCamera();
-      //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
+      SmartDashboard.setDefaultBoolean("babymode", babyMode);
+      SmartDashboard.setPersistent("babymode");
+      // safe auto setup... stuff in setupAutos() is not safe to run here - will break
+      // robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
       SmartDashboard.setPersistent("SendableChooser[0]");
 
       autoSelector.addOption("Nothing", 0);
       autoSelector.addOption("Raw Forward", 1);
-      autoSelector.addOption("PP Simple Forward", 2);//index corresponds to index in autoCommands[]
+      autoSelector.addOption("PP Simple Forward", 2);// index corresponds to index in autoCommands[]
 
-      int i=3;
-      for (String n:autoNames){
+      int i = 3;
+      for (String n : autoNames) {
         autoSelector.addOption(n, i);
         i++;
       }
 
       ShuffleboardTab autoSelectorTab = Shuffleboard.getTab("Auto Chooser Tab");
       autoSelectorTab.add(autoSelector)
-        .withSize(2, 1);
+          .withSize(2, 1);
     }
 
     setDefaultCommands();
     setBindingsDriver();
-    //setBindingsManipulatorENDEFF();
+    // setBindingsManipulatorENDEFF();
     setBindingsManipulatorNEO();
   }
 
@@ -156,14 +162,12 @@ public class RobotContainer {
         () -> driverController.getRawButton(Driver.slowDriveButton)));
     // TODO: Are we going to use default command for intakeshooter?
     intakeShooter.setDefaultCommand(new TeleopEffector(
-    intakeShooter,
-    () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
-    manipulatorController, driverController));
+        intakeShooter,
+        () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
+        manipulatorController, driverController));
     arm.setDefaultCommand(new TeleopArm(
-      arm,
-      () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)
-    ));
-
+        arm,
+        () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)));
 
   }
 
@@ -171,13 +175,13 @@ public class RobotContainer {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
     // axisTrigger(driverController, Axis.kRightTrigger)
-    //     .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-    //         new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
+    // .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+    // new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
     new POVButton(driverController, 0).whileTrue(new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight));
     axisTrigger(driverController, Axis.kLeftTrigger)
-        //.onTrue(new AlignToApriltag(drivetrain, limelight));
-        .onTrue(new InstantCommand(()->drivetrain.setFieldOriented(false)))
-        .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
+        // .onTrue(new AlignToApriltag(drivetrain, limelight));
+        .onTrue(new InstantCommand(() -> drivetrain.setFieldOriented(false)))
+        .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
@@ -191,12 +195,12 @@ public class RobotContainer {
     new JoystickButton(driverController, Driver.rotateFieldRelative270Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
   }
+
   private void setBindingsManipulatorNEO() {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
-
     new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
-   new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
@@ -211,24 +215,25 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR, 0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS, 1));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
     new JoystickButton(manipulatorController, Button.kRightStick.value).whileTrue(new PassToIntake(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
-    //TODO: test angles for pov button BEFORE climbing
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD, 1));
+    // TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
     new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
     new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
   }
+
   private void setBindingsManipulatorENDEFF() {
     /* /Eject also for AMP/ */
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
-
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
-   new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value)
+        .onFalse(new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
@@ -243,19 +248,16 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR, 0));
+    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS, 1));
     new JoystickButton(manipulatorController, Button.kLeftStick.value).onTrue(new PassToOuttake(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD,1));
-    //TODO: test angles for pov button BEFORE climbing
+    new JoystickButton(manipulatorController, Button.kX.value).onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD, 1));
+    // TODO: test angles for pov button BEFORE climbing
     new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
     new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
     new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
 
-
   }
-
-
 
   /**
    * Flips an axis' Y coordinates upside down, but only if the select axis is a
@@ -319,23 +321,23 @@ public class RobotContainer {
    * @param axis  The Axis object to retrieve value from the Joystick.
    * @return A new instance of Trigger based on the given Joystick and Axis
    *         objects.
-*   * @throws NullPointerException if either stick or axis is null.
+   *         * @throws NullPointerException if either stick or axis is null.
    */
   private Trigger axisTrigger(GenericHID controller, Axis axis) {
     return new Trigger(() -> Math.abs(getStickValue(controller, axis)) > OI.MIN_AXIS_TRIGGER_VALUE);
   }
 
-  private void registerAutoCommands(){
-    ////AUTO-USABLE COMMANDS
+  private void registerAutoCommands() {
+    //// AUTO-USABLE COMMANDS
     NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
-    //  NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
-    NamedCommands.registerCommand("ArmToAmp", new ArmToPos(arm, Armc.AMP_ANGLE_RAD,0));
-    NamedCommands.registerCommand("ArmToSubwoofer", new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD,1));
+    // NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm,
+    // Armc.SPEAKER_ANGLE_RAD, 0));
+    NamedCommands.registerCommand("ArmToAmp", new ArmToPos(arm, Armc.AMP_ANGLE_RAD, 0));
+    NamedCommands.registerCommand("ArmToSubwoofer", new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD, 1));
     NamedCommands.registerCommand("ArmToPodium", new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD, 2));
     NamedCommands.registerCommand("ArmToGround", new ArmToPos(arm, GROUND_INTAKE_POS, 1));
-
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
 
@@ -344,39 +346,42 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
     NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
     NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
-      new InstantCommand(intakeShooter::stopIntake),
-      new InstantCommand(intakeShooter::stopOutake)
-    ));
+        new InstantCommand(intakeShooter::stopIntake),
+        new InstantCommand(intakeShooter::stopOutake)));
   }
+
   private void setupAutos() {
-    ////CREATING PATHS from files
+    //// CREATING PATHS from files
     {
-      for (int i=0;i<autoNames.length;i++){
+      for (int i = 0; i < autoNames.length; i++) {
         String name = autoNames[i];
 
         autoCommands.add(new PathPlannerAuto(name));
 
-        /*         // TODO: Charles' opinion: we shouldn't 7689[n' hhave it path find to the starting pose at the start of match
-        new SequentialCommandGroup(
-          AutoBuilder.pathfindToPose(
-            // PathPlannerAuto.getStaringPoseFromAutoFile(name),
-            PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
-            Autoc.pathConstraints ),
-          new PathPlannerAuto(name)
-        );*/
+        /*
+         * // TODO: Charles' opinion: we shouldn't 7689[n' hhave it path find to the
+         * starting pose at the start of match
+         * new SequentialCommandGroup(
+         * AutoBuilder.pathfindToPose(
+         * // PathPlannerAuto.getStaringPoseFromAutoFile(name),
+         * PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).
+         * getPreviewStartingHolonomicPose(),
+         * Autoc.pathConstraints ),
+         * new PathPlannerAuto(name)
+         * );
+         */
       }
     }
 
-
-    //AUTOGENERATED AUTO FOR SLOT 2
+    // AUTOGENERATED AUTO FOR SLOT 2
     {
       Pose2d currPos = drivetrain.getPose();
       // Create a list of bezier points from poses. Each pose represents one waypoint.
-      // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
+      // The rotation component of the pose should be the direction of travel. Do not
+      // use holonomic rotation.
       List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-              currPos,
-              currPos.plus(new Transform2d(0,1,new Rotation2d(0)))
-      );
+          currPos,
+          currPos.plus(new Transform2d(0, 1, new Rotation2d(0))));
       /**
        * PATHPLANNER SETTINGS
        * Robot Width (m): .91
@@ -388,42 +393,40 @@ public class RobotContainer {
        */
       // Create the path using the bezier points created above
       PathPlannerPath path = new PathPlannerPath(
-              bezierPoints,
-              /*m/s, m/s^2, rad/s, rad/s^2 */
-              Autoc.pathConstraints,
-              new GoalEndState(0, currPos.getRotation())
-      );
+          bezierPoints,
+          /* m/s, m/s^2, rad/s, rad/s^2 */
+          Autoc.pathConstraints,
+          new GoalEndState(0, currPos.getRotation()));
       // Prevent the path from being flipped if the coordinates are already correct
       path.preventFlipping = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
       if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-         path.flipPath();
+        path.flipPath();
       }
 
-      //NOTHING
+      // NOTHING
       autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
-      //RAW FORWARD command
+      // RAW FORWARD command
       autoCommands.add(1, new LastResortAuto(drivetrain));
-      //smart forward command
+      // smart forward command
       autoCommands.add(2, new SequentialCommandGroup(
-        AutoBuilder.followPath(path)
-      ));
-      //no events so just use path instead of auto
+          AutoBuilder.followPath(path)));
+      // no events so just use path instead of auto
 
     }
   }
 
   public Command getAutonomousCommand() {
-    if (!hasSetupAutos){
+    if (!hasSetupAutos) {
       setupAutos();
-      hasSetupAutos=true;
+      hasSetupAutos = true;
     }
     Integer autoIndex = autoSelector.getSelected();
 
-    if (autoIndex!=null && autoIndex!=0){
-      new PrintCommand("Running selected auto: "+autoSelector.toString());
+    if (autoIndex != null && autoIndex != 0) {
+      new PrintCommand("Running selected auto: " + autoSelector.toString());
       return autoCommands.get(autoIndex.intValue());
     }
     return new PrintCommand("No auto :(");
-	}
+  }
 
 }
