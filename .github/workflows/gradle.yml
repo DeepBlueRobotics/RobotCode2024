@@ -17,4 +17,6 @@ jobs:
         distribution: 'temurin'
         java-version: 17
     - name: Build with Gradle
+      env:
+        testCONFIGIsDefault: true
       run: ./gradlew build
