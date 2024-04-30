@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
+    id "com.peterabeles.gversion" version "1.10"    
 }
 
 java {
@@ -109,4 +110,14 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    language = "Properties"
+    srcDir       = "src/main/deploy/"
+    className    = "BuildInfo.properties"
+    dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+    timeZone     = "America/Los_Angeles"
+    indent       = "  "
 }
