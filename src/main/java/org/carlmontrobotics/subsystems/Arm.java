@@ -464,6 +464,9 @@ public class Arm extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         // Fake goaling to the goal instantaneously
-        rotationsSim.set((goalState.position + armMasterEncoder.getZeroOffset()) / armMasterEncoder.getPositionConversionFactor());
+        if (rotationsSim != null) {
+            rotationsSim.set((goalState.position + armMasterEncoder.getZeroOffset())
+                    / armMasterEncoder.getPositionConversionFactor());
+        }
     }
 }
