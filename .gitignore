@@ -224,3 +224,4 @@ simgui-ds.json
 simgui.json
 *.wpilog
 *.dat
+src/main/deploy/BuildInfo.properties

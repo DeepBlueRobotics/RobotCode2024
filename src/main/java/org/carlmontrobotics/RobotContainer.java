@@ -123,6 +123,8 @@ public class RobotContainer {
       SmartDashboard.putData("CONFIG overrides", Config.CONFIG);
       System.out.println(Config.CONFIG);
 
+      SmartDashboard.putData("BuildConstants", BuildInfo.getInstance());
+
       SmartDashboard.setDefaultBoolean("babymode", babyMode);
       SmartDashboard.setPersistent("babymode");
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
