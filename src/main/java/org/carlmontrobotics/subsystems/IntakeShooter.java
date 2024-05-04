@@ -40,7 +40,10 @@ public class IntakeShooter extends SubsystemBase {
 
     private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
     private TimeOfFlight OutakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
-    
+
+    private double lastValidDistanceIntake = Double.POSITIVE_INFINITY;
+    private double lastValidDistanceOuttake = Double.POSITIVE_INFINITY;
+
     public IntakeShooter() {
         // Figure out which ones to set inverted
         intakeMotor.setInverted(INTAKE_MOTOR_INVERSION);
@@ -78,18 +81,25 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     // ---------------------------------------------------------------------------------------------------
-    private double getGamePieceDistanceIntake() {
-        return Units.metersToInches(intakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
-    }
 
     public void motorSetOutake(double speed) {
         outakeMotorVortex.set(speed);
     }
+
     public void motorSetIntake(double speed) {
         intakeMotor.set(speed);
     }
+
+    private double getGamePieceDistanceIntake() {
+        // return Units.metersToInches(intakeDistanceSensor.getRange() / 1000) -
+        // DS_DEPTH_INCHES;
+        return lastValidDistanceIntake;
+    }
+
     private double getGamePieceDistanceOutake() {
-        return Units.metersToInches(OutakeDistanceSensor.getRange() / 1000) - DS_DEPTH_INCHES;
+        // return Units.metersToInches(OutakeDistanceSensor.getRange() / 1000) -
+        // DS_DEPTH_INCHES;
+        return lastValidDistanceOuttake;
     }
 
     public boolean intakeDetectsNote() {
@@ -100,10 +110,18 @@ public class IntakeShooter extends SubsystemBase {
         return getGamePieceDistanceOutake() < DETECT_DISTANCE_INCHES;
     }
 
-    
+    public void updateValues() {
+        if (intakeDistanceSensor.isRangeValid()) {
+            lastValidDistanceIntake = intakeDistanceSensor.getRange();
+        }
+        if (OutakeDistanceSensor.isRangeValid()) {
+            lastValidDistanceOuttake = OutakeDistanceSensor.getRange();
+        }
+    }
 
     @Override
     public void periodic() {
+        updateValues();
         SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
         SmartDashboard.putBoolean("intake distanace sensor", intakeDistanceSensor.isRangeValid());
         SmartDashboard.putData("intake distanace sensor", OutakeDistanceSensor);
