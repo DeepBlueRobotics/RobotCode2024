@@ -104,6 +104,25 @@ public class IntakeShooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
+        SmartDashboard.putBoolean("intake distanace sensor", intakeDistanceSensor.isRangeValid());
+        SmartDashboard.putData("intake distanace sensor", OutakeDistanceSensor);
+        SmartDashboard.putBoolean("intake distanace sensor", OutakeDistanceSensor.isRangeValid());
+        TimeOfFlight.RangingMode rangingModeIntake = intakeDistanceSensor.getRangingMode();
+        if (rangingModeIntake == TimeOfFlight.RangingMode.Long)
+            SmartDashboard.putString("intake ds ranging mode", "long");
+        else if (rangingModeIntake == TimeOfFlight.RangingMode.Medium)
+            SmartDashboard.putString("intake ds ranging mode", "medium");
+        else
+            SmartDashboard.putString("intake ds ranging mode", "short");
+
+        TimeOfFlight.RangingMode rangingModeOuttake = OutakeDistanceSensor.getRangingMode();
+        if (rangingModeOuttake == TimeOfFlight.RangingMode.Long)
+            SmartDashboard.putString("outake ds ranging mode", "long");
+        else if (rangingModeOuttake == TimeOfFlight.RangingMode.Medium)
+            SmartDashboard.putString("outake ds ranging mode", "medium");
+        else
+            SmartDashboard.putString("outake ds ranging mode", "short");
     //intakeMotor.set(0.1);
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 

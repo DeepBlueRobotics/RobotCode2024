@@ -53,8 +53,8 @@ public class IntakeNEO extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeDetectsNote() && timer.get()>0.1;
+    // return intake.intakeDetectsNote() && timer.get()>0.1;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
-
+    return intake.outakeDetectsNote();
   }
 }
