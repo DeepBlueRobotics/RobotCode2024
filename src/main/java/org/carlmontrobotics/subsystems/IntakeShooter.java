@@ -112,20 +112,21 @@ public class IntakeShooter extends SubsystemBase {
 
     public void updateValues() {
         if (intakeDistanceSensor.isRangeValid()) {
-            lastValidDistanceIntake = intakeDistanceSensor.getRange();
+            lastValidDistanceIntake = Units.metersToInches(intakeDistanceSensor.getRange()) / 1000.0;
         }
         if (OutakeDistanceSensor.isRangeValid()) {
-            lastValidDistanceOuttake = OutakeDistanceSensor.getRange();
+            lastValidDistanceOuttake = Units.metersToInches(OutakeDistanceSensor.getRange()) / 1000.0;
         }
     }
 
     @Override
     public void periodic() {
         updateValues();
+        SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
         SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
-        SmartDashboard.putBoolean("intake distanace sensor", intakeDistanceSensor.isRangeValid());
-        SmartDashboard.putData("intake distanace sensor", OutakeDistanceSensor);
-        SmartDashboard.putBoolean("intake distanace sensor", OutakeDistanceSensor.isRangeValid());
+        SmartDashboard.putBoolean("intake ds range valid", intakeDistanceSensor.isRangeValid());
+        SmartDashboard.putData("outtake distanace sensor", OutakeDistanceSensor);
+        SmartDashboard.putBoolean("outtake ds range valid", OutakeDistanceSensor.isRangeValid());
         TimeOfFlight.RangingMode rangingModeIntake = intakeDistanceSensor.getRangingMode();
         if (rangingModeIntake == TimeOfFlight.RangingMode.Long)
             SmartDashboard.putString("intake ds ranging mode", "long");
