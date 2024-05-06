@@ -213,9 +213,8 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOutake, intakeShooter));
-
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new IntakeNEO(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
