@@ -16,6 +16,8 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.datalog.DataLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +34,7 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private Timer timer = new Timer();
     private int count = 0;
+    private StringLogEntry tofLogEntry;
     private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
             kA[INTAKE]);
     private final SimpleMotorFeedforward outakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE],
@@ -117,9 +120,11 @@ public class IntakeShooter extends SubsystemBase {
     public void updateValues() {
         if (intakeDistanceSensor.isRangeValid()) {
             lastValidDistanceIntake = Units.metersToInches(intakeDistanceSensor.getRange()) / 1000.0;
+            tofLogEntry.append("Intake ds valid");
         }
         if (OutakeDistanceSensor.isRangeValid()) {
             lastValidDistanceOuttake = Units.metersToInches(OutakeDistanceSensor.getRange()) / 1000.0;
+            tofLogEntry.append("Outtake ds valid");
         }
     }
 
@@ -271,4 +276,5 @@ public class IntakeShooter extends SubsystemBase {
      * return minRPM;
      * }
      */
+
 }
