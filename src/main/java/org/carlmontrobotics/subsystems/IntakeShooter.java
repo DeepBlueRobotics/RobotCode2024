@@ -6,6 +6,7 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -62,6 +63,8 @@ public class IntakeShooter extends SubsystemBase {
         // SmartDashboard.putNumber("intake volts", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
         // setMaxOutakeOverload(1);
+        intakeDistanceSensor.setRangingMode(RangingMode.Short, 24);// 24 ms is the minimum sample time acc to docs
+        OutakeDistanceSensor.setRangingMode(RangingMode.Short, 24);
         outakeMotorVortex.setSmartCurrentLimit(60);
         SmartDashboard.putNumber("Intake target RPM", 0);
     }
