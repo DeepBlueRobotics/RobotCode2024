@@ -64,13 +64,13 @@ public class Led extends SubsystemBase {
             setLedColor(DEFAULT_COLOR_BLUE, 0, getLength());
         }
          */
-        if (intakeshooter.intakeDetectsNote() && !intakeshooter.outakeDetectsNote())
+        if (intakeshooter.intakeDetectsNote() && !intakeshooter.outtakeDetectsNote())
         {
             setLedColor(DETECT_NOTE_YELLOW, 0,getLength());
          //when intake TOF detects, but outtake TOF does not the bottom half of the
        
         
-        }else if (intakeshooter.intakeDetectsNote() &&intakeshooter.outakeDetectsNote()) {
+     } else if (intakeshooter.intakeDetectsNote() && intakeshooter.outtakeDetectsNote()) {
             setLedColor(HOLDING_GREEN, 0, getLength());
          //when both TOFs detect and the end efforcter is holding the note the LEDS turn green
        

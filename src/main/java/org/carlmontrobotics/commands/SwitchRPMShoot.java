@@ -23,14 +23,14 @@ public class SwitchRPMShoot extends Command {
     }
     @Override
     public void initialize() {
-        intakeShooter.setMaxOutake(1);
+        intakeShooter.setMaxOuttake(1);
         timer.reset();
         
     }
     @Override
     public void execute() {
         rpmAmount = RPM_SELECTOR[Arm.getSelector()];
-        if(intakeShooter.getOutakeRPM() >= rpmAmount) {
+        if (intakeShooter.getOuttakeRPM() >= rpmAmount) {
         intakeShooter.setMaxIntake(1);
         timer.start();
         
@@ -39,13 +39,14 @@ public class SwitchRPMShoot extends Command {
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
-        intakeShooter.stopOutake();
+        intakeShooter.stopOuttake();
         intakeShooter.resetCurrentLimit();
         timer.stop();
        
     }
     @Override
     public boolean isFinished() {
-        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote()) || timer.get()>SMART_CURRENT_LIMIT_TIMEOUT;
+        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outtakeDetectsNote())
+                || timer.get() > SMART_CURRENT_LIMIT_TIMEOUT;
     }
 }

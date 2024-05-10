@@ -212,7 +212,7 @@ public class RobotContainer {
             new SwitchRPMShootNEO(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
-            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+            new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new IntakeNEO(intakeShooter)));
@@ -235,7 +235,8 @@ public class RobotContainer {
 
 
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value)
+        .onFalse(new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
@@ -243,7 +244,7 @@ public class RobotContainer {
             new SwitchRPMShoot(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
-            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+            new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
@@ -350,10 +351,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
-    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
+    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOuttake));
     NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
       new InstantCommand(intakeShooter::stopIntake),
-      new InstantCommand(intakeShooter::stopOutake)
+        new InstantCommand(intakeShooter::stopOuttake)
     ));
   }
   private void setupAutos() {
