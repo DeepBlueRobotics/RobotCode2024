@@ -33,6 +33,8 @@ public class IntakeShooter extends SubsystemBase {
     private final SparkPIDController pidControllerOutake = outakeMotorVortex.getPIDController();
     private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private Timer timer = new Timer();
+    private Timer intakeTOFTimer = new Timer();
+    private Timer outtakeTOFTimer = new Timer();
     private int count = 0;
     private StringLogEntry tofLogEntry;
     private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
@@ -121,10 +123,20 @@ public class IntakeShooter extends SubsystemBase {
         if (intakeDistanceSensor.isRangeValid()) {
             lastValidDistanceIntake = Units.metersToInches(intakeDistanceSensor.getRange()) / 1000.0;
             tofLogEntry.append("Intake ds valid");
+            if (lastValidDistanceIntake != Double.POSITIVE_INFINITY) {
+                tofLogEntry.append("Time between valid ranges intake " + intakeTOFTimer.get());
+                intakeTOFTimer.reset();
+            } else
+                intakeTOFTimer.start();
         }
         if (OutakeDistanceSensor.isRangeValid()) {
             lastValidDistanceOuttake = Units.metersToInches(OutakeDistanceSensor.getRange()) / 1000.0;
             tofLogEntry.append("Outtake ds valid");
+            if (lastValidDistanceOuttake != Double.POSITIVE_INFINITY) {
+                tofLogEntry.append("Time between valid ranges outtake " + outtakeTOFTimer.get());
+                outtakeTOFTimer.reset();
+            } else
+                outtakeTOFTimer.start();
         }
     }
 
