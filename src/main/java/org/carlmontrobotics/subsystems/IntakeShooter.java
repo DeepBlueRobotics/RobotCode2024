@@ -123,7 +123,7 @@ public class IntakeShooter extends SubsystemBase {
         if (intakeDistanceSensor.isRangeValid()) {
             lastValidDistanceIntake = Units.metersToInches(intakeDistanceSensor.getRange()) / 1000.0;
             if (lastValidDistanceIntake != Double.POSITIVE_INFINITY) {
-                tofLogEntry.append("Time between valid ranges intake " + intakeTOFTimer.get());
+                SmartDashboard.putNumber("Time between valid ranges intake", intakeTOFTimer.get());
                 intakeTOFTimer.reset();
             } else
                 intakeTOFTimer.start();
@@ -131,7 +131,7 @@ public class IntakeShooter extends SubsystemBase {
         if (OutakeDistanceSensor.isRangeValid()) {
             lastValidDistanceOuttake = Units.metersToInches(OutakeDistanceSensor.getRange()) / 1000.0;
             if (lastValidDistanceOuttake != Double.POSITIVE_INFINITY) {
-                tofLogEntry.append("Time between valid ranges outtake " + outtakeTOFTimer.get());
+                SmartDashboard.putNumber("Time between valid ranges outtake", outtakeTOFTimer.get());
                 outtakeTOFTimer.reset();
             } else
                 outtakeTOFTimer.start();
