@@ -8,7 +8,7 @@ import java.util.List;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
-abstract class Config implements Sendable {
+public abstract class Config implements Sendable {
     public static final Config CONFIG = new Config() {
         {
             // Override config settings here, like this:
