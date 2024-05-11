@@ -3,6 +3,7 @@ package org.carlmontrobotics.subsystems;
 import static org.carlmontrobotics.Constants.Drivetrainc.*;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import org.carlmontrobotics.Constants.Drivetrainc.Autoc;
@@ -34,18 +35,42 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
+
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
 public class Drivetrain extends SubsystemBase {
     private final AHRS gyro = new AHRS(SerialPort.Port.kMXP); // Also try kUSB and kUSB2
     private Pose2d autoGyroOffset = new Pose2d(0., 0., new Rotation2d(0.));
@@ -186,6 +211,8 @@ public class Drivetrain extends SubsystemBase {
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
 
+            // Must call this method for SysId to run
+            // sysIdSetup();
         }
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
@@ -238,13 +265,6 @@ public class Drivetrain extends SubsystemBase {
     // }
     // return new PrintCommand("Invalid Command");
     // }
-
-    public void keepRotateMotorsAtDegrees(int angle) {
-        for (SwerveModule module : modules) {
-            module.turnPeriodic();
-            module.move(0.0000000000001, angle);
-        }
-    }
 
     @Override
     public void periodic() {
@@ -584,4 +604,402 @@ public class Drivetrain extends SubsystemBase {
         };
     }
 
+    // #region SysId Code
+
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage>[] m_appliedVoltage = new MutableMeasure[8];
+
+    // Mutable holder for unit-safe linear distance values, persisted to avoid
+    // reallocation.
+    private final MutableMeasure<Distance>[] m_distance = new MutableMeasure[4];
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid
+    // reallocation.
+    private final MutableMeasure<Velocity<Distance>>[] m_velocity = new MutableMeasure[4];
+    // edu.wpi.first.math.util.Units.Rotations beans;
+    private final MutableMeasure<Angle>[] m_revs = new MutableMeasure[4];
+    private final MutableMeasure<Velocity<Angle>>[] m_revs_vel = new MutableMeasure[4];
+
+    private enum SysIdTest {
+        FRONT_DRIVE,
+        BACK_DRIVE,
+        ALL_DRIVE,
+        // FLBR_TURN,
+        // FRBL_TURN,
+        // ALL_TURN
+        FL_ROT,
+        FR_ROT,
+        BL_ROT,
+        BR_ROT
+    }
+
+    private SendableChooser<SysIdTest> sysIdChooser = new SendableChooser<>();
+
+    // ROUTINES FOR SYSID
+    // private SysIdRoutine.Config defaultSysIdConfig = new
+    // SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6),
+    // Seconds.of(5));
+    private SysIdRoutine.Config defaultSysIdConfig = new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)),
+            Volts.of(2.891), Seconds.of(10));
+
+    // DRIVE
+    private void motorLogShort_drive(SysIdRoutineLog log, int id) {
+        String name = new String[] { "fl", "fr", "bl", "br" }[id];
+        log.motor(name)
+                .voltage(m_appliedVoltage[id].mut_replace(
+                        driveMotors[id].getBusVoltage() * driveMotors[id].getAppliedOutput(), Volts))
+                .linearPosition(
+                        m_distance[id].mut_replace(driveMotors[id].getEncoder().getPosition(), Meters))
+                .linearVelocity(m_velocity[id].mut_replace(driveMotors[id].getEncoder().getVelocity(),
+                        MetersPerSecond));
+    }
+
+    // Create a new SysId routine for characterizing the drive.
+    private SysIdRoutine frontOnlyDriveRoutine = new SysIdRoutine(
+            defaultSysIdConfig,
+            new SysIdRoutine.Mechanism(
+                    // Tell SysId how to give the driving voltage to the motors.
+                    (Measure<Voltage> volts) -> {
+                        driveMotors[0].setVoltage(volts.in(Volts));
+                        driveMotors[1].setVoltage(volts.in(Volts));
+                        modules[2].coast();
+                        modules[3].coast();
+                    },
+                    log -> {// FRONT
+                        motorLogShort_drive(log, 0);// fl named automatically
+                        motorLogShort_drive(log, 1);// fr
+                    },
+                    this));
+
+    private SysIdRoutine backOnlyDriveRoutine = new SysIdRoutine(
+            defaultSysIdConfig,
+            new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        modules[0].coast();
+                        modules[1].coast();
+                        modules[2].brake();
+                        modules[3].brake();
+                        driveMotors[2].setVoltage(volts.in(Volts));
+                        driveMotors[3].setVoltage(volts.in(Volts));
+                    },
+                    log -> {// BACK
+                        motorLogShort_drive(log, 2);// bl
+                        motorLogShort_drive(log, 3);// br
+                    },
+                    this));
+
+    private SysIdRoutine allWheelsDriveRoutine = new SysIdRoutine(
+            defaultSysIdConfig,
+            new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        for (CANSparkMax dm : driveMotors) {
+                            dm.setVoltage(volts.in(Volts));
+                        }
+                    },
+                    log -> {
+                        motorLogShort_drive(log, 0);// fl named automatically
+                        motorLogShort_drive(log, 1);// fr
+                        motorLogShort_drive(log, 2);// bl
+                        motorLogShort_drive(log, 3);// br
+                    },
+                    this));
+
+    private SysIdRoutine sysidroutshort_turn(int id, String logname) {
+        return new SysIdRoutine(
+                defaultSysIdConfig,
+                // new SysIdRoutine.Config(Volts.of(.1).per(Seconds.of(.1)), Volts.of(.6),
+                // Seconds.of(3)),
+                new SysIdRoutine.Mechanism(
+                        (Measure<Voltage> volts) -> turnMotors[id].setVoltage(volts.in(Volts)),
+                        log -> log.motor(logname + "_turn")
+                                .voltage(m_appliedVoltage[id + 4].mut_replace(
+                                        // ^because drivemotors take up the first 4 slots of the unit holders
+                                        turnMotors[id].getBusVoltage() * turnMotors[id].getAppliedOutput(), Volts))
+                                .angularPosition(
+                                        m_revs[id].mut_replace(turnEncoders[id].getPosition().getValue(), Rotations))
+                                .angularVelocity(m_revs_vel[id].mut_replace(
+                                        turnEncoders[id].getVelocity().getValueAsDouble(), RotationsPerSecond)),
+                        this));
+    }
+
+    // as always, fl/fr/bl/br
+    private SysIdRoutine[] rotateRoutine = new SysIdRoutine[] {
+            sysidroutshort_turn(0, "fl"), // woaw, readable code???
+            sysidroutshort_turn(1, "fr"),
+            sysidroutshort_turn(2, "bl"),
+            sysidroutshort_turn(3, "br")
+    };
+
+    private ShuffleboardTab sysIdTab = Shuffleboard.getTab("Drivetrain SysID");
+
+    // void sysidtabshorthand(String name, SysIdRoutine.Direction dir, int width,
+    // int height){
+    // sysIdTab.add(name, dir).withSize(width, height);
+    // }
+    void sysidtabshorthand_qsi(String name, SysIdRoutine.Direction dir) {
+        sysIdTab.add(name, sysIdQuasistatic(dir)).withSize(2, 1);
+    }
+
+    void sysidtabshorthand_dyn(String name, SysIdRoutine.Direction dir) {
+        sysIdTab.add(name, sysIdDynamic(dir)).withSize(2, 1);
+    }
+
+    private void sysIdSetup() {
+        // SysId Setup
+        {
+            Supplier<SequentialCommandGroup> stopNwait = () -> new SequentialCommandGroup(
+                    new InstantCommand(this::stop), new WaitCommand(2));
+
+            /*
+             * Alex's old sysId tests
+             * sysIdTab.add("All sysid tests", new SequentialCommandGroup(
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,2),
+             * (Command)stopNwait.get()),
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,2),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,2),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,2),
+             * (Command)stopNwait.get())
+             * ));
+             * sysIdTab.add("All sysid tests - FRONT wheels", new SequentialCommandGroup(
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,0),
+             * (Command)stopNwait.get()),
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,0),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,0),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,0),
+             * (Command)stopNwait.get())
+             * ));
+             * sysIdTab.add("All sysid tests - BACK wheels", new SequentialCommandGroup(
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward,1),
+             * (Command)stopNwait.get()),
+             * new
+             * SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kReverse,1),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kForward,1),
+             * (Command)stopNwait.get()),
+             * new SequentialCommandGroup(sysIdDynamic(SysIdRoutine.Direction.kReverse,1),
+             * (Command)stopNwait.get())
+             * ));
+             */
+
+            sysidtabshorthand_qsi("Quasistatic Forward", SysIdRoutine.Direction.kForward);
+            sysidtabshorthand_qsi("Quasistatic Backward", SysIdRoutine.Direction.kReverse);
+            sysidtabshorthand_dyn("Dynamic Forward", SysIdRoutine.Direction.kForward);
+            sysidtabshorthand_dyn("Dynamic Backward", SysIdRoutine.Direction.kReverse);
+
+            sysIdChooser.addOption("Front Only Drive", SysIdTest.FRONT_DRIVE);
+            sysIdChooser.addOption("Back Only Drive", SysIdTest.BACK_DRIVE);
+            sysIdChooser.addOption("All Drive", SysIdTest.ALL_DRIVE);
+            // sysIdChooser.addOption("fl-br Turn", SysIdTest.FLBR_TURN);
+            // sysIdChooser.addOption("fr-bl Turn", SysIdTest.FRBL_TURN);
+            // sysIdChooser.addOption("All Turn", SysIdTest.ALL_TURN);
+            sysIdChooser.addOption("FL Rotate", SysIdTest.FL_ROT);
+            sysIdChooser.addOption("FR Rotate", SysIdTest.FR_ROT);
+            sysIdChooser.addOption("BL Rotate", SysIdTest.BL_ROT);
+            sysIdChooser.addOption("BR Rotate", SysIdTest.BR_ROT);
+
+            sysIdTab
+                    .add(sysIdChooser)
+                    .withSize(2, 1);
+
+            sysIdTab.add("ALL THE SYSID TESTS", allTheSYSID())// is this legal??
+                    .withSize(2, 1);
+
+            sysIdTab.add(this);
+
+            for (int i = 0; i < 8; i++) {// first four are drive, next 4 are turn motors
+                m_appliedVoltage[i] = mutable(Volts.of(0));
+            }
+            for (int i = 0; i < 4; i++) {
+                m_distance[i] = mutable(Meters.of(0));
+                m_velocity[i] = mutable(MetersPerSecond.of(0));
+
+                m_revs[i] = mutable(Rotations.of(0));
+                m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
+            }
+
+            SmartDashboard.putNumber("Desired Angle", 0);
+
+            SmartDashboard.putNumber("kS", 0);
+        }
+    }
+
+    // public Command sysIdQuasistatic(SysIdRoutine.Direction direction, int
+    // frontorback) {
+    // switch(frontorback) {
+    // case 0:
+    // return frontOnlyRoutine.quasistatic(direction);
+    // case 1:
+    // return backOnlyRoutine.quasistatic(direction);
+    // case 2:
+    // return allWheelsRoutine.quasistatic(direction);
+    // }
+    // return new PrintCommand("Invalid Command");
+    // }
+
+    private SysIdTest selector() {
+        SysIdTest test = sysIdChooser.getSelected();
+        System.out.println("Test Selected: " + test);
+        return test;
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return new SelectCommand<>(
+                Map.ofEntries(
+                        // DRIVE
+                        Map.entry(SysIdTest.FRONT_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running front only quasistatic forward")
+                                        : new PrintCommand("Running front only quasistatic backward"),
+                                frontOnlyDriveRoutine.quasistatic(direction))),
+                        Map.entry(SysIdTest.BACK_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running back only quasistatic forward")
+                                        : new PrintCommand("Running back only quasistatic backward"),
+                                backOnlyDriveRoutine.quasistatic(direction))),
+                        Map.entry(SysIdTest.ALL_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running all drive quasistatic forward")
+                                        : new PrintCommand("Running all drive quasistatic backward"),
+                                allWheelsDriveRoutine.quasistatic(direction))),
+                        // ROTATE
+                        Map.entry(SysIdTest.FL_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running FL rotate quasistatic forward")
+                                        : new PrintCommand("Running FL rotate quasistatic backward"),
+                                rotateRoutine[0].quasistatic(direction))),
+                        Map.entry(SysIdTest.FR_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running FR rotate quasistatic forward")
+                                        : new PrintCommand("Running FR rotate quasistatic backward"),
+                                rotateRoutine[1].quasistatic(direction))),
+                        Map.entry(SysIdTest.BL_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running BL rotate quasistatic forward")
+                                        : new PrintCommand("Running BL rotate quasistatic backward"),
+                                rotateRoutine[2].quasistatic(direction))),
+                        Map.entry(SysIdTest.BR_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running BR rotate quasistatic forward")
+                                        : new PrintCommand("Running BR rotate quasistatic backward"),
+                                rotateRoutine[3].quasistatic(direction)))
+
+                // //TURN
+                // Map.entry(SysIdTest.FLBR_TURN, new ParallelCommandGroup(
+                // direction == SysIdRoutine.Direction.kForward ?
+                // new PrintCommand("Running fL-bR turn quasistatic forward") :
+                // new PrintCommand("Running fL-bR turn quasistatic backward"),
+                // flbrTurn.quasistatic(direction)
+                // )),
+                // Map.entry(SysIdTest.FRBL_TURN, new ParallelCommandGroup(
+                // direction == SysIdRoutine.Direction.kForward ?
+                // new PrintCommand("Running fR-bL turn quasistatic forward") :
+                // new PrintCommand("Running fR-bL turn quasistatic backward"),
+                // frblTurn.quasistatic(direction)
+                // )),
+                // Map.entry(SysIdTest.ALL_TURN, new ParallelCommandGroup(
+                // direction == SysIdRoutine.Direction.kForward ?
+                // new PrintCommand("Running all turn quasistatic forward") :
+                // new PrintCommand("Running all turn quasistatic backward"),
+                // allWheelsTurn.quasistatic(direction)
+                // ))
+                ),
+                this::selector);
+    }
+
+    // public Command sysIdDynamic(SysIdRoutine.Direction direction, int
+    // frontorback) {
+    // switch(frontorback) {
+    // case 0:
+    // return frontOnlyDrive.dynamic(direction);
+    // case 1:
+    // return backOnlyDrive.dynamic(direction);
+    // case 2:
+    // return allWheelsDrive.dynamic(direction);
+    // }
+    // return new PrintCommand("Invalid Command");
+    // }
+    private Command allTheSYSID(SysIdRoutine.Direction direction) {
+        return new SequentialCommandGroup(
+                frontOnlyDriveRoutine.dynamic(direction),
+                backOnlyDriveRoutine.dynamic(direction),
+                allWheelsDriveRoutine.dynamic(direction),
+                rotateRoutine[0].dynamic(direction),
+                rotateRoutine[1].dynamic(direction),
+                rotateRoutine[2].dynamic(direction),
+                rotateRoutine[3].dynamic(direction),
+
+                frontOnlyDriveRoutine.quasistatic(direction),
+                backOnlyDriveRoutine.quasistatic(direction),
+                allWheelsDriveRoutine.quasistatic(direction),
+                rotateRoutine[0].quasistatic(direction),
+                rotateRoutine[1].quasistatic(direction),
+                rotateRoutine[2].quasistatic(direction),
+                rotateRoutine[3].quasistatic(direction));
+    }
+
+    public Command allTheSYSID() {
+        return new SequentialCommandGroup(
+                allTheSYSID(SysIdRoutine.Direction.kForward),
+                allTheSYSID(SysIdRoutine.Direction.kReverse));
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return new SelectCommand<>(
+                Map.ofEntries(
+                        // DRIVE
+                        Map.entry(SysIdTest.FRONT_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running front only dynamic forward")
+                                        : new PrintCommand("Running front only dynamic backward"),
+                                frontOnlyDriveRoutine.dynamic(direction))),
+                        Map.entry(SysIdTest.BACK_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running back only dynamic forward")
+                                        : new PrintCommand("Running back only dynamic backward"),
+                                backOnlyDriveRoutine.dynamic(direction))),
+                        Map.entry(SysIdTest.ALL_DRIVE, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running all wheels dynamic forward")
+                                        : new PrintCommand("Running all wheels dynamic backward"),
+                                allWheelsDriveRoutine.dynamic(direction))),
+                        // ROTATE
+                        Map.entry(SysIdTest.FL_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running FL rotate dynamic forward")
+                                        : new PrintCommand("Running FL rotate dynamic backward"),
+                                rotateRoutine[0].dynamic(direction))),
+                        Map.entry(SysIdTest.FR_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running FR rotate dynamic forward")
+                                        : new PrintCommand("Running FR rotate dynamic backward"),
+                                rotateRoutine[1].dynamic(direction))),
+                        Map.entry(SysIdTest.BL_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running BL rotate dynamic forward")
+                                        : new PrintCommand("Running BL rotate dynamic backward"),
+                                rotateRoutine[2].dynamic(direction))),
+                        Map.entry(SysIdTest.BR_ROT, new ParallelCommandGroup(
+                                direction == SysIdRoutine.Direction.kForward
+                                        ? new PrintCommand("Running BR rotate dynamic forward")
+                                        : new PrintCommand("Running BR rotate dynamic backward"),
+                                rotateRoutine[3].dynamic(direction)))),
+                this::selector);
+    }
+
+    public void keepRotateMotorsAtDegrees(int angle) {
+        for (SwerveModule module : modules) {
+            module.turnPeriodic();
+            module.move(0.0000000000001, angle);
+        }
+    }
+
+    // #endregion
 }
