@@ -51,12 +51,12 @@ public final class Constants {
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 		// 0.0001184
-		public static final double[] kP = { /* /Intake/ */ 0.030717, /* /Outake/ */0.0001 };
+		public static final double[] kP = { 0, 0 /* 0.030717,0.0001 */ };
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
-		public static final double[] kS = { /* /Intake/ */0.35042, /* /Outake/ */0.29753 * 2 };
-		public static final double[] kV = { /* /Intake/ */0.065239, /* /Outake/ */0.077913 };
-		public static final double[] kA = { /* /Intake/ */0.0062809, /* /Outake/ */0.05289 };
+		public static final double[] kS = { /* /Intake/ */0.22, /* /Outake/ */0.29753 * 2 };
+		public static final double[] kV = { 0.122, 0/* 0.065239, 0.077913 */ };
+		public static final double[] kA = { 0, 0/* 0.0062809,0.05289 */ };
 		public static final int INTAKE_PORT = 9; // port
 		public static final int OUTAKE_PORT = 10; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port

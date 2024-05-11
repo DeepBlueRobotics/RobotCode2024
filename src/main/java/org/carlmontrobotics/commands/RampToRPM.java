@@ -18,7 +18,7 @@ public class RampToRPM extends Command {
 
     @Override
     public void initialize() {
-      intake.setRPMOutake(rpm);
+      intake.setRPMOuttake(rpm);
       timer.reset();
       timer.start();
     }

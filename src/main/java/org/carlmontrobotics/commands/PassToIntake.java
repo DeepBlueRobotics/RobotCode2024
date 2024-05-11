@@ -16,11 +16,11 @@ public class PassToIntake extends Command{
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
-        intakeShooter.stopOutake();
+        intakeShooter.stopOuttake();
     }
     
     @Override
     public boolean isFinished() {
-        return intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote();
+        return intakeShooter.intakeDetectsNote() && !intakeShooter.outtakeDetectsNote();
     }
 }

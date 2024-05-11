@@ -5,6 +5,7 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeNEO extends Command {
@@ -13,9 +14,11 @@ public class IntakeNEO extends Command {
   private final IntakeShooter intake;
   double increaseAmount = 0.05;
   int index = 0;
+  public int speed;
 
   public IntakeNEO(IntakeShooter intake) {
     addRequirements(this.intake = intake);
+    SmartDashboard.putNumber("Intake RPM", speed);
 
   }
 
@@ -23,7 +26,11 @@ public class IntakeNEO extends Command {
   public void initialize() {
     //TODO: Adjust speed or add in an index
     timer.reset();
-    intake.motorSetIntake(0.6);
+    // if (intake.intakeDetectsNote()) {
+    // return;
+    // }
+    intake.motorSetIntake(SmartDashboard.getNumber("Intake RPM", speed));
+
     intake.resetCurrentLimit();
     index=0; 
     
@@ -32,6 +39,7 @@ public class IntakeNEO extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    intake.motorSetIntake(SmartDashboard.getNumber("Intake RPM", speed));
     // Intake Led
     if((intake.intakeDetectsNote())) {
       timer.start();
@@ -53,8 +61,8 @@ public class IntakeNEO extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeDetectsNote() && timer.get()>0.1;
+    // return intake.intakeDetectsNote() && timer.get()>0.1;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
-
+    return intake.intakeDetectsNote();
   }
 }

@@ -23,7 +23,7 @@ public class RampMaxRPM extends Command {
   @Override
   public void initialize() {
     babyMode = SmartDashboard.getBoolean("babymode", false);
-    intake.setMaxOutake(1);
+    intake.setMaxOuttake(1);
     
   }
 
@@ -35,7 +35,7 @@ public class RampMaxRPM extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopOutake();
+    intake.stopOuttake();
     // resets to defaultColor
   }
 

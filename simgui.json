@@ -43,6 +43,7 @@
       "/Shuffleboard/arm SysID/quasistatic forward": "Command",
       "/SmartDashboard/Arm": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Intake Shooter": "Subsystem",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/moveClimber": "Command"
     },
@@ -58,10 +59,7 @@
         "left": 150,
         "right": 2961,
         "top": 79,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
+        "width": 16.541748046875
       }
     }
   },
