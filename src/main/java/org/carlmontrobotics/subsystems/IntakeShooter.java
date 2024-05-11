@@ -147,7 +147,6 @@ public class IntakeShooter extends SubsystemBase {
         if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
             intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
         }
-        setRPMIntake(SmartDashboard.getNumber("Intake target RPM", 0));
         SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
         SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
         SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
@@ -199,7 +198,6 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void setMaxIntake(int direction) {
-        intakeMotor.setSmartCurrentLimit(60);
         intakeMotor.set(1 * direction);
 
     }
