@@ -22,11 +22,22 @@ public abstract class Config implements Sendable {
 
     // Add additional config settings by declaring a protected field, and...
     protected boolean exampleFlagEnabled = false;
+    protected boolean swimShady = false;
+    protected boolean setupSysId = false;
 
     // ...a public getter starting with "is" for booleans or "get" for other types.
     // Do NOT remove this example. It is used by unit tests.
+
     public boolean isExampleFlagEnabled() {
         return exampleFlagEnabled;
+    }
+
+    public boolean isSwimShady() {
+        return swimShady;
+    }
+
+    public boolean isSysIdTesting() {
+        return setupSysId;
     }
 
     // --- For clarity, place additional config settings ^above^ this line ---

@@ -14,6 +14,7 @@ import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
 import org.carlmontrobotics.lib199.SensorFactory;
 import org.carlmontrobotics.lib199.swerve.SwerveModule;
+import static org.carlmontrobotics.Config.CONFIG;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -212,7 +213,9 @@ public class Drivetrain extends SubsystemBase {
             // driveMotor.setSmartCurrentLimit(80);
 
             // Must call this method for SysId to run
-            // sysIdSetup();
+            if (CONFIG.isSysIdTesting()) {
+                sysIdSetup();
+            }
         }
 
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),

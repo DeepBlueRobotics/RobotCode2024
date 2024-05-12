@@ -6,6 +6,7 @@
 package org.carlmontrobotics;
 
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
+import static org.carlmontrobotics.Config.CONFIG;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -192,13 +193,12 @@ public final class Constants {
 
 	public static final class Drivetrainc {
 
-		// set this variable to true if testing on Swim Shady
-		public static final boolean isSwimShady = false;
-
 		// #region Subsystem Constants
 
-		public static final double wheelBase = isSwimShady ? Units.inchesToMeters(19.75) : Units.inchesToMeters(16.75);
-		public static final double trackWidth = isSwimShady ? Units.inchesToMeters(28.75) : Units.inchesToMeters(23.75);
+		public static final double wheelBase = CONFIG.isSwimShady() ? Units.inchesToMeters(19.75)
+				: Units.inchesToMeters(16.75);
+		public static final double trackWidth = CONFIG.isSwimShady() ? Units.inchesToMeters(28.75)
+				: Units.inchesToMeters(23.75);
 		// "swerveRadius" is the distance from the center of the robot to one of the
 		// modules
 		public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
@@ -235,7 +235,7 @@ public final class Constants {
 		// public static final boolean[] reversed = {true, true, true, true};
 		// Determine correct turnZero constants (FL, FR, BL, BR)
 		public static final double[] turnZeroDeg = RobotBase.isSimulation() ? new double[] {-90.0, -90.0, -90.0, -90.0 }
-				: (isSwimShady ? new double[] { 85.7812, 85.0782, -96.9433, -162.9492 }
+				: (CONFIG.isSwimShady() ? new double[] { 85.7812, 85.0782, -96.9433, -162.9492 }
 						: new double[] { -48.6914, 63.3691, 94.1309, -6.7676 });/* real values here */
 
 		// kP, kI, and kD constants for turn motor controllers in the order of
@@ -258,12 +258,13 @@ public final class Constants {
 		// Forward: 1.72, 1.71, 1.92, 1.94
 		// Backward: 1.92, 1.92, 2.11, 1.89
 		// Order of modules: (FL, FR, BL, BR)
-		public static final double[] drivekP = isSwimShady ? new double[] { 2.8, 2.8, 2.8, 2.8 }
+		public static final double[] drivekP = CONFIG.isSwimShady() ? new double[] { 2.8, 2.8, 2.8, 2.8 }
 				: new double[] { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
 																			// 1.915/100};
 		public static final double[] drivekI = { 0, 0, 0, 0 };
 		public static final double[] drivekD = { 0, 0, 0, 0 };
-		public static final boolean[] driveInversion = (isSwimShady ? new boolean[] { false, false, false, false }
+		public static final boolean[] driveInversion = (CONFIG.isSwimShady()
+				? new boolean[] { false, false, false, false }
 				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion = { true, true, true, true };
 		// kS
@@ -286,10 +287,10 @@ public final class Constants {
 		public static final boolean isGyroReversed = true;
 
 		// PID values are listed in the order kP, kI, and kD
-		public static final double[] xPIDController = isSwimShady ? new double[] { 4, 0.0, 0.0 }
+		public static final double[] xPIDController = CONFIG.isSwimShady() ? new double[] { 4, 0.0, 0.0 }
 				: new double[] { 2, 0.0, 0.0 };
 		public static final double[] yPIDController = xPIDController;
-		public static final double[] thetaPIDController = isSwimShady ? new double[] { 0.10, 0.0, 0.001 }
+		public static final double[] thetaPIDController = CONFIG.isSwimShady() ? new double[] { 0.10, 0.0, 0.001 }
 				: new double[] { 0.05, 0.0, 0.00 };
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu,
@@ -304,20 +305,20 @@ public final class Constants {
 
 		// #region Ports
 
-		public static final int driveFrontLeftPort = isSwimShady ? 8 : 11; //
-		public static final int driveFrontRightPort = isSwimShady ? 13 : 19; //
-		public static final int driveBackLeftPort = isSwimShady ? 5 : 14; //
-		public static final int driveBackRightPort = isSwimShady ? 11 : 17; // correct
+		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 8 : 11; //
+		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 13 : 19; //
+		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 5 : 14; //
+		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 11 : 17; // correct
 
-		public static final int turnFrontLeftPort = isSwimShady ? 7 : 12; //
-		public static final int turnFrontRightPort = isSwimShady ? 14 : 20; // 20
-		public static final int turnBackLeftPort = isSwimShady ? 6 : 15; //
-		public static final int turnBackRightPort = isSwimShady ? 12 : 16; // correct
+		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 7 : 12; //
+		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 14 : 20; // 20
+		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 6 : 15; //
+		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 12 : 16; // correct
 
-		public static final int canCoderPortFL = isSwimShady ? 4 : 0;
-		public static final int canCoderPortFR = isSwimShady ? 2 : 3;
-		public static final int canCoderPortBL = isSwimShady ? 3 : 2;
-		public static final int canCoderPortBR = isSwimShady ? 1 : 1;
+		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 4 : 0;
+		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
+		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 3 : 2;
+		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 1 : 1;
 
 		// #endregion
 
