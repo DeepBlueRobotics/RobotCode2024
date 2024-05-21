@@ -160,7 +160,7 @@ public class Arm extends SubsystemBase {
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
-            rotationsSim = new SimDeviceSim("AbsoluteEncoder", ARM_MOTOR_PORT_MASTER).getDouble("rotations");
+            rotationsSim = new SimDeviceSim("CANDutyCycle:CANSparkMax", ARM_MOTOR_PORT_MASTER).getDouble("position");
         }
 
     }
@@ -463,9 +463,10 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        // Fake goaling to the goal instantaneously
+        // Fake going to the goal instantaneously
         if (rotationsSim != null) {
-            rotationsSim.set((goalState.position + armMasterEncoder.getZeroOffset())
+            rotationsSim.set((goalState.position - armMasterEncoder.getZeroOffset())
+                    * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
                     / armMasterEncoder.getPositionConversionFactor());
         }
     }
