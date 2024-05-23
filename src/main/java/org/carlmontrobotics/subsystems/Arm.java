@@ -11,6 +11,8 @@ import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.sim.MockedEncoder;
+
 import static org.carlmontrobotics.RobotContainer.*;
 
 import org.carlmontrobotics.RobotContainer;
@@ -84,7 +86,7 @@ public class Arm extends SubsystemBase {
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
     private boolean setPIDOff; 
 
-    private SimDouble rotationsSim;
+    private SimDouble positionSim;
 
     public Arm() {
         // weird math stuff
@@ -160,7 +162,8 @@ public class Arm extends SubsystemBase {
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
-            rotationsSim = new SimDeviceSim("AbsoluteEncoder", ARM_MOTOR_PORT_MASTER).getDouble("rotations");
+            positionSim = new SimDeviceSim("SparkMax[%d]_AbsoluteEncoder".formatted(ARM_MOTOR_PORT_MASTER))
+                    .getDouble("Position");
         }
 
     }
@@ -464,9 +467,10 @@ public class Arm extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         // Fake goaling to the goal instantaneously
-        if (rotationsSim != null) {
-            rotationsSim.set((goalState.position + armMasterEncoder.getZeroOffset())
-                    / armMasterEncoder.getPositionConversionFactor());
+        if (positionSim != null) {
+            positionSim.set((goalState.position - armMasterEncoder.getZeroOffset())
+                    * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
+                    / armMasterEncoder.getPositionConversionFactor() * MockedEncoder.NEO_BUILTIN_ENCODER_CPR);
         }
     }
 }
