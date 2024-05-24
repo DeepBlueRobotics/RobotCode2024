@@ -27,7 +27,7 @@ public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
-    private final CANSparkFlex outtakeMotorVortex = new CANSparkFlex(10, MotorType.kBrushless);
+    private final CANSparkFlex outtakeMotorVortex = new CANSparkFlex(OUTAKE_PORT, MotorType.kBrushless);
     private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();
@@ -72,6 +72,7 @@ public class IntakeShooter extends SubsystemBase {
         outtakeDistanceSensor.setRangingMode(RangingMode.Short, 24);
         outtakeMotorVortex.setSmartCurrentLimit(60);
         SmartDashboard.putNumber("Intake target RPM", 0);
+        SmartDashboard.putNumber("Vortex volts", 0);
     }
 
     public boolean intakeIsOverTemp() {
@@ -174,10 +175,6 @@ public class IntakeShooter extends SubsystemBase {
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
-
-        // double volts = SmartDashboard.getNumber("Vortex volts", 0);
-        // outakeMotorVortex.set(volts);
-
         // setMaxOutake();
 
         SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());

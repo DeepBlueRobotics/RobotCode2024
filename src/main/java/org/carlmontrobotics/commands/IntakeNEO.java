@@ -29,7 +29,7 @@ public class IntakeNEO extends Command {
     // if (intake.intakeDetectsNote()) {
     // return;
     // }
-    intake.motorSetIntake(SmartDashboard.getNumber("Intake RPM", speed));
+    intake.motorSetIntake(.5);
 
     intake.resetCurrentLimit();
     index=0; 
@@ -39,10 +39,10 @@ public class IntakeNEO extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.motorSetIntake(SmartDashboard.getNumber("Intake RPM", speed));
     // Intake Led
     if((intake.intakeDetectsNote())) {
       timer.start();
+      intake.motorSetIntake(.1);
     } else {
       timer.stop();
       timer.reset();
@@ -63,6 +63,6 @@ public class IntakeNEO extends Command {
   public boolean isFinished() {
     // return intake.intakeDetectsNote() && timer.get()>0.1;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
-    return intake.intakeDetectsNote();
+    return intake.outtakeDetectsNote();
   }
 }
