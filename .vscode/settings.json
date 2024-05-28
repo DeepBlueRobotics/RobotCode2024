@@ -30,6 +30,7 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "wpilib.skipTests": true,
   "java.debug.settings.onBuildFailureProceed": true,
+  "java.format.settings.url": "https://raw.githubusercontent.com/wpilibsuite/styleguide/main/ide/eclipse-java-google-style.xml",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "modificationsIfAvailable"
 }
