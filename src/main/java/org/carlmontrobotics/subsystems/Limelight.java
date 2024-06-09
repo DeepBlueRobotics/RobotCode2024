@@ -34,8 +34,12 @@ public class Limelight extends SubsystemBase {
     getDistanceToSpeakerMeters();
     getCurrentPose();
     getDistanceToNoteMeters();
-  }
 
+    SmartDashboard.putBoolean("see apriltag", LimelightHelpers.getTV(SHOOTER_LL_NAME));
+    SmartDashboard.putNumber("distance to speaker", getDistanceToSpeakerMeters());
+    SmartDashboard.putNumber("rotation to align", getRotateAngleDeg());
+    SmartDashboard.putNumber("arm angle based on position", getArmAngleToShootSpeakerRad());
+  }
 
   public void updateBotPose3d() {
     botPose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
@@ -48,7 +52,6 @@ public class Limelight extends SubsystemBase {
     // SmartDashboard.putNumber("estimated rotation (deg)", estimatedPos.getRotation().getDegrees());
     return estimatedPos;
   }
-
 
   public double getTXDeg(String limelightName) {
     return (limelightName == INTAKE_LL_NAME) ? LimelightHelpers.getTX(INTAKE_LL_NAME) : -LimelightHelpers.getTY(SHOOTER_LL_NAME);
@@ -75,7 +78,6 @@ public class Limelight extends SubsystemBase {
     }
   }
 
-
   public double getDistanceToNoteMeters() {
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE)
         .plus(Rotation2d.fromDegrees(getTYDeg(INTAKE_LL_NAME)));
@@ -100,5 +102,4 @@ public class Limelight extends SubsystemBase {
     double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / getDistanceToSpeakerMeters());
     return Math.atan(realHorizontalOffset / getDistanceToSpeakerMeters());
   }
-
 }
