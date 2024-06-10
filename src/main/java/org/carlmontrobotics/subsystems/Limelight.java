@@ -35,8 +35,9 @@ public class Limelight extends SubsystemBase {
     getCurrentPose();
     getDistanceToNoteMeters();
 
-    SmartDashboard.putBoolean("see apriltag", LimelightHelpers.getTV(SHOOTER_LL_NAME));
-    SmartDashboard.putNumber("distance to speaker", getDistanceToSpeakerMeters());
+    SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
+    SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
+    SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
     SmartDashboard.putNumber("rotation to align", getRotateAngleDeg());
     SmartDashboard.putNumber("arm angle based on position", getArmAngleToShootSpeakerRad());
   }
