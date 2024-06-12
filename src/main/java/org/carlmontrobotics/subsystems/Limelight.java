@@ -3,10 +3,12 @@ package org.carlmontrobotics.subsystems;
 import static org.carlmontrobotics.Constants.Limelightc.*;
 import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -18,6 +20,8 @@ public class Limelight extends SubsystemBase {
   // private double[] targetPose = null;
   private Pose3d botPose;
 
+  private final InterpolatingDoubleTreeMap shooterMap;
+
   public Limelight(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     poseEstimator = new SwerveDrivePoseEstimator(
@@ -25,21 +29,29 @@ public class Limelight extends SubsystemBase {
         Rotation2d.fromDegrees(drivetrain.getHeading()),
         drivetrain.getModulePositions(),
         new Pose2d());
+
+    LimelightHelpers.SetFiducialIDFiltersOverride(SHOOTER_LL_NAME, VALID_IDS);
+
+    shooterMap = new InterpolatingDoubleTreeMap(); // add values after testing
+    shooterMap.put(0.0, 0.0); // key is distance (meters), value is angle (rads)
   }
 
   @Override
   public void periodic() {
     poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()), drivetrain.getModulePositions());
     updateBotPose3d();
-    getDistanceToSpeakerMeters();
-    getCurrentPose();
-    getDistanceToNoteMeters();
+
+    updateMT2Odometry();
 
     // intake limelight testing
     SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
     SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
     SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
     SmartDashboard.putNumber("rotation to align", getRotateAngleRad());
+
+    // shooter limelight testing
+    SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
+    SmartDashboard.putNumber("optimized arm angle", getArmAngleToShootSpeakerRad());
   }
 
   public void updateBotPose3d() {
@@ -100,5 +112,49 @@ public class Limelight extends SubsystemBase {
     double cameraLensHorizontalOffset = getTXDeg(SHOOTER_LL_NAME) / getDistanceToSpeakerMeters();
     double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / getDistanceToSpeakerMeters());
     return Math.atan(realHorizontalOffset / getDistanceToSpeakerMeters());
+  }
+
+  // megatag2
+
+  public void updateMT2Odometry() {
+    boolean rejectVisionUpdate = false;
+
+    LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
+        poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
+        .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
+
+    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL) {
+      rejectVisionUpdate = true;
+    }
+
+    if (visionPoseEstimate.tagCount == 0) {
+      rejectVisionUpdate = true;
+    }
+
+    if (!rejectVisionUpdate) {
+      poseEstimator
+          .setVisionMeasurementStdDevs(VecBuilder.fill(STD_DEV_X_METERS, STD_DEV_Y_METERS, STD_DEV_HEADING_RADS));
+      poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
+    }
+  }
+
+  public double getRotateAngleRadMT2() {
+    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
+
+    double targetX = targetPoseRobotSpace.getX(); // the forward offset between the center of the robot and target
+    double targetY = targetPoseRobotSpace.getY(); // the sideways offset
+
+    double targetOffsetRads = Math.atan2(targetY, targetX);
+
+    return targetOffsetRads;
+  }
+
+  public double getDistanceToSpeakerMetersMT2() {
+    return LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME).getX();
+  }
+
+  public double getOptimizedArmAngleRadsMT2() {
+    return shooterMap.get(getDistanceToSpeakerMetersMT2());
   }
 }
