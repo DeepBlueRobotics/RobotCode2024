@@ -125,7 +125,7 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
         .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
 
-    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEGSPSEC) { // degrees per second
+    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEG_PER_SEC) { // degrees per second
       rejectVisionUpdate = true;
     }
 
