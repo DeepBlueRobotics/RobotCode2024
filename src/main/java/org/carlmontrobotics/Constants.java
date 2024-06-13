@@ -371,32 +371,31 @@ public final class Constants {
 					2 * Math.PI); // The constraints for this path. If using a differential drivetrain, the
 									// angular constraints have no effect.
 		}
-		// #endregion
 	}
 
 	public static final class Limelightc {
 		public static final String INTAKE_LL_NAME = "limelight-intake";
 		public static final String SHOOTER_LL_NAME = "limelight-shooter";
 
-		public static final double ERROR_TOLERANCE_RAD = 0.1;
-		public static final double HORIZONTAL_FOV_DEG = 0;
-		public static final double RESOLUTION_WIDTH_PIX = 640;
-		public static final double MOUNT_ANGLE_DEG_SHOOTER = 42.5; 
-		public static final double MOUNT_ANGLE_DEG_INTAKE = -22; // 23.228
-		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(11.5); // 16.6
-		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); // 16.6
-		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115;
-		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
+		public static final double ERROR_TOLERANCE_RAD = 0.1; // unused
+		public static final double HORIZONTAL_FOV_DEG = 0; // unused
+		public static final double RESOLUTION_WIDTH_PIX = 640; // unused
+		public static final double MOUNT_ANGLE_DEG_SHOOTER = 55.446;
+		public static final double MOUNT_ANGLE_DEG_INTAKE = -29;
+		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(8.891);
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52);
+		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115; // unused
+		public static final double NOTE_HEIGHT = Units.inchesToMeters(2); // unused
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
 		public static final double HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS = Units.inchesToMeters(65.5675);
-		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(19.5);
+		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(10.911);
 		public static final double END_EFFECTOR_BASE_ANGLE_RADS = Units.degreesToRadians(75);
-		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65);
+		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65); // unused
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
-			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); //88.125
+			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(60.125);
 			public static final double HEIGHT_FROM_BOTTOM_TO_SUBWOOFER = Units.inchesToMeters(26);
 			public static final double HEIGHT_FROM_BOTTOM_TO_ARM_RESTING = Units.inchesToMeters(21.875);
 		}
