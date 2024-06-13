@@ -27,7 +27,8 @@ public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
-    private final CANSparkFlex outtakeMotorVortex = new CANSparkFlex(OUTAKE_PORT, MotorType.kBrushless);
+    private final CANSparkFlex outtakeMotorVortex =
+            new CANSparkFlex(OUTTAKE_PORT, MotorType.kBrushless);
     private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();
@@ -36,7 +37,6 @@ public class IntakeShooter extends SubsystemBase {
     private Timer intakeTOFTimer = new Timer();
     private Timer outtakeTOFTimer = new Timer();
     private int count = 0;
-    private StringLogEntry tofLogEntry;
     private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
             kA[INTAKE]);
     private final SimpleMotorFeedforward outtakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE],
@@ -61,8 +61,8 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
         SmartDashboard.putData("Intake Shooter", this);
-        SmartDashboard.putNumber("Intake Ks", kS[INTAKE]);
-        SmartDashboard.putNumber("Intake Kv", kV[INTAKE]);
+        // SmartDashboard.putNumber("Intake Ks", kS[INTAKE]);
+        // SmartDashboard.putNumber("Intake Kv", kV[INTAKE]);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
         // SmartDashboard.putNumber("intake volts", 0);
@@ -71,8 +71,8 @@ public class IntakeShooter extends SubsystemBase {
         intakeDistanceSensor.setRangingMode(RangingMode.Short, 24);// 24 ms is the minimum sample time acc to docs
         outtakeDistanceSensor.setRangingMode(RangingMode.Short, 24);
         outtakeMotorVortex.setSmartCurrentLimit(60);
-        SmartDashboard.putNumber("Intake target RPM", 0);
-        SmartDashboard.putNumber("Vortex volts", 0);
+        // SmartDashboard.putNumber("Intake target RPM", 0);
+        // SmartDashboard.putNumber("Vortex volts", 0);
     }
 
     public boolean intakeIsOverTemp() {
