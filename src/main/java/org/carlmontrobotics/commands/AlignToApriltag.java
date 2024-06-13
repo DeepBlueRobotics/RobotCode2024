@@ -33,7 +33,7 @@ public class AlignToApriltag extends Command {
 
         rotationPID.enableContinuousInput(-180, 180);
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
-                .minus(Rotation2d.fromDegrees(limelight.getRotateAngleRad()));
+                .minus(Rotation2d.fromRadians(limelight.getRotateAngleRad()));
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
         rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
         SendableRegistry.addChild(this, rotationPID);
@@ -43,7 +43,7 @@ public class AlignToApriltag extends Command {
     @Override
     public void execute() {
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
-                .minus(Rotation2d.fromDegrees(limelight.getRotateAngleRad()));
+                .minus(Rotation2d.fromRadians(limelight.getRotateAngleRad()));
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
         if (teleopDrive == null)
             drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
