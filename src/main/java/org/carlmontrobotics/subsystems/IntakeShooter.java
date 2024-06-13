@@ -142,12 +142,12 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         updateValues();
-        double newKS = SmartDashboard.getNumber("Intake Ks", kS[INTAKE]);
-        double newKV = SmartDashboard.getNumber("Intake Kv", kV[INTAKE]);
+        // double newKS = SmartDashboard.getNumber("Intake Ks", kS[INTAKE]);
+        /// double newKV = SmartDashboard.getNumber("Intake Kv", kV[INTAKE]);
 
-        if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
-            intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
-        }
+        // if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
+        // intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
+        // }
         SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
         SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
         SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
