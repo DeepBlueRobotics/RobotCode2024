@@ -33,7 +33,8 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.SetFiducialIDFiltersOverride(SHOOTER_LL_NAME, VALID_IDS);
 
     shooterMap = new InterpolatingDoubleTreeMap(); // add values after testing
-    shooterMap.put(0.0, 0.0); // key is distance (meters), value is angle (rads)
+    // key is distance (meters), value is angle (rads)
+    shooterMap.put(0.0, 0.0);
   }
 
   @Override
@@ -124,7 +125,7 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
         .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
 
-    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL) {
+    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEGSPSEC) { // degrees per second
       rejectVisionUpdate = true;
     }
 

@@ -192,7 +192,7 @@ public class RobotContainer {
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new IntakeNEO(intakeShooter)));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
-        .onTrue(new AlignToNote(drivetrain));
+        .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(270), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative180Deg)
@@ -201,7 +201,7 @@ public class RobotContainer {
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(90), drivetrain));
   }
   private void setBindingsManipulatorNEO() {
-    new JoystickButton(manipulatorController, EJECT_BUTTON).whileTrue(new AlignToNote(drivetrain)); // test
+    new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
 
     new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
