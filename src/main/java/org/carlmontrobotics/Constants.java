@@ -59,7 +59,7 @@ public final class Constants {
 		public static final double[] kV = { 0.122, 0/* 0.065239, 0.077913 */ };
 		public static final double[] kA = { 0, 0/* 0.0062809,0.05289 */ };
 		public static final int INTAKE_PORT = 9; // port
-		public static final int OUTAKE_PORT = 10; // port
+		public static final int OUTTAKE_PORT = 10; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
 		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
 		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
