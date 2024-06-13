@@ -152,7 +152,12 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getDistanceToSpeakerMetersMT2() {
-    return LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME).getX();
+    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
+
+    double x = targetPoseRobotSpace.getX();
+    double y = targetPoseRobotSpace.getY();
+
+    return Math.sqrt(x * x + y * y);
   }
 
   public double getOptimizedArmAngleRadsMT2() {
