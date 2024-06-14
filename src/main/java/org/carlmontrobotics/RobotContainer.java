@@ -109,9 +109,7 @@ public class RobotContainer {
     // "Preloaded Left-Pickup Subwoofer",
     // "Preloaded Right-Pickup Subwoofer",
 
-    "Left-Amp",
-    "Shoot on Right",
-    "Shoot Center"
+      "Left-Amp",
   
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
