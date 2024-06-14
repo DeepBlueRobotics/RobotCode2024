@@ -24,13 +24,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutonRuinerShoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutonRuiner"
+                  "name": "AutonRuinerShootAndIntake"
                 }
               }
             ]
