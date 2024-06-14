@@ -24,13 +24,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "AutonRuinerShoot"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "SwitchRPMShoot"
+                  "name": "IntakeAutonRuiner"
                 }
               }
             ]
