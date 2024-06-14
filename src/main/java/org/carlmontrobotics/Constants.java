@@ -377,6 +377,14 @@ public final class Constants {
 		public static final String INTAKE_LL_NAME = "limelight-intake";
 		public static final String SHOOTER_LL_NAME = "limelight-shooter";
 
+		public static final int[] VALID_IDS = { 4, 7 };
+
+		public static final double STD_DEV_X_METERS = 0.7; // uncertainty of 0.7 meters on the field
+		public static final double STD_DEV_Y_METERS = 0.7; // uncertainty of 0.7 meters on the field
+		public static final int STD_DEV_HEADING_RADS = 9999999; // (gyro) heading standard deviation, set extremely high
+																// to represent unreliable heading
+		public static final int MAX_TRUSTED_ANG_VEL_DEG_PER_SEC = 720; // maximum trusted angular velocity
+
 		public static final double ERROR_TOLERANCE_RAD = 0.1; // unused
 		public static final double HORIZONTAL_FOV_DEG = 0; // unused
 		public static final double RESOLUTION_WIDTH_PIX = 640; // unused

@@ -175,6 +175,9 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
+
         babyMode = SmartDashboard.getBoolean("babymode", false);
         
 
