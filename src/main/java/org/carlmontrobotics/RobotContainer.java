@@ -106,6 +106,7 @@ public class RobotContainer {
     "Left-Shoot For Left Subwoofer",
     "Right-Shoot For Right Subwoofer",
 
+      "Preloaded Right Auton 3 piece total",
     // "Preloaded Left-Pickup Subwoofer",
     // "Preloaded Right-Pickup Subwoofer",
 
