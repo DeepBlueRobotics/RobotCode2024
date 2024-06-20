@@ -352,9 +352,12 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
 
-    NamedCommands.registerCommand("AutonRuinerShoot", new AutonRuinerShoot(intakeShooter));
-    NamedCommands.registerCommand("IntakeAutonRuiner", new IntakeAutonRuiner(intakeShooter));
-    NamedCommands.registerCommand("AutonRuinerShootAndIntake", new IntakeAutonRuiner(intakeShooter));
+    // NamedCommands.registerCommand("AutonRuinerShoot", new
+    // AutonRuinerShoot(intakeShooter));
+    // NamedCommands.registerCommand("IntakeAutonRuiner", new
+    // IntakeAutonRuiner(intakeShooter));
+    // NamedCommands.registerCommand("AutonRuinerShootAndIntake", new
+    // IntakeAutonRuiner(intakeShooter));
 
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 

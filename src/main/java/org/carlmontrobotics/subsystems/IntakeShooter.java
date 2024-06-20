@@ -202,7 +202,11 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
-    public void setMaxOuttake(double d) {
+    public void setMaxOuttake(int d) {
+        outtakeMotorVortex.set(1 * d);
+    }
+
+    public void setAutoRuinerOuttake(double d) {
         outtakeMotorVortex.set(1 * d);
     }
 
