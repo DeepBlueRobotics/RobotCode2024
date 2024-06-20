@@ -6,6 +6,7 @@
 package org.carlmontrobotics;
 
 import org.carlmontrobotics.lib199.swerve.SwerveConfig;
+import static org.carlmontrobotics.Config.CONFIG;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -18,6 +19,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.util.Color;
+import org.carlmontrobotics.subsystems.Led;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -33,7 +36,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  */
 public final class Constants {
 	public static final double g = 9.81; // meters per second squared
-
 	public static final class Led {
 
 		public static final Color8Bit DEFAULT_COLOR_BLUE = new Color8Bit(0, 0, 200);
@@ -50,14 +52,14 @@ public final class Constants {
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
 		// 0.0001184
-		public static final double[] kP = { /* /Intake/ */ 0.030717, /* /Outake/ */0.0001 };
+		public static final double[] kP = { 0, 0 /* 0.030717,0.0001 */ };
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
-		public static final double[] kS = { /* /Intake/ */0.35042, /* /Outake/ */0.29753 * 2 };
-		public static final double[] kV = { /* /Intake/ */0.065239, /* /Outake/ */0.077913 };
-		public static final double[] kA = { /* /Intake/ */0.0062809, /* /Outake/ */0.05289 };
+		public static final double[] kS = { /* /Intake/ */0.22, /* /Outake/ */0.29753 * 2 };
+		public static final double[] kV = { 0.122, 0/* 0.065239, 0.077913 */ };
+		public static final double[] kA = { 0, 0/* 0.0062809,0.05289 */ };
 		public static final int INTAKE_PORT = 9; // port
-		public static final int OUTAKE_PORT = 10; // port
+		public static final int OUTTAKE_PORT = 10; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
 		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
 		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
@@ -145,12 +147,21 @@ public final class Constants {
 		// fine for now, change it later before use - ("Incorect use of setIZone()"
 		// Issue #22)
 		// public static final double MAX_FF_VEL_RAD_P_S = 0.2; //rad/s
+		public static final double MAX_FF_VEL_RAD_P_S = Math.PI * .5;
 		public static final double MAX_FF_ACCEL_RAD_P_S = 53.728 / 4; // rad / s^2
 																		// ((.89*2)/(1.477/(61.875^2))/61.875)-20.84
+
+		public static final double MAX_FF_VEL_RAD_P_S_BABY = 0;
+		public static final double MAX_FF_ACCEL_RAD_P_S_BABY = 0;
+		//TODO: determine these values^
+
+
 		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
 		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
+		public static final double MIN_VOLTAGE_BABY = MIN_VOLTAGE/12 *0.7;
+		public static final double MAX_VOLTAGE_BABY = MAX_VOLTAGE/12*0.7;
 		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
@@ -184,8 +195,10 @@ public final class Constants {
 
 		// #region Subsystem Constants
 
-		public static final double wheelBase = Units.inchesToMeters(16.75);
-		public static final double trackWidth = Units.inchesToMeters(23.75);
+		public static final double wheelBase = CONFIG.isSwimShady() ? Units.inchesToMeters(19.75)
+				: Units.inchesToMeters(16.75);
+		public static final double trackWidth = CONFIG.isSwimShady() ? Units.inchesToMeters(28.75)
+				: Units.inchesToMeters(23.75);
 		// "swerveRadius" is the distance from the center of the robot to one of the
 		// modules
 		public static final double swerveRadius = Math.sqrt(Math.pow(wheelBase / 2, 2) + Math.pow(trackWidth / 2, 2));
@@ -222,7 +235,8 @@ public final class Constants {
 		// public static final boolean[] reversed = {true, true, true, true};
 		// Determine correct turnZero constants (FL, FR, BL, BR)
 		public static final double[] turnZeroDeg = RobotBase.isSimulation() ? new double[] {-90.0, -90.0, -90.0, -90.0 }
-				: new double[] { -48.6914, 63.3691, 94.1309, -6.7676 };/* real values here */
+				: (CONFIG.isSwimShady() ? new double[] { 85.7812, 85.0782, -96.9433, -162.9492 }
+						: new double[] { -48.6914, 63.3691, 94.1309, -6.7676 });/* real values here */
 
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
@@ -244,11 +258,14 @@ public final class Constants {
 		// Forward: 1.72, 1.71, 1.92, 1.94
 		// Backward: 1.92, 1.92, 2.11, 1.89
 		// Order of modules: (FL, FR, BL, BR)
-		public static final double[] drivekP = { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
+		public static final double[] drivekP = CONFIG.isSwimShady() ? new double[] { 2.8, 2.8, 2.8, 2.8 }
+				: new double[] { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
 																			// 1.915/100};
 		public static final double[] drivekI = { 0, 0, 0, 0 };
 		public static final double[] drivekD = { 0, 0, 0, 0 };
-		public static final boolean[] driveInversion = { true, false, true, false };
+		public static final boolean[] driveInversion = (CONFIG.isSwimShady()
+				? new boolean[] { false, false, false, false }
+				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion = { true, true, true, true };
 		// kS
 		public static final double[] kForwardVolts = { 0.26744, 0.31897, 0.27967, 0.2461 };
@@ -270,9 +287,11 @@ public final class Constants {
 		public static final boolean isGyroReversed = true;
 
 		// PID values are listed in the order kP, kI, and kD
-		public static final double[] xPIDController = { 2, 0.0, 0.0 };
-		public static final double[] yPIDController = { 2, 0.0, 0.0 };
-		public static final double[] thetaPIDController = { 0.05, 0.0, 0.00 };
+		public static final double[] xPIDController = CONFIG.isSwimShady() ? new double[] { 4, 0.0, 0.0 }
+				: new double[] { 2, 0.0, 0.0 };
+		public static final double[] yPIDController = xPIDController;
+		public static final double[] thetaPIDController = CONFIG.isSwimShady() ? new double[] { 0.10, 0.0, 0.001 }
+				: new double[] { 0.05, 0.0, 0.00 };
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu,
 				autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels,
@@ -286,20 +305,20 @@ public final class Constants {
 
 		// #region Ports
 
-		public static final int driveFrontLeftPort = 11; //
-		public static final int driveFrontRightPort = 19; //
-		public static final int driveBackLeftPort = 14; //
-		public static final int driveBackRightPort = 17; // correct
+		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 8 : 11; //
+		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 13 : 19; //
+		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 5 : 14; //
+		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 11 : 17; // correct
 
-		public static final int turnFrontLeftPort = 12; //
-		public static final int turnFrontRightPort = 20; // 20
-		public static final int turnBackLeftPort = 15; //
-		public static final int turnBackRightPort = 16; // correct
+		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 7 : 12; //
+		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 14 : 20; // 20
+		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 6 : 15; //
+		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 12 : 16; // correct
 
-		public static final int canCoderPortFL = 0;
-		public static final int canCoderPortFR = 3;
-		public static final int canCoderPortBL = 2;
-		public static final int canCoderPortBR = 1;
+		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 4 : 0;
+		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
+		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 3 : 2;
+		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 1 : 1;
 
 		// #endregion
 
@@ -309,6 +328,10 @@ public final class Constants {
 		public static double kNormalDriveRotation = 0.5; // Percent Multiplier
 		public static double kSlowDriveSpeed = 0.4; // Percent Multiplier
 		public static double kSlowDriveRotation = 0.250; // Percent Multiplier
+
+		//baby speed values, i just guessed the percent multiplier. TODO: find actual ones we wana use
+		public static double kBabyDriveSpeed = 0.3;
+		public static double kBabyDriveRotation = 0.2;
 		public static double kAlignMultiplier = 1D / 3D;
 		public static final double kAlignForward = 0.6;
 
@@ -348,32 +371,41 @@ public final class Constants {
 					2 * Math.PI); // The constraints for this path. If using a differential drivetrain, the
 									// angular constraints have no effect.
 		}
-		// #endregion
 	}
 
 	public static final class Limelightc {
 		public static final String INTAKE_LL_NAME = "limelight-intake";
 		public static final String SHOOTER_LL_NAME = "limelight-shooter";
 
-		public static final double ERROR_TOLERANCE_RAD = 0.1;
-		public static final double HORIZONTAL_FOV_DEG = 0;
-		public static final double RESOLUTION_WIDTH_PIX = 640;
-		public static final double MOUNT_ANGLE_DEG_SHOOTER = 42.5; 
-		public static final double MOUNT_ANGLE_DEG_INTAKE = -22; // 23.228
-		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(11.5); // 16.6
-		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52); // 16.6
-		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115;
-		public static final double NOTE_HEIGHT = Units.inchesToMeters(0);
+		public static final int[] VALID_IDS = { 4, 7 };
+
+		public static final double STD_DEV_X_METERS = 0.7; // uncertainty of 0.7 meters on the field
+		public static final double STD_DEV_Y_METERS = 0.7; // uncertainty of 0.7 meters on the field
+		public static final int STD_DEV_HEADING_RADS = 9999999; // (gyro) heading standard deviation, set extremely high
+																// to represent unreliable heading
+		public static final int MAX_TRUSTED_ANG_VEL_DEG_PER_SEC = 720; // maximum trusted angular velocity
+
+		public static final double ERROR_TOLERANCE_RAD = 0.1; // unused
+		public static final double HORIZONTAL_FOV_DEG = 0; // unused
+		public static final double RESOLUTION_WIDTH_PIX = 640; // unused
+		public static final double MOUNT_ANGLE_DEG_SHOOTER = 55.446;
+		public static final double MOUNT_ANGLE_DEG_INTAKE = -29;
+		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(8.891);
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52);
+		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115; // unused
+		public static final double NOTE_HEIGHT = Units.inchesToMeters(2); // unused
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
 		public static final double MIN_MOVEMENT_RADSPSEC = 0.5;
 		public static final double HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS = Units.inchesToMeters(65.5675);
-		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(19.5);
+		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(10.911);
 		public static final double END_EFFECTOR_BASE_ANGLE_RADS = Units.degreesToRadians(75);
-		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65);
+		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65); // unused
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
-			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(56.7); // 88.125
+			public static final double SPEAKER_CENTER_HEIGHT_METERS = Units.inchesToMeters(60.125);
+			public static final double HEIGHT_FROM_BOTTOM_TO_SUBWOOFER = Units.inchesToMeters(26);
+			public static final double HEIGHT_FROM_BOTTOM_TO_ARM_RESTING = Units.inchesToMeters(21.875);
 		}
 	}
 

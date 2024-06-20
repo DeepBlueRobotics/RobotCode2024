@@ -11,6 +11,11 @@ import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.sim.MockedEncoder;
+
+import static org.carlmontrobotics.RobotContainer.*;
+
+import org.carlmontrobotics.RobotContainer;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -19,6 +24,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -30,9 +36,11 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 public class Arm extends SubsystemBase {
+    
     private boolean callDrive = true;
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
@@ -73,9 +82,12 @@ public class Arm extends SubsystemBase {
     private final MutableMeasure<Voltage> voltage = mutable(Volts.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(RadiansPerSecond.of(0));
     private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
-
+    private static boolean babyMode;
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
     private boolean setPIDOff; 
+
+    private SimDouble rotationsSim;
+
     public Arm() {
         // weird math stuff
         armMotorMaster.setInverted(MOTOR_INVERTED_MASTER);
@@ -112,12 +124,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput((3 * Math.PI) / 2);
         armPIDMaster.setIZone(IZONE_RAD);
 
-        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                Math.PI * .5,
-                MAX_FF_ACCEL_RAD_P_S);
-        // ^ worst case scenario
-        // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
-        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
+        
 
         SmartDashboard.putData("Arm", this);
 
@@ -143,9 +150,24 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("soft limit pos (rad)", SOFT_LIMIT_LOCATION_IN_RADIANS);
         armMotorMaster.setSmartCurrentLimit(80);
         armMotorFollower.setSmartCurrentLimit(80);
-
+        if(SmartDashboard.getBoolean("babymode", babyMode) == true){
+            armPIDMaster.setOutputRange(-0.3/12, 0.3/12);
+        }
+        else{
+            armPIDMaster.setOutputRange(MIN_VOLTAGE/12, MAX_VOLTAGE/12);
+        }
+        TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                (MAX_FF_VEL_RAD_P_S),
+                (MAX_FF_ACCEL_RAD_P_S));
+        armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putBoolean("arm is at pos", false);
+        if (RobotBase.isSimulation()) {
+            rotationsSim = new SimDeviceSim("CANDutyCycle:CANSparkMax",
+                    ARM_MOTOR_PORT_MASTER).getDouble("position");
+        }
+
     }
+    
 
     public void setBooleanDrive(boolean climb) {
         callDrive = climb;
@@ -153,6 +175,16 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
+
+        babyMode = SmartDashboard.getBoolean("babymode", false);
+        
+
+        //Aaron was here
+        // ^ worst case scenario
+        // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
+
         SmartDashboard.putData(this);
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
@@ -228,8 +260,12 @@ public class Arm extends SubsystemBase {
             armMotorMaster.set(0);
             armMotorFollower.set(0);
         }
+        
+       
+        
 
         autoCancelArmCommand();
+
 
     }
     public static void setSelector(int num) {
@@ -429,5 +465,16 @@ public class Arm extends SubsystemBase {
     public void setDefaultCommand(TeleopArm teleopArm, Object object) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        // Fake going to the goal instantaneously
+        if (rotationsSim != null) {
+            rotationsSim
+                    .set((goalState.position - armMasterEncoder.getZeroOffset())
+                            * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
+                            / armMasterEncoder.getPositionConversionFactor());
+        }
     }
 }

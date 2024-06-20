@@ -6,6 +6,11 @@
       }
     },
     "Other Devices": {
+      "AbsoluteEncoder[13]": {
+        "header": {
+          "open": true
+        }
+      },
       "CANCoder (v6)[2]": {
         "header": {
           "open": true
@@ -37,6 +42,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Auto Chooser Tab/SendableChooser[0]": "String Chooser",
+      "/Shuffleboard/Auto Chooser Tab/SendableChooser[1]": "String Chooser",
       "/Shuffleboard/arm SysID/dynamic backward": "Command",
       "/Shuffleboard/arm SysID/dynamic forward": "Command",
       "/Shuffleboard/arm SysID/quasistatic backward": "Command",
@@ -45,6 +51,7 @@
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Intake Shooter": "Subsystem",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
       "/SmartDashboard/moveClimber": "Command"
     },
     "windows": {
@@ -67,7 +74,20 @@
     }
   },
   "NetworkTables": {
+    "persistent": {
+      "SmartDashboard": {
+        "open": true
+      }
+    },
+    "retained": {
+      "Shuffleboard": {
+        "open": true
+      }
+    },
     "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
       "SmartDashboard": {
         "Arm": {
           "open": true
@@ -76,6 +96,9 @@
           "open": true
         },
         "BR": {
+          "open": true
+        },
+        "CONFIG overrides": {
           "open": true
         },
         "FL": {

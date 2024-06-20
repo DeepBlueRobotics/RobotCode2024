@@ -1,9 +1,7 @@
 package org.carlmontrobotics.commands;
 
 import static org.carlmontrobotics.Constants.Effectorc.*;
-
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -35,13 +33,13 @@ public class Intake extends Command {
   public void execute() {
     // Intake Led
     
-    if (intake.intakeDetectsNote() && !intake.outakeDetectsNote()) {
+    if (intake.intakeDetectsNote() && !intake.outtakeDetectsNote()) {
       index++;
 
       //intake.setRPMIntake(0);
      intake.setRPMIntake(INTAKE_RPM + index*increaseAmount);
     }
-    if (intake.outakeDetectsNote()) {
+    if (intake.outtakeDetectsNote()) {
       // Timer.delay(keepIntakingFor);
 
       intake.setRPMIntake(0.0);
@@ -64,7 +62,7 @@ public class Intake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && intake.outakeDetectsNote());
+    return (intake.intakeDetectsNote() && intake.outtakeDetectsNote());
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
 
   }

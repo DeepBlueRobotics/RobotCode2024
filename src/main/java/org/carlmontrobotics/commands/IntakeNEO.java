@@ -5,27 +5,26 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 import org.carlmontrobotics.subsystems.IntakeShooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeNEO extends Command {
   // intake until sees game peice or 4sec has passed
-  private Timer timer = new Timer();
   private final IntakeShooter intake;
-  double increaseAmount = 0.05;
-  int index = 0;
 
   public IntakeNEO(IntakeShooter intake) {
     addRequirements(this.intake = intake);
-
   }
 
   @Override
   public void initialize() {
-    //TODO: Adjust speed or add in an index
-    timer.reset();
-    intake.motorSetIntake(0.6);
+    // TODO: Adjust speed or add in an index;
+    // if (intake.intakeDetectsNote()) {
+    // return;
+    // }
+    intake.motorSetIntake(.5); // Fast intake speed for initial intake
+
     intake.resetCurrentLimit();
-    index=0; 
     
   }
 
@@ -34,10 +33,7 @@ public class IntakeNEO extends Command {
   public void execute() {
     // Intake Led
     if((intake.intakeDetectsNote())) {
-      timer.start();
-    } else {
-      timer.stop();
-      timer.reset();
+      intake.motorSetIntake(.1); // Slower intake speed triggered after intake ds sees note
     }
   }
 
@@ -45,16 +41,14 @@ public class IntakeNEO extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
-    timer.stop();
-    index = 0;
     //intake.resetCurrentLimit();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeDetectsNote() && timer.get()>0.1;
+    // return intake.intakeDetectsNote() && timer.get()>0.1;
     // || //timer.hasElapsed(MAX_SECONDS_OVERLOAD);
-
+    return intake.outtakeDetectsNote();
   }
 }

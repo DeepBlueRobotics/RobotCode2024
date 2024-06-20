@@ -63,6 +63,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  private static boolean babyMode = false;
+  
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(Driver.port);
@@ -117,6 +119,14 @@ public class RobotContainer {
 
   public RobotContainer() {
     {
+      // Put any configuration overrides to the dashboard and the terminal
+      SmartDashboard.putData("CONFIG overrides", Config.CONFIG);
+      System.out.println(Config.CONFIG);
+
+      SmartDashboard.putData("BuildConstants", BuildInfo.getInstance());
+
+      SmartDashboard.setDefaultBoolean("babymode", babyMode);
+      SmartDashboard.setPersistent("babymode");
       //safe auto setup... stuff in setupAutos() is not safe to run here - will break robot
       registerAutoCommands();
       SmartDashboard.putData(autoSelector);
@@ -142,6 +152,9 @@ public class RobotContainer {
     //setBindingsManipulatorENDEFF();
     setBindingsManipulatorNEO();
   }
+  
+
+ 
 
   private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new TeleopDrive(
@@ -199,10 +212,9 @@ public class RobotContainer {
             new SwitchRPMShootNEO(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
-            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
-
+            new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
             new IntakeNEO(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
@@ -223,7 +235,8 @@ public class RobotContainer {
 
 
     new JoystickButton(manipulatorController, Button.kB.value).onTrue(new RampMaxRPM(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kB.value).onFalse(new InstantCommand(intakeShooter::stopOutake,intakeShooter));
+    new JoystickButton(manipulatorController, Button.kB.value)
+        .onFalse(new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
@@ -231,7 +244,7 @@ public class RobotContainer {
             new SwitchRPMShoot(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
-            new InstantCommand(intakeShooter::stopOutake, intakeShooter));
+            new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
@@ -335,12 +348,13 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
 
+    NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 
     NamedCommands.registerCommand("StopIntake", new InstantCommand(intakeShooter::stopIntake));
-    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOutake));
+    NamedCommands.registerCommand("StopOutake", new InstantCommand(intakeShooter::stopOuttake));
     NamedCommands.registerCommand("StopBoth", new ParallelCommandGroup(
       new InstantCommand(intakeShooter::stopIntake),
-      new InstantCommand(intakeShooter::stopOutake)
+        new InstantCommand(intakeShooter::stopOuttake)
     ));
   }
   private void setupAutos() {

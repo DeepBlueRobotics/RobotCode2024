@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
+    id "com.peterabeles.gversion" version "1.10"    
 }
 
 java {
@@ -79,7 +80,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    implementation "com.github.deepbluerobotics:lib199:67457c0d0880e4f484a1b5eedc094768114da9da"
+    implementation "com.github.deepbluerobotics:lib199:400693b52180c82a1f26c08025bc12f144b930f9"
 }
 
 test {
@@ -109,4 +110,14 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    language = "Properties"
+    srcDir       = "src/main/deploy/"
+    className    = "BuildInfo.properties"
+    dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+    timeZone     = "America/Los_Angeles"
+    indent       = "  "
 }

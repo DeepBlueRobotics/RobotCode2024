@@ -1,7 +1,6 @@
 package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToIntake extends Command{
@@ -17,11 +16,11 @@ public class PassToIntake extends Command{
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
-        intakeShooter.stopOutake();
+        intakeShooter.stopOuttake();
     }
     
     @Override
     public boolean isFinished() {
-        return intakeShooter.intakeDetectsNote() && !intakeShooter.outakeDetectsNote();
+        return intakeShooter.intakeDetectsNote() && !intakeShooter.outtakeDetectsNote();
     }
 }
