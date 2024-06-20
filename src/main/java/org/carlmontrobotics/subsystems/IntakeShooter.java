@@ -28,27 +28,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
-    private final CANSparkMax intakeMotor =
-            MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
+    private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
     private final CANSparkFlex outtakeMotorVortex =
             new CANSparkFlex(OUTTAKE_PORT, MotorType.kBrushless);
-    private final RelativeEncoder outtakeEncoder =
-            outtakeMotorVortex.getEncoder();
+    private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
-    private final SparkPIDController pidControllerOutake =
-            outtakeMotorVortex.getPIDController();
-    private final SparkPIDController pidControllerIntake =
-            intakeMotor.getPIDController();
+    private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();
+    private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
     private Timer timer = new Timer();
     private Timer intakeTOFTimer = new Timer();
     private Timer outtakeTOFTimer = new Timer();
     private int count = 0;
-    private SimpleMotorFeedforward intakeFeedforward =
-            new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE], kA[INTAKE]);
-    private final SimpleMotorFeedforward outtakeFeedforward =
-            new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE], kA[OUTTAKE]);
+    private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
+            kA[INTAKE]);
+    private final SimpleMotorFeedforward outtakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE],
+            kA[OUTTAKE]);
 
     private double goalOutakeRPM = outtakeEncoder.getVelocity();
 
@@ -83,8 +79,7 @@ public class IntakeShooter extends SubsystemBase {
         // SmartDashboard.putNumber("intake volts", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
         // setMaxOutakeOverload(1);
-        intakeDistanceSensor.setRangingMode(RangingMode.Short, 24);// 24 ms is the minimum sample
-                                                                   // time acc to docs
+        intakeDistanceSensor.setRangingMode(RangingMode.Short, 24);// 24 ms is the minimum sample time acc to docs
         outtakeDistanceSensor.setRangingMode(RangingMode.Short, 24);
         outtakeMotorVortex.setSmartCurrentLimit(60);
         // SmartDashboard.putNumber("Intake target RPM", 0);
@@ -108,8 +103,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public boolean intakeIsOverTemp() {
-        return intakeMotor
-                .getMotorTemperature() >= MotorConfig.NEO.temperatureLimitCelsius;
+        return intakeMotor.getMotorTemperature() >= MotorConfig.NEO.temperatureLimitCelsius;
     }
 
     // ---------------------------------------------------------------------------------------------------
@@ -156,25 +150,19 @@ public class IntakeShooter extends SubsystemBase {
     public void updateValues() {
         if (intakeDistanceSensor.isRangeValid()) {
             if (lastValidDistanceIntake != Double.POSITIVE_INFINITY) {
-                SmartDashboard.putNumber("Time between valid ranges intake",
-                        intakeTOFTimer.get());
+                SmartDashboard.putNumber("Time between valid ranges intake", intakeTOFTimer.get());
                 intakeTOFTimer.reset();
             } else
                 intakeTOFTimer.start();
-            lastValidDistanceIntake =
-                    Units.metersToInches(intakeDistanceSensor.getRange())
-                            / 1000.0;
+            lastValidDistanceIntake = Units.metersToInches(intakeDistanceSensor.getRange()) / 1000.0;
         }
         if (outtakeDistanceSensor.isRangeValid()) {
             if (lastValidDistanceOuttake != Double.POSITIVE_INFINITY) {
-                SmartDashboard.putNumber("Time between valid ranges outtake",
-                        outtakeTOFTimer.get());
+                SmartDashboard.putNumber("Time between valid ranges outtake", outtakeTOFTimer.get());
                 outtakeTOFTimer.reset();
             } else
                 outtakeTOFTimer.start();
-            lastValidDistanceOuttake =
-                    Units.metersToInches(outtakeDistanceSensor.getRange())
-                            / 1000.0;
+            lastValidDistanceOuttake = Units.metersToInches(outtakeDistanceSensor.getRange()) / 1000.0;
         }
     }
 
@@ -189,18 +177,13 @@ public class IntakeShooter extends SubsystemBase {
         // }
         SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
         SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
-        SmartDashboard.putNumber("intake sample rate",
-                intakeDistanceSensor.getSampleTime());
+        SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
         SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
-        SmartDashboard.putBoolean("intake ds range valid",
-                intakeDistanceSensor.isRangeValid());
-        SmartDashboard.putData("outtake distanace sensor",
-                outtakeDistanceSensor);
-        SmartDashboard.putBoolean("outtake ds range valid",
-                outtakeDistanceSensor.isRangeValid());
+        SmartDashboard.putBoolean("intake ds range valid", intakeDistanceSensor.isRangeValid());
+        SmartDashboard.putData("outtake distanace sensor", outtakeDistanceSensor);
+        SmartDashboard.putBoolean("outtake ds range valid", outtakeDistanceSensor.isRangeValid());
         SmartDashboard.putNumber("Intake Vel", intakeEncoder.getVelocity());
-        TimeOfFlight.RangingMode rangingModeIntake =
-                intakeDistanceSensor.getRangingMode();
+        TimeOfFlight.RangingMode rangingModeIntake = intakeDistanceSensor.getRangingMode();
         if (rangingModeIntake == TimeOfFlight.RangingMode.Long)
             SmartDashboard.putString("intake ds ranging mode", "long");
         else if (rangingModeIntake == TimeOfFlight.RangingMode.Medium)
@@ -208,8 +191,7 @@ public class IntakeShooter extends SubsystemBase {
         else
             SmartDashboard.putString("intake ds ranging mode", "short");
 
-        TimeOfFlight.RangingMode rangingModeOuttake =
-                outtakeDistanceSensor.getRangingMode();
+        TimeOfFlight.RangingMode rangingModeOuttake = outtakeDistanceSensor.getRangingMode();
         if (rangingModeOuttake == TimeOfFlight.RangingMode.Long)
             SmartDashboard.putString("outake ds ranging mode", "long");
         else if (rangingModeOuttake == TimeOfFlight.RangingMode.Medium)
@@ -227,8 +209,7 @@ public class IntakeShooter extends SubsystemBase {
         if (intakeIsOverTemp()) {
             turnOffIntakeMotor();
             stopIntake();
-            System.err.println(
-                    "INTAKE IS OVER TEMP!!!!\nBIG BAD\nOOPSY WOOPSY\nTURN IT OFF");
+            System.err.println("INTAKE IS OVER TEMP!!!!\nBIG BAD\nOOPSY WOOPSY\nTURN IT OFF");
         }
     }
 
@@ -266,15 +247,13 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void setRPMOuttake(double rpm) {
-        pidControllerOutake.setReference(rpm,
-                CANSparkBase.ControlType.kVelocity, 0,
-                        outtakeFeedforward.calculate(rpm / 60.0));
+        pidControllerOutake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0,
+                outtakeFeedforward.calculate(rpm / 60.0));
     }
 
     public void setRPMIntake(double rpm) {
-        pidControllerIntake.setReference(rpm,
-                CANSparkBase.ControlType.kVelocity, 0,
-                        intakeFeedforward.calculate(rpm / 60.0));
+        pidControllerIntake.setReference(rpm, CANSparkBase.ControlType.kVelocity, 0,
+                intakeFeedforward.calculate(rpm / 60.0));
     }
 
     public double getOuttakeRPM() {
@@ -302,20 +281,13 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder sendableBuilder) {
         super.initSendable(sendableBuilder);
-        sendableBuilder.addDoubleProperty("Outtake Velocity",
-                this::getOuttakeRPM, null);
-        sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM,
-                null);
-        sendableBuilder.addDoubleProperty("Outake distance sensor",
-                this::getGamePieceDistanceOuttake, null);
-        sendableBuilder.addDoubleProperty("Intake distance sensor",
-                this::getGamePieceDistanceIntake, null);
-        sendableBuilder.addBooleanProperty("Outake distance sensor length",
-                this::outtakeDetectsNote, null);
-        sendableBuilder.addBooleanProperty("Intake distance sensor length",
-                this::intakeDetectsNote, null);
-        sendableBuilder.addDoubleProperty("Period time", this::countPeridoic,
-                null);
+        sendableBuilder.addDoubleProperty("Outtake Velocity", this::getOuttakeRPM, null);
+        sendableBuilder.addDoubleProperty("Intake velocity", this::getIntakeRPM, null);
+        sendableBuilder.addDoubleProperty("Outake distance sensor", this::getGamePieceDistanceOuttake, null);
+        sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceIntake, null);
+        sendableBuilder.addBooleanProperty("Outake distance sensor length", this::outtakeDetectsNote, null);
+        sendableBuilder.addBooleanProperty("Intake distance sensor length", this::intakeDetectsNote, null);
+        sendableBuilder.addDoubleProperty("Period time", this::countPeridoic, null);
     }
 
     public void simulationPeriodic() {
@@ -337,11 +309,21 @@ public class IntakeShooter extends SubsystemBase {
     /*
      * public double calculateRPMAtDistance() {
      * 
-     * double minRPM = Integer.MAX_VALUE; double distance = limelight.distanceToTargetSpeaker(); //
-     * placeholder for limelight for(int i = 0; i<= 360; i++) { double t =
-     * Math.sqrt((OFFSETFROMGROUND-SPEAKER_HEIGHT+distance*Math.tan(i))); double rpm =
-     * distance/Math.cos(i)*t; if(rpm<minRPM) { minRPM = rpm; } } if(minRPM == Integer.MAX_VALUE) {
-     * System.err.println("FAILURE"); } return minRPM; }
+     * double minRPM = Integer.MAX_VALUE;
+     * double distance = limelight.distanceToTargetSpeaker(); // placeholder for
+     * limelight
+     * for(int i = 0; i<= 360; i++) {
+     * double t = Math.sqrt((OFFSETFROMGROUND-SPEAKER_HEIGHT+distance*Math.tan(i)));
+     * double rpm = distance/Math.cos(i)*t;
+     * if(rpm<minRPM) {
+     * minRPM = rpm;
+     * }
+     * }
+     * if(minRPM == Integer.MAX_VALUE) {
+     * System.err.println("FAILURE");
+     * }
+     * return minRPM;
+     * }
      */
 
 }
