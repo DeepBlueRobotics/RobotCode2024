@@ -19,7 +19,7 @@ public class AutonRuinerShootAndIntake extends Command {
   @Override
   public void initialize() {
     intakeShooter.setRPMIntake(INTAKE_RPM);
-    intakeShooter.setAutoRuinerOuttake(0.3);
+    intakeShooter.motorSetOutake(0.3);
 
   }
 

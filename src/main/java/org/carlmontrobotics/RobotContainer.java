@@ -356,8 +356,8 @@ public class RobotContainer {
     // AutonRuinerShoot(intakeShooter));
     // NamedCommands.registerCommand("IntakeAutonRuiner", new
     // IntakeAutonRuiner(intakeShooter));
-    // NamedCommands.registerCommand("AutonRuinerShootAndIntake", new
-    // IntakeAutonRuiner(intakeShooter));
+
+    NamedCommands.registerCommand("AutonRuinerShootAndIntake", new AutonRuinerShootAndIntake(intakeShooter));
 
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 
