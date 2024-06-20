@@ -203,10 +203,6 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.set(1 * direction);
     }
 
-    public void setAutoRuinerOuttake(double d) {
-        outtakeMotorVortex.set(1 * d);
-    }
-
     public void setMaxOuttakeOverload(int direction) {
         outtakeMotorVortex.setSmartCurrentLimit(80);
         outtakeMotorVortex.set(1 * direction);
