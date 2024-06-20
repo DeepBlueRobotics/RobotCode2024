@@ -268,13 +268,13 @@ public class IntakeShooter extends SubsystemBase {
     public void setRPMOuttake(double rpm) {
         pidControllerOutake.setReference(rpm,
                 CANSparkBase.ControlType.kVelocity, 0,
-                outtakeFeedforward.calculate(rpm / 60.0));
+                        outtakeFeedforward.calculate(rpm / 60.0));
     }
 
     public void setRPMIntake(double rpm) {
         pidControllerIntake.setReference(rpm,
                 CANSparkBase.ControlType.kVelocity, 0,
-                intakeFeedforward.calculate(rpm / 60.0));
+                        intakeFeedforward.calculate(rpm / 60.0));
     }
 
     public double getOuttakeRPM() {
