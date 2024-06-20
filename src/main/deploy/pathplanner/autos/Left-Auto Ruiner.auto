@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Left-Auto Ruiner"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left-Auto Ruiner"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonRuinerShootAndIntake"
+                }
+              }
+            ]
           }
         }
       ]

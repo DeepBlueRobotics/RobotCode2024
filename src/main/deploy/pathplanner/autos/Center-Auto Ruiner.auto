@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center-Auto Ruiner"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center-Auto Ruiner"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonRuinerShootAndIntake"
+                }
+              }
+            ]
           }
         }
       ]
