@@ -86,7 +86,7 @@ public class Arm extends SubsystemBase {
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
     private boolean setPIDOff; 
 
-    private SimDouble positionSim;
+    private SimDouble rotationsSim;
 
     public Arm() {
         // weird math stuff
@@ -162,8 +162,8 @@ public class Arm extends SubsystemBase {
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
         SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
-            positionSim = new SimDeviceSim("SparkMax[%d]_AbsoluteEncoder".formatted(ARM_MOTOR_PORT_MASTER))
-                    .getDouble("Position");
+            rotationsSim = new SimDeviceSim("CANDutyCycle:CANSparkMax",
+                    ARM_MOTOR_PORT_MASTER).getDouble("position");
         }
 
     }
@@ -469,11 +469,12 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        // Fake goaling to the goal instantaneously
-        if (positionSim != null) {
-            positionSim.set((goalState.position - armMasterEncoder.getZeroOffset())
-                    * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
-                    / armMasterEncoder.getPositionConversionFactor() * MockedEncoder.NEO_BUILTIN_ENCODER_CPR);
+        // Fake going to the goal instantaneously
+        if (rotationsSim != null) {
+            rotationsSim
+                    .set((goalState.position - armMasterEncoder.getZeroOffset())
+                            * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
+                            / armMasterEncoder.getPositionConversionFactor());
         }
     }
 }
