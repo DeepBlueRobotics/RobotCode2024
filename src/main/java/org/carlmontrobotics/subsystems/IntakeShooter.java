@@ -27,7 +27,8 @@ public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
-    private final CANSparkFlex outtakeMotorVortex = new CANSparkFlex(10, MotorType.kBrushless);
+    private final CANSparkFlex outtakeMotorVortex =
+            new CANSparkFlex(OUTTAKE_PORT, MotorType.kBrushless);
     private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();
@@ -36,7 +37,6 @@ public class IntakeShooter extends SubsystemBase {
     private Timer intakeTOFTimer = new Timer();
     private Timer outtakeTOFTimer = new Timer();
     private int count = 0;
-    private StringLogEntry tofLogEntry;
     private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
             kA[INTAKE]);
     private final SimpleMotorFeedforward outtakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE],
@@ -61,8 +61,8 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
         SmartDashboard.putData("Intake Shooter", this);
-        SmartDashboard.putNumber("Intake Ks", kS[INTAKE]);
-        SmartDashboard.putNumber("Intake Kv", kV[INTAKE]);
+        // SmartDashboard.putNumber("Intake Ks", kS[INTAKE]);
+        // SmartDashboard.putNumber("Intake Kv", kV[INTAKE]);
         intakeEncoder.setAverageDepth(4);
         intakeEncoder.setMeasurementPeriod(8);
         // SmartDashboard.putNumber("intake volts", 0);
@@ -71,7 +71,8 @@ public class IntakeShooter extends SubsystemBase {
         intakeDistanceSensor.setRangingMode(RangingMode.Short, 24);// 24 ms is the minimum sample time acc to docs
         outtakeDistanceSensor.setRangingMode(RangingMode.Short, 24);
         outtakeMotorVortex.setSmartCurrentLimit(60);
-        SmartDashboard.putNumber("Intake target RPM", 0);
+        // SmartDashboard.putNumber("Intake target RPM", 0);
+        // SmartDashboard.putNumber("Vortex volts", 0);
     }
 
     public boolean intakeIsOverTemp() {
@@ -141,12 +142,12 @@ public class IntakeShooter extends SubsystemBase {
     @Override
     public void periodic() {
         updateValues();
-        double newKS = SmartDashboard.getNumber("Intake Ks", kS[INTAKE]);
-        double newKV = SmartDashboard.getNumber("Intake Kv", kV[INTAKE]);
+        // double newKS = SmartDashboard.getNumber("Intake Ks", kS[INTAKE]);
+        /// double newKV = SmartDashboard.getNumber("Intake Kv", kV[INTAKE]);
 
-        if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
-            intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
-        }
+        // if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
+        // intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
+        // }
         SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
         SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
         SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
@@ -174,10 +175,6 @@ public class IntakeShooter extends SubsystemBase {
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
-
-        // double volts = SmartDashboard.getNumber("Vortex volts", 0);
-        // outakeMotorVortex.set(volts);
-
         // setMaxOutake();
 
         SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());

@@ -1004,5 +1004,8 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public double getGyroRate() {
+        return gyro.getRate();
+    }
     // #endregion
 }
