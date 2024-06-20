@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3756161320151827,
+      "y": 5.55076982040085
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center-Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center-Pickup 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center-Pickup 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
