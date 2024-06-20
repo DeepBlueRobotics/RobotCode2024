@@ -77,6 +77,9 @@ public final class Constants {
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
 		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM, PODIUM_RPM};
+		public static final int AMP_RPM_INDEX = 0;
+		public static final int SUBWOOFER_RPM_INDEX = 1;
+		public static final int PODIUM_RPM_INDEX = 2;
 		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 

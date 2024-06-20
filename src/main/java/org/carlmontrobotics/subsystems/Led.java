@@ -12,8 +12,7 @@ public class Led extends SubsystemBase {
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(100);
     private final AddressableLED led = new AddressableLED(9);
     private final IntakeShooter intakeshooter;
-    private int midpoint = (int) ledBuffer.getLength() / 2;
-    private int color = 1;
+
 
     // rounds down
     // public static final double midpoint = Math.floor(ledLength/2);
