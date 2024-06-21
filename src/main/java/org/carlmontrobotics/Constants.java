@@ -450,7 +450,10 @@ public final class Constants {
 			public static final int EJECT_RPM = Button.kX.value;
 			public static final int RAISE_CLIMBER = Button.kA.value;
 			public static final int LOWER_CLIMBER = Button.kY.value;
-			
+			public static final int PASS_TO_OUTTAKE_STICK =
+					Button.kLeftStick.value;
+			public static final int PASS_TO_INTAKE_STICK =
+					Button.kRightStick.value;
 		}
 
 		public static final double JOY_THRESH = 0.01;
