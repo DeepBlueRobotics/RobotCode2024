@@ -33,7 +33,7 @@ public class IntakeNEO extends Command {
   public void execute() {
     // Intake Led
     if((intake.intakeDetectsNote())) {
-      intake.motorSetIntake(.1); // Slower intake speed triggered after intake ds sees note
+      intake.motorSetIntake(.3); // Slower intake speed triggered after intake ds sees note
     }
   }
 

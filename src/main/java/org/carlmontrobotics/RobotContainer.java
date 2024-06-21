@@ -193,8 +193,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new IntakeNEO(intakeShooter)));
+        .whileTrue(new AlignToApriltagMegatag2(drivetrain, limelight));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
