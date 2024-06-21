@@ -208,6 +208,7 @@ public class Drivetrain extends SubsystemBase {
             }
 
             SmartDashboard.putData("Field", field);
+            SmartDashboard.putData(this);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
@@ -286,7 +287,6 @@ public class Drivetrain extends SubsystemBase {
         // moduleBL.periodic();
         // moduleBR.periodic();
         // double goal = SmartDashboard.getNumber("bigoal", 0);
-        SmartDashboard.putData(this);
         for (SwerveModule module : modules) {
             module.periodic();
             // module.move(0, goal);
