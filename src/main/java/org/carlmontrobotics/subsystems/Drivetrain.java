@@ -208,6 +208,7 @@ public class Drivetrain extends SubsystemBase {
             }
 
             SmartDashboard.putData("Field", field);
+            SmartDashboard.putData(this);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
@@ -286,7 +287,6 @@ public class Drivetrain extends SubsystemBase {
         // moduleBL.periodic();
         // moduleBR.periodic();
         // double goal = SmartDashboard.getNumber("bigoal", 0);
-
         for (SwerveModule module : modules) {
             module.periodic();
             // module.move(0, goal);
@@ -298,12 +298,7 @@ public class Drivetrain extends SubsystemBase {
         odometry.update(gyro.getRotation2d(), getModulePositions());
         //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-        { 
-            // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-            // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-            // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-            // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-       }
+
         //setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()), SmartDashboard.getNumber("set y", getPose().getTranslation().getY()), Rotation2d.fromDegrees(getHeading())));
         // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
         // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
@@ -345,6 +340,15 @@ public class Drivetrain extends SubsystemBase {
         builder.addDoubleProperty("Roll", gyro::getRoll, null);
         builder.addDoubleProperty("Field Offset", () -> fieldOffset, fieldOffset ->
         this.fieldOffset = fieldOffset);
+        builder.addDoubleProperty("FL Turn Encoder (Deg)",
+                () -> moduleFL.getModuleAngle(), null);
+        builder.addDoubleProperty("FR Turn Encoder (Deg)",
+                () -> moduleFR.getModuleAngle(), null);
+        builder.addDoubleProperty("BL Turn Encoder (Deg)",
+                () -> moduleBL.getModuleAngle(), null);
+        builder.addDoubleProperty("BR Turn Encoder (Deg)",
+                () -> moduleBR.getModuleAngle(), null);
+
     }
 
     // #region Drive Methods

@@ -14,6 +14,8 @@ public class IntakeNEO extends Command {
 
   public IntakeNEO(IntakeShooter intake) {
     addRequirements(this.intake = intake);
+    SmartDashboard.putNumber("Initial intake speed", .5);
+    SmartDashboard.putNumber("Slow intake speed", .1);
   }
 
   @Override
@@ -22,18 +24,22 @@ public class IntakeNEO extends Command {
     // if (intake.intakeDetectsNote()) {
     // return;
     // }
-    intake.motorSetIntake(.5); // Fast intake speed for initial intake
 
+    intake.motorSetIntake(SmartDashboard.getNumber("Initial intake speed", 0)); // Fast intake speed
+                                                                                // for initial
+                                                                                // intake
     intake.resetCurrentLimit();
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // Intake Led
-    if((intake.intakeDetectsNote())) {
-      intake.motorSetIntake(.1); // Slower intake speed triggered after intake ds sees note
+    if ((intake.intakeDetectsNote())) {
+      intake.motorSetIntake(SmartDashboard.getNumber("Slow intake speed", 0)); // Slower intake
+                                                                               // speed triggered
+                                                                               // after intake ds
+                                                                               // sees note
     }
   }
 
@@ -41,7 +47,7 @@ public class IntakeNEO extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
-    //intake.resetCurrentLimit();
+    // intake.resetCurrentLimit();
   }
 
   // Returns true when the command should end.
