@@ -190,7 +190,7 @@ public class RobotContainer {
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new IntakeNEO(intakeShooter)));
+            new Intake(intakeShooter)));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -209,27 +209,31 @@ public class RobotContainer {
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
-            new SwitchRPMShootNEO(intakeShooter));
+            new SwitchRPMShootNEO(intakeShooter, arm));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new IntakeNEO(intakeShooter)));
+            new Intake(intakeShooter)));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value).onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR,0));
-    new JoystickButton(manipulatorController, Button.kA.value).onTrue(new ArmToPos(arm, GROUND_INTAKE_POS,1));
+    new JoystickButton(manipulatorController, Button.kY.value)
+        .onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR));
+    new JoystickButton(manipulatorController, OI.A_BUTTON)
+        .onTrue(new ArmToPos(arm, GROUND_INTAKE_POS));
     new JoystickButton(manipulatorController, PASS_TO_OUTTAKE_STICK)
         .onTrue(new PassToOuttake(intakeShooter));
     new JoystickButton(manipulatorController, PASS_TO_INTAKE_STICK)
-        .whileTrue(new PassToIntake(intakeShooter));
+        .onTrue(new PassToIntake(intakeShooter));
     new JoystickButton(manipulatorController, Button.kX.value)
-        .onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD, 1));
-    new POVButton(manipulatorController, 0).onTrue(new ArmToPos(arm, CLIMB_POS, 0));
-    new POVButton(manipulatorController, 180).onTrue(new Climb(arm));
-    new POVButton(manipulatorController, 270).onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD, 2));
+        .onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD));
+    new POVButton(manipulatorController, OI.UP_D_PAD)
+        .onTrue(new ArmToPos(arm, CLIMB_POS));
+    new POVButton(manipulatorController, OI.DOWN_D_PAD).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, OI.LEFT_D_PAD)
+        .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
   }
 
 
@@ -305,21 +309,22 @@ public class RobotContainer {
 
   private void registerAutoCommands(){
     ////AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
+    NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
     //  NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
     NamedCommands.registerCommand("ArmToAmp",
-        new ArmToPos(arm, Armc.AMP_ANGLE_RAD, AMP_RPM_INDEX));
+        new ArmToPos(arm, Armc.AMP_ANGLE_RAD));
     NamedCommands.registerCommand("ArmToSubwoofer",
-        new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD, SUBWOOFER_RPM_INDEX));
+        new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD));
     NamedCommands.registerCommand("ArmToPodium",
-        new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD, PODIUM_RPM_INDEX));
+        new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD));
     NamedCommands.registerCommand("ArmToGround",
-        new ArmToPos(arm, GROUND_INTAKE_POS, SUBWOOFER_RPM_INDEX));
+        new ArmToPos(arm, GROUND_INTAKE_POS));
 
 
-    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
+    NamedCommands.registerCommand("SwitchRPMShoot",
+        new SwitchRPMShootNEO(intakeShooter, arm));
 
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 

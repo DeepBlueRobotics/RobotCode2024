@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static org.carlmontrobotics.Constants.Armc.*;
-import static org.carlmontrobotics.Constants.Effectorc.RPM_SELECTOR;
 
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;

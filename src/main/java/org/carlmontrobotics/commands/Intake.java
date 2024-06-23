@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IntakeNEO extends Command {
+public class Intake extends Command {
   // intake until sees game peice or 4sec has passed
   private final IntakeShooter intake;
 
-  public IntakeNEO(IntakeShooter intake) {
+  public Intake(IntakeShooter intake) {
     addRequirements(this.intake = intake);
   }
 

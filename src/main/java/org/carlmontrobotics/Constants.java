@@ -76,10 +76,6 @@ public final class Constants {
 		public static final double SUBWOOFER_RPM = 2100;
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
-		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM, PODIUM_RPM};
-		public static final int AMP_RPM_INDEX = 0;
-		public static final int SUBWOOFER_RPM_INDEX = 1;
-		public static final int PODIUM_RPM_INDEX = 2;
 		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
@@ -458,5 +454,9 @@ public final class Constants {
 
 		public static final double JOY_THRESH = 0.01;
 		public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;// woah, this is high.
+		public static final int UP_D_PAD = 0;
+		public static final int DOWN_D_PAD = 180;
+		public static final int LEFT_D_PAD = 270;
+		public static final int A_BUTTON = Button.kA.value;
 	}
 }
