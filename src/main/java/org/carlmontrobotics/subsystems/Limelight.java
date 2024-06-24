@@ -48,7 +48,7 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
     SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
     SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("rotation to align", getRotateAngleRad());
+    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
 
     // shooter limelight testing
     SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
