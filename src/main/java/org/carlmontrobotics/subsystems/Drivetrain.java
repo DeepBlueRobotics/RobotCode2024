@@ -213,7 +213,6 @@ public class Drivetrain extends SubsystemBase {
             }
 
             SmartDashboard.putData("Field", field);
-            SmartDashboard.putData(this);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
@@ -240,6 +239,8 @@ public class Drivetrain extends SubsystemBase {
         //                 SmartDashboard.putNumber("chassis speeds y", 0);
 
         //                             SmartDashboard.putNumber("chassis speeds theta", 0);
+        SmartDashboard.putData(this);
+
     }
 
     @Override
