@@ -110,8 +110,17 @@ public class Drivetrain extends SubsystemBase {
     private Timer simTimer = new Timer();
 
     public Drivetrain() {
-        // SmartDashboard.putNumber("set x", 0);
-        // SmartDashboard.putNumber("set y", 0);
+        SmartDashboard.putNumber("Pose Estimator set x", getPose().getTranslation().getX());
+        SmartDashboard.putNumber("Pose Estimator set y", getPose().getTranslation().getY());
+        SmartDashboard.putNumber("Pose Estimator set rotation", getPose().getRotation().getDegrees());
+        setPose(new Pose2d(SmartDashboard.getNumber("Pose Estimator set x", getPose().getTranslation().getX()),
+                SmartDashboard.getNumber("Pose Estimator set y", getPose().getTranslation().getY()),
+                Rotation2d.fromDegrees(SmartDashboard.getNumber("Pose Estimator set rotation",
+                        getPose().getRotation().getDegrees()))));
+
+        SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
+        SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
+
         // Calibrate Gyro
         {
 
@@ -310,16 +319,11 @@ public class Drivetrain extends SubsystemBase {
 
         // odometry.update(gyro.getRotation2d(), getModulePositions());
 
-        poseEstimator.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        poseEstimator.update(gyro.getRotation2d(), getModulePositions());
         //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
         updateMT2PoseEstimator();
 
-        setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()),
-                SmartDashboard.getNumber("set y", getPose().getTranslation().getY()),
-                Rotation2d.fromDegrees(getHeading())));
-        SmartDashboard.putNumber("Pose Estimator X", getPose().getTranslation().getX());
-        SmartDashboard.putNumber("Pose Estimator Y", getPose().getTranslation().getY());
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
         // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
@@ -348,9 +352,9 @@ public class Drivetrain extends SubsystemBase {
         builder.addBooleanProperty("Gyro Calibrating", gyro::isCalibrating, null);
         builder.addBooleanProperty("Field Oriented", () -> fieldOriented,
         fieldOriented -> this.fieldOriented = fieldOriented);
-        builder.addDoubleProperty("Pose Estimator X", () -> getPose().getX(), null);
-        builder.addDoubleProperty("Pose Estimator Y", () -> getPose().getY(), null);
-        builder.addDoubleProperty("Odometry Heading", () ->
+        builder.addDoubleProperty("Pose Estimator set x", () -> getPose().getX(), null);
+        builder.addDoubleProperty("Pose Estimator set y", () -> getPose().getY(), null);
+        builder.addDoubleProperty("Pose Estimator set rotation", () ->
         getPose().getRotation().getDegrees(), null);
         builder.addDoubleProperty("Robot Heading", () -> getHeading(), null);
         builder.addDoubleProperty("Raw Gyro Angle", gyro::getAngle, null);
@@ -1052,18 +1056,11 @@ public class Drivetrain extends SubsystemBase {
         if (!rejectVisionUpdate) {
             poseEstimator
                     .setVisionMeasurementStdDevs(
-                            VecBuilder.fill(STD_DEV_X_METERS, STD_DEV_Y_METERS, STD_DEV_HEADING_RADS));
+                            VecBuilder.fill(SmartDashboard.getNumber("pose estimator std dev x", STD_DEV_X_METERS),
+                                    SmartDashboard.getNumber("pose estimator std dev y", STD_DEV_Y_METERS),
+                                    STD_DEV_HEADING_RADS));
             poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
         }
-    }
-
-    public Pose2d getCurrentPose() {
-        Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
-        SmartDashboard.putNumber("estimated x", estimatedPos.getX());
-        // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
-        // SmartDashboard.putNumber("estimated rotation (deg)",
-        // estimatedPos.getRotation().getDegrees());
-        return estimatedPos;
     }
 
     public double getGyroRate() {
