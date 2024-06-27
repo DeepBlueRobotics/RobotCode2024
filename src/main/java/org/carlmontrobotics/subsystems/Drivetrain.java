@@ -313,7 +313,7 @@ public class Drivetrain extends SubsystemBase {
         poseEstimator.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-        updateMT2Odometry();
+        updateMT2PoseEstimator();
 
         setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()),
                 SmartDashboard.getNumber("set y", getPose().getTranslation().getY()),
@@ -1033,7 +1033,7 @@ public class Drivetrain extends SubsystemBase {
 
     // pose estimator stuff
 
-    public void updateMT2Odometry() {
+    public void updateMT2PoseEstimator() {
         boolean rejectVisionUpdate = false;
 
         LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
