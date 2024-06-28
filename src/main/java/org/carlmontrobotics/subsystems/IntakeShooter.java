@@ -4,6 +4,7 @@ import static org.carlmontrobotics.Constants.Effectorc.*;
 
 import org.carlmontrobotics.lib199.MotorConfig;
 import org.carlmontrobotics.lib199.MotorControllerFactory;
+import org.carlmontrobotics.lib199.SensorFactory;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
@@ -14,12 +15,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimEnum;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.datalog.DataLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -44,11 +48,18 @@ public class IntakeShooter extends SubsystemBase {
 
     private double goalOutakeRPM = outtakeEncoder.getVelocity();
 
-    private TimeOfFlight intakeDistanceSensor = new TimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
-    private TimeOfFlight outtakeDistanceSensor = new TimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
+    private TimeOfFlight intakeDistanceSensor = SensorFactory
+            .createPlayingWithFusionTimeOfFlight(INTAKE_DISTANCE_SENSOR_PORT);
+    private TimeOfFlight outtakeDistanceSensor = SensorFactory
+            .createPlayingWithFusionTimeOfFlight(OUTAKE_DISTANCE_SENSOR_PORT);
 
     private double lastValidDistanceIntake = Double.POSITIVE_INFINITY;
     private double lastValidDistanceOuttake = Double.POSITIVE_INFINITY;
+
+    private SimDouble intakeDistanceSensorRangeSim,
+            outtakeDistanceSensorRangeSim;
+    private SimEnum intakeDistanceSensorStatusSim,
+            outtakeDistanceSensorStatusSim;
 
     public IntakeShooter() {
         // Figure out which ones to set inverted
@@ -73,6 +84,22 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.setSmartCurrentLimit(60);
         // SmartDashboard.putNumber("Intake target RPM", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
+
+        SimDeviceSim intakeDistanceSensorSim = new SimDeviceSim(
+                "CANAIn:PlayingWithFusionTimeOfFlight[%d]-rangeVoltsIsMM"
+                        .formatted(INTAKE_DISTANCE_SENSOR_PORT));
+        intakeDistanceSensorRangeSim =
+                intakeDistanceSensorSim.getDouble("voltage");
+        intakeDistanceSensorStatusSim =
+                intakeDistanceSensorSim.getEnum("status");
+
+        SimDeviceSim outtakeDistanceSensorSim = new SimDeviceSim(
+                "CANAIn:PlayingWithFusionTimeOfFlight[%d]-rangeVoltsIsMM"
+                        .formatted(OUTAKE_DISTANCE_SENSOR_PORT));
+        outtakeDistanceSensorRangeSim =
+                outtakeDistanceSensorSim.getDouble("voltage");
+        outtakeDistanceSensorStatusSim =
+                outtakeDistanceSensorSim.getEnum("status");
     }
 
     public boolean intakeIsOverTemp() {
@@ -262,6 +289,23 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addBooleanProperty("Intake distance sensor length", this::intakeDetectsNote, null);
         sendableBuilder.addDoubleProperty("Period time", this::countPeridoic, null);
     }
+
+    public void simulationPeriodic() {
+        if (intakeMotor.get() > 0.0) {
+            intakeDistanceSensorRangeSim.set(
+                    Units.inchesToMeters(DETECT_DISTANCE_INCHES / 2) * 1000);
+            outtakeDistanceSensorRangeSim.set(
+                    Units.inchesToMeters(DETECT_DISTANCE_INCHES / 2) * 1000);
+        } else if (intakeMotor.get() < 0.0 || outtakeMotorVortex.get() > 0.0) {
+            intakeDistanceSensorRangeSim.set(
+                    Units.inchesToMeters(DETECT_DISTANCE_INCHES * 2) * 1000);
+            outtakeDistanceSensorRangeSim.set(
+                    Units.inchesToMeters(DETECT_DISTANCE_INCHES * 2) * 1000);
+        }
+        intakeDistanceSensorStatusSim.set(TimeOfFlight.Status.Valid.ordinal());
+        outtakeDistanceSensorStatusSim.set(TimeOfFlight.Status.Valid.ordinal());
+    }
+
     /*
      * public double calculateRPMAtDistance() {
      * 

@@ -21,6 +21,11 @@
           "open": true
         }
       },
+      "PlayingWithFusionTimeOfFlight[11]": {
+        "header": {
+          "open": true
+        }
+      },
       "SparkMax[15]": {
         "header": {
           "open": true
@@ -84,6 +89,9 @@
         "open": true
       },
       "SmartDashboard": {
+        "Arm": {
+          "open": true
+        },
         "BL": {
           "open": true
         },
