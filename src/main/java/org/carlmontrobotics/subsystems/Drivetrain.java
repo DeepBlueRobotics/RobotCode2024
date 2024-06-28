@@ -109,14 +109,13 @@ public class Drivetrain extends SubsystemBase {
     private SimDouble gyroYawSim;
     private Timer simTimer = new Timer();
 
+    private double lastSetX = 0, lastSetY = 0, lastSetTheta = 0;
+
     public Drivetrain() {
-        SmartDashboard.putNumber("Pose Estimator set x", getPose().getTranslation().getX());
-        SmartDashboard.putNumber("Pose Estimator set y", getPose().getTranslation().getY());
-        SmartDashboard.putNumber("Pose Estimator set rotation", getPose().getRotation().getDegrees());
-        setPose(new Pose2d(SmartDashboard.getNumber("Pose Estimator set x", getPose().getTranslation().getX()),
-                SmartDashboard.getNumber("Pose Estimator set y", getPose().getTranslation().getY()),
-                Rotation2d.fromDegrees(SmartDashboard.getNumber("Pose Estimator set rotation",
-                        getPose().getRotation().getDegrees()))));
+        SmartDashboard.putNumber("Pose Estimator set x (m)", lastSetX);
+        SmartDashboard.putNumber("Pose Estimator set y (m)", lastSetY);
+        SmartDashboard.putNumber("Pose Estimator set rotation (deg)",
+                lastSetTheta);
 
         SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
         SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
@@ -325,6 +324,20 @@ public class Drivetrain extends SubsystemBase {
 
         updateMT2PoseEstimator();
 
+        double currSetX =
+                SmartDashboard.getNumber("Pose Estimator set x (m)", lastSetX);
+        double currSetY =
+                SmartDashboard.getNumber("Pose Estimator set y (m)", lastSetY);
+        double currSetTheta = SmartDashboard
+                .getNumber("Pose Estimator set rotation (deg)", lastSetTheta);
+
+        if (lastSetX != currSetX || lastSetY != currSetY
+                || lastSetTheta != currSetTheta) {
+            setPose(new Pose2d(currSetX, currSetY,
+                    Rotation2d.fromDegrees(currSetTheta)));
+        }
+
+
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
         // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
@@ -353,9 +366,12 @@ public class Drivetrain extends SubsystemBase {
         builder.addBooleanProperty("Gyro Calibrating", gyro::isCalibrating, null);
         builder.addBooleanProperty("Field Oriented", () -> fieldOriented,
         fieldOriented -> this.fieldOriented = fieldOriented);
-        builder.addDoubleProperty("Pose Estimator set x", () -> getPose().getX(), null);
-        builder.addDoubleProperty("Pose Estimator set y", () -> getPose().getY(), null);
-        builder.addDoubleProperty("Pose Estimator set rotation", () ->
+        builder.addDoubleProperty("Pose Estimator X", () -> getPose().getX(),
+                null);
+        builder.addDoubleProperty("Pose Estimator Y", () -> getPose().getY(),
+                null);
+        builder.addDoubleProperty("Pose Estimator Theta",
+                () ->
         getPose().getRotation().getDegrees(), null);
         builder.addDoubleProperty("Robot Heading", () -> getHeading(), null);
         builder.addDoubleProperty("Raw Gyro Angle", gyro::getAngle, null);
