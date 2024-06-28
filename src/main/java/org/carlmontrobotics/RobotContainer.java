@@ -204,12 +204,14 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON).onTrue(new Eject(intakeShooter));
 
 
-    new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
-   new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
+    new JoystickButton(manipulatorController, RAMP_OUTTAKE)
+        .whileTrue(new RampMaxRPM(intakeShooter));
+    new JoystickButton(manipulatorController, OPPISITE_EJECT)
+        .whileTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
-            new SwitchRPMShootNEO(intakeShooter, arm));
+            new Outtake(intakeShooter, arm));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
@@ -219,20 +221,20 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
-    new JoystickButton(manipulatorController, Button.kY.value)
+    new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)
         .onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR));
-    new JoystickButton(manipulatorController, OI.A_BUTTON)
+    new JoystickButton(manipulatorController, A_BUTTON)
         .onTrue(new ArmToPos(arm, GROUND_INTAKE_POS));
     new JoystickButton(manipulatorController, PASS_TO_OUTTAKE_STICK)
         .onTrue(new PassToOuttake(intakeShooter));
     new JoystickButton(manipulatorController, PASS_TO_INTAKE_STICK)
         .onTrue(new PassToIntake(intakeShooter));
-    new JoystickButton(manipulatorController, Button.kX.value)
+    new JoystickButton(manipulatorController, SPEAKER_POS)
         .onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD));
-    new POVButton(manipulatorController, OI.UP_D_PAD)
+    new POVButton(manipulatorController, UP_D_PAD)
         .onTrue(new ArmToPos(arm, CLIMB_POS));
-    new POVButton(manipulatorController, OI.DOWN_D_PAD).onTrue(new Climb(arm));
-    new POVButton(manipulatorController, OI.LEFT_D_PAD)
+    new POVButton(manipulatorController, DOWN_D_PAD).onTrue(new Climb(arm));
+    new POVButton(manipulatorController, LEFT_D_PAD)
         .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
   }
 
@@ -324,7 +326,7 @@ public class RobotContainer {
 
 
     NamedCommands.registerCommand("SwitchRPMShoot",
-        new SwitchRPMShootNEO(intakeShooter, arm));
+        new Outtake(intakeShooter, arm));
 
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 

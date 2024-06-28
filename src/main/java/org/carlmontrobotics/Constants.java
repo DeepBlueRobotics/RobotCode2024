@@ -436,27 +436,25 @@ public final class Constants {
 			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
 			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
 			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
-			public static final int AMP_BUTTON = Button.kRightBumper.value;
+			public static final int OPPISITE_EJECT = Button.kRightBumper.value;
 			public static final Axis INTAKE_AX = Axis.kRightTrigger;
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
-			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
-			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
 			public static final int SPEAKER_POS = Button.kX.value;
-			// public static final int INTAKE_POS = Button.kX.value;
-			public static final int EJECT_RPM = Button.kX.value;
-			public static final int RAISE_CLIMBER = Button.kA.value;
-			public static final int LOWER_CLIMBER = Button.kY.value;
+			public static final int ARM_TO_AMP_BUTTON = Button.kY.value;
 			public static final int PASS_TO_OUTTAKE_STICK =
 					Button.kLeftStick.value;
 			public static final int PASS_TO_INTAKE_STICK =
 					Button.kRightStick.value;
+			public static final int UP_D_PAD = 0;
+			public static final int DOWN_D_PAD = 180;
+			public static final int LEFT_D_PAD = 270;
+			public static final int A_BUTTON = Button.kA.value;
+			public static final int RAMP_OUTTAKE = Button.kB.value;
 		}
+
 
 		public static final double JOY_THRESH = 0.01;
 		public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;// woah, this is high.
-		public static final int UP_D_PAD = 0;
-		public static final int DOWN_D_PAD = 180;
-		public static final int LEFT_D_PAD = 270;
-		public static final int A_BUTTON = Button.kA.value;
+
 	}
 }

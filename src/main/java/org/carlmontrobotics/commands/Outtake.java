@@ -12,19 +12,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwitchRPMShootNEO extends Command {
+public class Outtake extends Command {
     private IntakeShooter intakeShooter;
     private Arm arm;
     private double currentPos;
     private double rpmAmount;
     private Timer timer = new Timer();
-   
-    
-    public SwitchRPMShootNEO(IntakeShooter intakeShooter, Arm arm) {
+
+
+    public Outtake(IntakeShooter intakeShooter, Arm arm) {
         this.intakeShooter = intakeShooter;
         this.arm = arm;
-        addRequirements(intakeShooter, arm);
+        addRequirements(intakeShooter);
     }
+
     @Override
     public void initialize() {
         intakeShooter.setMaxOuttake(1);
@@ -44,20 +45,23 @@ public class SwitchRPMShootNEO extends Command {
     public void execute() {
 
         if (intakeShooter.getOuttakeRPM() >= rpmAmount) {
-        intakeShooter.setMaxIntake(1);
-        timer.start();
+            intakeShooter.setMaxIntake(1);
+            timer.start();
         }
     }
+
     @Override
     public void end(boolean interrupted) {
         intakeShooter.stopIntake();
         intakeShooter.stopOuttake();
         intakeShooter.resetCurrentLimit();
         timer.stop();
-        
+
     }
+
     @Override
     public boolean isFinished() {
-        return (!intakeShooter.intakeDetectsNote() && !intakeShooter.outtakeDetectsNote()) || timer.get() > 10;
+        return (!intakeShooter.intakeDetectsNote()
+                && !intakeShooter.outtakeDetectsNote()) || timer.get() > 10;
     }
 }
