@@ -189,8 +189,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new Intake(intakeShooter)));
+        .whileTrue(new Intake(intakeShooter));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -212,15 +211,8 @@ public class RobotContainer {
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
             new Outtake(intakeShooter, arm));
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-        .onFalse(
-            new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new Intake(intakeShooter)));
-    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .onFalse(
-            new InstantCommand(intakeShooter::stopIntake, intakeShooter));
+        .whileTrue(new Intake(intakeShooter));
     new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)
         .onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR));
     new JoystickButton(manipulatorController, A_BUTTON)
