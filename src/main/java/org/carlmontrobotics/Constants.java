@@ -66,7 +66,7 @@ public final class Constants {
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
-		
+
 		public static final double INTAKE_RPM = 6300;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
@@ -187,7 +187,9 @@ public final class Constants {
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.5;
 		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
-		// Arm buttons
+		
+
+		public static final int NEO_BUILTIN_ENCODER_CPR = 42;
 	}
 
 	public static final class Drivetrainc {
@@ -436,7 +438,7 @@ public final class Constants {
 			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
 			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
 			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
-			public static final int OPPISITE_EJECT = Button.kRightBumper.value;
+			public static final int OPPOSITE_EJECT = Button.kRightBumper.value;
 			public static final Axis INTAKE_AX = Axis.kRightTrigger;
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
 			public static final int SPEAKER_POS = Button.kX.value;

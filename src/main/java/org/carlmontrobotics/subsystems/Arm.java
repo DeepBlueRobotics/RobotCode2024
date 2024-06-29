@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.Armc.NEO_BUILTIN_ENCODER_CPR; // (42) explicit import
 
 import org.carlmontrobotics.commands.TeleopArm;
 import org.carlmontrobotics.lib199.MotorConfig;
@@ -50,7 +51,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 // Arm angle is measured from horizontal on the intake side of the robot and bounded between -3π/2 and π/2
 public class Arm extends SubsystemBase {
-    
+
     private boolean callDrive = true;
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_MASTER,
             MotorConfig.NEO);
@@ -83,7 +84,7 @@ public class Arm extends SubsystemBase {
     private final MutableMeasure<Angle> distance = mutable(Radians.of(0));
     private static boolean babyMode;
     private ShuffleboardTab sysIdTab = Shuffleboard.getTab("arm SysID");
-    private boolean setPIDOff; 
+    private boolean setPIDOff;
 
     private SimDouble positionSim;
 
@@ -101,7 +102,7 @@ public class Arm extends SubsystemBase {
         armMasterEncoder.setZeroOffset(ENCODER_OFFSET_RAD);
 
         // ------------------------------------------------------------
-        
+
         armMotorFollower.follow(armMotorMaster, MOTOR_INVERTED_FOLLOWER);
         setPIDOff = false;
         armPIDMaster.setP(kP);
@@ -123,7 +124,7 @@ public class Arm extends SubsystemBase {
         armPIDMaster.setPositionPIDWrappingMaxInput((3 * Math.PI) / 2);
         armPIDMaster.setIZone(IZONE_RAD);
 
-        
+
 
         SmartDashboard.putData("Arm", this);
 
@@ -142,7 +143,7 @@ public class Arm extends SubsystemBase {
         // sysid
         lastArmVel = getArmVel();
         lastArmPos = getArmPos();
-        
+
         lastMeasuredTime = Timer.getFPGATimestamp();
 
         // SmartDashboard.putNumber("ramp rate (s)", 2);
@@ -166,7 +167,7 @@ public class Arm extends SubsystemBase {
         }
 
     }
-    
+
 
     public void setBooleanDrive(boolean climb) {
         callDrive = climb;
@@ -178,7 +179,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
 
         babyMode = SmartDashboard.getBoolean("babymode", false);
-        
+
 
         //Aaron was here
         // ^ worst case scenario
@@ -259,9 +260,9 @@ public class Arm extends SubsystemBase {
             armMotorMaster.set(0);
             armMotorFollower.set(0);
         }
-        
-       
-        
+
+
+
 
         autoCancelArmCommand();
 
@@ -298,9 +299,9 @@ public class Arm extends SubsystemBase {
             armFeedVolts = armFeed.calculate(getArmPos(), 0);
             // kg * cos(arm angle) * arm_COM_length
         }
-        
+
        armPIDMaster.setReference((setpoint.position), CANSparkBase.ControlType.kPosition, 0, armFeedVolts);
-        
+
         // SmartDashboard.putNumber("feedforward volts", armFeedVolts);
         // SmartDashboard.putNumber("pid volts",
         //         armMotorMaster.getBusVoltage() * armMotorMaster.getAppliedOutput() - armFeedVolts);
@@ -317,7 +318,7 @@ public class Arm extends SubsystemBase {
         armMotorMaster.setVoltage(volts); // STARTING WITH SLOWER SPEED FOR TESTING
     }
 
-    
+
     public void setLimitsForClimbOn() {
         armPIDMaster.setOutputRange(-1, 1);
         armMotorMaster.setSoftLimit(SoftLimitDirection.kReverse,
@@ -472,7 +473,7 @@ public class Arm extends SubsystemBase {
         if (positionSim != null) {
             positionSim.set((goalState.position - armMasterEncoder.getZeroOffset())
                     * (armMasterEncoder.getInverted() ? -1.0 : 1.0)
-                    / armMasterEncoder.getPositionConversionFactor() * MockedEncoder.NEO_BUILTIN_ENCODER_CPR);
+                    / armMasterEncoder.getPositionConversionFactor() * NEO_BUILTIN_ENCODER_CPR);
         }
     }
 }

@@ -64,7 +64,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   private static boolean babyMode = false;
-  
+
   // 1. using GenericHID allows us to use different kinds of controllers
   // 2. Use absolute paths from constants to reduce confusion
   public final GenericHID driverController = new GenericHID(Driver.port);
@@ -112,7 +112,7 @@ public class RobotContainer {
     "Left-Amp",
     "Shoot on Right",
     "Shoot Center"
-  
+
   };
   DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
 
@@ -152,9 +152,9 @@ public class RobotContainer {
     //setBindingsManipulatorENDEFF();
     setBindingsManipulatorNEO();
   }
-  
 
- 
+
+
 
   private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new TeleopDrive(
@@ -206,7 +206,7 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
         .whileTrue(new RampMaxRPM(intakeShooter));
-    new JoystickButton(manipulatorController, OPPISITE_EJECT)
+    new JoystickButton(manipulatorController, OPPOSITE_EJECT)
         .whileTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
