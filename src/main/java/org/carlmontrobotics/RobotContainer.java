@@ -210,7 +210,7 @@ public class RobotContainer {
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onTrue(
-            new Outtake(intakeShooter, arm));
+            new TestRPM(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new Intake(intakeShooter));
     new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)

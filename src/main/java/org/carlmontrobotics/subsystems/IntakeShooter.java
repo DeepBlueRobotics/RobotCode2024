@@ -72,6 +72,7 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.setSmartCurrentLimit(60);
         // SmartDashboard.putNumber("Intake target RPM", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
+        SmartDashboard.putNumber("Goal RPM Outtake", 0);
     }
 
     public boolean intakeIsOverTemp() {
