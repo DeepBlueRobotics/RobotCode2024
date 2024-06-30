@@ -24,6 +24,11 @@ public abstract class Config implements Sendable {
     protected boolean exampleFlagEnabled = false;
     protected boolean swimShady = false;
     protected boolean setupSysId = false;
+    protected boolean useSmartDashboardControl = true; // whether to control arm position + rpm of
+                                                       // outtake through SmartDashboard
+                                                       // Note: disables joystick control of arm and
+                                                       // outtake command if
+                                                       // using SmartDashboard
 
     // ...a public getter starting with "is" for booleans or "get" for other types.
     // Do NOT remove this example. It is used by unit tests.
@@ -38,6 +43,10 @@ public abstract class Config implements Sendable {
 
     public boolean isSysIdTesting() {
         return setupSysId;
+    }
+
+    public boolean useSmartDashboardControl() {
+        return useSmartDashboardControl;
     }
 
     // --- For clarity, place additional config settings ^above^ this line ---

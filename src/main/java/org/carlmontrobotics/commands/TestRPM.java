@@ -11,7 +11,6 @@ public class TestRPM extends Command {
 
     public TestRPM(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
-        goalRPM = SmartDashboard.getNumber("Goal RPM Outtake", 0);
         addRequirements(intakeShooter);
     }
 
@@ -22,6 +21,7 @@ public class TestRPM extends Command {
 
     @Override
     public void execute() {
+        goalRPM = SmartDashboard.getNumber("Goal RPM Outtake", 0);
         if (intakeShooter.getOuttakeRPM() >= goalRPM) {
             intakeShooter.setMaxIntake(1);
         }
