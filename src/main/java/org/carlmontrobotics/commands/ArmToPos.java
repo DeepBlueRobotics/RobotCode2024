@@ -9,18 +9,16 @@ public class ArmToPos extends Command {
   // return true when close enough
   private final Arm arm;
   private double goal;
-  private int index;
 
   // TODO: don't have an index parameter
-  public ArmToPos(Arm armSubsystem, double goal, int index) {
+  public ArmToPos(Arm armSubsystem, double goal) {
     addRequirements(this.arm = armSubsystem);
     this.goal = goal;
-    this.index = index;
+    
   }
 
   @Override
   public void initialize() {
-    Arm.setSelector(index);
     arm.setArmTarget(goal);
   }
 

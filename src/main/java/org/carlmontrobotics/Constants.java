@@ -66,7 +66,7 @@ public final class Constants {
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
 		public static final double DETECT_DISTANCE_INCHES = 13;
-		
+
 		public static final double INTAKE_RPM = 6300;
 		public static final double INTAKE_SLOWDOWN_RPM = 4500;
 		public static final double MAX_SECONDS_OVERLOAD = 2.0;
@@ -76,7 +76,6 @@ public final class Constants {
 		public static final double SUBWOOFER_RPM = 2100;
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
-		public static final double[] RPM_SELECTOR = {AMP_RPM, SUBWOOFER_RPM, PODIUM_RPM};
 		// WTF FAB ISSUE
 		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
@@ -188,7 +187,9 @@ public final class Constants {
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.5;
 		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
-		// Arm buttons
+		
+
+		public static final int NEO_BUILTIN_ENCODER_CPR = 42;
 	}
 
 	public static final class Drivetrainc {
@@ -437,20 +438,25 @@ public final class Constants {
 			public static final Axis INTAKE_BUTTON = Axis.kLeftTrigger;
 			public static final Axis SHOOTER_BUTTON = Axis.kRightTrigger;
 			public static final int EJECT_BUTTON = Button.kLeftBumper.value;
-			public static final int AMP_BUTTON = Button.kRightBumper.value;
+			public static final int OPPOSITE_EJECT = Button.kRightBumper.value;
 			public static final Axis INTAKE_AX = Axis.kRightTrigger;
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
-			public static final int SPEAKER_CLOSE = Button.kLeftBumper.value;
-			public static final int SPEAKER_SAFE = Button.kRightBumper.value;
 			public static final int SPEAKER_POS = Button.kX.value;
-			// public static final int INTAKE_POS = Button.kX.value;
-			public static final int EJECT_RPM = Button.kX.value;
-			public static final int RAISE_CLIMBER = Button.kA.value;
-			public static final int LOWER_CLIMBER = Button.kY.value;
-			
+			public static final int ARM_TO_AMP_BUTTON = Button.kY.value;
+			public static final int PASS_TO_OUTTAKE_STICK =
+					Button.kLeftStick.value;
+			public static final int PASS_TO_INTAKE_STICK =
+					Button.kRightStick.value;
+			public static final int UP_D_PAD = 0;
+			public static final int DOWN_D_PAD = 180;
+			public static final int LEFT_D_PAD = 270;
+			public static final int A_BUTTON = Button.kA.value;
+			public static final int RAMP_OUTTAKE = Button.kB.value;
 		}
+
 
 		public static final double JOY_THRESH = 0.01;
 		public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;// woah, this is high.
+
 	}
 }

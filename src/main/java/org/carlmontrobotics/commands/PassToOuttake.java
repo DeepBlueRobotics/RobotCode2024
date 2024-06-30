@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToOuttake extends Command {
     private IntakeShooter intakeShooter;
-    Timer timer = new Timer();
 
     public PassToOuttake(IntakeShooter intakeShooter) {
         this.intakeShooter = intakeShooter;
@@ -15,8 +14,8 @@ public class PassToOuttake extends Command {
 
     @Override
     public void initialize() {
-        timer.start();
-        intakeShooter.setMaxIntake(1);
+
+        intakeShooter.motorSetIntake(0.6);
     }
 
     @Override
@@ -26,13 +25,12 @@ public class PassToOuttake extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        timer.stop();
-        timer.reset();
         intakeShooter.resetCurrentLimit();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.get() > 0.8;
+        return intakeShooter.intakeDetectsNote()
+                && intakeShooter.outtakeDetectsNote();
     }
 }

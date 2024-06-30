@@ -32,11 +32,10 @@ public class IntakeShooter extends SubsystemBase {
     private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();
-    private final SparkPIDController pidControllerIntake = intakeMotor.getPIDController();
-    private Timer timer = new Timer();
+    private final SparkPIDController pidControllerIntake =
+            intakeMotor.getPIDController();
     private Timer intakeTOFTimer = new Timer();
     private Timer outtakeTOFTimer = new Timer();
-    private int count = 0;
     private SimpleMotorFeedforward intakeFeedforward = new SimpleMotorFeedforward(kS[INTAKE], kV[INTAKE],
             kA[INTAKE]);
     private final SimpleMotorFeedforward outtakeFeedforward = new SimpleMotorFeedforward(kS[OUTTAKE], kV[OUTTAKE],
@@ -73,6 +72,7 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.setSmartCurrentLimit(60);
         // SmartDashboard.putNumber("Intake target RPM", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
+        SmartDashboard.putNumber("Goal RPM Outtake", 0);
     }
 
     public boolean intakeIsOverTemp() {
@@ -86,9 +86,7 @@ public class IntakeShooter extends SubsystemBase {
                 && goalOutakeRPM - RPM_TOLERANCE < outtakeEncoder.getVelocity();
     }
 
-    private double countPeridoic() {
-        return count / timer.get();
-    }
+
 
     // ---------------------------------------------------------------------------------------------------
 
@@ -203,10 +201,7 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.set(1 * direction);
     }
 
-    public void setMaxOuttakeOverload(int direction) {
-        outtakeMotorVortex.setSmartCurrentLimit(80);
-        outtakeMotorVortex.set(1 * direction);
-    }
+
 
     public void resetCurrentLimit() {
         intakeMotor.setSmartCurrentLimit(MotorConfig.NEO.currentLimitAmps);
@@ -260,26 +255,7 @@ public class IntakeShooter extends SubsystemBase {
         sendableBuilder.addDoubleProperty("Intake distance sensor", this::getGamePieceDistanceIntake, null);
         sendableBuilder.addBooleanProperty("Outake distance sensor length", this::outtakeDetectsNote, null);
         sendableBuilder.addBooleanProperty("Intake distance sensor length", this::intakeDetectsNote, null);
-        sendableBuilder.addDoubleProperty("Period time", this::countPeridoic, null);
+
     }
-    /*
-     * public double calculateRPMAtDistance() {
-     * 
-     * double minRPM = Integer.MAX_VALUE;
-     * double distance = limelight.distanceToTargetSpeaker(); // placeholder for
-     * limelight
-     * for(int i = 0; i<= 360; i++) {
-     * double t = Math.sqrt((OFFSETFROMGROUND-SPEAKER_HEIGHT+distance*Math.tan(i)));
-     * double rpm = distance/Math.cos(i)*t;
-     * if(rpm<minRPM) {
-     * minRPM = rpm;
-     * }
-     * }
-     * if(minRPM == Integer.MAX_VALUE) {
-     * System.err.println("FAILURE");
-     * }
-     * return minRPM;
-     * }
-     */
 
 }
