@@ -1,6 +1,7 @@
 package org.carlmontrobotics.subsystems;
 
 import static org.carlmontrobotics.Constants.Drivetrainc.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -26,6 +27,8 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -78,7 +81,9 @@ public class Drivetrain extends SubsystemBase {
     // ^used by PathPlanner for chaining paths
 
     private SwerveDriveKinematics kinematics = null;
-    private SwerveDriveOdometry odometry = null;
+    // private SwerveDriveOdometry odometry = null;
+
+    private SwerveDrivePoseEstimator poseEstimator = null;
 
     private SwerveModule modules[];
     private boolean fieldOriented = true;
@@ -104,9 +109,17 @@ public class Drivetrain extends SubsystemBase {
     private SimDouble gyroYawSim;
     private Timer simTimer = new Timer();
 
+    private double lastSetX = 0, lastSetY = 0, lastSetTheta = 0;
+
     public Drivetrain() {
-        // SmartDashboard.putNumber("set x", 0);
-        // SmartDashboard.putNumber("set y", 0);
+        SmartDashboard.putNumber("Pose Estimator set x (m)", lastSetX);
+        SmartDashboard.putNumber("Pose Estimator set y (m)", lastSetY);
+        SmartDashboard.putNumber("Pose Estimator set rotation (deg)",
+                lastSetTheta);
+
+        SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
+        SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
+
         // Calibrate Gyro
         {
 
@@ -218,7 +231,14 @@ public class Drivetrain extends SubsystemBase {
             }
         }
 
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
+        // odometry = new SwerveDriveOdometry(kinematics,
+        // Rotation2d.fromDegrees(getHeading()), getModulePositions(),
+        // new Pose2d());
+
+        poseEstimator = new SwerveDrivePoseEstimator(
+                getKinematics(),
+                Rotation2d.fromDegrees(getHeading()),
+                getModulePositions(),
                 new Pose2d());
 
         // Setup autopath builder
@@ -227,6 +247,8 @@ public class Drivetrain extends SubsystemBase {
         //                 SmartDashboard.putNumber("chassis speeds y", 0);
 
         //                             SmartDashboard.putNumber("chassis speeds theta", 0);
+        SmartDashboard.putData(this);
+
     }
 
     @Override
@@ -286,27 +308,36 @@ public class Drivetrain extends SubsystemBase {
         // moduleBL.periodic();
         // moduleBR.periodic();
         // double goal = SmartDashboard.getNumber("bigoal", 0);
-
         for (SwerveModule module : modules) {
             module.periodic();
             // module.move(0, goal);
         }
 
-        field.setRobotPose(odometry.getPoseMeters());
+        // field.setRobotPose(odometry.getPoseMeters());
 
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
 
-        odometry.update(gyro.getRotation2d(), getModulePositions());
+        // odometry.update(gyro.getRotation2d(), getModulePositions());
+
+        poseEstimator.update(gyro.getRotation2d(), getModulePositions());
         //odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-        { 
-            // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-            // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-            // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-            // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
-       }
-        //setPose(new Pose2d(SmartDashboard.getNumber("set x", getPose().getTranslation().getX()), SmartDashboard.getNumber("set y", getPose().getTranslation().getY()), Rotation2d.fromDegrees(getHeading())));
-        // SmartDashboard.putNumber("Odometry X", getPose().getTranslation().getX());
-        // SmartDashboard.putNumber("Odometry Y", getPose().getTranslation().getY());
+        updateMT2PoseEstimator();
+
+        double currSetX =
+                SmartDashboard.getNumber("Pose Estimator set x (m)", lastSetX);
+        double currSetY =
+                SmartDashboard.getNumber("Pose Estimator set y (m)", lastSetY);
+        double currSetTheta = SmartDashboard
+                .getNumber("Pose Estimator set rotation (deg)", lastSetTheta);
+
+        if (lastSetX != currSetX || lastSetY != currSetY
+                || lastSetTheta != currSetTheta) {
+            setPose(new Pose2d(currSetX, currSetY,
+                    Rotation2d.fromDegrees(currSetTheta)));
+        }
+
+
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
         // SmartDashboard.putNumber("Raw gyro angle", gyro.getAngle());
@@ -335,9 +366,12 @@ public class Drivetrain extends SubsystemBase {
         builder.addBooleanProperty("Gyro Calibrating", gyro::isCalibrating, null);
         builder.addBooleanProperty("Field Oriented", () -> fieldOriented,
         fieldOriented -> this.fieldOriented = fieldOriented);
-        builder.addDoubleProperty("Odometry X", () -> getPose().getX(), null);
-        builder.addDoubleProperty("Odometry Y", () -> getPose().getY(), null);
-        builder.addDoubleProperty("Odometry Heading", () ->
+        builder.addDoubleProperty("Pose Estimator X", () -> getPose().getX(),
+                null);
+        builder.addDoubleProperty("Pose Estimator Y", () -> getPose().getY(),
+                null);
+        builder.addDoubleProperty("Pose Estimator Theta",
+                () ->
         getPose().getRotation().getDegrees(), null);
         builder.addDoubleProperty("Robot Heading", () -> getHeading(), null);
         builder.addDoubleProperty("Raw Gyro Angle", gyro::getAngle, null);
@@ -345,6 +379,15 @@ public class Drivetrain extends SubsystemBase {
         builder.addDoubleProperty("Roll", gyro::getRoll, null);
         builder.addDoubleProperty("Field Offset", () -> fieldOffset, fieldOffset ->
         this.fieldOffset = fieldOffset);
+        builder.addDoubleProperty("FL Turn Encoder (Deg)",
+                () -> moduleFL.getModuleAngle(), null);
+        builder.addDoubleProperty("FR Turn Encoder (Deg)",
+                () -> moduleFR.getModuleAngle(), null);
+        builder.addDoubleProperty("BL Turn Encoder (Deg)",
+                () -> moduleBL.getModuleAngle(), null);
+        builder.addDoubleProperty("BR Turn Encoder (Deg)",
+                () -> moduleBR.getModuleAngle(), null);
+
     }
 
     // #region Drive Methods
@@ -531,13 +574,16 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        // return odometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
 
     private Rotation2d simGyroOffset = new Rotation2d();
     public void setPose(Pose2d initialPose) {
         Rotation2d gyroRotation = gyro.getRotation2d();
-        odometry.resetPosition(gyroRotation, getModulePositions(), initialPose);
+        // odometry.resetPosition(gyroRotation, getModulePositions(), initialPose);
+
+        poseEstimator.resetPosition(gyroRotation, getModulePositions(), initialPose);
         // Remember the offset that the above call to resetPosition() will cause the odometry.update() will add to the gyro rotation in the future
         // We need the offset so that we can compensate for it during simulationPeriodic().
         simGyroOffset = initialPose.getRotation().minus(gyroRotation);
@@ -570,8 +616,10 @@ public class Drivetrain extends SubsystemBase {
         fieldOffset = gyro.getAngle();
     }
 
-    public void resetOdometry() {
-        odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+    public void resetPoseEstimator() {
+        // odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
+        poseEstimator.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
         gyro.reset();
     }
 
@@ -1001,6 +1049,34 @@ public class Drivetrain extends SubsystemBase {
         for (SwerveModule module : modules) {
             module.turnPeriodic();
             module.move(0.0000000000001, angle);
+        }
+    }
+
+    // pose estimator stuff
+
+    public void updateMT2PoseEstimator() {
+        boolean rejectVisionUpdate = false;
+
+        LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
+                poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
+                .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
+
+        if (Math.abs(getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEG_PER_SEC) { // degrees per second
+            rejectVisionUpdate = true;
+        }
+
+        if (visionPoseEstimate.tagCount == 0) {
+            rejectVisionUpdate = true;
+        }
+
+        if (!rejectVisionUpdate) {
+            poseEstimator
+                    .setVisionMeasurementStdDevs(
+                            VecBuilder.fill(SmartDashboard.getNumber("pose estimator std dev x", STD_DEV_X_METERS),
+                                    SmartDashboard.getNumber("pose estimator std dev y", STD_DEV_Y_METERS),
+                                    STD_DEV_HEADING_RADS));
+            poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
         }
     }
 

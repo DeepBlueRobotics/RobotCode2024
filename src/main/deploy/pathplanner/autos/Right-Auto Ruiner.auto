@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5,
-      "y": 2.08
+      "x": 0.8442899328546756,
+      "y": 2.7050989470935694
     },
     "rotation": 0
   },
@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right-Auto Ruiner"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right-Auto Ruiner"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonRuinerShootAndIntake"
+                }
+              }
+            ]
           }
         }
       ]

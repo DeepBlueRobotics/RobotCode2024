@@ -14,21 +14,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
-  private final SwerveDrivePoseEstimator poseEstimator;
+  // private final SwerveDrivePoseEstimator poseEstimator;
+
   // private double tv, tx;
   // private double[] rawBotPose = null;
   // private double[] targetPose = null;
-  private Pose3d botPose;
 
   private final InterpolatingDoubleTreeMap shooterMap;
 
   public Limelight(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    poseEstimator = new SwerveDrivePoseEstimator(
-        drivetrain.getKinematics(),
-        Rotation2d.fromDegrees(drivetrain.getHeading()),
-        drivetrain.getModulePositions(),
-        new Pose2d());
+    // poseEstimator = new SwerveDrivePoseEstimator(
+    // drivetrain.getKinematics(),
+    // Rotation2d.fromDegrees(drivetrain.getHeading()),
+    // drivetrain.getModulePositions(),
+    // new Pose2d());
 
     LimelightHelpers.SetFiducialIDFiltersOverride(SHOOTER_LL_NAME, VALID_IDS);
 
@@ -39,33 +39,30 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()), drivetrain.getModulePositions());
-    updateBotPose3d();
+    // poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()),
+    // drivetrain.getModulePositions());
 
-    updateMT2Odometry();
+    // updateMT2Odometry();
 
     // intake limelight testing
     SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
     SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
     SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("rotation to align", getRotateAngleRad());
+    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
 
     // shooter limelight testing
     SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
     SmartDashboard.putNumber("optimized arm angle", getArmAngleToShootSpeakerRad());
   }
 
-  public void updateBotPose3d() {
-    botPose = LimelightHelpers.getBotPose3d(SHOOTER_LL_NAME);
-  }
-
-  public Pose2d getCurrentPose() {
-    Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
-    SmartDashboard.putNumber("estimated x", estimatedPos.getX());
-    // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
-    // SmartDashboard.putNumber("estimated rotation (deg)", estimatedPos.getRotation().getDegrees());
-    return estimatedPos;
-  }
+  // public Pose2d getCurrentPose() {
+  // Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
+  // SmartDashboard.putNumber("estimated x", estimatedPos.getX());
+  // // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
+  // // SmartDashboard.putNumber("estimated rotation (deg)",
+  // estimatedPos.getRotation().getDegrees());
+  // return estimatedPos;
+  // }
 
   public double getTXDeg(String limelightName) {
     return (limelightName == INTAKE_LL_NAME) ? LimelightHelpers.getTX(INTAKE_LL_NAME) : -LimelightHelpers.getTY(SHOOTER_LL_NAME);
@@ -117,28 +114,32 @@ public class Limelight extends SubsystemBase {
 
   // megatag2
 
-  public void updateMT2Odometry() {
-    boolean rejectVisionUpdate = false;
+  // public void updateMT2Odometry() {
+  // boolean rejectVisionUpdate = false;
 
-    LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
-        poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
-        .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
+  // LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
+  // poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0,
+  // 0);
+  // LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
+  // .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
 
-    if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEG_PER_SEC) { // degrees per second
-      rejectVisionUpdate = true;
-    }
+  // if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEG_PER_SEC) {
+  // // degrees per second
+  // rejectVisionUpdate = true;
+  // }
 
-    if (visionPoseEstimate.tagCount == 0) {
-      rejectVisionUpdate = true;
-    }
+  // if (visionPoseEstimate.tagCount == 0) {
+  // rejectVisionUpdate = true;
+  // }
 
-    if (!rejectVisionUpdate) {
-      poseEstimator
-          .setVisionMeasurementStdDevs(VecBuilder.fill(STD_DEV_X_METERS, STD_DEV_Y_METERS, STD_DEV_HEADING_RADS));
-      poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
-    }
-  }
+  // if (!rejectVisionUpdate) {
+  // poseEstimator
+  // .setVisionMeasurementStdDevs(VecBuilder.fill(STD_DEV_X_METERS,
+  // STD_DEV_Y_METERS, STD_DEV_HEADING_RADS));
+  // poseEstimator.addVisionMeasurement(visionPoseEstimate.pose,
+  // visionPoseEstimate.timestampSeconds);
+  // }
+  // }
 
   public double getRotateAngleRadMT2() {
     Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
