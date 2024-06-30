@@ -163,8 +163,11 @@ public class RobotContainer {
     intakeShooter.setDefaultCommand(new TeleopEffector(intakeShooter,
         () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
         manipulatorController, driverController));
-    arm.setDefaultCommand(new TeleopArm(arm,
-        () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY)));
+    arm.setDefaultCommand(
+            Config.CONFIG.useSmartDashboardControl ? new TestArmToPos(arm)
+                    : new TeleopArm(arm,
+                            () -> ProcessedAxisValue(manipulatorController,
+                                    Axis.kLeftY)));
 
 
   }
@@ -208,7 +211,9 @@ public class RobotContainer {
         .whileTrue(new EjectOuttakeSide(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-        .onTrue(new TestRPM(intakeShooter));
+            .onTrue(Config.CONFIG.useSmartDashboardControl
+                    ? new TestRPM(intakeShooter)
+                    : new Outtake(intakeShooter, arm));
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new Intake(intakeShooter));
     new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)
