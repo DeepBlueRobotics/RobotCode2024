@@ -157,8 +157,13 @@ public class Limelight extends SubsystemBase {
 
     double x = targetPoseRobotSpace.getX();
     double y = targetPoseRobotSpace.getY();
+    double z = targetPoseRobotSpace.getZ();
+    SmartDashboard.putNumber("target x", x);
+    SmartDashboard.putNumber("target y", y);
+    SmartDashboard.putNumber("target z", z);
 
-    return Math.sqrt(x * x + y * y);
+
+    return Math.hypot(x, z);
   }
 
   public double getOptimizedArmAngleRadsMT2() {
