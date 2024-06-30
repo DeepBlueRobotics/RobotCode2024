@@ -148,7 +148,7 @@ public class RobotContainer {
     setDefaultCommands();
     setBindingsDriver();
     // setBindingsManipulatorENDEFF();
-    setBindingsManipulatorNEO();
+    setBindingsManipulator();
   }
 
 
@@ -197,7 +197,7 @@ public class RobotContainer {
             drivetrain));
   }
 
-  private void setBindingsManipulatorNEO() {
+  private void setBindingsManipulator() {
     new JoystickButton(manipulatorController, EJECT_BUTTON)
         .onTrue(new Eject(intakeShooter));
 
