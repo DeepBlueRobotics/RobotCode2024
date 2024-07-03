@@ -3,6 +3,7 @@ package org.carlmontrobotics.subsystems;
 import static org.carlmontrobotics.Constants.Limelightc.*;
 import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -145,9 +146,10 @@ public class Limelight extends SubsystemBase {
     Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
 
     double targetX = targetPoseRobotSpace.getX(); // the forward offset between the center of the robot and target
-    double targetY = targetPoseRobotSpace.getY(); // the sideways offset
+    double targetZ = -targetPoseRobotSpace.getZ(); // the sideways offset
 
-    double targetOffsetRads = Math.atan2(targetY, targetX);
+    double targetOffsetRads =
+        MathUtil.inputModulus(Math.atan2(targetX, targetZ), -Math.PI, Math.PI);
 
     return targetOffsetRads;
   }
@@ -156,11 +158,7 @@ public class Limelight extends SubsystemBase {
     Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
 
     double x = targetPoseRobotSpace.getX();
-    double y = targetPoseRobotSpace.getY();
     double z = targetPoseRobotSpace.getZ();
-    SmartDashboard.putNumber("target x", x);
-    SmartDashboard.putNumber("target y", y);
-    SmartDashboard.putNumber("target z", z);
 
 
     return Math.hypot(x, z);
@@ -168,5 +166,9 @@ public class Limelight extends SubsystemBase {
 
   public double getOptimizedArmAngleRadsMT2() {
     return shooterMap.get(getDistanceToSpeakerMetersMT2());
+  }
+
+  public boolean seesTag() {
+    return LimelightHelpers.getTV(SHOOTER_LL_NAME);
   }
 }

@@ -21,8 +21,9 @@ public class AlignToApriltagMegatag2 extends Command {
     public final Drivetrain drivetrain;
     private Limelight limelight;
 
-    public final PIDController rotationPID = new PIDController(thetaPIDController[0], thetaPIDController[1],
-            thetaPIDController[2]);
+    public final PIDController rotationPID =
+            new PIDController(thetaPIDController[0], thetaPIDController[1],
+                    thetaPIDController[2]);
 
     public AlignToApriltagMegatag2(Drivetrain drivetrain, Limelight limelight) {
         this.limelight = limelight;
@@ -32,7 +33,8 @@ public class AlignToApriltagMegatag2 extends Command {
         rotationPID.enableContinuousInput(-180, 180);
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
                 .plus(Rotation2d.fromRadians(limelight.getRotateAngleRadMT2()));
-        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+        rotationPID.setSetpoint(
+                MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
         rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
         SendableRegistry.addChild(this, rotationPID);
         addRequirements(drivetrain);
@@ -42,13 +44,19 @@ public class AlignToApriltagMegatag2 extends Command {
     public void execute() {
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
                 .plus(Rotation2d.fromRadians(limelight.getRotateAngleRadMT2()));
-        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+        rotationPID.setSetpoint(
+                MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+        double rotationDrive = rotationPID.calculate(drivetrain.getHeading());
+        if (!limelight.seesTag()) {
+            rotationDrive = 0;
+        }
+
         if (teleopDrive == null)
-            drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
+            drivetrain.drive(0, 0, rotationDrive);
         else {
             double[] driverRequestedSpeeds = teleopDrive.getRequestedSpeeds();
             drivetrain.drive(driverRequestedSpeeds[0], driverRequestedSpeeds[1],
-                    rotationPID.calculate(drivetrain.getHeading()));
+                    rotationDrive);
         }
     }
 
