@@ -222,7 +222,7 @@ public class RobotContainer {
                     : new Outtake(intakeShooter, arm)*/
     
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-            .onTrue(new RampMaxRPMDriving(intakeShooter));
+            .onTrue(new PassToOuttake(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new Intake(intakeShooter));
