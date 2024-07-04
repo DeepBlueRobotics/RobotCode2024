@@ -450,6 +450,7 @@ public final class Constants {
 			public static final int UP_D_PAD = 0;
 			public static final int DOWN_D_PAD = 180;
 			public static final int LEFT_D_PAD = 270;
+			
 			public static final int A_BUTTON = Button.kA.value;
 			public static final int RAMP_OUTTAKE = Button.kB.value;
 		}

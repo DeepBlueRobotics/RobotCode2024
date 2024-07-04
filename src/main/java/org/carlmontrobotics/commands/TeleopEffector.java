@@ -37,6 +37,9 @@ public class TeleopEffector extends Command {
   public void initialize() {
     timer.reset();
     hasIntaked = false;
+    if(intake.intakeDetectsNote() && intake.outtakeDetectsNote()){
+      intake.setMaxOuttake(1);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -75,6 +78,6 @@ public class TeleopEffector extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !intake.intakeDetectsNote() && !intake.outtakeDetectsNote();
   }
 }
