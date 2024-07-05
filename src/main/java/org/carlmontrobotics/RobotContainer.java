@@ -163,6 +163,9 @@ public class RobotContainer {
     intakeShooter.setDefaultCommand(new TeleopEffector(intakeShooter,
         () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
         manipulatorController, driverController));
+    //TODO
+       // intakeShooter.setDefaultCommand(new RampMaxRPMDriving(intakeShooter)); 
+
     arm.setDefaultCommand(
             Config.CONFIG.useSmartDashboardControl ? new TestArmToPos(arm)
                     : new TeleopArm(arm,
@@ -203,6 +206,9 @@ public class RobotContainer {
   private void setBindingsManipulator() {
     new JoystickButton(manipulatorController, EJECT_BUTTON)
         .onTrue(new Eject(intakeShooter));
+    
+    //new JoystickButton(manipulatorController, A_BUTTON)
+        //.onTrue(new RampMaxRPMDriving(intakeShooter));
 
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
@@ -210,10 +216,14 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, OPPOSITE_EJECT)
         .whileTrue(new EjectOuttakeSide(intakeShooter));
 
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+    /*axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
             .onTrue(Config.CONFIG.useSmartDashboardControl
                     ? new TestRPM(intakeShooter)
-                    : new Outtake(intakeShooter, arm));
+                    : new Outtake(intakeShooter, arm)*/
+    
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+            .onTrue(new PassToOuttake(intakeShooter));
+
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new Intake(intakeShooter));
     new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)

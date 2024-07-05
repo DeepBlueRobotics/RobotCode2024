@@ -50,6 +50,14 @@ public class TeleopEffector extends Command {
     //   intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
     // }
     // manipulatorController.setRumble(RumbleType.kBothRumble, 0.5);
+    
+    if(intake.intakeDetectsNote() && intake.outtakeDetectsNote()){
+      intake.setRPMOuttake(4000);    
+      }
+    else{
+      intake.setRPMOuttake(0);    
+    }  
+
     if (intake.intakeDetectsNote()) {
       manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
       driverController.setRumble(RumbleType.kBothRumble, 0.4);
