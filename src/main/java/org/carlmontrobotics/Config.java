@@ -24,7 +24,7 @@ public abstract class Config implements Sendable {
     protected boolean exampleFlagEnabled = false;
     protected boolean swimShady = false;
     protected boolean setupSysId = false;
-    protected boolean useSmartDashboardControl = true; // whether to control arm position + rpm of
+    protected boolean useSmartDashboardControl = false; // whether to control arm position + rpm of
                                                        // outtake through SmartDashboard
                                                        // Note: disables joystick control of arm and
                                                        // outtake command if
