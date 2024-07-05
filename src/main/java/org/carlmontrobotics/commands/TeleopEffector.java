@@ -37,9 +37,6 @@ public class TeleopEffector extends Command {
   public void initialize() {
     timer.reset();
     hasIntaked = false;
-    if(intake.intakeDetectsNote() && intake.outtakeDetectsNote()){
-      intake.setMaxOuttake(1);
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,6 +50,14 @@ public class TeleopEffector extends Command {
     //   intake.setRPMOutake(MANUAL_RPM_MAX * joystick.getAsDouble());
     // }
     // manipulatorController.setRumble(RumbleType.kBothRumble, 0.5);
+    
+    if(intake.intakeDetectsNote() && intake.outtakeDetectsNote()){
+      intake.setRPMOuttake(4000);    
+      }
+    else{
+      intake.setRPMOuttake(0);    
+    }  
+
     if (intake.intakeDetectsNote()) {
       manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
       driverController.setRumble(RumbleType.kBothRumble, 0.4);
@@ -78,6 +83,6 @@ public class TeleopEffector extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intake.intakeDetectsNote() && !intake.outtakeDetectsNote();
+    return false;
   }
 }
