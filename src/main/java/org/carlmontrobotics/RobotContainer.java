@@ -207,8 +207,8 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, EJECT_BUTTON)
         .onTrue(new Eject(intakeShooter));
     
-    new JoystickButton(manipulatorController, A_BUTTON)
-        .onTrue(new RampMaxRPMDriving(intakeShooter));
+    //new JoystickButton(manipulatorController, A_BUTTON)
+        //.onTrue(new RampMaxRPMDriving(intakeShooter));
 
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
