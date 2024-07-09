@@ -209,7 +209,9 @@ public class RobotContainer {
     
     //new JoystickButton(manipulatorController, A_BUTTON)
         //.onTrue(new RampMaxRPMDriving(intakeShooter));
-
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
+            new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+                    new PassToOuttake(intakeShooter)));
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
         .whileTrue(new RampMaxRPM(intakeShooter));
@@ -221,8 +223,8 @@ public class RobotContainer {
                     ? new TestRPM(intakeShooter)
                     : new Outtake(intakeShooter, arm)*/
     
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-            .onTrue(new PassToOuttake(intakeShooter));
+    // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+    // .onTrue(new PassToOuttake(intakeShooter));
 
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .whileTrue(new Intake(intakeShooter));
@@ -241,6 +243,7 @@ public class RobotContainer {
     new POVButton(manipulatorController, DOWN_D_PAD).onTrue(new Climb(arm));
     new POVButton(manipulatorController, LEFT_D_PAD)
         .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
+
   }
 
 
