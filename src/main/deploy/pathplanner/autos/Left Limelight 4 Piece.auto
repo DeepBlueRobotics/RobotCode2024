@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6842044526319189,
+      "y": 6.719352940485241
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 6"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
