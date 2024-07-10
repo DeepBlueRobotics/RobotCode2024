@@ -343,6 +343,12 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("PassToOuttake",
         new PassToOuttake(intakeShooter));
+    NamedCommands.registerCommand("AimArmSpeakerMT2",
+            new AimArmSpeakerMT2(arm, limelight));
+    NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
+            new AlignToApriltagMegatag2(drivetrain, limelight));
+
+
 
     NamedCommands.registerCommand("StopIntake",
         new InstantCommand(intakeShooter::stopIntake));
