@@ -8,16 +8,12 @@ import static org.carlmontrobotics.Constants.Limelightc.*;
 
 import org.carlmontrobotics.Constants.Limelightc;
 
-import static org.carlmontrobotics.Constants.Effectorc.*;
-
 import org.carlmontrobotics.subsystems.Drivetrain;
-import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoMATICALLYGetNote extends Command {
@@ -25,14 +21,11 @@ public class AutoMATICALLYGetNote extends Command {
   private Drivetrain dt;
   // private IntakeShooter effector;
   private Limelight ll;
-  private IntakeShooter intake;
-  //private Timer timer = new Timer();
-  private int index;
-  private int increaseAmount = 250;
+  // private Timer timer = new Timer();
   Timer timer = new Timer();
-  public AutoMATICALLYGetNote(Drivetrain dt, IntakeShooter intake, Limelight ll) {
+
+  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll) {
     addRequirements(this.dt = dt);
-    addRequirements(this.intake = intake);
     this.ll = ll;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -44,7 +37,6 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
-    intake.motorSetIntake(0.6);
     
   }
 
@@ -54,35 +46,31 @@ public class AutoMATICALLYGetNote extends Command {
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
-    dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
-        Math.max(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC), Math.max(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
-    // 180deg is about 6.2 rad/sec, min is .5rad/sec
 
-    if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
-      intake.motorSetIntake(0.5);
+    if (LimelightHelpers.getTX(INTAKE_LL_NAME) == 1) {
+      if (angleErrRad >= 0) {
+        dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
+            Math.max(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
+            Math.max(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
+      } else {
+        dt.drive(Math.min(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
+            Math.min(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
+            Math.min(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
+      }
     }
-    if(intake.intakeDetectsNote()) {
-      timer.start();
-    } else {
-      timer.stop();
-      timer.reset();
-    }
-    
+    // 180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
-    //SmartDashboard.putBoolean("end", true);
-    intake.stopIntake();
-   
+    // SmartDashboard.putBoolean("end", true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.intakeDetectsNote() && timer.get()>0.1);
-    //return timer.get() >= 0.5;
+    return false;
   }
 }

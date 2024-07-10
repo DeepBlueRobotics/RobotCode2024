@@ -91,7 +91,8 @@ public class Limelight extends SubsystemBase {
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE)
         .plus(Rotation2d.fromDegrees(getTYDeg(INTAKE_LL_NAME)));
     if (angleToGoal.getDegrees() <= 0) {
-      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));
+      double distance = (NOTE_HEIGHT - HEIGHT_FROM_GROUND_METERS_INTAKE)
+          / Math.tan(Math.abs(angleToGoal.getRadians()));
       // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     } else {

@@ -391,7 +391,8 @@ public final class Constants {
 		public static final double MOUNT_ANGLE_DEG_SHOOTER = 55.446;
 		public static final double MOUNT_ANGLE_DEG_INTAKE = -29;
 		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(8.891);
-		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(52);
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE =
+				Units.inchesToMeters(13);
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115; // unused
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(2); // unused
 		public static final double MIN_MOVEMENT_METERSPSEC = 0.5;
