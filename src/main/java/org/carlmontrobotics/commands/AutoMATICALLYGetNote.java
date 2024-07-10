@@ -14,6 +14,7 @@ import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoMATICALLYGetNote extends Command {
@@ -47,16 +48,47 @@ public class AutoMATICALLYGetNote extends Command {
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
     // dt.drive(0,0,0);
 
+    double forwardSpeed = 0;
+    double strafeSpeed = 0;
+    double rotationalSpeed = 0;
+
     if (LimelightHelpers.getTX(INTAKE_LL_NAME) == 1) {
       if (angleErrRad >= 0) {
-        dt.drive(Math.max(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
-            Math.max(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
-            Math.max(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
-      } else {
-        dt.drive(Math.min(forwardDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
-            Math.min(strafeDistErrMeters * 2, MIN_MOVEMENT_METERSPSEC),
-            Math.min(angleErrRad * 2, MIN_MOVEMENT_RADSPSEC));
+        forwardSpeed = Math.max(
+            forwardDistErrMeters
+                * SmartDashboard.getNumber("forward speed multiplier", 1.5),
+            MIN_MOVEMENT_METERSPSEC);
+        strafeSpeed = Math.max(
+            strafeDistErrMeters
+                * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
+            MIN_MOVEMENT_METERSPSEC);
+        rotationalSpeed = Math.max(
+            angleErrRad
+                * SmartDashboard.getNumber("rotational speed multiplier", 2),
+            MIN_MOVEMENT_RADSPSEC);
       }
+
+      else {
+        forwardSpeed = Math.min(
+            forwardDistErrMeters
+                * SmartDashboard.getNumber("forward speed multiplier", 1.5),
+            MIN_MOVEMENT_METERSPSEC);
+        strafeSpeed = Math.min(
+            strafeDistErrMeters
+                * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
+            MIN_MOVEMENT_METERSPSEC);
+        rotationalSpeed = Math.min(
+            angleErrRad
+                * SmartDashboard.getNumber("rotational speed multiplier", 2),
+            MIN_MOVEMENT_RADSPSEC);
+      }
+
+      if (angleErrRad >= -ERROR_TOLERANCE_RAD
+          && angleErrRad <= ERROR_TOLERANCE_RAD) {
+        rotationalSpeed = 0;
+      }
+
+      dt.drive(forwardSpeed, strafeSpeed, rotationalSpeed);
     }
     // 180deg is about 6.2 rad/sec, min is .5rad/sec
   }

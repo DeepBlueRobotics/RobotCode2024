@@ -385,7 +385,7 @@ public final class Constants {
 																// to represent unreliable heading
 		public static final int MAX_TRUSTED_ANG_VEL_DEG_PER_SEC = 720; // maximum trusted angular velocity
 
-		public static final double ERROR_TOLERANCE_RAD = 0.1; // unused
+		public static final double ERROR_TOLERANCE_RAD = 0.1;
 		public static final double HORIZONTAL_FOV_DEG = 0; // unused
 		public static final double RESOLUTION_WIDTH_PIX = 640; // unused
 		public static final double MOUNT_ANGLE_DEG_SHOOTER = 55.446;

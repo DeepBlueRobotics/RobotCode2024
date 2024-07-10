@@ -53,6 +53,11 @@ public class Limelight extends SubsystemBase {
     // shooter limelight testing
     SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
     SmartDashboard.putNumber("optimized arm angle", getArmAngleToShootSpeakerRad());
+
+    // changing speed multipliers for auto intaking note
+    SmartDashboard.putNumber("forward speed multiplier", 1.5);
+    SmartDashboard.putNumber("strafe speed multiplier", 1.5);
+    SmartDashboard.putNumber("rotational speed multiplier", 2);
   }
 
   // public Pose2d getCurrentPose() {
