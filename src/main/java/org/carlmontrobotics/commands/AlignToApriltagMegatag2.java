@@ -62,7 +62,7 @@ public class AlignToApriltagMegatag2 extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return rotationPID.atSetpoint();
         // SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
         // SmartDashboard.putNumber("Error", rotationPID.getPositionError());
         // return rotationPID.atSetpoint();
