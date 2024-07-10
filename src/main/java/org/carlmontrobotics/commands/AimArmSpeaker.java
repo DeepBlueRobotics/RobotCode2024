@@ -19,10 +19,11 @@ public class AimArmSpeaker extends Command {
     this.ll = ll;
   }
 
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double goal = ll.getArmAngleToShootSpeakerRad();
+    double goal = ll.getOptimizedArmAngleRadsMT2();
     arm.setArmTarget(goal);
   }
 
