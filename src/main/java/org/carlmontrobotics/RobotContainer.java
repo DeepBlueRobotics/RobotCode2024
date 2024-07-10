@@ -108,6 +108,8 @@ public class RobotContainer {
       "Preloaded Right Auton 3 piece total",
       // "Preloaded Left-Pickup Subwoofer",
       // "Preloaded Right-Pickup Subwoofer",
+          "Right Limelight 4 Piece", "Left Limelight 4 Piece",
+          "Center Limelight 4 Piece",
 
       "Left-Amp",
 
