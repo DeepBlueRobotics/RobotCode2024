@@ -183,8 +183,9 @@ public class RobotContainer {
     //         new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
     
     new POVButton(driverController, 0)
-        .whileTrue(new ParallelCommandGroup(new IntakeNEO(intakeShooter),
-            new AutoMATICALLYGetNote(drivetrain, limelight)));
+            .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter)));
     
     axisTrigger(driverController, Axis.kLeftTrigger)
         // .onTrue(new AlignToApriltag(drivetrain, limelight));

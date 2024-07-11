@@ -9,6 +9,7 @@ import static org.carlmontrobotics.Constants.Limelightc.*;
 import org.carlmontrobotics.Constants.Limelightc;
 
 import org.carlmontrobotics.subsystems.Drivetrain;
+import org.carlmontrobotics.subsystems.IntakeShooter;
 import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
@@ -24,10 +25,13 @@ public class AutoMATICALLYGetNote extends Command {
   private Limelight ll;
   // private Timer timer = new Timer();
   Timer timer = new Timer();
+  private IntakeShooter intake;
 
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll) {
+  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll,
+      IntakeShooter intake) {
     addRequirements(this.dt = dt);
     this.ll = ll;
+    this.intake = intake;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -46,50 +50,51 @@ public class AutoMATICALLYGetNote extends Command {
     double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
-    // dt.drive(0,0,0);
 
-    double forwardSpeed = 0;
-    double strafeSpeed = 0;
-    double rotationalSpeed = 0;
-
-    if (LimelightHelpers.getTX(INTAKE_LL_NAME) == 1) {
-      if (angleErrRad >= 0) {
-        forwardSpeed = Math.max(
-            forwardDistErrMeters
-                * SmartDashboard.getNumber("forward speed multiplier", 1.5),
-            MIN_MOVEMENT_METERSPSEC);
-        strafeSpeed = Math.max(
-            strafeDistErrMeters
-                * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
-            MIN_MOVEMENT_METERSPSEC);
-        rotationalSpeed = Math.max(
-            angleErrRad
-                * SmartDashboard.getNumber("rotational speed multiplier", 2),
-            MIN_MOVEMENT_RADSPSEC);
-      }
-
-      else {
-        forwardSpeed = Math.min(
-            forwardDistErrMeters
-                * SmartDashboard.getNumber("forward speed multiplier", 1.5),
-            MIN_MOVEMENT_METERSPSEC);
-        strafeSpeed = Math.min(
-            strafeDistErrMeters
-                * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
-            MIN_MOVEMENT_METERSPSEC);
-        rotationalSpeed = Math.min(
-            angleErrRad
-                * SmartDashboard.getNumber("rotational speed multiplier", 2),
-            MIN_MOVEMENT_RADSPSEC);
-      }
-
-      if (angleErrRad >= -ERROR_TOLERANCE_RAD
-          && angleErrRad <= ERROR_TOLERANCE_RAD) {
-        rotationalSpeed = 0;
-      }
-
-      dt.drive(forwardSpeed, strafeSpeed, rotationalSpeed);
+    if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
+      dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad);
     }
+
+    // double forwardSpeed = 0;
+    // double strafeSpeed = 0;
+    // double rotationalSpeed = 0;
+
+    // forwardSpeed = Math.max(
+    // forwardDistErrMeters
+    // * SmartDashboard.getNumber("forward speed multiplier", 1.5),
+    // MIN_MOVEMENT_METERSPSEC);
+
+    // if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
+    // if (angleErrRad >= 0) {
+    // strafeSpeed = Math.max(
+    // strafeDistErrMeters
+    // * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
+    // MIN_MOVEMENT_METERSPSEC);
+    // rotationalSpeed = Math.max(
+    // angleErrRad
+    // * SmartDashboard.getNumber("rotational speed multiplier", 2),
+    // MIN_MOVEMENT_RADSPSEC);
+    // }
+
+    // else {
+    // strafeSpeed = Math.min(
+    // strafeDistErrMeters
+    // * SmartDashboard.getNumber("strafe speed multiplier", 1.5),
+    // -MIN_MOVEMENT_METERSPSEC);
+    // rotationalSpeed = Math.min(
+    // angleErrRad
+    // * SmartDashboard.getNumber("rotational speed multiplier", 2),
+    // -MIN_MOVEMENT_RADSPSEC);
+    // }
+
+    // if (angleErrRad >= -ERROR_TOLERANCE_RAD
+    // && angleErrRad <= ERROR_TOLERANCE_RAD) {
+    // rotationalSpeed = 0;
+    // }
+
+    // dt.drive(forwardSpeed, strafeSpeed, rotationalSpeed);
+
+
     // 180deg is about 6.2 rad/sec, min is .5rad/sec
   }
 
@@ -103,6 +108,6 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return intake.intakeDetectsNote();
   }
 }
