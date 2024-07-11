@@ -34,8 +34,8 @@ public class Limelight extends SubsystemBase {
     // intake limelight testing
     SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
     SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
-    SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
+    SmartDashboard.putNumber("intake tx",
+        LimelightHelpers.getTX(INTAKE_LL_NAME));
 
     // shooter limelight testing
     SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
@@ -47,10 +47,17 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("strafe speed multiplier", 1.5);
     SmartDashboard.putNumber("rotational speed multiplier", 2);
 
-    // tuning apriltag alignment pid
+    // tuning apriltag alignment pid and tolerances
+    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
+
     SmartDashboard.putNumber("apriltag align kp", thetaPIDController[0]);
     SmartDashboard.putNumber("apriltag align ki", thetaPIDController[1]);
     SmartDashboard.putNumber("apriltag align kd", thetaPIDController[2]);
+
+    SmartDashboard.putNumber("apriltag align pos tolerance",
+        positionTolerance[2]);
+    SmartDashboard.putNumber("apriltag align vel tolerance",
+        velocityTolerance[2]);
   }
 
   public double getTXDeg(String limelightName) {

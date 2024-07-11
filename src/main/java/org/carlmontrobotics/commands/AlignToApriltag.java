@@ -41,7 +41,11 @@ public class AlignToApriltag extends Command {
                                         limelight.getRotateAngleRadMT2()));
         rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(),
                         -180, 180));
-        rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
+        rotationPID.setTolerance(
+                        SmartDashboard.getNumber("apriltag align pos tolerance",
+                                        positionTolerance[2]),
+                        SmartDashboard.getNumber("apriltag align vel tolerance",
+                                        velocityTolerance[2]));
         SendableRegistry.addChild(this, rotationPID);
         addRequirements(drivetrain);
     }

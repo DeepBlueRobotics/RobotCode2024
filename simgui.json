@@ -43,6 +43,7 @@
       "/Shuffleboard/arm SysID/quasistatic backward": "Command",
       "/Shuffleboard/arm SysID/quasistatic forward": "Command",
       "/SmartDashboard/Arm": "Subsystem",
+      "/SmartDashboard/Drivetrain": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Intake Shooter": "Subsystem",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
