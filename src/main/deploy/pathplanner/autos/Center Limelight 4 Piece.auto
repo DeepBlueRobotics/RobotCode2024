@@ -5,34 +5,210 @@
       "x": 1.356139746680443,
       "y": 5.531293435066112
     },
-    "rotation": 0
+    "rotation": -1.9026452141219743
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center Limelight 1"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 2"
+            "name": "PassToOuttake"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 3"
+            "name": "ArmToGround"
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Center Limelight 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Limelight 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Limelight 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Limelight 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Limelight 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -42,9 +218,53 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center Limelight 6"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Limelight 6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         }
       ]
