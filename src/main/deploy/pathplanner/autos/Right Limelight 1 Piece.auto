@@ -1,0 +1,100 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4048307100172925,
+      "y": 5.570246205735591
+    },
+    "rotation": -61.557071375636745
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Limelight 1 Piece"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToAprilTagMegaTag2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimArmSpeakerMT2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
