@@ -184,8 +184,7 @@ public class RobotContainer {
     
     new POVButton(driverController, 0)
             .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
-                    new AutoMATICALLYGetNote(drivetrain, limelight,
-                            intakeShooter)));
+                    new AutoMATICALLYGetNote(drivetrain, limelight)));
     
     axisTrigger(driverController, Axis.kLeftTrigger)
         // .onTrue(new AlignToApriltag(drivetrain, limelight));
@@ -193,7 +192,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-        .whileTrue(new AlignToApriltagMegatag2(drivetrain, limelight));
+            .whileTrue(new AlignToApriltag(drivetrain, limelight));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(
         new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)

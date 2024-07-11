@@ -27,11 +27,9 @@ public class AutoMATICALLYGetNote extends Command {
   Timer timer = new Timer();
   private IntakeShooter intake;
 
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll,
-      IntakeShooter intake) {
+  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll) {
     addRequirements(this.dt = dt);
     this.ll = ll;
-    this.intake = intake;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -50,6 +48,11 @@ public class AutoMATICALLYGetNote extends Command {
     double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
+
+    forwardDistErrMeters = Math.max(
+        forwardDistErrMeters
+            * SmartDashboard.getNumber("forward speed multiplier", 1.5),
+        MIN_MOVEMENT_METERSPSEC);
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
       dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad);
@@ -108,6 +111,6 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeDetectsNote();
+    return intake.outtakeDetectsNote();
   }
 }

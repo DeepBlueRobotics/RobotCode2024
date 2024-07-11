@@ -13,6 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AlignToApriltag extends Command {
@@ -21,18 +22,25 @@ public class AlignToApriltag extends Command {
     public final Drivetrain drivetrain;
     private Limelight limelight;
 
-    public final PIDController rotationPID = new PIDController(thetaPIDController[0], thetaPIDController[1],
-            thetaPIDController[2]);
+    public final PIDController rotationPID = new PIDController(
+                    SmartDashboard.getNumber("apriltag align kp",
+                                    thetaPIDController[0]),
+                    SmartDashboard.getNumber("apriltag align ki",
+                                    thetaPIDController[1]),
+                    SmartDashboard.getNumber("apriltag align kd",
+                                    thetaPIDController[2]));
 
     public AlignToApriltag(Drivetrain drivetrain, Limelight limelight) {
-        this.limelight = limelight;  
+            this.limelight = limelight;
         this.drivetrain = drivetrain;
         this.teleopDrive = (TeleopDrive) drivetrain.getDefaultCommand();
 
         rotationPID.enableContinuousInput(-180, 180);
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
-                .minus(Rotation2d.fromRadians(limelight.getRotateAngleRad()));
-        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+                        .plus(Rotation2d.fromRadians(
+                                        limelight.getRotateAngleRadMT2()));
+        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(),
+                        -180, 180));
         rotationPID.setTolerance(positionTolerance[2], velocityTolerance[2]);
         SendableRegistry.addChild(this, rotationPID);
         addRequirements(drivetrain);
@@ -41,14 +49,21 @@ public class AlignToApriltag extends Command {
     @Override
     public void execute() {
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
-                .minus(Rotation2d.fromRadians(limelight.getRotateAngleRad()));
-        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(), -180, 180));
+                        .plus(Rotation2d.fromRadians(
+                                        limelight.getRotateAngleRadMT2()));
+        rotationPID.setSetpoint(MathUtil.inputModulus(targetAngle.getDegrees(),
+                        -180, 180));
+        double rotationDrive = rotationPID.calculate(drivetrain.getHeading());
+        if (!limelight.seesTag()) {
+                rotationDrive = 0;
+        }
+
         if (teleopDrive == null)
-            drivetrain.drive(0, 0, rotationPID.calculate(drivetrain.getHeading()));
+                drivetrain.drive(0, 0, rotationDrive);
         else {
             double[] driverRequestedSpeeds = teleopDrive.getRequestedSpeeds();
             drivetrain.drive(driverRequestedSpeeds[0], driverRequestedSpeeds[1],
-                    rotationPID.calculate(drivetrain.getHeading()));
+                            rotationDrive);
         }
     }
 
