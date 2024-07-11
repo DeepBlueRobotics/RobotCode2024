@@ -20,12 +20,6 @@
                 "data": {
                   "pathName": "Center-Auto Ruiner"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutonRuinerShootAndIntake"
-                }
               }
             ]
           }

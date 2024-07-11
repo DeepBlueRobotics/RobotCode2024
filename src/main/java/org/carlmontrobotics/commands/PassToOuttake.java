@@ -1,21 +1,25 @@
 package org.carlmontrobotics.commands;
 
 import org.carlmontrobotics.subsystems.IntakeShooter;
+import org.carlmontrobotics.subsystems.IntakeShooter.*;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PassToOuttake extends Command {
-    private IntakeShooter intakeShooter;
+    private final IntakeShooter intakeShooter;
+
 
     public PassToOuttake(IntakeShooter intakeShooter) {
-        this.intakeShooter = intakeShooter;
+        addRequirements(this.intakeShooter = intakeShooter);
     }
 
     @Override
     public void initialize() {
-
+        if (intakeShooter.getOuttakeRPM() >= 4000
+                && intakeShooter.getOuttakeRPM() <= 4250) {
         intakeShooter.motorSetIntake(0.6);
+    }
     }
 
     @Override
