@@ -9,36 +9,34 @@ import org.carlmontrobotics.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AimArmSpeaker extends Command {
-  private final Arm arm;
-  private final Limelight ll;
+    private final Arm arm;
+    private final Limelight ll;
 
-  /** Creates a new AimOuttakeSpeaker. */
-  public AimArmSpeaker(Arm arm, Limelight ll) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.arm = arm);
-    this.ll = ll;
-  }
+    /** Creates a new AimOuttakeSpeaker. */
+    public AimArmSpeaker(Arm arm, Limelight ll) {
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(this.arm = arm);
+        this.ll = ll;
+    }
 
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        double goal = ll.getOptimizedArmAngleRadsMT2();
+        arm.setArmTarget(goal);
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    double goal = ll.getOptimizedArmAngleRadsMT2();
-    arm.setArmTarget(goal);
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-}
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return arm.armAtSetpoint();
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return arm.armAtSetpoint();
+    }
 }

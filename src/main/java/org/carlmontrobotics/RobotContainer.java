@@ -181,17 +181,20 @@ public class RobotContainer {
     new JoystickButton(driverController, Driver.resetFieldOrientationButton)
         .onTrue(new InstantCommand(drivetrain::resetFieldOrientation));
     // axisTrigger(driverController, Axis.kRightTrigger)
-    // .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-    // new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
-    new POVButton(driverController, 0).whileTrue(
-        new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight));
+    //     .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+    //         new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
+    
+    new POVButton(driverController, 0)
+            .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight)));
+    
     axisTrigger(driverController, Axis.kLeftTrigger)
         // .onTrue(new AlignToApriltag(drivetrain, limelight));
         .onTrue(new InstantCommand(() -> drivetrain.setFieldOriented(false)))
         .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-        .whileTrue(new AlignToApriltagMegatag2(drivetrain, limelight));
+            .whileTrue(new AlignToApriltag(drivetrain, limelight));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(
         new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -346,9 +349,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("PassToOuttake",
         new PassToOuttake(intakeShooter));
     NamedCommands.registerCommand("AimArmSpeakerMT2",
-            new AimArmSpeakerMT2(arm, limelight));
+            new AimArmSpeaker(arm, limelight));
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
-            new AlignToApriltagMegatag2(drivetrain, limelight));
+            new AlignToApriltag(drivetrain, limelight));
 
 
 

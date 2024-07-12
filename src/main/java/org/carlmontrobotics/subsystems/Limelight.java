@@ -1,12 +1,10 @@
 package org.carlmontrobotics.subsystems;
 
+import static org.carlmontrobotics.Constants.Drivetrainc.*;
 import static org.carlmontrobotics.Constants.Limelightc.*;
 import static org.carlmontrobotics.Constants.Limelightc.Apriltag.*;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -15,21 +13,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
   private final Drivetrain drivetrain;
-  // private final SwerveDrivePoseEstimator poseEstimator;
-
-  // private double tv, tx;
-  // private double[] rawBotPose = null;
-  // private double[] targetPose = null;
 
   private final InterpolatingDoubleTreeMap shooterMap;
 
   public Limelight(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    // poseEstimator = new SwerveDrivePoseEstimator(
-    // drivetrain.getKinematics(),
-    // Rotation2d.fromDegrees(drivetrain.getHeading()),
-    // drivetrain.getModulePositions(),
-    // new Pose2d());
 
     LimelightHelpers.SetFiducialIDFiltersOverride(SHOOTER_LL_NAME, VALID_IDS);
 
@@ -38,34 +26,41 @@ public class Limelight extends SubsystemBase {
     // ASSUMING SHOOTING AT 4000 RPM
     shooterMap.put(2.0, .005);
     shooterMap.put(3.05, 0.275);
+
+    // changing speed multipliers for auto intaking note
+    SmartDashboard.putNumber("forward speed multiplier", 1.5);
+    SmartDashboard.putNumber("strafe speed multiplier", 1.5);
+    SmartDashboard.putNumber("rotational speed multiplier", 2);
+
+    // tuning apriltag alignment pid and tolerances
+    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
+
+    SmartDashboard.putNumber("apriltag align kp", thetaPIDController[0]);
+    SmartDashboard.putNumber("apriltag align ki", thetaPIDController[1]);
+    SmartDashboard.putNumber("apriltag align kd", thetaPIDController[2]);
+
+    SmartDashboard.putNumber("apriltag align pos tolerance",
+        positionTolerance[2]);
+    SmartDashboard.putNumber("apriltag align vel tolerance",
+        velocityTolerance[2]);
   }
 
   @Override
   public void periodic() {
-    // poseEstimator.update(Rotation2d.fromDegrees(drivetrain.getHeading()),
-    // drivetrain.getModulePositions());
-
-    // updateMT2Odometry();
 
     // intake limelight testing
-    SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
+    SmartDashboard.putBoolean("see note",
+        LimelightHelpers.getTV(INTAKE_LL_NAME));
     SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
-    SmartDashboard.putNumber("intake tx", LimelightHelpers.getTX(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
+    SmartDashboard.putNumber("intake tx",
+        LimelightHelpers.getTX(INTAKE_LL_NAME));
 
     // shooter limelight testing
-    SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
-    SmartDashboard.putNumber("optimized arm angle", getArmAngleToShootSpeakerRad());
+    SmartDashboard.putNumber("distance to speaker (meters)",
+        getDistanceToSpeakerMetersMT2());
+    SmartDashboard.putNumber("optimized arm angle",
+        getOptimizedArmAngleRadsMT2());
   }
-
-  // public Pose2d getCurrentPose() {
-  // Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
-  // SmartDashboard.putNumber("estimated x", estimatedPos.getX());
-  // // SmartDashboard.putNumber("estimated y", estimatedPos.getY());
-  // // SmartDashboard.putNumber("estimated rotation (deg)",
-  // estimatedPos.getRotation().getDegrees());
-  // return estimatedPos;
-  // }
 
   public double getTXDeg(String limelightName) {
     return (limelightName == INTAKE_LL_NAME) ? LimelightHelpers.getTX(INTAKE_LL_NAME) : -LimelightHelpers.getTY(SHOOTER_LL_NAME);
@@ -94,7 +89,8 @@ public class Limelight extends SubsystemBase {
     Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_INTAKE)
         .plus(Rotation2d.fromDegrees(getTYDeg(INTAKE_LL_NAME)));
     if (angleToGoal.getDegrees() <= 0) {
-      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT) / Math.tan(Math.abs(angleToGoal.getRadians()));
+      double distance = (HEIGHT_FROM_GROUND_METERS_INTAKE - NOTE_HEIGHT)
+          / Math.tan(Math.abs(angleToGoal.getRadians()));
       // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     } else {
@@ -109,40 +105,6 @@ public class Limelight extends SubsystemBase {
     return END_EFFECTOR_BASE_ANGLE_RADS - Math.atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
   }
 
-  public double getRotateAngleRad() {
-    double cameraLensHorizontalOffset = getTXDeg(SHOOTER_LL_NAME) / getDistanceToSpeakerMeters();
-    double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / getDistanceToSpeakerMeters());
-    return Math.atan(realHorizontalOffset / getDistanceToSpeakerMeters());
-  }
-
-  // megatag2
-
-  // public void updateMT2Odometry() {
-  // boolean rejectVisionUpdate = false;
-
-  // LimelightHelpers.SetRobotOrientation(SHOOTER_LL_NAME,
-  // poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0,
-  // 0);
-  // LimelightHelpers.PoseEstimate visionPoseEstimate = LimelightHelpers
-  // .getBotPoseEstimate_wpiBlue_MegaTag2(SHOOTER_LL_NAME);
-
-  // if (Math.abs(drivetrain.getGyroRate()) > MAX_TRUSTED_ANG_VEL_DEG_PER_SEC) {
-  // // degrees per second
-  // rejectVisionUpdate = true;
-  // }
-
-  // if (visionPoseEstimate.tagCount == 0) {
-  // rejectVisionUpdate = true;
-  // }
-
-  // if (!rejectVisionUpdate) {
-  // poseEstimator
-  // .setVisionMeasurementStdDevs(VecBuilder.fill(STD_DEV_X_METERS,
-  // STD_DEV_Y_METERS, STD_DEV_HEADING_RADS));
-  // poseEstimator.addVisionMeasurement(visionPoseEstimate.pose,
-  // visionPoseEstimate.timestampSeconds);
-  // }
-  // }
 
   public double getRotateAngleRadMT2() {
     Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
