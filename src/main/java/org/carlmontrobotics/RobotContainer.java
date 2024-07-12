@@ -209,6 +209,7 @@ public class RobotContainer {
             drivetrain));
   }
 
+
   private void setBindingsManipulator() {
     new JoystickButton(manipulatorController, EJECT_BUTTON)
         .onTrue(new Eject(intakeShooter));
@@ -216,7 +217,7 @@ public class RobotContainer {
     //new JoystickButton(manipulatorController, A_BUTTON)
         //.onTrue(new RampMaxRPMDriving(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-            new SequentialCommandGroup(/* new AimArmSpeaker(arm, limelight), */
+            new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
                     new PassToOuttake(intakeShooter)));
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)

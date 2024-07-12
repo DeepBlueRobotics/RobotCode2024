@@ -25,7 +25,7 @@ public class Limelight extends SubsystemBase {
     // key is distance (meters), value is angle (rads)
     // ASSUMING SHOOTING AT 4000 RPM
     shooterMap.put(2.0, .005);
-    shooterMap.put(3.05, 0.275);
+    shooterMap.put(3.05, 0.27);
     shooterMap.put(1.39, -.18);
 
     // changing speed multipliers for auto intaking note
