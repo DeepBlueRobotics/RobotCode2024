@@ -33,6 +33,7 @@ public class PassToOuttake extends Command {
     public void end(boolean interrupted) {
         intakeShooter.resetCurrentLimit();
         intakeShooter.stopIntake();
+
     }
 
     @Override

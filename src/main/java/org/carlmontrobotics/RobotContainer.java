@@ -336,6 +336,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToGround",
         new ArmToPos(arm, GROUND_INTAKE_POS));
 
+    NamedCommands.registerCommand("RampRPMAuton",
+            new RampRPMAuton(intakeShooter));
+
 
     NamedCommands.registerCommand("SwitchRPMShoot",
         new Outtake(intakeShooter, arm));

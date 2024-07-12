@@ -33,6 +33,12 @@
         {
           "type": "named",
           "data": {
+            "name": "RampRPMAuton"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PassToOuttake"
           }
         },
@@ -78,6 +84,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RampRPMAuton"
           }
         },
         {
@@ -133,6 +145,12 @@
         {
           "type": "named",
           "data": {
+            "name": "RampRPMAuton"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PassToOuttake"
           }
         },
@@ -178,6 +196,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RampRPMAuton"
           }
         },
         {
@@ -234,6 +258,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RampRPMAuton"
           }
         },
         {
