@@ -31,11 +31,11 @@ public class EjectOuttakeSide extends Command {
         intakeShooter.stopIntake();
         intakeShooter.stopOuttake();
         timer.stop();
-
-
     }
     @Override
     public boolean isFinished() {
-        return timer.get() >= 4 || (!intakeShooter.intakeDetectsNote() && !intakeShooter.outtakeDetectsNote());
+        return false;
+        // return timer.get() >= 4 || (!intakeShooter.intakeDetectsNote() &&
+        // !intakeShooter.outtakeDetectsNote());
     }
 }
