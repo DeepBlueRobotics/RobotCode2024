@@ -186,7 +186,8 @@ public class RobotContainer {
     
     new POVButton(driverController, 0)
             .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
-                    new AutoMATICALLYGetNote(drivetrain, limelight)));
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter)));
     
     axisTrigger(driverController, Axis.kLeftTrigger)
         // .onTrue(new AlignToApriltag(drivetrain, limelight));
@@ -215,7 +216,7 @@ public class RobotContainer {
     //new JoystickButton(manipulatorController, A_BUTTON)
         //.onTrue(new RampMaxRPMDriving(intakeShooter));
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-            new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+            new SequentialCommandGroup(/* new AimArmSpeaker(arm, limelight), */
                     new PassToOuttake(intakeShooter)));
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
@@ -250,6 +251,7 @@ public class RobotContainer {
         .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
 
   }
+
 
 
 

@@ -4,8 +4,11 @@
 
 package org.carlmontrobotics.commands;
 
+import org.carlmontrobotics.Constants.Limelightc;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.Limelight;
+import org.carlmontrobotics.subsystems.LimelightHelpers;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AimArmSpeaker extends Command {
@@ -22,8 +25,13 @@ public class AimArmSpeaker extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        double goal = ll.getOptimizedArmAngleRadsMT2();
-        arm.setArmTarget(goal);
+        if (LimelightHelpers.getTV(Limelightc.SHOOTER_LL_NAME)) {
+            double goal = ll.getOptimizedArmAngleRadsMT2();
+            arm.setArmTarget(goal);
+        } else {
+            arm.setArmTarget(.23);
+        }
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.

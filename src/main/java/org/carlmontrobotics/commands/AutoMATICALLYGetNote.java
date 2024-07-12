@@ -27,9 +27,11 @@ public class AutoMATICALLYGetNote extends Command {
   Timer timer = new Timer();
   private IntakeShooter intake;
 
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll) {
+  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll,
+      IntakeShooter intake) {
     addRequirements(this.dt = dt);
     this.ll = ll;
+    this.intake = intake;
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -40,12 +42,15 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
+    SmartDashboard.putNumber("turning speed multiplier", 3);
     
   }
 
+
   @Override
   public void execute() {
-    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
+    double angleErrRad = -Units
+        .degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
 
@@ -55,7 +60,8 @@ public class AutoMATICALLYGetNote extends Command {
         MIN_MOVEMENT_METERSPSEC);
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
-      dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad);
+      dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad
+          * SmartDashboard.getNumber("turning speed multiplier", 3));
     }
 
     // double forwardSpeed = 0;
@@ -105,6 +111,8 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
+    intake.stopIntake();
+
     // SmartDashboard.putBoolean("end", true);
   }
 
