@@ -26,21 +26,6 @@ public class Limelight extends SubsystemBase {
     // ASSUMING SHOOTING AT 4000 RPM
     shooterMap.put(2.0, .005);
     shooterMap.put(3.05, 0.275);
-  }
-
-  @Override
-  public void periodic() {
-
-    // intake limelight testing
-    SmartDashboard.putBoolean("see note", LimelightHelpers.getTV(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
-    SmartDashboard.putNumber("intake tx",
-        LimelightHelpers.getTX(INTAKE_LL_NAME));
-
-    // shooter limelight testing
-    SmartDashboard.putNumber("distance to speaker (meters)", getDistanceToSpeakerMetersMT2());
-    SmartDashboard.putNumber("optimized arm angle",
-        getOptimizedArmAngleRadsMT2());
 
     // changing speed multipliers for auto intaking note
     SmartDashboard.putNumber("forward speed multiplier", 1.5);
@@ -58,6 +43,23 @@ public class Limelight extends SubsystemBase {
         positionTolerance[2]);
     SmartDashboard.putNumber("apriltag align vel tolerance",
         velocityTolerance[2]);
+  }
+
+  @Override
+  public void periodic() {
+
+    // intake limelight testing
+    SmartDashboard.putBoolean("see note",
+        LimelightHelpers.getTV(INTAKE_LL_NAME));
+    SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
+    SmartDashboard.putNumber("intake tx",
+        LimelightHelpers.getTX(INTAKE_LL_NAME));
+
+    // shooter limelight testing
+    SmartDashboard.putNumber("distance to speaker (meters)",
+        getDistanceToSpeakerMetersMT2());
+    SmartDashboard.putNumber("optimized arm angle",
+        getOptimizedArmAngleRadsMT2());
   }
 
   public double getTXDeg(String limelightName) {

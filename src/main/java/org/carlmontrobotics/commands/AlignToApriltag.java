@@ -52,6 +52,36 @@ public class AlignToApriltag extends Command {
 
     @Override
     public void execute() {
+        double kp = SmartDashboard.getNumber("apriltag align kp",
+                rotationPID.getP());
+        double ki = SmartDashboard.getNumber("apriltag align ki",
+                rotationPID.getI());
+        double kd = SmartDashboard.getNumber("apriltag align kd",
+                rotationPID.getD());
+
+        if (kp != rotationPID.getP())
+            rotationPID.setP(kp);
+        if (ki != rotationPID.getI())
+            rotationPID.setI(ki);
+        if (kd != rotationPID.getD())
+            rotationPID.setD(kd);
+
+        double posTolerance =
+                SmartDashboard.getNumber("apriltag align pos tolerance",
+                        rotationPID.getPositionTolerance());
+        double velTolerance =
+                SmartDashboard.getNumber("apriltag align vel tolerance",
+                        rotationPID.getVelocityTolerance());
+
+        if (posTolerance != rotationPID.getPositionTolerance()
+                || velTolerance != rotationPID.getVelocityTolerance())
+            rotationPID.setTolerance(posTolerance, velTolerance);
+
+        SmartDashboard.putNumber("apriltag align pos error (rad)",
+                rotationPID.getPositionError());
+        SmartDashboard.putNumber("apriltag align vel error (rad/s)",
+                rotationPID.getVelocityError());
+
         Rotation2d targetAngle = Rotation2d.fromDegrees(drivetrain.getHeading())
                         .plus(Rotation2d.fromRadians(
                                         limelight.getRotateAngleRadMT2()));
