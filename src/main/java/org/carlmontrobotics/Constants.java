@@ -300,7 +300,7 @@ public final class Constants {
 				: new double[] { 2, 0.0, 0.0 };
 		public static final double[] yPIDController = xPIDController;
 		public static final double[] thetaPIDController = CONFIG.isSwimShady() ? new double[] { 0.10, 0.0, 0.001 }
-				: new double[] { 0.05, 0.0, 0.00 };
+				: new double[] {0.10, 0.0, 0.001};
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu,
 				autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels,
