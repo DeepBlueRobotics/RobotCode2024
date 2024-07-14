@@ -22,6 +22,7 @@ public class Intake extends Command {
     SmartDashboard.putNumber("Slow intake speed", slowSpeed);
     SmartDashboard.putNumber("Increase speed", increaseSpeed);
   }
+  // .-18
 
   @Override
   public void initialize() {
@@ -36,6 +37,7 @@ public class Intake extends Command {
     intake.resetCurrentLimit();
     index = 0;
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

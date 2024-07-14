@@ -26,10 +26,14 @@ public class AutoMATICALLYGetNote extends Command {
   // private Timer timer = new Timer();
   Timer timer = new Timer();
   private IntakeShooter intake;
+  private int direction;
 
-  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll) {
+  public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll,
+      IntakeShooter intake, int direction) {
     addRequirements(this.dt = dt);
     this.ll = ll;
+    this.intake = intake;
+    this.direction = direction; // direction to turn if it doesn't see note
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -40,12 +44,19 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
+    SmartDashboard.putNumber("turning speed multiplier", 3);
     
   }
 
+
   @Override
   public void execute() {
-    double angleErrRad = Units.degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
+    if (!LimelightHelpers.getTV(Limelightc.INTAKE_LL_NAME)) {
+      dt.drive(0, 0, direction);
+      return;
+    }
+    double angleErrRad = -Units
+        .degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
     double strafeDistErrMeters = forwardDistErrMeters * Math.tan(angleErrRad);
 
@@ -55,7 +66,8 @@ public class AutoMATICALLYGetNote extends Command {
         MIN_MOVEMENT_METERSPSEC);
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
-      dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad);
+      dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad
+          * SmartDashboard.getNumber("turning speed multiplier", 3));
     }
 
     // double forwardSpeed = 0;
@@ -105,6 +117,8 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void end(boolean interrupted) {
     dt.setFieldOriented(true);
+    intake.stopIntake();
+
     // SmartDashboard.putBoolean("end", true);
   }
 

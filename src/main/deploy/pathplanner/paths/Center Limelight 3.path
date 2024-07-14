@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.544199252099572,
-        "y": 4.158208268966954
+        "x": 2.0841042629952553,
+        "y": 4.435354463125988
       },
       "prevControl": {
-        "x": 1.9696458847247476,
-        "y": 4.469830434322791
+        "x": 1.5095508956204307,
+        "y": 4.746976628481825
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center Limelight 4 Piece",
   "previewStartingState": {
     "rotation": 4.763641690726263,
     "velocity": 0

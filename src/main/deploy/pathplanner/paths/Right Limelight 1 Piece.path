@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.356139746680443,
-        "y": 5.531293435066112
+        "x": 0.7523718013035084,
+        "y": 4.430877663653311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3561397466804435,
-        "y": 5.531293435066112
+        "x": 1.5022126366909918,
+        "y": 4.245852002973283
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.909024481556072,
-        "y": 5.531293435066112
+        "x": 2.534461059432202,
+        "y": 4.138731883632214
       },
       "prevControl": {
-        "x": 0.909024481556072,
-        "y": 5.531293435066112
+        "x": 1.5344610594322021,
+        "y": 4.138731883632214
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center Limelight 4 Piece",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -58.27639704231601,
     "velocity": 0
   },
   "useDefaultConstraints": true

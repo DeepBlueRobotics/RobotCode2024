@@ -16,25 +16,29 @@ public class PassToOuttake extends Command {
 
     @Override
     public void initialize() {
-        if (intakeShooter.getOuttakeRPM() >= 4000
-                && intakeShooter.getOuttakeRPM() <= 4250) {
-        intakeShooter.motorSetIntake(0.6);
-    }
+
     }
 
     @Override
     public void execute() {
+        if (intakeShooter.getOuttakeRPM() >= 4000
+                && intakeShooter.getOuttakeRPM() <= 4250) {
+            intakeShooter.motorSetIntake(1);
+        }
 
     }
+
 
     @Override
     public void end(boolean interrupted) {
         intakeShooter.resetCurrentLimit();
+        intakeShooter.stopIntake();
+
     }
 
     @Override
     public boolean isFinished() {
-        return intakeShooter.intakeDetectsNote()
-                && intakeShooter.outtakeDetectsNote();
+        return !intakeShooter.intakeDetectsNote()
+                && !intakeShooter.outtakeDetectsNote();
     }
 }
