@@ -109,7 +109,7 @@ public class RobotContainer {
       // "Preloaded Left-Pickup Subwoofer",
       // "Preloaded Right-Pickup Subwoofer",
           "Right Limelight 4 Piece", "Left Limelight 4 Piece",
-          "Center Limelight 4 Piece",
+          "Center Limelight 4 Piece", "Center Limelight 4 Piece Path Following",
 
       "Left-Amp",
 
@@ -187,7 +187,7 @@ public class RobotContainer {
     new POVButton(driverController, 0)
             .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
                     new AutoMATICALLYGetNote(drivetrain, limelight,
-                            intakeShooter)));
+                            intakeShooter, 1)));
     
     axisTrigger(driverController, Axis.kLeftTrigger)
         // .onTrue(new AlignToApriltag(drivetrain, limelight));
@@ -358,7 +358,19 @@ public class RobotContainer {
             new AimArmSpeaker(arm, limelight));
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
             new AlignToApriltag(drivetrain, limelight));
-
+    NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
+            new ParallelCommandGroup(new AlignToApriltag(drivetrain, limelight),
+                    new AimArmSpeaker(arm, limelight)),
+            new RampRPMAuton(intakeShooter), new PassToOuttake(intakeShooter),
+            new ArmToPos(arm, GROUND_INTAKE_POS)));
+    NamedCommands.registerCommand("Limelight Intake CCW",
+            new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter, 1)));
+    NamedCommands.registerCommand("Limelight Intake CW",
+            new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter, -1)));
 
 
     NamedCommands.registerCommand("StopIntake",
@@ -368,6 +380,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopBoth",
         new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
             new InstantCommand(intakeShooter::stopOuttake)));
+    for (int i = 0; i < 6; i++) {
+        NamedCommands.registerCommand("Follow Center Limelight " + i,
+                new AutonPathfind(drivetrain, "Center Limelight " + i));
+    }
+
   }
 
   private void setupAutos() {

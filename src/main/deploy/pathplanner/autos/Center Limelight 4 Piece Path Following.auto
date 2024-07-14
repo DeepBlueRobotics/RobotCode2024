@@ -36,9 +36,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 2"
+            "name": "Follow Center Limelight 2"
           }
         },
         {
@@ -54,9 +54,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 3"
+            "name": "Follow Center Limelight 3"
           }
         },
         {
@@ -72,9 +72,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 4"
+            "name": "Follow Center Limelight 4"
           }
         },
         {
@@ -84,9 +84,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 5"
+            "name": "Follow Center Limelight 5"
           }
         },
         {
@@ -96,9 +96,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Center Limelight 6"
+            "name": "Follow Center Limelight 6"
           }
         },
         {

@@ -26,12 +26,14 @@ public class AutoMATICALLYGetNote extends Command {
   // private Timer timer = new Timer();
   Timer timer = new Timer();
   private IntakeShooter intake;
+  private int direction;
 
   public AutoMATICALLYGetNote(Drivetrain dt, Limelight ll,
-      IntakeShooter intake) {
+      IntakeShooter intake, int direction) {
     addRequirements(this.dt = dt);
     this.ll = ll;
     this.intake = intake;
+    this.direction = direction; // direction to turn if it doesn't see note
     //addRequirements(this.effector = effector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -49,6 +51,10 @@ public class AutoMATICALLYGetNote extends Command {
 
   @Override
   public void execute() {
+    if (!LimelightHelpers.getTV(Limelightc.INTAKE_LL_NAME)) {
+      dt.drive(0, 0, direction);
+      return;
+    }
     double angleErrRad = -Units
         .degreesToRadians(LimelightHelpers.getTX(Limelightc.INTAKE_LL_NAME));
     double forwardDistErrMeters = ll.getDistanceToNoteMeters(); 
