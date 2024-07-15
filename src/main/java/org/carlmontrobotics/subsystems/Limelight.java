@@ -23,12 +23,14 @@ public class Limelight extends SubsystemBase {
 
     shooterMap = new InterpolatingDoubleTreeMap(); // add values after testing
     // key is distance (meters), value is angle (rads)
-    // ASSUMING SHOOTING AT 4000 RPM
-    shooterMap.put(2.0, .005);
+    shooterMap.put(2.06, .01);
     shooterMap.put(3.05, 0.26);
-    shooterMap.put(1.39, -.18);
     shooterMap.put(2.5, 0.23);
+    shooterMap.put(1.39, -0.18);
+    shooterMap.put(3.45, 0.3);
+    shooterMap.put(3.1, 0.3);
 
+    // ASSUMING SHOOTING AT 4000 RPM
     // changing speed multipliers for auto intaking note
     SmartDashboard.putNumber("forward speed multiplier", 1.5);
     SmartDashboard.putNumber("strafe speed multiplier", 1.5);
@@ -45,6 +47,7 @@ public class Limelight extends SubsystemBase {
         positionTolerance[2]);
     SmartDashboard.putNumber("apriltag align vel tolerance",
         velocityTolerance[2]);
+
   }
 
   @Override
@@ -65,23 +68,31 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getTXDeg(String limelightName) {
-    return (limelightName == INTAKE_LL_NAME) ? LimelightHelpers.getTX(INTAKE_LL_NAME) : -LimelightHelpers.getTY(SHOOTER_LL_NAME);
+    return (limelightName == INTAKE_LL_NAME)
+        ? LimelightHelpers.getTX(INTAKE_LL_NAME)
+        : -LimelightHelpers.getTY(SHOOTER_LL_NAME);
   }
 
   public double getTYDeg(String limelightName) {
-    return (limelightName == INTAKE_LL_NAME) ? LimelightHelpers.getTY(INTAKE_LL_NAME) : LimelightHelpers.getTX(SHOOTER_LL_NAME);
+    return (limelightName == INTAKE_LL_NAME)
+        ? LimelightHelpers.getTY(INTAKE_LL_NAME)
+        : LimelightHelpers.getTX(SHOOTER_LL_NAME);
   }
 
   public double getDistanceToSpeakerMeters() {
-    if (LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID
-        || LimelightHelpers.getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID) {
+    if (LimelightHelpers
+        .getFiducialID(SHOOTER_LL_NAME) == RED_SPEAKER_CENTER_TAG_ID
+        || LimelightHelpers
+            .getFiducialID(SHOOTER_LL_NAME) == BLUE_SPEAKER_CENTER_TAG_ID) {
       Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER)
-          .plus(Rotation2d.fromDegrees(getTYDeg(SHOOTER_LL_NAME))); //because limelight is mounted horizontally
-      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER) / angleToGoal.getTan();
+          .plus(Rotation2d.fromDegrees(getTYDeg(SHOOTER_LL_NAME))); // because limelight is mounted
+                                                                    // horizontally
+      double distance =
+          (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER)
+              / angleToGoal.getTan();
       // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
-    }
-    else {
+    } else {
       // SmartDashboard.putNumber("limelight distance", -1);
       return -1;
     }
@@ -102,16 +113,21 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getArmAngleToShootSpeakerRad() {
-    double armRestingHeightToSubwooferMeters = HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS;
-    double horizontalDistanceMeters = getDistanceToSpeakerMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
-    return END_EFFECTOR_BASE_ANGLE_RADS - Math.atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
+    double armRestingHeightToSubwooferMeters =
+        HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS;
+    double horizontalDistanceMeters =
+        getDistanceToSpeakerMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
+    return END_EFFECTOR_BASE_ANGLE_RADS - Math
+        .atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
   }
 
 
   public double getRotateAngleRadMT2() {
-    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
+    Pose3d targetPoseRobotSpace =
+        LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
 
-    double targetX = targetPoseRobotSpace.getX(); // the forward offset between the center of the robot and target
+    double targetX = targetPoseRobotSpace.getX(); // the forward offset between the center of the
+                                                  // robot and target
     double targetZ = -targetPoseRobotSpace.getZ(); // the sideways offset
 
     double targetOffsetRads =
@@ -121,7 +137,8 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getDistanceToSpeakerMetersMT2() {
-    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
+    Pose3d targetPoseRobotSpace =
+        LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
 
     double x = targetPoseRobotSpace.getX();
     double z = targetPoseRobotSpace.getZ();

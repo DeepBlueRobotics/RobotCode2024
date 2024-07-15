@@ -220,6 +220,9 @@ public class RobotContainer {
             new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
                     new PassToOuttake(intakeShooter)));
 
+    // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
+    // new PassToOuttake(intakeShooter));
+
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
         .whileTrue(new RampMaxRPM(intakeShooter));
     new JoystickButton(manipulatorController, OPPOSITE_EJECT)
