@@ -361,7 +361,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
             new AlignToApriltag(drivetrain, limelight));
     NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
-            new ParallelCommandGroup(new AlignToApriltag(drivetrain, limelight),
+            new ParallelCommandGroup(new AlignDrivetrain(drivetrain),
                     new AimArmSpeaker(arm, limelight),
                     new RampRPMAuton(intakeShooter)),
             new PassToOuttake(intakeShooter),
