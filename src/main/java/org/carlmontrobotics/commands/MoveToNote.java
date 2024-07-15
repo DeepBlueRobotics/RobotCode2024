@@ -9,6 +9,8 @@ import org.carlmontrobotics.subsystems.Drivetrain;
 import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
+import static org.carlmontrobotics.Config.CONFIG;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,6 +56,6 @@ public class MoveToNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >= 0.5;
+    return timer.get() >= 0.5 || CONFIG.isLimelightDisabled();
   }
 }
