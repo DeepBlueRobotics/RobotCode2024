@@ -140,8 +140,7 @@ public class RobotContainer {
       for (String n : autoNames) {
         autoSelector.addOption(n, i);
         i++;
-      }
-      autoSelector.addOption("bruh", i);
+    }
 
       ShuffleboardTab autoSelectorTab = Shuffleboard.getTab("Auto Chooser Tab");
       autoSelectorTab.add(autoSelector).withSize(2, 1);
@@ -382,12 +381,7 @@ public class RobotContainer {
         new InstantCommand(intakeShooter::stopOuttake));
     NamedCommands.registerCommand("StopBoth",
         new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
-            new InstantCommand(intakeShooter::stopOuttake)));
-    for (int i = 1; i <= 6; i++) {
-        NamedCommands.registerCommand("Follow Center Limelight " + i,
-                new AutonPathfind(drivetrain, "Center Limelight " + i));
-    }
-
+                    new InstantCommand(intakeShooter::stopOuttake)));
   }
 
   private void setupAutos() {
@@ -405,17 +399,7 @@ public class RobotContainer {
          * PathPlannerAuto.getPathGroupFromAutoFile(name).get(0).getPreviewStartingHolonomicPose(),
          * Autoc.pathConstraints ), new PathPlannerAuto(name) );
          */
-      }
-      String[] centerLimelight4 = {"Center Limelight 4 Piece 1",
-              "Center Limelight 4 Piece 2", "Center Limelight 4 Piece 3"};
-      SequentialCommandGroup commandGroup = new SequentialCommandGroup();
-      for (int i = 0; i < 3; i++) {
-          commandGroup.addCommands(new PathPlannerAuto(centerLimelight4[i]),
-                  new ParallelCommandGroup(new Intake(intakeShooter),
-                          new AutoMATICALLYGetNote(drivetrain, limelight,
-                                  intakeShooter, -1)));
-      }
-      autoCommands.add(commandGroup);
+    }
     }
 
 

@@ -5,9 +5,7 @@
   "pathFolders": [
     "Center Limelight 4 Piece"
   ],
-  "autoFolders": [
-    "Center Limelight 4 Piece"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
