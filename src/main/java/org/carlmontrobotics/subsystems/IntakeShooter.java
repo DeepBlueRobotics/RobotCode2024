@@ -27,8 +27,8 @@ public class IntakeShooter extends SubsystemBase {
     private final CANSparkMax intakeMotor = MotorControllerFactory.createSparkMax(INTAKE_PORT, MotorConfig.NEO);
     // private final CANSparkMax outakeMotor =
     // MotorControllerFactory.createSparkMax(10, MotorConfig.NEO_550);
-    private final CANSparkFlex outtakeMotorVortex =
-            new CANSparkFlex(OUTTAKE_PORT, MotorType.kBrushless);
+    private final CANSparkFlex outtakeMotorVortex = MotorControllerFactory
+            .createSparkFlex(OUTTAKE_PORT, MotorConfig.NEO_VORTEX);
     private final RelativeEncoder outtakeEncoder = outtakeMotorVortex.getEncoder();
     private final RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private final SparkPIDController pidControllerOutake = outtakeMotorVortex.getPIDController();

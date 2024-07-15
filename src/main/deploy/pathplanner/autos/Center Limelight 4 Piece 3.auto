@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Center Limelight 4 Piece",
+  "choreoAuto": false
+}

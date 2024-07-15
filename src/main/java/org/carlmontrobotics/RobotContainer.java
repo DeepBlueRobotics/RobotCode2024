@@ -111,8 +111,7 @@ public class RobotContainer {
           "Right Limelight 4 Piece", "Left Limelight 4 Piece",
           "Center Limelight 4 Piece", "Center Limelight 4 Piece Path Following",
 
-      "Left-Amp",
-
+          "Left-Amp",
   };
   DigitalInput[] autoSelectors =
       new DigitalInput[Math.min(autoNames.length, 10)];
@@ -142,6 +141,7 @@ public class RobotContainer {
         autoSelector.addOption(n, i);
         i++;
       }
+      autoSelector.addOption("bruh", i);
 
       ShuffleboardTab autoSelectorTab = Shuffleboard.getTab("Auto Chooser Tab");
       autoSelectorTab.add(autoSelector).withSize(2, 1);
@@ -360,8 +360,9 @@ public class RobotContainer {
             new AlignToApriltag(drivetrain, limelight));
     NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
             new ParallelCommandGroup(new AlignToApriltag(drivetrain, limelight),
-                    new AimArmSpeaker(arm, limelight)),
-            new RampRPMAuton(intakeShooter), new PassToOuttake(intakeShooter),
+                    new AimArmSpeaker(arm, limelight),
+                    new RampRPMAuton(intakeShooter)),
+            new PassToOuttake(intakeShooter),
             new ArmToPos(arm, GROUND_INTAKE_POS)));
     NamedCommands.registerCommand("Limelight Intake CCW",
             new ParallelCommandGroup(new Intake(intakeShooter),
@@ -372,7 +373,6 @@ public class RobotContainer {
                     new AutoMATICALLYGetNote(drivetrain, limelight,
                             intakeShooter, -1)));
 
-
     NamedCommands.registerCommand("StopIntake",
         new InstantCommand(intakeShooter::stopIntake));
     NamedCommands.registerCommand("StopOutake",
@@ -380,7 +380,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopBoth",
         new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
             new InstantCommand(intakeShooter::stopOuttake)));
-    for (int i = 0; i < 6; i++) {
+    for (int i = 1; i <= 6; i++) {
         NamedCommands.registerCommand("Follow Center Limelight " + i,
                 new AutonPathfind(drivetrain, "Center Limelight " + i));
     }
@@ -403,6 +403,16 @@ public class RobotContainer {
          * Autoc.pathConstraints ), new PathPlannerAuto(name) );
          */
       }
+      String[] centerLimelight4 = {"Center Limelight 4 Piece 1",
+              "Center Limelight 4 Piece 2", "Center Limelight 4 Piece 3"};
+      SequentialCommandGroup commandGroup = new SequentialCommandGroup();
+      for (int i = 0; i < 3; i++) {
+          commandGroup.addCommands(new PathPlannerAuto(centerLimelight4[i]),
+                  new ParallelCommandGroup(new Intake(intakeShooter),
+                          new AutoMATICALLYGetNote(drivetrain, limelight,
+                                  intakeShooter, -1)));
+      }
+      autoCommands.add(commandGroup);
     }
 
 
