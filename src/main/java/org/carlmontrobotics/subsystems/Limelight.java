@@ -36,8 +36,12 @@ public class Limelight extends SubsystemBase {
     shooterMap = new InterpolatingDoubleTreeMap(); // add values after testing
     // key is distance (meters), value is angle (rads)
     // ASSUMING SHOOTING AT 4000 RPM
-    shooterMap.put(2.0, .005);
-    shooterMap.put(3.05, 0.275);
+    shooterMap.put(2.06, .01);
+    shooterMap.put(3.05, 0.26);
+    shooterMap.put(2.5, 0.23);
+    shooterMap.put(1.39, -0.18);
+    shooterMap.put(3.45, 0.3);
+    shooterMap.put(3.1, 0.3);
   }
 
   @Override
