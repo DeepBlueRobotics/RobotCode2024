@@ -382,6 +382,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopBoth",
         new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
                     new InstantCommand(intakeShooter::stopOuttake)));
+
+    NamedCommands.registerCommand("Auto Intake",
+            new SequentialCommandGroup(
+                    new AlignToNoteMath(drivetrain, intakeShooter),
+                    new DriveAndIntake(intakeShooter, drivetrain)));
   }
 
   private void setupAutos() {
