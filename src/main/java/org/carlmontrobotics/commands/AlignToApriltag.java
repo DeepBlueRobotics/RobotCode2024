@@ -16,6 +16,8 @@ import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import static org.carlmontrobotics.Config.CONFIG;
+
 public class AlignToApriltag extends Command {
 
         public final TeleopDrive teleopDrive;
@@ -116,6 +118,6 @@ public class AlignToApriltag extends Command {
                 // return false;
                 // SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
                 // SmartDashboard.putNumber("Error", rotationPID.getPositionError());
-                return rotationPID.atSetpoint();
+                return rotationPID.atSetpoint() || CONFIG.isLimelightDisabled();
         }
 }

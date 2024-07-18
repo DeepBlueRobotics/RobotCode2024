@@ -11,6 +11,8 @@ import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
+import static org.carlmontrobotics.Config.CONFIG;
+
 public class AimArmSpeaker extends Command {
     private final Arm arm;
     private final Limelight ll;
@@ -45,6 +47,6 @@ public class AimArmSpeaker extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return arm.armAtSetpoint();
+        return arm.armAtSetpoint() || CONFIG.isLimelightDisabled();
     }
 }
