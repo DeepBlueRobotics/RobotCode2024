@@ -14,19 +14,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center-Pickup"
+            "pathName": "CenterLL1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center-Pickup 2"
+            "pathName": "CenterLL2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center-Pickup 3"
+            "pathName": "CenterLL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL7"
           }
         }
       ]
