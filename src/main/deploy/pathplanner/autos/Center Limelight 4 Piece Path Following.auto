@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6842044526319189,
-      "y": 6.719352940485241
+      "x": 1.356139746680443,
+      "y": 5.531293435066112
     },
-    "rotation": 60.60256482955589
+    "rotation": -1.9026452141219743
   },
   "command": {
     "type": "sequential",
@@ -20,31 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftLL1"
+            "pathName": "Center Limelight 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Auto Intake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftLL2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto Intake"
+            "name": "Limelight Intake CCW"
           }
         },
         {
@@ -54,39 +36,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftLL3"
+            "name": "Follow Center Limelight 2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Auto Intake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftLL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftLL5"
+            "name": "Limelight Intake CW"
           }
         },
         {
@@ -96,15 +54,57 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftLL6"
+            "name": "Follow Center Limelight 3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Auto Intake"
+            "name": "Limelight Intake CCW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Follow Center Limelight 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Limelight Intake CCW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Follow Center Limelight 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Follow Center Limelight 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Limelight Intake CCW"
           }
         }
       ]

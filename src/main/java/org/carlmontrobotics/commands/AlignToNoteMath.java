@@ -159,23 +159,28 @@ public class AlignToNoteMath extends ProxyCommand {
 
 
             // TODO: DONE BLUE MIDDLE
-            if (Note4distance4 < 2.0 && allianceSide.get() == Alliance.Red) {
+                if (Note4distance4 < 1.0
+                                && allianceSide.get() == Alliance.Red) {
                 return new RotateToFieldRelativeAngle(new Rotation2d(
                         dt.getPose().getX(), note4Y - dt.getPose().getY()), dt);
             }
-            if (Note5distance5 < 2.0 && allianceSide.get() == Alliance.Red) {
+                if (Note5distance5 < 1.0
+                                && allianceSide.get() == Alliance.Red) {
                 return new RotateToFieldRelativeAngle(new Rotation2d(
                         dt.getPose().getX(), note5Y - dt.getPose().getY()), dt);
             }
-            if (Note6distance6 < 2.0 && allianceSide.get() == Alliance.Red) {
+                if (Note6distance6 < 1.0
+                                && allianceSide.get() == Alliance.Red) {
                 return new RotateToFieldRelativeAngle(new Rotation2d(
                         dt.getPose().getX(), note6Y - dt.getPose().getY()), dt);
             }
-            if (Note7distance7 < 2.0 && allianceSide.get() == Alliance.Red) {
+                if (Note7distance7 < 1.0
+                                && allianceSide.get() == Alliance.Red) {
                 return new RotateToFieldRelativeAngle(new Rotation2d(
                         dt.getPose().getX(), note7Y - dt.getPose().getY()), dt);
             }
-            if (Note8distance8 < 2.0 && allianceSide.get() == Alliance.Red) {
+                if (Note8distance8 < 1.0
+                                && allianceSide.get() == Alliance.Red) {
                 return new RotateToFieldRelativeAngle(new Rotation2d(
                         dt.getPose().getX(), note8Y - dt.getPose().getY()), dt);
             }
@@ -183,31 +188,36 @@ public class AlignToNoteMath extends ProxyCommand {
 
 
 
-            if (Note4distance4 < 2.0 && allianceSide.get() == Alliance.Blue) {
+                if (Note4distance4 < 1.0
+                                && allianceSide.get() == Alliance.Blue) {
                 return new RotateToFieldRelativeAngle(
                         new Rotation2d(note4X - dt.getPose().getX(),
                                 note4Y - dt.getPose().getY()),
                         dt);
             }
-            if (Note5distance5 < 2.0 && allianceSide.get() == Alliance.Blue) {
+                if (Note5distance5 < 1.0
+                                && allianceSide.get() == Alliance.Blue) {
                 return new RotateToFieldRelativeAngle(
                         new Rotation2d(note5X - dt.getPose().getX(),
                                 note5Y - dt.getPose().getY()),
                         dt);
             }
-            if (Note6distance6 < 2.0 && allianceSide.get() == Alliance.Blue) {
+                if (Note6distance6 < 1.0
+                                && allianceSide.get() == Alliance.Blue) {
                 return new RotateToFieldRelativeAngle(
                         new Rotation2d(note6X - dt.getPose().getX(),
                                 note6Y - dt.getPose().getY()),
                         dt);
             }
-            if (Note7distance7 < 2.0 && allianceSide.get() == Alliance.Blue) {
+                if (Note7distance7 < 1.0
+                                && allianceSide.get() == Alliance.Blue) {
                 return new RotateToFieldRelativeAngle(
                         new Rotation2d(note7X - dt.getPose().getX(),
                                 note7Y - dt.getPose().getY()),
                         dt);
             }
-            if (Note8distance8 < 2.0 && allianceSide.get() == Alliance.Blue) {
+                if (Note8distance8 < 1.0
+                                && allianceSide.get() == Alliance.Blue) {
                 return new RotateToFieldRelativeAngle(
                         new Rotation2d(note8X - dt.getPose().getX(),
                                 note8Y - dt.getPose().getY()),

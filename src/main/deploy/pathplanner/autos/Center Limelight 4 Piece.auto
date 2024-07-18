@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.356139746680443,
-      "y": 5.531293435066112
+      "x": 1.39784299924834,
+      "y": 5.525086266457521
     },
     "rotation": -1.9026452141219743
   },
@@ -18,9 +18,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL1"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Auto Intake"
           }
         },
         {
@@ -32,31 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Limelight 2"
+            "pathName": "CenterLL2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CW"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Limelight 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Auto Intake"
           }
         },
         {
@@ -68,19 +56,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Limelight 4"
+            "pathName": "CenterLL3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Auto Intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center Limelight 5"
+            "pathName": "CenterLL4"
           }
         },
         {
@@ -92,13 +80,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Limelight 6"
+            "pathName": "CenterLL5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Auto Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLL7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Intake"
           }
         }
       ]
