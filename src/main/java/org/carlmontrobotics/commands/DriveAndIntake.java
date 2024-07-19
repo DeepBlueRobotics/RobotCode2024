@@ -19,6 +19,7 @@ public class DriveAndIntake extends Command {
   private double slowSpeed = .1;
 
   public DriveAndIntake(IntakeShooter intake, Drivetrain Dt) {
+    addRequirements(this.Dt = Dt);
     addRequirements(this.intake = intake);
     SmartDashboard.putNumber("Initial intake speed", initSpeed);
     SmartDashboard.putNumber("Slow intake speed", slowSpeed);
