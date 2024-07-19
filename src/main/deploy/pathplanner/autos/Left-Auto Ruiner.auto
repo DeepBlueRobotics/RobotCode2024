@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
