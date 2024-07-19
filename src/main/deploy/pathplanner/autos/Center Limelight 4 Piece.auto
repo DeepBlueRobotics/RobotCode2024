@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Center Limelight 1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Limelight Intake CCW"

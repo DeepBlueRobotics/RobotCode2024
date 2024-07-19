@@ -54,7 +54,7 @@ public class AutoMATICALLYGetNote extends Command {
   @Override
   public void execute() {
     if (!LimelightHelpers.getTV(Limelightc.INTAKE_LL_NAME)) {
-      dt.drive(0, 0, direction);
+      dt.drive(0, 0, direction * 2);
       return;
     }
     double angleErrRad = -Units
