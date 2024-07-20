@@ -12,84 +12,27 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 1 Piece"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PassToOuttake"
+            "name": "Limelight Intake Straight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ArmToGround"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Limelight 1 Piece"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
+            "name": "Shoot"
           }
         }
       ]

@@ -26,9 +26,12 @@ public class AlignToApriltag extends Command {
                         thetaPIDController[0], thetaPIDController[1],
                         thetaPIDController[2]);
 
-        public AlignToApriltag(Drivetrain drivetrain, Limelight limelight) {
+        double RotationSpeed = 0.0;
+
+        public AlignToApriltag(Drivetrain drivetrain, Limelight limelight, double RotationSpeed) {
                 this.limelight = limelight;
                 this.drivetrain = drivetrain;
+                this.RotationSpeed = RotationSpeed;
                 this.teleopDrive = (TeleopDrive) drivetrain.getDefaultCommand();
 
                 rotationPID.enableContinuousInput(-180, 180);
@@ -86,7 +89,7 @@ public class AlignToApriltag extends Command {
                 double rotationDrive =
                                 rotationPID.calculate(drivetrain.getHeading());
                 if (!limelight.seesTag()) {
-                        rotationDrive = 2;
+                        rotationDrive = RotationSpeed;
                 }
                 if (rotationPID.atSetpoint())
                         rotationDrive = 0;

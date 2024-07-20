@@ -112,6 +112,13 @@ public class RobotContainer {
           "Center Limelight 4 Piece", "Center Limelight 4 Piece Path Following",
 
           "Left-Amp",
+
+          "Center Limelight 1 Piece", "Left Limelight 1 Piece",
+          "Right Limelight 1 Piece", "Center Field Limelight",
+          "Center Field Limelight(No Preload)", "Center Forward",
+          "Right Forward", "Left Forward",
+          "Backup-Center", "Backup-Right", "Backup-Left",
+
   };
   DigitalInput[] autoSelectors =
       new DigitalInput[Math.min(autoNames.length, 10)];
@@ -194,7 +201,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-            .whileTrue(new AlignToApriltag(drivetrain, limelight));
+            .whileTrue(new AlignToApriltag(drivetrain, limelight, 2.0));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(
         new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -359,9 +366,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimArmSpeakerMT2",
             new AimArmSpeaker(arm, limelight));
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
-            new AlignToApriltag(drivetrain, limelight));
+            new AlignToApriltag(drivetrain, limelight, 0.0));
     NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
-            new ParallelCommandGroup(new AlignToApriltag(drivetrain, limelight),
+            new ParallelCommandGroup(
+                    // TODO: Use Align To Drivetrain
+                    // new AlignDrivetrain(drivetrain),
+                    new AlignToApriltag(drivetrain, limelight, 0.0),
                     new AimArmSpeaker(arm, limelight),
                     new RampRPMAuton(intakeShooter)),
             new PassToOuttake(intakeShooter),
@@ -374,6 +384,11 @@ public class RobotContainer {
             new ParallelCommandGroup(new Intake(intakeShooter),
                     new AutoMATICALLYGetNote(drivetrain, limelight,
                             intakeShooter, -1)));
+
+    NamedCommands.registerCommand("Limelight Intake Straight",
+            new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter, 0)));
 
     NamedCommands.registerCommand("StopIntake",
         new InstantCommand(intakeShooter::stopIntake));
