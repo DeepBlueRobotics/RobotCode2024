@@ -22,7 +22,7 @@ public abstract class Config implements Sendable {
 
     // Add additional config settings by declaring a protected field, and...
     protected boolean exampleFlagEnabled = false;
-    protected boolean swimShady = true;
+    protected boolean swimShady = false;
     protected boolean setupSysId = false;
     protected boolean useSmartDashboardControl = false; // whether to control arm position + rpm of
                                                        // outtake through SmartDashboard
