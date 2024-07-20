@@ -30,6 +30,8 @@ public class Limelight extends SubsystemBase {
     shooterMap.put(3.45, 0.3);
     shooterMap.put(3.1, 0.3);
 
+    SmartDashboard.putBoolean("shooter sees note", false);
+
     // ASSUMING SHOOTING AT 4000 RPM
     // changing speed multipliers for auto intaking note
     // SmartDashboard.putNumber("forward speed multiplier", 1.5);
@@ -52,6 +54,8 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    SmartDashboard.putBoolean("shooter sees note", LimelightHelpers.getTV(SHOOTER_LL_NAME));
 
     // intake limelight testing
     // SmartDashboard.putBoolean("see note",

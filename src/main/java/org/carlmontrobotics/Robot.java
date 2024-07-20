@@ -35,11 +35,11 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
     FollowPathCommand.warmupCommand().schedule();
+    // for (int port = 5800; port <= 5809; port++) {
+    // PortForwarder.add(port, INTAKE_LL_NAME + ".local", port);
+    // }
     for (int port = 5800; port <= 5809; port++) {
-      PortForwarder.add(port, INTAKE_LL_NAME + ".local", port);
-    }
-    for (int port = 5800; port <= 5809; port++) {
-      PortForwarder.add(port + 10, SHOOTER_LL_NAME + ".local", port);
+      PortForwarder.add(port, SHOOTER_LL_NAME + ".local", port);
     }
   }
 
