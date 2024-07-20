@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.356139746680443,
+      "y": 5.531293435066112
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 6"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

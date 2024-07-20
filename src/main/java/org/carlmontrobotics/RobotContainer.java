@@ -116,6 +116,8 @@ public class RobotContainer {
           "Backup-Center", "Backup-Left", "Backup-Right",
 
           "Center-Forward", "Left-Forward", "Right-Forward",
+
+          "Center Field Test", "Center Limelight Test", "Left Limelight Test", "Center Limelight Test1", "Right Limelight Test", "Left Limelight 1 Test", "Right Limelight 1 Test", "Center Limelight 1 Piece", "Center Limelight 1 Test", "Backup-Right Test", "Backup-Left Test", "Backup-Center Test", "Center-Forward Test", "Left-Forward Test", "Right-Forward Test",
   };
   DigitalInput[] autoSelectors =
       new DigitalInput[Math.min(autoNames.length, 10)];
@@ -374,6 +376,10 @@ public class RobotContainer {
             new ParallelCommandGroup(new Intake(intakeShooter),
                     new AutoMATICALLYGetNote(drivetrain, limelight,
                             intakeShooter, 1)));
+    NamedCommands.registerCommand("Limelight Intake Straight",
+            new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter, 0)));
     NamedCommands.registerCommand("Limelight Intake CW",
             new ParallelCommandGroup(new Intake(intakeShooter),
                     new AutoMATICALLYGetNote(drivetrain, limelight,

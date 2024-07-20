@@ -127,7 +127,7 @@ public class AlignToNoteMath extends ProxyCommand {
                 for (int i = 0; i < redNoteDistances.length; i++) {
                         if (redNoteDistances[i] < 2.0) {
                                 return new RotateToFieldRelativeAngle(
-                                                new Rotation2d(redNoteX[i] + dt
+                                                new Rotation2d(dt
                                                                 .getPose()
                                                                 .getX(),
                                                                 redNoteY[i] - dt.getPose()
@@ -157,8 +157,8 @@ public class AlignToNoteMath extends ProxyCommand {
                         if (centerNoteDistances[i] < 1.0
                                         && allianceSide.get() == Alliance.Red) {
                                 return new RotateToFieldRelativeAngle(
-                                                new Rotation2d(centerNoteX[i]
-                                                                + dt.getPose().getX(),
+                                                new Rotation2d(dt.getPose()
+                                                                .getX(),
                                                                 centerNoteY[i] - dt
                                                                                 .getPose()
                                                                                 .getY()),

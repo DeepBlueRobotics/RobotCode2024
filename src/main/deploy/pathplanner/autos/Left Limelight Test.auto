@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6842044526319189,
+      "y": 6.719352940485241
+    },
+    "rotation": 60.60256482955589
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftLL6"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
