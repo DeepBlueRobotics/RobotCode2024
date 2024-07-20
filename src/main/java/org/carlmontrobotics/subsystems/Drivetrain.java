@@ -337,9 +337,9 @@ public class Drivetrain extends SubsystemBase {
         // Rotation2d.fromDegrees(currSetTheta)));
         // }
 
-        setPose(new Pose2d(getPose().getTranslation().getX(),
-                getPose().getTranslation().getY(),
-                Rotation2d.fromDegrees(getHeading())));
+        // setPose(new Pose2d(getPose().getTranslation().getX(),
+        // getPose().getTranslation().getY(),
+        // Rotation2d.fromDegrees(getHeading())));
 
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());

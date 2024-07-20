@@ -17,7 +17,7 @@ public class EjectOuttakeSide extends Command {
     @Override
     public void initialize() {
         intakeShooter.setMaxIntake(1);
-        intakeShooter.setMaxOuttake(1);
+        intakeShooter.setMaxOuttake(0.6);
         timer.reset();
         timer.start();
     }

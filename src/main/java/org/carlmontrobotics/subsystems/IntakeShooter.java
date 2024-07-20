@@ -200,7 +200,7 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
-    public void setMaxOuttake(int direction) {
+    public void setMaxOuttake(double direction) {
         outtakeMotorVortex.set(1 * direction);
     }
 
