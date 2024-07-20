@@ -12,6 +12,7 @@ import java.util.List;
 import static org.carlmontrobotics.Constants.Armc.*;
 import static org.carlmontrobotics.Constants.OI.Manipulator.*;
 import static org.carlmontrobotics.Constants.Effectorc.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
 
 // non static constants
 import org.carlmontrobotics.Constants.OI;
@@ -52,6 +53,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // commands
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -202,9 +204,14 @@ public class RobotContainer {
 
         // new JoystickButton(manipulatorController, A_BUTTON)
         // .onTrue(new RampMaxRPMDriving(intakeShooter));
+        // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
+        // new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+        // new PassToOuttake(intakeShooter)));
+
         axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-                new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
-                        new PassToOuttake(intakeShooter)));
+                new ConditionalCommand(new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+                        new PassToOuttake(intakeShooter)), new InstantCommand(() -> {
+                        }), () -> LimelightHelpers.getTV(SHOOTER_LL_NAME)));
 
         // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         // .whileTrue(new PassToOuttake(intakeShooter));
