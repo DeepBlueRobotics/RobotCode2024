@@ -112,6 +112,12 @@ public class RobotContainer {
           "Center Limelight 4 Piece", "Center Limelight 4 Piece Path Following",
 
           "Left-Amp",
+
+          "Center Limelight 1 Piece", "Left Limelight 1 Piece",
+          "Right Limelight 1 Piece", "Center Field Limelight",
+          "Center Field Limelight(No Preload)", "Center Forward",
+          "Right Forward", "Left Forward",
+
   };
   DigitalInput[] autoSelectors =
       new DigitalInput[Math.min(autoNames.length, 10)];

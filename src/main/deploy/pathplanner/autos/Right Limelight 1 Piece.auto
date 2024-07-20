@@ -12,39 +12,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Limelight 1"
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Limelight 2"
+            "pathName": "Right Limelight 1 Piece"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Limelight 3"
+            "name": "Limelight Intake Straight"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Limelight 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Limelight 5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Limelight 6"
+            "name": "Shoot"
           }
         }
       ]
