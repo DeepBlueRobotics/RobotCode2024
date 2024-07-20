@@ -91,26 +91,10 @@ public class RobotContainer {
 
   private boolean hasSetupAutos = false;
   private final String[] autoNames = new String[] {
-      /* These are assumed to be equal to the AUTO ames in pathplanner */
-      "Left-Straight", "Center-Straight", "Right-Straight", "Middle-Ram",
-
-      "Left-Auto Ruiner", "Center-Auto Ruiner", "Right-Auto Ruiner",
-
-      "Preloaded Left Shooting", "Preloaded Right Shooting",
-
-      "Left Shoot", "Center Shoot", "Right Shoot",
-
-      "Left-Shoot For Left Subwoofer", "Right-Shoot For Right Subwoofer",
-
-      "Test 4 piece", "Left Auton 4 piece total",
-      "Preloaded Center Auton 4 piece total",
-      "Preloaded Left Auton 3 piece total",
-      "Preloaded Center Auton 3 piece total",
-      "Preloaded Right Auton 3 piece total",
-      // "Preloaded Left-Pickup Subwoofer",
-      // "Preloaded Right-Pickup Subwoofer",
+          /* These are assumed to be equal to the AUTO ames in pathplanner */
+          "Left-Auto Ruiner", "Center-Auto Ruiner", "Right-Auto Ruiner",
           "Right Limelight 4 Piece", "Left Limelight 4 Piece",
-          "Center Limelight 4 Piece", "Center Limelight 4 Piece Path Following",
+          "Center Limelight 4 Piece",
 
           "Left-Amp",
 
