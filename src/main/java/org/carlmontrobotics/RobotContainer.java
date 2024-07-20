@@ -371,7 +371,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                     // TODO: Use Align To Drivetrain
                     // new AlignDrivetrain(drivetrain),
-                    // new AlignToApriltag(drivetrain, limelight),
+                    new AlignToApriltag(drivetrain, limelight, 0.0));
                     new AimArmSpeaker(arm, limelight),
                     new RampRPMAuton(intakeShooter)),
             new PassToOuttake(intakeShooter),
