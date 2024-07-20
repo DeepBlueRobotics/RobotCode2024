@@ -12,34 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
+            "name": "Shoot"
           }
         },
         {
@@ -49,22 +24,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Field Limelight 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "Limelight Intake CW"
           }
         },
         {
@@ -74,53 +36,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Field Limelight 4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Field Limelight 4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "Limelight Intake CW"
           }
         },
         {
@@ -130,40 +60,21 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Center Field Limelight 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Limelight Intake CW"
           }
         }
       ]

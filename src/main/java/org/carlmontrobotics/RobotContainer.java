@@ -361,7 +361,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
             new AlignToApriltag(drivetrain, limelight));
     NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
-            new ParallelCommandGroup(new AlignToApriltag(drivetrain, limelight),
+            new ParallelCommandGroup(
+                    // TODO: Use Align To Drivetrain
+                    new AlignDrivetrain(drivetrain),
+                    // new AlignToApriltag(drivetrain, limelight),
                     new AimArmSpeaker(arm, limelight),
                     new RampRPMAuton(intakeShooter)),
             new PassToOuttake(intakeShooter),
@@ -374,6 +377,11 @@ public class RobotContainer {
             new ParallelCommandGroup(new Intake(intakeShooter),
                     new AutoMATICALLYGetNote(drivetrain, limelight,
                             intakeShooter, -1)));
+
+    NamedCommands.registerCommand("Limelight Intake Straight",
+            new ParallelCommandGroup(new Intake(intakeShooter),
+                    new AutoMATICALLYGetNote(drivetrain, limelight,
+                            intakeShooter, 0)));
 
     NamedCommands.registerCommand("StopIntake",
         new InstantCommand(intakeShooter::stopIntake));

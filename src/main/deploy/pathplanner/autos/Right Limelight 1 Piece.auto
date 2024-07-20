@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4048307100172925,
-      "y": 5.570246205735591
+      "x": 0.7134190306340287,
+      "y": 4.411401278318571
     },
     "rotation": -61.557071375636745
   },
@@ -12,84 +12,39 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
+            "pathName": "Right Limelight 1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "PassToOuttake"
+            "pathName": "Right Limelight 2"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ArmToGround"
+            "pathName": "Right Limelight 3"
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right Limelight 1 Piece"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "pathName": "Right Limelight 4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
+            "pathName": "Right Limelight 5"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
+            "pathName": "Right Limelight 6"
           }
         }
       ]
