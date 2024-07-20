@@ -13,6 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -21,6 +22,8 @@ public class AlignToApriltag extends Command {
         public final TeleopDrive teleopDrive;
         public final Drivetrain drivetrain;
         private Limelight limelight;
+        private Timer time = new Timer();
+        private double startTime;
 
         public final PIDController rotationPID = new PIDController(
                         thetaPIDController[0], thetaPIDController[1],
@@ -44,6 +47,11 @@ public class AlignToApriltag extends Command {
                 rotationPID.setTolerance(positionTolerance[2],
                                 velocityTolerance[2]);
                 SendableRegistry.addChild(this, rotationPID);
+
+                time.reset();
+                time.start();
+                startTime = time.getFPGATimestamp();
+
                 addRequirements(drivetrain);
         }
 
@@ -110,6 +118,7 @@ public class AlignToApriltag extends Command {
                 // return false;
                 // SmartDashboard.putBoolean("At Setpoint", rotationPID.atSetpoint());
                 // SmartDashboard.putNumber("Error", rotationPID.getPositionError());
-                return rotationPID.atSetpoint();
+                return rotationPID.atSetpoint()
+                                || (time.getFPGATimestamp() - startTime) > 3;
         }
 }

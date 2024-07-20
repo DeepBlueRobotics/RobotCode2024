@@ -62,7 +62,7 @@ public class AutoMATICALLYGetNote extends Command {
 
     forwardDistErrMeters = Math.max(
         forwardDistErrMeters
-            * 1.5,
+            * 1.75,
         MIN_MOVEMENT_METERSPSEC);
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {

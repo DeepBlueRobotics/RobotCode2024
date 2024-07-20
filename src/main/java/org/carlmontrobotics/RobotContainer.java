@@ -54,6 +54,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -221,13 +222,13 @@ public class RobotContainer {
         .onTrue(new Eject(intakeShooter));
     
     //new JoystickButton(manipulatorController, A_BUTTON)
-        //.onTrue(new RampMaxRPMDriving(intakeShooter));
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-            new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
-                    new PassToOuttake(intakeShooter)));
-
+    // .onTrue(new RampMaxRPMDriving(intakeShooter));
     // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-    // new PassToOuttake(intakeShooter));
+    // new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+    // new PassToOuttake(intakeShooter)));
+
+    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+            .whileTrue(new PassToOuttake(intakeShooter));
 
     new JoystickButton(manipulatorController, RAMP_OUTTAKE)
         .whileTrue(new RampMaxRPM(intakeShooter));
