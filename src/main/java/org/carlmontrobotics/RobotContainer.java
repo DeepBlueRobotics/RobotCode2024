@@ -201,7 +201,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
     axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-            .whileTrue(new AlignToApriltag(drivetrain, limelight));
+            .whileTrue(new AlignToApriltag(drivetrain, limelight, 2.0));
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(
         new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -366,11 +366,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimArmSpeakerMT2",
             new AimArmSpeaker(arm, limelight));
     NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
-            new AlignToApriltag(drivetrain, limelight));
+            new AlignToApriltag(drivetrain, limelight, 0.0));
     NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
             new ParallelCommandGroup(
                     // TODO: Use Align To Drivetrain
-                    new AlignDrivetrain(drivetrain),
+                    // new AlignDrivetrain(drivetrain),
                     // new AlignToApriltag(drivetrain, limelight),
                     new AimArmSpeaker(arm, limelight),
                     new RampRPMAuton(intakeShooter)),
