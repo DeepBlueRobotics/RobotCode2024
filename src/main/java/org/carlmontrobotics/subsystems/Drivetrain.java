@@ -112,13 +112,13 @@ public class Drivetrain extends SubsystemBase {
     private double lastSetX = 0, lastSetY = 0, lastSetTheta = 0;
 
     public Drivetrain() {
-        SmartDashboard.putNumber("Pose Estimator set x (m)", lastSetX);
-        SmartDashboard.putNumber("Pose Estimator set y (m)", lastSetY);
-        SmartDashboard.putNumber("Pose Estimator set rotation (deg)",
-                lastSetTheta);
+        // SmartDashboard.putNumber("Pose Estimator set x (m)", lastSetX);
+        // SmartDashboard.putNumber("Pose Estimator set y (m)", lastSetY);
+        // SmartDashboard.putNumber("Pose Estimator set rotation (deg)",
+        // lastSetTheta);
 
-        SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
-        SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
+        // SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
+        // SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
 
         // Calibrate Gyro
         {
@@ -220,7 +220,7 @@ public class Drivetrain extends SubsystemBase {
 
             }
 
-            SmartDashboard.putData("Field", field);
+            // SmartDashboard.putData("Field", field);
 
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
@@ -247,7 +247,7 @@ public class Drivetrain extends SubsystemBase {
         //                 SmartDashboard.putNumber("chassis speeds y", 0);
 
         //                             SmartDashboard.putNumber("chassis speeds theta", 0);
-        SmartDashboard.putData(this);
+        // SmartDashboard.putData(this);
 
     }
 
@@ -324,19 +324,22 @@ public class Drivetrain extends SubsystemBase {
 
         updateMT2PoseEstimator();
 
-        double currSetX =
-                SmartDashboard.getNumber("Pose Estimator set x (m)", lastSetX);
-        double currSetY =
-                SmartDashboard.getNumber("Pose Estimator set y (m)", lastSetY);
-        double currSetTheta = SmartDashboard
-                .getNumber("Pose Estimator set rotation (deg)", lastSetTheta);
+        // double currSetX =
+        // SmartDashboard.getNumber("Pose Estimator set x (m)", lastSetX);
+        // double currSetY =
+        // SmartDashboard.getNumber("Pose Estimator set y (m)", lastSetY);
+        // double currSetTheta = SmartDashboard
+        // .getNumber("Pose Estimator set rotation (deg)", lastSetTheta);
 
-        if (lastSetX != currSetX || lastSetY != currSetY
-                || lastSetTheta != currSetTheta) {
-            setPose(new Pose2d(currSetX, currSetY,
-                    Rotation2d.fromDegrees(currSetTheta)));
-        }
+        // if (lastSetX != currSetX || lastSetY != currSetY
+        // || lastSetTheta != currSetTheta) {
+        // setPose(new Pose2d(currSetX, currSetY,
+        // Rotation2d.fromDegrees(currSetTheta)));
+        // }
 
+        setPose(new Pose2d(getPose().getTranslation().getX(),
+                getPose().getTranslation().getY(),
+                Rotation2d.fromDegrees(getHeading())));
 
         // // // SmartDashboard.putNumber("Pitch", gyro.getPitch());
         // // // SmartDashboard.putNumber("Roll", gyro.getRoll());
@@ -876,9 +879,9 @@ public class Drivetrain extends SubsystemBase {
                 m_revs_vel[i] = mutable(RotationsPerSecond.of(0));
             }
 
-            SmartDashboard.putNumber("Desired Angle", 0);
+            // SmartDashboard.putNumber("Desired Angle", 0);
 
-            SmartDashboard.putNumber("kS", 0);
+            // SmartDashboard.putNumber("kS", 0);
         }
     }
 
@@ -1073,8 +1076,7 @@ public class Drivetrain extends SubsystemBase {
         if (!rejectVisionUpdate) {
             poseEstimator
                     .setVisionMeasurementStdDevs(
-                            VecBuilder.fill(SmartDashboard.getNumber("pose estimator std dev x", STD_DEV_X_METERS),
-                                    SmartDashboard.getNumber("pose estimator std dev y", STD_DEV_Y_METERS),
+                            VecBuilder.fill(STD_DEV_X_METERS, STD_DEV_Y_METERS,
                                     STD_DEV_HEADING_RADS));
             poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
         }
