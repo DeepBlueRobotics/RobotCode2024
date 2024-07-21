@@ -105,6 +105,7 @@ public class RobotContainer {
             "Center Field Limelight(No Preload)", "Center Forward",
             "Right Forward", "Left Forward",
             "Backup-Center", "Backup-Right", "Backup-Left",
+                    "Preload1Center", "Preload1Right", "Preload1Left",
 
     };
     DigitalInput[] autoSelectors = new DigitalInput[Math.min(autoNames.length, 10)];
