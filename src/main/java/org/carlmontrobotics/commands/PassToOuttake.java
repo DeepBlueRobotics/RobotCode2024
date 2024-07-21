@@ -42,6 +42,7 @@ public class PassToOuttake extends Command {
     @Override
     public boolean isFinished() {
         return (!intakeShooter.intakeDetectsNote()
-                && !intakeShooter.outtakeDetectsNote()) || LimelightHelpers.getTV(SHOOTER_LL_NAME);
+                && !intakeShooter.outtakeDetectsNote());
+        // || !LimelightHelpers.getTV(SHOOTER_LL_NAME);
     }
 }

@@ -376,9 +376,10 @@ public class RobotContainer {
                                 new PassToOuttake(intakeShooter),
                                 new ArmToPos(arm, GROUND_INTAKE_POS)))));
         NamedCommands.registerCommand("ShootSubwoofer",
-                new SequentialCommandGroup(
-                        new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD),
-                        new RampRPMAuton(intakeShooter),
+                        new SequentialCommandGroup(new ParallelCommandGroup(
+                                        new ArmToPos(arm,
+                                                        Armc.SUBWOOFER_ANGLE_RAD),
+                                        new RampRPMAuton(intakeShooter)),
                         new PassToOuttake(intakeShooter),
                         new ArmToPos(arm, GROUND_INTAKE_POS)));
         NamedCommands.registerCommand("Limelight Intake CCW",
