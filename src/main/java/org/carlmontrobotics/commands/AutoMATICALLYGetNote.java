@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import static org.carlmontrobotics.Config.CONFIG;
-
 public class AutoMATICALLYGetNote extends Command {
   /** Creates a new AutoMATICALLYGetNote. */
   private Drivetrain dt;
@@ -127,6 +125,6 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.outtakeDetectsNote() || CONFIG.isLimelightDisabled();
+    return intake.outtakeDetectsNote();
   }
 }
