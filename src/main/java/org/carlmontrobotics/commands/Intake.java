@@ -12,7 +12,7 @@ public class Intake extends Command {
   // intake until sees game peice or 4sec has passed
   private final IntakeShooter intake;
   private int index = 0;
-  private double increaseSpeed = .007;
+  private double increaseSpeed = .01;
   private double initSpeed = .5;
   private double slowSpeed = .1;
 

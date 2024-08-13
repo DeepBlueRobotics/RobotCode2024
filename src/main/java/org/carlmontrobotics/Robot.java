@@ -4,8 +4,12 @@
 
 package org.carlmontrobotics;
 
+import static org.carlmontrobotics.Constants.Limelightc.INTAKE_LL_NAME;
+import static org.carlmontrobotics.Constants.Limelightc.SHOOTER_LL_NAME;
+
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -31,7 +35,12 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
     FollowPathCommand.warmupCommand().schedule();
-    
+    // for (int port = 5800; port <= 5809; port++) {
+    // PortForwarder.add(port, INTAKE_LL_NAME + ".local", port);
+    // }
+    for (int port = 5800; port <= 5809; port++) {
+      PortForwarder.add(port, SHOOTER_LL_NAME + ".local", port);
+    }
   }
 
   @Override

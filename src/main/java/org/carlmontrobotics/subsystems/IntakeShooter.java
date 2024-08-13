@@ -59,7 +59,7 @@ public class IntakeShooter extends SubsystemBase {
         pidControllerIntake.setP(kP[INTAKE]);
         pidControllerIntake.setI(kI[INTAKE]);
         pidControllerIntake.setD(kD[INTAKE]);
-        SmartDashboard.putData("Intake Shooter", this);
+        // SmartDashboard.putData("Intake Shooter", this);
         // SmartDashboard.putNumber("Intake Ks", kS[INTAKE]);
         // SmartDashboard.putNumber("Intake Kv", kV[INTAKE]);
         intakeEncoder.setAverageDepth(4);
@@ -72,7 +72,7 @@ public class IntakeShooter extends SubsystemBase {
         outtakeMotorVortex.setSmartCurrentLimit(60);
         // SmartDashboard.putNumber("Intake target RPM", 0);
         // SmartDashboard.putNumber("Vortex volts", 0);
-        SmartDashboard.putNumber("Goal RPM Outtake", 0);
+        // SmartDashboard.putNumber("Goal RPM Outtake", 0);
     }
 
     public boolean intakeIsOverTemp() {
@@ -121,7 +121,8 @@ public class IntakeShooter extends SubsystemBase {
     public void updateValues() {
         if (intakeDistanceSensor.isRangeValid()) {
             if (lastValidDistanceIntake != Double.POSITIVE_INFINITY) {
-                SmartDashboard.putNumber("Time between valid ranges intake", intakeTOFTimer.get());
+                // SmartDashboard.putNumber("Time between valid ranges intake",
+                // intakeTOFTimer.get());
                 intakeTOFTimer.reset();
             } else
                 intakeTOFTimer.start();
@@ -129,7 +130,8 @@ public class IntakeShooter extends SubsystemBase {
         }
         if (outtakeDistanceSensor.isRangeValid()) {
             if (lastValidDistanceOuttake != Double.POSITIVE_INFINITY) {
-                SmartDashboard.putNumber("Time between valid ranges outtake", outtakeTOFTimer.get());
+                // SmartDashboard.putNumber("Time between valid ranges outtake",
+                // outtakeTOFTimer.get());
                 outtakeTOFTimer.reset();
             } else
                 outtakeTOFTimer.start();
@@ -146,36 +148,37 @@ public class IntakeShooter extends SubsystemBase {
         // if (newKS != intakeFeedforward.ks || newKV != intakeFeedforward.kv) {
         // intakeFeedforward = new SimpleMotorFeedforward(newKS, newKV);
         // }
-        SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
-        SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
-        SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
-        SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
-        SmartDashboard.putBoolean("intake ds range valid", intakeDistanceSensor.isRangeValid());
-        SmartDashboard.putData("outtake distanace sensor", outtakeDistanceSensor);
-        SmartDashboard.putBoolean("outtake ds range valid", outtakeDistanceSensor.isRangeValid());
+        // SmartDashboard.putBoolean("instake ds sees", intakeDetectsNote());
+        // SmartDashboard.putBoolean("outtake ds sees", outtakeDetectsNote());
+        // SmartDashboard.putNumber("intake sample rate", intakeDistanceSensor.getSampleTime());
+        // SmartDashboard.putData("intake distanace sensor", intakeDistanceSensor);
+        // SmartDashboard.putBoolean("intake ds range valid", intakeDistanceSensor.isRangeValid());
+        // SmartDashboard.putData("outtake distanace sensor", outtakeDistanceSensor);
+        // SmartDashboard.putBoolean("outtake ds range valid",
+        // outtakeDistanceSensor.isRangeValid());
         SmartDashboard.putNumber("Intake Vel", intakeEncoder.getVelocity());
-        TimeOfFlight.RangingMode rangingModeIntake = intakeDistanceSensor.getRangingMode();
-        if (rangingModeIntake == TimeOfFlight.RangingMode.Long)
-            SmartDashboard.putString("intake ds ranging mode", "long");
-        else if (rangingModeIntake == TimeOfFlight.RangingMode.Medium)
-            SmartDashboard.putString("intake ds ranging mode", "medium");
-        else
-            SmartDashboard.putString("intake ds ranging mode", "short");
+        // TimeOfFlight.RangingMode rangingModeIntake = intakeDistanceSensor.getRangingMode();
+        // if (rangingModeIntake == TimeOfFlight.RangingMode.Long)
+        // SmartDashboard.putString("intake ds ranging mode", "long");
+        // else if (rangingModeIntake == TimeOfFlight.RangingMode.Medium)
+        // SmartDashboard.putString("intake ds ranging mode", "medium");
+        // else
+        // SmartDashboard.putString("intake ds ranging mode", "short");
 
-        TimeOfFlight.RangingMode rangingModeOuttake = outtakeDistanceSensor.getRangingMode();
-        if (rangingModeOuttake == TimeOfFlight.RangingMode.Long)
-            SmartDashboard.putString("outake ds ranging mode", "long");
-        else if (rangingModeOuttake == TimeOfFlight.RangingMode.Medium)
-            SmartDashboard.putString("outake ds ranging mode", "medium");
-        else
-            SmartDashboard.putString("outake ds ranging mode", "short");
+        // TimeOfFlight.RangingMode rangingModeOuttake = outtakeDistanceSensor.getRangingMode();
+        // if (rangingModeOuttake == TimeOfFlight.RangingMode.Long)
+        // SmartDashboard.putString("outake ds ranging mode", "long");
+        // else if (rangingModeOuttake == TimeOfFlight.RangingMode.Medium)
+        // SmartDashboard.putString("outake ds ranging mode", "medium");
+        // else
+        // SmartDashboard.putString("outake ds ranging mode", "short");
         // intakeMotor.set(0.1);
         // outakeMotor.set(SmartDashboard.getNumber("intake volts", 0));
 
         // count++;
         // setMaxOutake();
 
-        SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Intake amps", intakeMotor.getOutputCurrent());
 
         if (intakeIsOverTemp()) {
             turnOffIntakeMotor();
@@ -197,7 +200,7 @@ public class IntakeShooter extends SubsystemBase {
 
     }
 
-    public void setMaxOuttake(int direction) {
+    public void setMaxOuttake(double direction) {
         outtakeMotorVortex.set(1 * direction);
     }
 

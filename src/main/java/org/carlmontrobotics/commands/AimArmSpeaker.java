@@ -4,6 +4,9 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
+
 import org.carlmontrobotics.Constants.Limelightc;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.Limelight;
@@ -28,10 +31,10 @@ public class AimArmSpeaker extends Command {
         if (LimelightHelpers.getTV(Limelightc.SHOOTER_LL_NAME)) {
             double goal = ll.getOptimizedArmAngleRadsMT2();
             arm.setArmTarget(goal);
-        } else {
-            arm.setArmTarget(.23);
         }
-
+        else {
+            arm.setArmTarget(SPEAKER_ANGLE_RAD);
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.

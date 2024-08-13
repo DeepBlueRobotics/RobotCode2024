@@ -30,41 +30,47 @@ public class Limelight extends SubsystemBase {
     shooterMap.put(3.45, 0.3);
     shooterMap.put(3.1, 0.3);
 
+    SmartDashboard.putBoolean("shooter sees note", LimelightHelpers.getTV(SHOOTER_LL_NAME));
+    SmartDashboard.putBoolean("intake sees note", LimelightHelpers.getTV(INTAKE_LL_NAME));
+
     // ASSUMING SHOOTING AT 4000 RPM
     // changing speed multipliers for auto intaking note
-    SmartDashboard.putNumber("forward speed multiplier", 1.5);
-    SmartDashboard.putNumber("strafe speed multiplier", 1.5);
-    SmartDashboard.putNumber("rotational speed multiplier", 2);
+    // SmartDashboard.putNumber("forward speed multiplier", 1.5);
+    // SmartDashboard.putNumber("strafe speed multiplier", 1.5);
+    // SmartDashboard.putNumber("rotational speed multiplier", 2);
 
     // tuning apriltag alignment pid and tolerances
-    SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
+    // SmartDashboard.putNumber("rotation to align", getRotateAngleRadMT2());
 
-    SmartDashboard.putNumber("apriltag align kp", thetaPIDController[0]);
-    SmartDashboard.putNumber("apriltag align ki", thetaPIDController[1]);
-    SmartDashboard.putNumber("apriltag align kd", thetaPIDController[2]);
+    // SmartDashboard.putNumber("apriltag align kp", thetaPIDController[0]);
+    // SmartDashboard.putNumber("apriltag align ki", thetaPIDController[1]);
+    // SmartDashboard.putNumber("apriltag align kd", thetaPIDController[2]);
 
-    SmartDashboard.putNumber("apriltag align pos tolerance",
-        positionTolerance[2]);
-    SmartDashboard.putNumber("apriltag align vel tolerance",
-        velocityTolerance[2]);
+    // SmartDashboard.putNumber("apriltag align pos tolerance",
+    // positionTolerance[2]);
+    // SmartDashboard.putNumber("apriltag align vel tolerance",
+    // velocityTolerance[2]);
 
   }
 
   @Override
   public void periodic() {
 
+    SmartDashboard.putBoolean("shooter sees note", LimelightHelpers.getTV(SHOOTER_LL_NAME));
+    SmartDashboard.putBoolean("intake sees note", LimelightHelpers.getTV(INTAKE_LL_NAME));
+
     // intake limelight testing
-    SmartDashboard.putBoolean("see note",
-        LimelightHelpers.getTV(INTAKE_LL_NAME));
-    SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
-    SmartDashboard.putNumber("intake tx",
-        LimelightHelpers.getTX(INTAKE_LL_NAME));
+    // SmartDashboard.putBoolean("see note",
+    // LimelightHelpers.getTV(INTAKE_LL_NAME));
+    // SmartDashboard.putNumber("distance to note", getDistanceToNoteMeters());
+    // SmartDashboard.putNumber("intake tx",
+    // LimelightHelpers.getTX(INTAKE_LL_NAME));
 
     // shooter limelight testing
-    SmartDashboard.putNumber("distance to speaker (meters)",
-        getDistanceToSpeakerMetersMT2());
-    SmartDashboard.putNumber("optimized arm angle",
-        getOptimizedArmAngleRadsMT2());
+    // SmartDashboard.putNumber("distance to speaker (meters)",
+    // getDistanceToSpeakerMetersMT2());
+    // SmartDashboard.putNumber("optimized arm angle",
+    // getOptimizedArmAngleRadsMT2());
   }
 
   public double getTXDeg(String limelightName) {
@@ -87,9 +93,8 @@ public class Limelight extends SubsystemBase {
       Rotation2d angleToGoal = Rotation2d.fromDegrees(MOUNT_ANGLE_DEG_SHOOTER)
           .plus(Rotation2d.fromDegrees(getTYDeg(SHOOTER_LL_NAME))); // because limelight is mounted
                                                                     // horizontally
-      double distance =
-          (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER)
-              / angleToGoal.getTan();
+      double distance = (SPEAKER_CENTER_HEIGHT_METERS - HEIGHT_FROM_GROUND_METERS_SHOOTER)
+          / angleToGoal.getTan();
       // SmartDashboard.putNumber("limelight distance", distance);
       return distance;
     } else {
@@ -113,36 +118,29 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getArmAngleToShootSpeakerRad() {
-    double armRestingHeightToSubwooferMeters =
-        HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS;
-    double horizontalDistanceMeters =
-        getDistanceToSpeakerMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
+    double armRestingHeightToSubwooferMeters = HEIGHT_FROM_RESTING_ARM_TO_SPEAKER_METERS;
+    double horizontalDistanceMeters = getDistanceToSpeakerMeters() + SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH;
     return END_EFFECTOR_BASE_ANGLE_RADS - Math
         .atan(armRestingHeightToSubwooferMeters / horizontalDistanceMeters);
   }
 
-
   public double getRotateAngleRadMT2() {
-    Pose3d targetPoseRobotSpace =
-        LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
+    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME); // pose of the target
 
     double targetX = targetPoseRobotSpace.getX(); // the forward offset between the center of the
                                                   // robot and target
     double targetZ = -targetPoseRobotSpace.getZ(); // the sideways offset
 
-    double targetOffsetRads =
-        MathUtil.inputModulus(Math.atan2(targetX, targetZ), -Math.PI, Math.PI);
+    double targetOffsetRads = MathUtil.inputModulus(Math.atan2(targetX, targetZ), -Math.PI, Math.PI);
 
     return targetOffsetRads;
   }
 
   public double getDistanceToSpeakerMetersMT2() {
-    Pose3d targetPoseRobotSpace =
-        LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
+    Pose3d targetPoseRobotSpace = LimelightHelpers.getTargetPose3d_RobotSpace(SHOOTER_LL_NAME);
 
     double x = targetPoseRobotSpace.getX();
     double z = targetPoseRobotSpace.getZ();
-
 
     return Math.hypot(x, z);
   }

@@ -134,6 +134,7 @@ public final class Constants {
 		public static final double PODIUM_ANGLE_RAD = -0.2 + Units.degreesToRadians(7.5);
 		// -0.427725
 		public static final double GROUND_INTAKE_POS = -0.34537;
+
 		public static final double HANG_ANGL_RAD = GROUND_INTAKE_POS + Units.degreesToRadians(30);
 
 		public static final double SUBWOOFER_ANGLE_RAD = -0.22;// touching the base of the speaker

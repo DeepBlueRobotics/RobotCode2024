@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 0.6452516819624394,
-      "y": 4.499045012324901
+      "y": 6.6706619771483915
     },
     "rotation": 60.60256482955589
   },
@@ -12,84 +12,27 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Limelight 1 Piece"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PassToOuttake"
+            "name": "Limelight Intake Straight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ArmToGround"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left Limelight 1 Piece"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToAprilTagMegaTag2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimArmSpeakerMT2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PassToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ArmToGround"
+            "name": "Shoot"
           }
         }
       ]
