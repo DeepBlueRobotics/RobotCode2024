@@ -120,7 +120,8 @@ public final class Constants {
 		public static final boolean ENCODER_INVERTED = true;
 
 		// difference between CoG and arm is .328 rad
-		public static final double ENCODER_OFFSET_RAD = -0.08 + .328; // - 0.6095;
+		public static final double ENCODER_OFFSET_RAD = -0.145;
+		// 0.08 + .328 - 0.404; // - 0.6095;
 
 		// TODO: finish understand why this is broken public static final Measure<Angle>
 		// INTAKE_ANGLE = Degrees.to(-1);

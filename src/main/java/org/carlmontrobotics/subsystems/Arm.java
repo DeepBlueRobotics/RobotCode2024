@@ -183,6 +183,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
 
         SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
+        SmartDashboard.putNumber("no math arm angle", getNoMathPos());
 
         babyMode = SmartDashboard.getBoolean("babymode", false);
 
@@ -396,10 +397,15 @@ public class Arm extends SubsystemBase {
     // #region Getters
 
     public double getArmPos() {
+
         return MathUtil.inputModulus(armMasterEncoder.getPosition(),
                 ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI);// armMasterEncoder.getPosition();//MathUtil.inputModulus(armMasterEncoder.getPosition(),
                                                                 // ARM_DISCONT_RAD,
         // ARM_DISCONT_RAD + 2 * Math.PI);
+    }
+
+    public double getNoMathPos() {
+            return (armMasterEncoder.getPosition());
     }
 
     public double getArmVel() {
