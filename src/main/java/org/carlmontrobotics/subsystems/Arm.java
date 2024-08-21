@@ -396,12 +396,12 @@ public class Arm extends SubsystemBase {
     // #region Getters
 
     public double getArmPos() {
+
         return MathUtil.inputModulus(armMasterEncoder.getPosition(),
                 ARM_DISCONT_RAD, ARM_DISCONT_RAD + 2 * Math.PI);// armMasterEncoder.getPosition();//MathUtil.inputModulus(armMasterEncoder.getPosition(),
                                                                 // ARM_DISCONT_RAD,
         // ARM_DISCONT_RAD + 2 * Math.PI);
     }
-
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }
