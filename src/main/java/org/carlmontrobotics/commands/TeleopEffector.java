@@ -59,8 +59,10 @@ public class TeleopEffector extends Command {
     }  
 
     if (intake.intakeDetectsNote()) {
-      manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
+      // manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
       driverController.setRumble(RumbleType.kBothRumble, 0.4);
+    } else if (intake.outtakeDetectsNote()) {
+    manipulatorController.setRumble(RumbleType.kBothRumble, 0.4);
   } else {
     manipulatorController.setRumble(RumbleType.kBothRumble, 0);
     driverController.setRumble(RumbleType.kBothRumble, 0);

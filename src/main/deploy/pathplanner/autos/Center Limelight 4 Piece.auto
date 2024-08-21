@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ShootSubwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Limelight 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Limelight Intake Straight"
           }
         },
         {
@@ -38,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CW"
+            "name": "Limelight Intake CCW"
           }
         },
         {
@@ -56,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Limelight Intake CW"
           }
         },
         {
@@ -98,7 +104,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Limelight Intake CCW"
+            "name": "Limelight Intake Straight"
           }
         }
       ]

@@ -130,7 +130,7 @@ public class Arm extends SubsystemBase {
 
 
 
-        SmartDashboard.putData("Arm", this);
+        // SmartDashboard.putData("Arm", this);
 
         setpoint = getCurrentArmState();
         goalState = getCurrentArmState();
@@ -166,7 +166,7 @@ public class Arm extends SubsystemBase {
         TRAP_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 (MAX_FF_VEL_RAD_P_S), (MAX_FF_ACCEL_RAD_P_S));
         armProfile = new TrapezoidProfile(TRAP_CONSTRAINTS);
-        SmartDashboard.putBoolean("arm is at pos", false);
+        // SmartDashboard.putBoolean("arm is at pos", false);
         if (RobotBase.isSimulation()) {
             rotationsSim = new SimDeviceSim("CANDutyCycle:CANSparkMax",
                     ARM_MOTOR_PORT_MASTER).getDouble("position");
@@ -182,8 +182,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
 
-        SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
-        SmartDashboard.putNumber("no math arm angle", getNoMathPos());
+            // SmartDashboard.putNumber("arm angle", getArmPos()); // for limelight testing
 
         babyMode = SmartDashboard.getBoolean("babymode", false);
 
@@ -192,7 +191,7 @@ public class Arm extends SubsystemBase {
         // ^ worst case scenario
         // armFeed.maxAchievableVelocity(12, 0, MAX_FF_ACCEL_RAD_P_S)
 
-        SmartDashboard.putData(this);
+        // SmartDashboard.putData(this);
         // armMotorMaster.setSmartCurrentLimit(50);
         // armMotorFollower.setSmartCurrentLimit(50);
         if (DriverStation.isDisabled())
@@ -403,11 +402,6 @@ public class Arm extends SubsystemBase {
                                                                 // ARM_DISCONT_RAD,
         // ARM_DISCONT_RAD + 2 * Math.PI);
     }
-
-    public double getNoMathPos() {
-            return (armMasterEncoder.getPosition());
-    }
-
     public double getArmVel() {
         return armMasterEncoder.getVelocity();
     }

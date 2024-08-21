@@ -16,34 +16,32 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 /** Add your docs here. */
 public class AlignDrivetrain extends ProxyCommand {
-    static double blueSpeakerX = 0.14;
-    static double blueSpeakerY = 5.54;
+  static double blueSpeakerX = 0.14;
+  static double blueSpeakerY = 5.54;
 
-    static double redSpeakerX = 16.36;
-    static double redSpeakerY = 5.51;
+  static double redSpeakerX = 16.36;
+  static double redSpeakerY = 5.51;
 
-    public AlignDrivetrain(Drivetrain dt) {
-        super(() -> {
-            Optional<Alliance> allianceSide = DriverStation.getAlliance();
-            if (allianceSide.get() == Alliance.Red) {
-                // double redAngle = Math.atan2(redSpeakerY-dt.getPose().getY(),
-                // dt.getPose().getX());
-                return new RotateToFieldRelativeAngle(
-                        new Rotation2d(dt.getPose().getX(),
-                                blueSpeakerY - dt.getPose().getY()),
-                        dt);
+  public AlignDrivetrain(Drivetrain dt) {
+    super(() -> {
+      Optional<Alliance> allianceSide = DriverStation.getAlliance();
+      if (allianceSide.get() == Alliance.Red) {
+        // double redAngle = Math.atan2(redSpeakerY-dt.getPose().getY(),
+        // dt.getPose().getX());
+        return new RotateToFieldRelativeAngle(new Rotation2d(
+            dt.getPose().getX(), blueSpeakerY - dt.getPose().getY()), dt);
 
-            } else if (allianceSide.get() == Alliance.Blue) {
-                // double blueAngle = Math.atan2(blueSpeakerY-dt.getPose().getY(),
-                // dt.getPose().getX());
-                return new RotateToFieldRelativeAngle(
-                        new Rotation2d(redSpeakerX - dt.getPose().getX(),
-                                redSpeakerY - dt.getPose().getY()),
-                        dt);
+      } else if (allianceSide.get() == Alliance.Blue) {
+        // double blueAngle = Math.atan2(blueSpeakerY-dt.getPose().getY(),
+        // dt.getPose().getX());
+        return new RotateToFieldRelativeAngle(
+            new Rotation2d(redSpeakerX - dt.getPose().getX(),
+                redSpeakerY - dt.getPose().getY()),
+            dt);
 
-            }
-            // create an if statement based on alliance side
-            return new InstantCommand();
-        });
-    }
+      }
+      // create an if statement based on alliance side
+      return new InstantCommand();
+    });
+  }
 }

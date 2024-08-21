@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import static org.carlmontrobotics.Config.CONFIG;
-
 public class AutoMATICALLYGetNote extends Command {
   /** Creates a new AutoMATICALLYGetNote. */
   private Drivetrain dt;
@@ -46,7 +44,7 @@ public class AutoMATICALLYGetNote extends Command {
     // timer.start();
     // new Intake(intake).finallyDo(()->{this.end(false);});
     dt.setFieldOriented(false);
-    SmartDashboard.putNumber("turning speed multiplier", 3);
+    // SmartDashboard.putNumber("turning speed multiplier", 3);
     
   }
 
@@ -64,12 +62,12 @@ public class AutoMATICALLYGetNote extends Command {
 
     forwardDistErrMeters = Math.max(
         forwardDistErrMeters
-            * SmartDashboard.getNumber("forward speed multiplier", 1.5),
+            * 1.75,
         MIN_MOVEMENT_METERSPSEC);
 
     if (LimelightHelpers.getTV(INTAKE_LL_NAME)) {
       dt.drive(forwardDistErrMeters, strafeDistErrMeters, angleErrRad
-          * SmartDashboard.getNumber("turning speed multiplier", 3));
+          * 3);
     }
 
     // double forwardSpeed = 0;
@@ -127,6 +125,6 @@ public class AutoMATICALLYGetNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.outtakeDetectsNote() || CONFIG.isLimelightDisabled();
+    return intake.outtakeDetectsNote();
   }
 }

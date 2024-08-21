@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ArmToGround"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -19,6 +25,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "Center-Auto Ruiner"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonRuinerShootAndIntake"
                 }
               }
             ]

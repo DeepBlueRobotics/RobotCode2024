@@ -4,14 +4,15 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Armc.*;
+import static org.carlmontrobotics.Constants.Limelightc.*;
+
 import org.carlmontrobotics.Constants.Limelightc;
 import org.carlmontrobotics.subsystems.Arm;
 import org.carlmontrobotics.subsystems.Limelight;
 import org.carlmontrobotics.subsystems.LimelightHelpers;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
-import static org.carlmontrobotics.Config.CONFIG;
 
 public class AimArmSpeaker extends Command {
     private final Arm arm;
@@ -30,10 +31,10 @@ public class AimArmSpeaker extends Command {
         if (LimelightHelpers.getTV(Limelightc.SHOOTER_LL_NAME)) {
             double goal = ll.getOptimizedArmAngleRadsMT2();
             arm.setArmTarget(goal);
-        } else {
-            arm.setArmTarget(.23);
         }
-
+        else {
+            arm.setArmTarget(SPEAKER_ANGLE_RAD);
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -47,6 +48,6 @@ public class AimArmSpeaker extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return arm.armAtSetpoint() || CONFIG.isLimelightDisabled();
+        return arm.armAtSetpoint();
     }
 }

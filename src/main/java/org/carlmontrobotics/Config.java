@@ -24,7 +24,6 @@ public abstract class Config implements Sendable {
     protected boolean exampleFlagEnabled = false;
     protected boolean swimShady = false;
     protected boolean setupSysId = false;
-	  protected boolean limelightDisabled = false;
     protected boolean useSmartDashboardControl = false; // whether to control arm position + rpm of
                                                        // outtake through SmartDashboard
                                                        // Note: disables joystick control of arm and
@@ -50,11 +49,7 @@ public abstract class Config implements Sendable {
         return useSmartDashboardControl;
     }
 
-    public boolean isLimelightDisabled() {
-        return limelightDisabled;
-    }
-
-    // --- Place additional config settings ^above^ this line ---
+    // --- For clarity, place additional config settings ^above^ this line ---
 
     private static class MethodResult {
         String methodName = null;
