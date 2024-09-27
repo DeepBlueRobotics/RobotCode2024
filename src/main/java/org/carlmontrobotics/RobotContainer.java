@@ -431,7 +431,9 @@ public class RobotContainer {
             // NOTHING
             autoCommands.add(0, new PrintCommand("Running NULL Auto!"));
             // RAW FORWARD command
-            autoCommands.add(1, new LastResortAuto(drivetrain));
+            autoCommands.add(1, new SequentialCommandGroup(
+                            new InstantCommand(() -> drivetrain.drive(-.0001, 0, 0)), new WaitCommand(0.5),
+                            new LastResortAuto(drivetrain)));
             // dumb PP forward command
             autoCommands.add(2, new PrintCommand("PPSimpleAuto not Configured!"));
         }
