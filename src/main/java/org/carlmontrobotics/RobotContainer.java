@@ -455,8 +455,8 @@ public class RobotContainer {
         //Note: alliance detection and path generation work correctly!
         //Solution: Redeploy after auto.
         Pose2d endPos = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
-                        ? currPos.transformBy(new Transform2d(-1, 0, new Rotation2d(0)))
-                        : currPos.transformBy(new Transform2d(1, 0, new Rotation2d(0)));
+                        ? currPos.transformBy(new Transform2d(1, 0, new Rotation2d(0)))
+                        : currPos.transformBy(new Transform2d(-1, 0, new Rotation2d(0)));
 
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(currPos, endPos);
 
