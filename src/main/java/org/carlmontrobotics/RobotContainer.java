@@ -464,7 +464,7 @@ public class RobotContainer {
         PathPlannerPath path = new PathPlannerPath(bezierPoints,
                 Autoc.pathConstraints, new GoalEndState(0, currPos.getRotation()));
         
-        path.preventFlipping = true;// don't flip, we do that manually already.
+        path.preventFlipping = false;// don't flip, we do that manually already.
 
         return new SequentialCommandGroup(
             new InstantCommand(()->drivetrain.drive(-.0001, 0, 0)),//align drivetrain wheels.
