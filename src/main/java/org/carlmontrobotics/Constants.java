@@ -317,15 +317,15 @@ public final class Constants {
 
 		// #region Ports
 
-		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 8 : 11; //
-		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 13 : 19; //
-		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 5 : 14; //
-		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 11 : 17; // correct
+		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 18 : 11; //
+		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 10 : 19; //
+		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 19 : 14; //
+		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 1 : 17; // correct
 
-		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 7 : 12; //
-		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 14 : 20; // 20
-		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 6 : 15; //
-		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 12 : 16; // correct
+		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 17 : 12; //
+		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 9 : 20; // 20
+		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 20 : 15; //
+		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 2 : 16; // correct
 
 		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 4 : 0;
 		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
