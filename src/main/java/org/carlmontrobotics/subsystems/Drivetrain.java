@@ -351,10 +351,20 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Gyro Compass Heading", gyro.getCompassHeading());
         // SmartDashboard.putNumber("Compass Offset", compassOffset);
         // SmartDashboard.putBoolean("Current Magnetic Field Disturbance", gyro.isMagneticDisturbance());
-        // SmartDashboard.putNumber("front left encoder", moduleFL.getModuleAngle());
-        // SmartDashboard.putNumber("front right encoder", moduleFR.getModuleAngle());
-        // SmartDashboard.putNumber("back left encoder", moduleBL.getModuleAngle());
-        // SmartDashboard.putNumber("back right encoder", moduleBR.getModuleAngle());
+        SmartDashboard.putNumber("front turn left encoder", moduleFL.getModuleAngle());
+        SmartDashboard.putNumber("front turn right encoder", moduleFR.getModuleAngle());
+        SmartDashboard.putNumber("back turn left encoder", moduleBL.getModuleAngle());
+        SmartDashboard.putNumber("back turn right encoder", moduleBR.getModuleAngle());
+
+        // SmartDashboard.putNumber("front drive left encoder",
+        // moduleFL.getModuleAngle());
+        // SmartDashboard.putNumber("front drive right encoder",
+        // moduleFR.getModuleAngle());
+        // SmartDashboard.putNumber("back drive left encoder",
+        // moduleBL.getModuleAngle());
+        // SmartDashboard.putNumber("back drive right encoder",
+        // moduleBR.getModuleAngle());
+
     }
 
     @Override

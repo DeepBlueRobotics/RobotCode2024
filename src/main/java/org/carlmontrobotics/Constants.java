@@ -65,10 +65,10 @@ public final class Constants {
 		public static final double[] kS = { /* /Intake/ */0.22, /* /Outake/ */0.29753 * 2 };
 		public static final double[] kV = {0.122, 0.11124};
 		public static final double[] kA = {0, 0.039757};
-		public static final int INTAKE_PORT = 9; // port
-		public static final int OUTTAKE_PORT = 10; // port
-		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port
-		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port
+		public static final int INTAKE_PORT = 50; // ports
+		public static final int OUTTAKE_PORT = 51; // port
+		public static final int INTAKE_DISTANCE_SENSOR_PORT = 52; // port
+		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 53; // port
 		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
@@ -110,8 +110,8 @@ public final class Constants {
 
 		// Motor port
 		public static final int ARM_MOTOR_PORT_MASTER =
-				CONFIG.isSwimShady() ? 20 : 13;
-		public final static int ARM_MOTOR_PORT_FOLLOWER = 18;
+				CONFIG.isSwimShady() ? 55 : 13;
+		public final static int ARM_MOTOR_PORT_FOLLOWER = 60;
 		// Config for motors
 		public static final boolean MOTOR_INVERTED_MASTER = false;
 		public static final boolean MOTOR_INVERTED_FOLLOWER = true; // verifyed by design AND physical testing
@@ -253,7 +253,7 @@ public final class Constants {
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
-		public static final double[] turnkP = { 51.078, 60.885, 60.946, 60.986 }; // {0.00374, 0.00374, 0.00374,
+		public static final double[] turnkP = { 0.00374, 0.00374, 0.00374, 0.00374 }; // {0.00374, 0.00374, 0.00374,
 																					// 0.00374};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
 		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
@@ -263,8 +263,9 @@ public final class Constants {
 		// V = kS + kV * v + kA * a
 		// 12 = 0.2 + 0.00463 * v
 		// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
-		public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
-		public static final double[] turnkA = { 0.17924, 0.17924, 0.17924, 0.17924 };
+		// public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
+		public static final double[] turnkV = { 0.00463, 0.00463, 0.00463, 0.00463 }; // swimshady
+		public static final double[] turnkA = { 0.000115, 0.000115, 0.000115, 0.000115 }; // swimshady
 
 		// kP is an average of the forward and backward kP values
 		// Forward: 1.72, 1.71, 1.92, 1.94
@@ -327,10 +328,10 @@ public final class Constants {
 		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 20 : 15; //
 		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 2 : 16; // correct
 
-		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 4 : 0;
-		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
-		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 3 : 2;
-		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 1 : 1;
+		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 1 : 0;
+		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 3 : 3;
+		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 2 : 2;
+		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 4 : 1;
 
 		// #endregion
 

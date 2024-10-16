@@ -57,8 +57,8 @@ public class Arm extends SubsystemBase {
     private final CANSparkMax armMotorMaster/* left */ = MotorControllerFactory
             .createSparkMax(ARM_MOTOR_PORT_MASTER, MotorConfig.NEO);
     private final CANSparkMax armMotorFollower/* right */ =
-            MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_FOLLOWER,
-                    MotorConfig.NEO);
+                    MotorControllerFactory.createSparkMax(ARM_MOTOR_PORT_FOLLOWER// ARM_MOTOR_PORT_FOLLOWER,
+                                    , MotorConfig.NEO);
     private final SparkAbsoluteEncoder armMasterEncoder = armMotorMaster
             .getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
