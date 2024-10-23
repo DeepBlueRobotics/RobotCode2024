@@ -254,7 +254,8 @@ public final class Constants {
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
 		public static final double[] turnkP = CONFIG.isSwimShady()
-				? new double[] {0.00374, 0.00374, 0.00374, 0.00374}
+				? new double[] {0.00374 * 350, 0.00374 * 350, 0.00374 * 350,
+						0.00374 * 350}
 				: new double[] {51.078, 60.885, 60.946, 60.986};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
 		public static final double[] turnkD =
@@ -280,7 +281,8 @@ public final class Constants {
 		// Forward: 1.72, 1.71, 1.92, 1.94
 		// Backward: 1.92, 1.92, 2.11, 1.89
 		// Order of modules: (FL, FR, BL, BR)
-		public static final double[] drivekP = CONFIG.isSwimShady() ? new double[] { 2.8, 2.8, 2.8, 2.8 }
+		public static final double[] drivekP = CONFIG.isSwimShady()
+				? new double[] {2.8 / 6, 2.8 / 6, 2.8 / 6, 2.8 / 6}
 				: new double[] { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
 																			// 1.915/100};
 		public static final double[] drivekI = { 0, 0, 0, 0 };
@@ -343,19 +345,27 @@ public final class Constants {
 
 		// #region Ports
 
-		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 18 : 11; //
-		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 10 : 19; //
-		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 19 : 14; //
-		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 1 : 17; // correct
+		public static final int driveFrontLeftPort =
+				CONFIG.isSwimShady() ? 1 : 11; //
+		public static final int driveFrontRightPort =
+				CONFIG.isSwimShady() ? 2 : 19; //
+		public static final int driveBackLeftPort =
+				CONFIG.isSwimShady() ? 3 : 14; //
+		public static final int driveBackRightPort =
+				CONFIG.isSwimShady() ? 4 : 17; // correct
 
-		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 17 : 12; //
-		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 9 : 20; // 20
-		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 20 : 15; //
-		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 2 : 16; // correct
+		public static final int turnFrontLeftPort =
+				CONFIG.isSwimShady() ? 11 : 12; //
+		public static final int turnFrontRightPort =
+				CONFIG.isSwimShady() ? 12 : 20; // 20
+		public static final int turnBackLeftPort =
+				CONFIG.isSwimShady() ? 13 : 15; //
+		public static final int turnBackRightPort =
+				CONFIG.isSwimShady() ? 14 : 16; // correct
 
 		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 1 : 0;
-		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 3 : 3;
-		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 2 : 2;
+		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
+		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 3 : 2;
 		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 4 : 1;
 
 		// #endregion
