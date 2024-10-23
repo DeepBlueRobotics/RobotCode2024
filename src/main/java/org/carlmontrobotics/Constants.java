@@ -253,19 +253,28 @@ public final class Constants {
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
-		public static final double[] turnkP = { 0.00374, 0.00374, 0.00374, 0.00374 }; // {0.00374, 0.00374, 0.00374,
-																					// 0.00374};
+		public static final double[] turnkP = CONFIG.isSwimShady()
+				? new double[] {0.00374, 0.00374, 0.00374, 0.00374}
+				: new double[] {51.078, 60.885, 60.946, 60.986};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
-		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
+		public static final double[] turnkD =
+				CONFIG.isSwimShady() ? new double[] {0, 0, 0, 0}
+						: new double[] {0/* dont edit */, 0.5, 0.42, 1}; // todo: use d
 		// public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
-		public static final double[] turnkS = { 0.13027, 0.17026, 0.2, 0.23262 };
+		public static final double[] turnkS =
+				CONFIG.isSwimShady() ? new double[] {0.2, 0.2, 0.2, 0.2}
+						: new double[] {0.13027, 0.17026, 0.2, 0.23262};
 
 		// V = kS + kV * v + kA * a
 		// 12 = 0.2 + 0.00463 * v
 		// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
 		// public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
-		public static final double[] turnkV = { 0.00463, 0.00463, 0.00463, 0.00463 }; // swimshady
-		public static final double[] turnkA = { 0.000115, 0.000115, 0.000115, 0.000115 }; // swimshady
+		public static final double[] turnkV = CONFIG.isSwimShady()
+				? new double[] {0.00463, 0.00463, 0.00463, 0.00463}
+				: new double[] {2.6532, 2.7597, 2.7445, 2.7698};
+		public static final double[] turnkA = CONFIG.isSwimShady()
+				? new double[] {0.000115, 0.000115, 0.000115, 0.000115}
+				: new double[] {0.17924, 0.17924, 0.17924, 0.17924};
 
 		// kP is an average of the forward and backward kP values
 		// Forward: 1.72, 1.71, 1.92, 1.94
@@ -281,13 +290,29 @@ public final class Constants {
 				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion = { true, true, true, true };
 		// kS
-		public static final double[] kForwardVolts = { 0.26744, 0.31897, 0.27967, 0.2461 };
-		public static final double[] kBackwardVolts = kForwardVolts;
+		public static final double[] kForwardVolts =
+				CONFIG.isSwimShady() ? new double[] {0.129, 0.108, 0.14, 0.125}
+						: new double[] {0.26744, 0.31897, 0.27967, 0.2461};
+		public static final double[] kBackwardVolts =
+				CONFIG.isSwimShady() ? new double[] {0.115, 0.169, 0.13, 0.148}
+						: kForwardVolts;
 
-		public static final double[] kForwardVels = { 2.81, 2.9098, 2.8378, 2.7391 };
-		public static final double[] kBackwardVels = kForwardVels;
-		public static final double[] kForwardAccels = { 1.1047 / 2, 0.79422 / 2, 0.77114 / 2, 1.1003 / 2 };
-		public static final double[] kBackwardAccels = kForwardAccels;
+		public static final double[] kForwardVels = CONFIG.isSwimShady()
+				? new double[] {2.910 / 1.1, 2.970 / 1.1, 2.890 / 1.1,
+						2.930 / 1.1}
+				: new double[] {2.81, 2.9098, 2.8378, 2.7391};
+		public static final double[] kBackwardVels =
+				CONFIG.isSwimShady()
+						? new double[] {2.890 / 1.1, 2.800 / 1.1, 2.850 / 1.1,
+								2.820 / 1.1}
+						: kForwardVels;
+		public static final double[] kForwardAccels =
+				CONFIG.isSwimShady() ? new double[] {0.145, 0.149, 0.192, 0.198}
+						: new double[] {1.1047 / 2, 0.79422 / 2, 0.77114 / 2,
+								1.1003 / 2};
+		public static final double[] kBackwardAccels =
+				CONFIG.isSwimShady() ? new double[] {0.192, 0.187, 0.264, 0.176}
+						: kForwardAccels;
 
 		public static final double autoMaxSpeedMps = 0.35 * 4.4; // Meters / second
 		public static final double autoMaxAccelMps2 = mu * g; // Meters / seconds^2
