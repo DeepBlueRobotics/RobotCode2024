@@ -48,6 +48,7 @@ public final class Constants {
 
 	public static final class Effectorc {
 		// PID values
+		// 30s
 
 		public static final int INTAKE = 0;
 		public static final int OUTTAKE = 1;
@@ -65,10 +66,10 @@ public final class Constants {
 		public static final double[] kS = { /* /Intake/ */0.22, /* /Outake/ */0.29753 * 2 };
 		public static final double[] kV = {0.122, 0.11124};
 		public static final double[] kA = {0, 0.039757};
-		public static final int INTAKE_PORT = 50; // ports
-		public static final int OUTTAKE_PORT = 51; // port
-		public static final int INTAKE_DISTANCE_SENSOR_PORT = 52; // port
-		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 53; // port
+		public static final int INTAKE_PORT = 30; // port
+		public static final int OUTTAKE_PORT = 31; // port
+		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port correspnds with intake
+		public static final int OUTAKE_DISTANCE_SENSOR_PORT = 10; // port corresponds with outtake
 		public static final double DISTANCE_BETWEEN_SENSORS_INCHES = 8.189; // inches
 		public static final double OFFSET_FROM_GROUND_INCHES = 21; // in
 		public static final double DS_DEPTH_INCHES = 9.97; // Distance sensor Depth
@@ -107,11 +108,11 @@ public final class Constants {
 	}
 
 	public static final class Armc {
+		// 20s
 
 		// Motor port
-		public static final int ARM_MOTOR_PORT_MASTER =
-				CONFIG.isSwimShady() ? 55 : 13;
-		public final static int ARM_MOTOR_PORT_FOLLOWER = 60;
+		public static final int ARM_MOTOR_PORT_MASTER = 20; // port
+		public final static int ARM_MOTOR_PORT_FOLLOWER = 21; // port
 		// Config for motors
 		public static final boolean MOTOR_INVERTED_MASTER = false;
 		public static final boolean MOTOR_INVERTED_FOLLOWER = true; // verifyed by design AND physical testing
@@ -200,10 +201,16 @@ public final class Constants {
 		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
 		
 
-		public static final int NEO_BUILTIN_ENCODER_CPR = 42;
+		public static final int NEO_BUILTIN_ENCODER_CPR = 42; /*
+																 * counts per rotation -
+																 * encoder measuring ticks, every rotation of encoder
+																 * results in a certain number of ticks
+																 */
 	}
 
 	public static final class Drivetrainc {
+		// 1-4 are drive motors (FL, FR, BL, BR)
+		// 11-14 are turn motors. Ones digit correspond to the values of drive motors
 
 		// #region Subsystem Constants
 
@@ -253,7 +260,7 @@ public final class Constants {
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
-		public static final double[] turnkP = { 0.00374, 0.00374, 0.00374, 0.00374 }; // {0.00374, 0.00374, 0.00374,
+		public static final double[] turnkP = { 51.078, 60.885, 60.946, 60.986 }; // {0.00374, 0.00374, 0.00374,
 																					// 0.00374};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
 		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
@@ -318,15 +325,15 @@ public final class Constants {
 
 		// #region Ports
 
-		public static final int driveFrontLeftPort = CONFIG.isSwimShady() ? 18 : 11; //
-		public static final int driveFrontRightPort = CONFIG.isSwimShady() ? 10 : 19; //
-		public static final int driveBackLeftPort = CONFIG.isSwimShady() ? 19 : 14; //
-		public static final int driveBackRightPort = CONFIG.isSwimShady() ? 1 : 17; // correct
+		public static final int driveFrontLeftPort = 1; //
+		public static final int driveFrontRightPort = 2; //
+		public static final int driveBackLeftPort = 3; //
+		public static final int driveBackRightPort = 4; // correct
 
-		public static final int turnFrontLeftPort = CONFIG.isSwimShady() ? 17 : 12; //
-		public static final int turnFrontRightPort = CONFIG.isSwimShady() ? 9 : 20; // 20
-		public static final int turnBackLeftPort = CONFIG.isSwimShady() ? 20 : 15; //
-		public static final int turnBackRightPort = CONFIG.isSwimShady() ? 2 : 16; // correct
+		public static final int turnFrontLeftPort = 11; //
+		public static final int turnFrontRightPort = 12; // 20
+		public static final int turnBackLeftPort = 13; //
+		public static final int turnBackRightPort = 14; // correct
 
 		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 1 : 0;
 		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 3 : 3;
