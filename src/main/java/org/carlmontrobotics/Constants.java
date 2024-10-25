@@ -36,13 +36,12 @@ import org.carlmontrobotics.subsystems.Led;
  */
 public final class Constants {
 	public static final double g = 9.81; // meters per second squared
-
 	public static final class Led {
 
 		public static final Color8Bit DEFAULT_COLOR_BLUE = new Color8Bit(0, 0, 200);
 		public static final Color8Bit DETECT_NOTE_YELLOW = new Color8Bit(255, 255, 0);
 		public static final Color8Bit HOLDING_GREEN = new Color8Bit(0, 250, 0);
-		public static final Color8Bit RED_NEO_550_MOTOR = new Color8Bit(255, 0, 0);
+		public static final Color8Bit RED_NEO_550_MOTOR = new Color8Bit(255,0,0);
 		public static final int ledPort = 0;
 		// TODO: figure out how to get port of LED, it could be 0 or
 	}
@@ -56,19 +55,17 @@ public final class Constants {
 		// 0.0001184
 
 		/*
-		 * public static final double kP = 0.0001067; public static final double kI = 0;
-		 * public
-		 * static final double kD = 0; public static final double kS = 0; public static
-		 * final double
+		 * public static final double kP = 0.0001067; public static final double kI = 0; public
+		 * static final double kD = 0; public static final double kS = 0; public static final double
 		 * kV = 0.11124; public static final double kA = 0.039757;
 		 */
 
-		public static final double[] kP = { 0, 0.0001067 };
+		public static final double[] kP = {0, 0.0001067};
 		public static final double[] kI = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kD = { /* /Intake/ */0, /* /Outake/ */0 };
 		public static final double[] kS = { /* /Intake/ */0.22, /* /Outake/ */0.29753 * 2 };
-		public static final double[] kV = { 0.122, 0.11124 };
-		public static final double[] kA = { 0, 0.039757 };
+		public static final double[] kV = {0.122, 0.11124};
+		public static final double[] kA = {0, 0.039757};
 		public static final int INTAKE_PORT = 30; // port
 		public static final int OUTTAKE_PORT = 31; // port
 		public static final int INTAKE_DISTANCE_SENSOR_PORT = 11; // port correspnds with intake
@@ -88,7 +85,7 @@ public final class Constants {
 		public static final double PODIUM_RPM = 4000;
 		public static final double SPEAKER_RPM = 2100;
 		// WTF FAB ISSUE
-		// public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
+		//public static final double SAFE_RPM = 6000;// WTF FAB ISSUE
 
 		public static final double EJECT_RPM_INTAKE = -2550;
 		public static final double EJECT_RPM_OUTAKE = -2550;
@@ -144,8 +141,7 @@ public final class Constants {
 
 		public static final double SUBWOOFER_ANGLE_RAD = -0.22;// touching the base of the speaker
 		public static final double SAFE_ZONE_ANGLE_RAD = Units.degreesToRadians(36);// touching the white line
-		// public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);//
-		// touching the safe pad on the stage
+		//public static final double PODIUM_ANGLE_RAD = Units.degreesToRadians(40);// touching the safe pad on the stage
 
 		// 0.4 rad for shooting at podium
 
@@ -167,14 +163,15 @@ public final class Constants {
 
 		public static final double MAX_FF_VEL_RAD_P_S_BABY = 0;
 		public static final double MAX_FF_ACCEL_RAD_P_S_BABY = 0;
-		// TODO: determine these values^
+		//TODO: determine these values^
+
 
 		public static final double SOFT_LIMIT_LOCATION_IN_RADIANS = 0;
-		public static final double CLIMB_POS = 1.701; // RADIANS
+		public static final double CLIMB_POS = 1.701; //RADIANS
 		public static final double MIN_VOLTAGE = -0.5; // -((kS + kG + 1)/12);
 		public static final double MAX_VOLTAGE = 0.5; // (kS + kG + 1)/12;
-		public static final double MIN_VOLTAGE_BABY = MIN_VOLTAGE / 12 * 0.7;
-		public static final double MAX_VOLTAGE_BABY = MAX_VOLTAGE / 12 * 0.7;
+		public static final double MIN_VOLTAGE_BABY = MIN_VOLTAGE/12 *0.7;
+		public static final double MAX_VOLTAGE_BABY = MAX_VOLTAGE/12*0.7;
 		public static final double CLIMB_FINISH_POS = -0.38;
 		// if needed
 		public static final double COM_ARM_LENGTH_METERS = 0.381;
@@ -187,9 +184,9 @@ public final class Constants {
 
 		// Boundaries
 		public static final double ARM_TELEOP_MAX_GOAL_DIFF_FROM_CURRENT_RAD = 1.8345; // placeholder
-		public static final double POS_TOLERANCE_RAD = Units.degreesToRadians(5); // placeholder //Whether or not this
-																					// is the actual
-																					// account
+		public static final double POS_TOLERANCE_RAD =
+				Units.degreesToRadians(5); // placeholder //Whether or not this is the actual
+																		// account
 		// idk TODO: test on actual encoder without a conversion
 		// factor
 		public static final double VEL_TOLERANCE_RAD_P_SEC = (POS_TOLERANCE_RAD / 0.02); // 20ms per robot loop
@@ -202,6 +199,7 @@ public final class Constants {
 
 		public static final double DISCONNECTED_ENCODER_TIMEOUT_SEC = 0.5;
 		public static final double SMART_CURRENT_LIMIT_TIMEOUT = 0.8;
+		
 
 		public static final int NEO_BUILTIN_ENCODER_CPR = 42; /*
 																 * counts per rotation -
@@ -255,44 +253,34 @@ public final class Constants {
 		public static final boolean[] reversed = { false, false, false, false };
 		// public static final boolean[] reversed = {true, true, true, true};
 		// Determine correct turnZero constants (FL, FR, BL, BR)
-		public static final double[] turnZeroDeg = RobotBase.isSimulation()
-				? new double[] { -90.0, -90.0, -90.0, -90.0 }
+		public static final double[] turnZeroDeg = RobotBase.isSimulation() ? new double[] {-90.0, -90.0, -90.0, -90.0 }
 				: (CONFIG.isSwimShady() ? new double[] { 85.7812, 85.0782, -96.9433, -162.9492 }
 						: new double[] { -48.6914, 63.3691, 94.1309, -6.7676 });/* real values here */
 
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
-		public static final double[] turnkP = CONFIG.isSwimShady()
-				? new double[] { 0.00374 * 350, 0.00374 * 350, 0.00374 * 350,
-						0.00374 * 350 }
-				: new double[] { 51.078, 60.885, 60.946, 60.986 };
+		public static final double[] turnkP = { 51.078, 60.885, 60.946, 60.986 }; // {0.00374, 0.00374, 0.00374,
+																					// 0.00374};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
-		public static final double[] turnkD = CONFIG.isSwimShady() ? new double[] { 0, 0, 0, 0 }
-				: new double[] { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
+		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
 		// public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
-		public static final double[] turnkS = CONFIG.isSwimShady() ? new double[] { 0.2, 0.2, 0.2, 0.2 }
-				: new double[] { 0.13027, 0.17026, 0.2, 0.23262 };
+		public static final double[] turnkS = { 0.13027, 0.17026, 0.2, 0.23262 };
 
 		// V = kS + kV * v + kA * a
 		// 12 = 0.2 + 0.00463 * v
 		// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
 		// public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
-		public static final double[] turnkV = CONFIG.isSwimShady()
-				? new double[] { 0.00463, 0.00463, 0.00463, 0.00463 }
-				: new double[] { 2.6532, 2.7597, 2.7445, 2.7698 };
-		public static final double[] turnkA = CONFIG.isSwimShady()
-				? new double[] { 0.000115, 0.000115, 0.000115, 0.000115 }
-				: new double[] { 0.17924, 0.17924, 0.17924, 0.17924 };
+		public static final double[] turnkV = { 0.00463, 0.00463, 0.00463, 0.00463 }; // swimshady
+		public static final double[] turnkA = { 0.000115, 0.000115, 0.000115, 0.000115 }; // swimshady
 
 		// kP is an average of the forward and backward kP values
 		// Forward: 1.72, 1.71, 1.92, 1.94
 		// Backward: 1.92, 1.92, 2.11, 1.89
 		// Order of modules: (FL, FR, BL, BR)
-		public static final double[] drivekP = CONFIG.isSwimShady()
-				? new double[] { 2.8 / 6, 2.8 / 6, 2.8 / 6, 2.8 / 6 }
+		public static final double[] drivekP = CONFIG.isSwimShady() ? new double[] { 2.8, 2.8, 2.8, 2.8 }
 				: new double[] { 1.75, 1.75, 1.75, .75 }; // {1.82/100, 1.815/100, 2.015/100,
-															// 1.915/100};
+																			// 1.915/100};
 		public static final double[] drivekI = { 0, 0, 0, 0 };
 		public static final double[] drivekD = { 0, 0, 0, 0 };
 		public static final boolean[] driveInversion = (CONFIG.isSwimShady()
@@ -300,25 +288,13 @@ public final class Constants {
 				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion = { true, true, true, true };
 		// kS
-		public static final double[] kForwardVolts = CONFIG.isSwimShady() ? new double[] { 0.129, 0.108, 0.14, 0.125 }
-				: new double[] { 0.26744, 0.31897, 0.27967, 0.2461 };
-		public static final double[] kBackwardVolts = CONFIG.isSwimShady() ? new double[] { 0.115, 0.169, 0.13, 0.148 }
-				: kForwardVolts;
+		public static final double[] kForwardVolts = { 0.26744, 0.31897, 0.27967, 0.2461 };
+		public static final double[] kBackwardVolts = kForwardVolts;
 
-		public static final double[] kForwardVels = CONFIG.isSwimShady()
-				? new double[] { 2.910 / 1.1, 2.970 / 1.1, 2.890 / 1.1,
-						2.930 / 1.1 }
-				: new double[] { 2.81, 2.9098, 2.8378, 2.7391 };
-		public static final double[] kBackwardVels = CONFIG.isSwimShady()
-				? new double[] { 2.890 / 1.1, 2.800 / 1.1, 2.850 / 1.1,
-						2.820 / 1.1 }
-				: kForwardVels;
-		public static final double[] kForwardAccels = CONFIG.isSwimShady() ? new double[] { 0.145, 0.149, 0.192, 0.198 }
-				: new double[] { 1.1047 / 2, 0.79422 / 2, 0.77114 / 2,
-						1.1003 / 2 };
-		public static final double[] kBackwardAccels = CONFIG.isSwimShady()
-				? new double[] { 0.192, 0.187, 0.264, 0.176 }
-				: kForwardAccels;
+		public static final double[] kForwardVels = { 2.81, 2.9098, 2.8378, 2.7391 };
+		public static final double[] kBackwardVels = kForwardVels;
+		public static final double[] kForwardAccels = { 1.1047 / 2, 0.79422 / 2, 0.77114 / 2, 1.1003 / 2 };
+		public static final double[] kBackwardAccels = kForwardAccels;
 
 		public static final double autoMaxSpeedMps = 0.35 * 4.4; // Meters / second
 		public static final double autoMaxAccelMps2 = mu * g; // Meters / seconds^2
@@ -335,7 +311,7 @@ public final class Constants {
 				: new double[] { 2, 0.0, 0.0 };
 		public static final double[] yPIDController = xPIDController;
 		public static final double[] thetaPIDController = CONFIG.isSwimShady() ? new double[] { 0.10, 0.0, 0.001 }
-				: new double[] { 0.05, 0.0, 0.00 };
+				: new double[] {0.05, 0.0, 0.00};
 
 		public static final SwerveConfig swerveConfig = new SwerveConfig(wheelDiameterMeters, driveGearing, mu,
 				autoCentripetalAccel, kForwardVolts, kForwardVels, kForwardAccels, kBackwardVolts, kBackwardVels,
@@ -360,8 +336,8 @@ public final class Constants {
 		public static final int turnBackRightPort = 14; // correct
 
 		public static final int canCoderPortFL = CONFIG.isSwimShady() ? 1 : 0;
-		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 2 : 3;
-		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 3 : 2;
+		public static final int canCoderPortFR = CONFIG.isSwimShady() ? 3 : 3;
+		public static final int canCoderPortBL = CONFIG.isSwimShady() ? 2 : 2;
 		public static final int canCoderPortBR = CONFIG.isSwimShady() ? 4 : 1;
 
 		// #endregion
@@ -373,8 +349,7 @@ public final class Constants {
 		public static double kSlowDriveSpeed = 0.4; // Percent Multiplier
 		public static double kSlowDriveRotation = 0.250; // Percent Multiplier
 
-		// baby speed values, i just guessed the percent multiplier. TODO: find actual
-		// ones we wana use
+		//baby speed values, i just guessed the percent multiplier. TODO: find actual ones we wana use
 		public static double kBabyDriveSpeed = 0.3;
 		public static double kBabyDriveRotation = 0.2;
 		public static double kAlignMultiplier = 1D / 3D;
@@ -436,7 +411,8 @@ public final class Constants {
 		public static final double MOUNT_ANGLE_DEG_SHOOTER = 55.446;
 		public static final double MOUNT_ANGLE_DEG_INTAKE = -29;
 		public static final double HEIGHT_FROM_GROUND_METERS_SHOOTER = Units.inchesToMeters(8.891);
-		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE = Units.inchesToMeters(13);
+		public static final double HEIGHT_FROM_GROUND_METERS_INTAKE =
+				Units.inchesToMeters(13);
 		public static final double ARM_TO_OUTTAKE_OFFSET_DEG = 115; // unused
 		public static final double NOTE_HEIGHT = Units.inchesToMeters(2); // unused
 		public static final double MIN_MOVEMENT_METERSPSEC = 1.5;
@@ -445,7 +421,6 @@ public final class Constants {
 		public static final double SIDEWAYS_OFFSET_TO_OUTTAKE_MOUTH = Units.inchesToMeters(10.911);
 		public static final double END_EFFECTOR_BASE_ANGLE_RADS = Units.degreesToRadians(75);
 		public static final double VERTICAL_OFFSET_FROM_ARM_PIVOT = Units.inchesToMeters(3.65); // unused
-
 		public static final class Apriltag {
 			public static final int RED_SPEAKER_CENTER_TAG_ID = 4;
 			public static final int BLUE_SPEAKER_CENTER_TAG_ID = 7;
@@ -488,15 +463,18 @@ public final class Constants {
 			public static final Axis AMP_AX = Axis.kLeftTrigger;
 			public static final int SPEAKER_POS = Button.kX.value;
 			public static final int ARM_TO_AMP_BUTTON = Button.kY.value;
-			public static final int PASS_TO_OUTTAKE_STICK = Button.kLeftStick.value;
-			public static final int PASS_TO_INTAKE_STICK = Button.kRightStick.value;
+			public static final int PASS_TO_OUTTAKE_STICK =
+					Button.kLeftStick.value;
+			public static final int PASS_TO_INTAKE_STICK =
+					Button.kRightStick.value;
 			public static final int UP_D_PAD = 0;
 			public static final int DOWN_D_PAD = 180;
 			public static final int LEFT_D_PAD = 270;
-
+			
 			public static final int A_BUTTON = Button.kA.value;
 			public static final int RAMP_OUTTAKE = Button.kB.value;
 		}
+
 
 		public static final double JOY_THRESH = 0.01;
 		public static final double MIN_AXIS_TRIGGER_VALUE = 0.2;// woah, this is high.

@@ -110,8 +110,7 @@ public class Drivetrain extends SubsystemBase {
     private Timer simTimer = new Timer();
 
     private double lastSetX = 0, lastSetY = 0, lastSetTheta = 0;
-    private Timer timer = new Timer();
-    private double lastMeasuredTime = 0;
+
     public Drivetrain() {
         // SmartDashboard.putNumber("Pose Estimator set x (m)", lastSetX);
         // SmartDashboard.putNumber("Pose Estimator set y (m)", lastSetY);
@@ -120,7 +119,7 @@ public class Drivetrain extends SubsystemBase {
 
         // SmartDashboard.putNumber("pose estimator std dev x", STD_DEV_X_METERS);
         // SmartDashboard.putNumber("pose estimator std dev y", STD_DEV_Y_METERS);
-        SmartDashboard.putNumber("biggoal", 0);
+
         // Calibrate Gyro
         {
 
@@ -140,7 +139,6 @@ public class Drivetrain extends SubsystemBase {
             // this.resetFieldOrientation();
             System.out.println("NavX-MXP firmware version: " + gyro.getFirmwareVersion());
             System.out.println("Magnetometer is calibrated: " + gyro.isMagnetometerCalibrated());
-            timer.start();
         }
 
         // Setup Kinematics
@@ -309,15 +307,12 @@ public class Drivetrain extends SubsystemBase {
         // moduleFR.periodic();
         // moduleBL.periodic();
         // moduleBR.periodic();
-        double goal = SmartDashboard.getNumber("bigoal", 0);
+        // double goal = SmartDashboard.getNumber("bigoal", 0);
         for (SwerveModule module : modules) {
             module.periodic();
-            // module.move(5, goal);
+            // module.move(0, goal);
         }
-        double deltaTime = lastMeasuredTime - timer.get();
-        SmartDashboard.putNumber("Time to update", deltaTime);
-        lastMeasuredTime = timer.get();
-        // keepRotateMotorsAtDegrees((int) goal);
+
         // field.setRobotPose(odometry.getPoseMeters());
 
         field.setRobotPose(poseEstimator.getEstimatedPosition());
