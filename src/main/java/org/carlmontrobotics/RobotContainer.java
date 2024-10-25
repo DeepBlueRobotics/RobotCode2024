@@ -71,14 +71,14 @@ public class RobotContainer {
     // 1. using GenericHID allows us to use different kinds of controllers
     // 2. Use absolute paths from constants to reduce confusion
     public final GenericHID driverController = new GenericHID(Driver.port);
-    public final GenericHID manipulatorController = new GenericHID(Manipulator.port);
-    private final IntakeShooter intakeShooter = new IntakeShooter();
+    // public final GenericHID manipulatorController = new GenericHID(Manipulator.port);
+    // private final IntakeShooter intakeShooter = new IntakeShooter();
 
     // ignore warning, LED must be initialized
-    private final Led led = new Led(intakeShooter);
-    private final Arm arm = new Arm();
+    // private final Led led = new Led(intakeShooter);
+    // private final Arm arm = new Arm();
     private final Drivetrain drivetrain = new Drivetrain();
-    private final Limelight limelight = new Limelight(drivetrain);
+    // private final Limelight limelight = new Limelight(drivetrain);
 
     /* These are assumed to be equal to the AUTO ames in pathplanner */
     /* These must be equal to the pathPlanner path names from the GUI! */
@@ -153,17 +153,17 @@ public class RobotContainer {
                 () -> ProcessedAxisValue(driverController, Axis.kRightX),
                 () -> driverController.getRawButton(Driver.slowDriveButton)));
         // TODO: Are we going to use default command for intakeshooter?
-        intakeShooter.setDefaultCommand(new TeleopEffector(intakeShooter,
-                () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
-                manipulatorController, driverController));
+        // intakeShooter.setDefaultCommand(new TeleopEffector(intakeShooter,
+        // () -> ProcessedAxisValue(manipulatorController, Axis.kLeftY),
+        // manipulatorController, driverController));
         // TODO
         // intakeShooter.setDefaultCommand(new RampMaxRPMDriving(intakeShooter));
 
-        arm.setDefaultCommand(
-                Config.CONFIG.useSmartDashboardControl ? new TestArmToPos(arm)
-                        : new TeleopArm(arm,
-                                () -> ProcessedAxisValue(manipulatorController,
-                                        Axis.kLeftY)));
+        // arm.setDefaultCommand(
+        // Config.CONFIG.useSmartDashboardControl ? new TestArmToPos(arm)
+        // : new TeleopArm(arm,
+        // () -> ProcessedAxisValue(manipulatorController,
+        // Axis.kLeftY)));
 
     }
 
@@ -174,18 +174,18 @@ public class RobotContainer {
         // .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
         // new AutoMATICALLYGetNote(drivetrain, intakeShooter, limelight)));
 
-        new POVButton(driverController, 0)
-                .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
-                        new AutoMATICALLYGetNote(drivetrain, limelight,
-                                intakeShooter, 1)));
+        // new POVButton(driverController, 0)
+        // .whileTrue(new ParallelCommandGroup(new Intake(intakeShooter),
+        // new AutoMATICALLYGetNote(drivetrain, limelight,
+        // intakeShooter, 1)));
 
         axisTrigger(driverController, Axis.kLeftTrigger)
                 // .onTrue(new AlignToApriltag(drivetrain, limelight));
                 .onTrue(new InstantCommand(() -> drivetrain.setFieldOriented(false)))
                 .onFalse(new InstantCommand(() -> drivetrain.setFieldOriented(true)));
 
-        axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-                .whileTrue(new AlignToApriltag(drivetrain, limelight, 2.0));
+        // axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
+        // .whileTrue(new AlignToApriltag(drivetrain, limelight, 2.0));
         new JoystickButton(driverController, Driver.rotateFieldRelative0Deg).onTrue(
                 new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
         new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -200,8 +200,8 @@ public class RobotContainer {
     }
 
     private void setBindingsManipulator() {
-        new JoystickButton(manipulatorController, EJECT_BUTTON)
-                .onTrue(new Eject(intakeShooter));
+            // new JoystickButton(manipulatorController, EJECT_BUTTON)
+            // .onTrue(new Eject(intakeShooter));
 
         // new JoystickButton(manipulatorController, A_BUTTON)
         // .onTrue(new RampMaxRPMDriving(intakeShooter));
@@ -209,10 +209,10 @@ public class RobotContainer {
         // new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
         // new PassToOuttake(intakeShooter)));
 
-        axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
-                new ConditionalCommand(new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
-                        new PassToOuttake(intakeShooter)), new InstantCommand(() -> {
-                        }), () -> LimelightHelpers.getTV(SHOOTER_LL_NAME)));
+        // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON).whileTrue(
+        // new ConditionalCommand(new SequentialCommandGroup(new AimArmSpeaker(arm, limelight),
+        // new PassToOuttake(intakeShooter)), new InstantCommand(() -> {
+        // }), () -> LimelightHelpers.getTV(SHOOTER_LL_NAME)));
 
         // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         // .whileTrue(new PassToOuttake(intakeShooter));
@@ -220,10 +220,10 @@ public class RobotContainer {
         // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         // .whileTrue(new AimArmSpeaker(arm, limelight));
 
-        new JoystickButton(manipulatorController, RAMP_OUTTAKE)
-                .whileTrue(new RampMaxRPM(intakeShooter));
-        new JoystickButton(manipulatorController, OPPOSITE_EJECT)
-                .whileTrue(new EjectOuttakeSide(intakeShooter));
+        // new JoystickButton(manipulatorController, RAMP_OUTTAKE)
+        // .whileTrue(new RampMaxRPM(intakeShooter));
+        // new JoystickButton(manipulatorController, OPPOSITE_EJECT)
+        // .whileTrue(new EjectOuttakeSide(intakeShooter));
 
         /*
          * axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
@@ -235,23 +235,23 @@ public class RobotContainer {
         // axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         // .onTrue(new PassToOuttake(intakeShooter));
 
-        axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-                .whileTrue(new Intake(intakeShooter));
-        new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)
-                .onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR));
-        new JoystickButton(manipulatorController, A_BUTTON)
-                .onTrue(new ArmToPos(arm, GROUND_INTAKE_POS));
-        new JoystickButton(manipulatorController, PASS_TO_OUTTAKE_STICK)
-                .onTrue(new PassToOuttake(intakeShooter));
-        new JoystickButton(manipulatorController, PASS_TO_INTAKE_STICK)
-                .onTrue(new PassToIntake(intakeShooter));
-        new JoystickButton(manipulatorController, SPEAKER_POS)
-                .onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD));
-        new POVButton(manipulatorController, UP_D_PAD)
-                .onTrue(new ArmToPos(arm, CLIMB_POS));
-        new POVButton(manipulatorController, DOWN_D_PAD).onTrue(new Climb(arm));
-        new POVButton(manipulatorController, LEFT_D_PAD)
-                .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
+        // axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+        // .whileTrue(new Intake(intakeShooter));
+        // new JoystickButton(manipulatorController, ARM_TO_AMP_BUTTON)
+        // .onTrue(new ArmToPos(arm, AMP_ANGLE_RAD_NEW_MOTOR));
+        // new JoystickButton(manipulatorController, A_BUTTON)
+        // .onTrue(new ArmToPos(arm, GROUND_INTAKE_POS));
+        // new JoystickButton(manipulatorController, PASS_TO_OUTTAKE_STICK)
+        // .onTrue(new PassToOuttake(intakeShooter));
+        // new JoystickButton(manipulatorController, PASS_TO_INTAKE_STICK)
+        // .onTrue(new PassToIntake(intakeShooter));
+        // new JoystickButton(manipulatorController, SPEAKER_POS)
+        // .onTrue(new ArmToPos(arm, SPEAKER_ANGLE_RAD));
+        // new POVButton(manipulatorController, UP_D_PAD)
+        // .onTrue(new ArmToPos(arm, CLIMB_POS));
+        // new POVButton(manipulatorController, DOWN_D_PAD).onTrue(new Climb(arm));
+        // new POVButton(manipulatorController, LEFT_D_PAD)
+        // .onTrue(new ArmToPos(arm, PODIUM_ANGLE_RAD));
 
     }
 
@@ -329,80 +329,80 @@ public class RobotContainer {
 
     private void registerAutoCommands() {
         //// AUTO-USABLE COMMANDS
-        NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
-        NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
+        // NamedCommands.registerCommand("Intake", new Intake(intakeShooter));
+        // NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
         // NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm,
         // Armc.SPEAKER_ANGLE_RAD, 0));
-        NamedCommands.registerCommand("ArmToAmp",
-                new ArmToPos(arm, Armc.AMP_ANGLE_RAD));
-        NamedCommands.registerCommand("ArmToSubwoofer",
-                new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD));
-        NamedCommands.registerCommand("ArmToPodium",
-                new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD));
-        NamedCommands.registerCommand("ArmToGround",
-                new ArmToPos(arm, GROUND_INTAKE_POS));
+        // NamedCommands.registerCommand("ArmToAmp",
+        // new ArmToPos(arm, Armc.AMP_ANGLE_RAD));
+        // NamedCommands.registerCommand("ArmToSubwoofer",
+        // new ArmToPos(arm, Armc.SUBWOOFER_ANGLE_RAD));
+        // NamedCommands.registerCommand("ArmToPodium",
+        // new ArmToPos(arm, Armc.PODIUM_ANGLE_RAD));
+        // NamedCommands.registerCommand("ArmToGround",
+        // new ArmToPos(arm, GROUND_INTAKE_POS));
 
-        NamedCommands.registerCommand("RampRPMAuton",
-                new RampRPMAuton(intakeShooter));
+        // NamedCommands.registerCommand("RampRPMAuton",
+        // new RampRPMAuton(intakeShooter));
 
-        NamedCommands.registerCommand("SwitchRPMShoot",
-                new Outtake(intakeShooter, arm));
+        // NamedCommands.registerCommand("SwitchRPMShoot",
+        // new Outtake(intakeShooter, arm));
 
         // NamedCommands.registerCommand("AutonRuinerShoot", new
         // AutonRuinerShoot(intakeShooter));
         // NamedCommands.registerCommand("IntakeAutonRuiner", new
         // IntakeAutonRuiner(intakeShooter));
 
-        NamedCommands.registerCommand("AutonRuinerShootAndIntake",
-                new AutonRuinerShootAndIntake(intakeShooter, arm));
+        // NamedCommands.registerCommand("AutonRuinerShootAndIntake",
+        // new AutonRuinerShootAndIntake(intakeShooter, arm));
 
-        NamedCommands.registerCommand("PassToOuttake",
-                new PassToOuttake(intakeShooter));
-        NamedCommands.registerCommand("AimArmSpeakerMT2",
-                new AimArmSpeaker(arm, limelight));
-        NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
-                new AlignToApriltag(drivetrain, limelight, 0.0));
-        NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
-                        new WaitCommand(3.0),
-                        new SequentialCommandGroup(
-                                // TODO: Use Align To Drivetrain
-                                // new AlignDrivetrain(drivetrain),
-                                new ParallelCommandGroup(
-                                        new AlignToApriltag(drivetrain, limelight, 0.0),
-                                        new AimArmSpeaker(arm, limelight),
-                                        new RampRPMAuton(intakeShooter)),
-                                new PassToOuttake(intakeShooter),
-                                new ArmToPos(arm, GROUND_INTAKE_POS)))));
-        NamedCommands.registerCommand("ShootSubwoofer",
-                        new SequentialCommandGroup(new ParallelCommandGroup(
-                                        new ArmToPos(arm,
-                                                        Armc.SUBWOOFER_ANGLE_RAD),
-                                        new RampRPMAuton(intakeShooter)),
-                        new PassToOuttake(intakeShooter),
-                        new ArmToPos(arm, GROUND_INTAKE_POS)));
-        NamedCommands.registerCommand("Limelight Intake CCW",
-                new ParallelCommandGroup(new Intake(intakeShooter),
-                        new AutoMATICALLYGetNote(drivetrain, limelight,
-                                intakeShooter, 1)));
-        NamedCommands.registerCommand("Limelight Intake CW",
-                new ParallelCommandGroup(new Intake(intakeShooter),
-                        new AutoMATICALLYGetNote(drivetrain, limelight,
-                                intakeShooter, -1)));
+        // NamedCommands.registerCommand("PassToOuttake",
+        // new PassToOuttake(intakeShooter));
+        // NamedCommands.registerCommand("AimArmSpeakerMT2",
+        // new AimArmSpeaker(arm, limelight));
+        // NamedCommands.registerCommand("AlignToAprilTagMegaTag2",
+        // new AlignToApriltag(drivetrain, limelight, 0.0));
+        // NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(
+        // new ParallelDeadlineGroup(
+        // new WaitCommand(3.0),
+        // new SequentialCommandGroup(
+        // // TODO: Use Align To Drivetrain
+        // // new AlignDrivetrain(drivetrain),
+        // new ParallelCommandGroup(
+        // new AlignToApriltag(drivetrain, limelight, 0.0),
+        // new AimArmSpeaker(arm, limelight),
+        // new RampRPMAuton(intakeShooter)),
+        // new PassToOuttake(intakeShooter),
+        // new ArmToPos(arm, GROUND_INTAKE_POS)))));
+        // NamedCommands.registerCommand("ShootSubwoofer",
+        // new SequentialCommandGroup(new ParallelCommandGroup(
+        // new ArmToPos(arm,
+        // Armc.SUBWOOFER_ANGLE_RAD),
+        // new RampRPMAuton(intakeShooter)),
+        // new PassToOuttake(intakeShooter),
+        // new ArmToPos(arm, GROUND_INTAKE_POS)));
+        // NamedCommands.registerCommand("Limelight Intake CCW",
+        // new ParallelCommandGroup(new Intake(intakeShooter),
+        // new AutoMATICALLYGetNote(drivetrain, limelight,
+        // intakeShooter, 1)));
+        // NamedCommands.registerCommand("Limelight Intake CW",
+        // new ParallelCommandGroup(new Intake(intakeShooter),
+        // new AutoMATICALLYGetNote(drivetrain, limelight,
+        // intakeShooter, -1)));
 
-        NamedCommands.registerCommand("Limelight Intake Straight",
-                new ParallelCommandGroup(new Intake(intakeShooter),
-                        new AutoMATICALLYGetNote(drivetrain, limelight,
-                                intakeShooter, 0)));
+        // NamedCommands.registerCommand("Limelight Intake Straight",
+        // new ParallelCommandGroup(new Intake(intakeShooter),
+        // new AutoMATICALLYGetNote(drivetrain, limelight,
+        // intakeShooter, 0)));
 
-        NamedCommands.registerCommand("StopIntake",
-                new InstantCommand(intakeShooter::stopIntake));
-        NamedCommands.registerCommand("StopOutake",
-                new InstantCommand(intakeShooter::stopOuttake));
-        NamedCommands.registerCommand("StopBoth",
-                new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
-                        new InstantCommand(intakeShooter::stopOuttake)));
+        // NamedCommands.registerCommand("StopIntake",
+        // new InstantCommand(intakeShooter::stopIntake));
+        // NamedCommands.registerCommand("StopOutake",
+        // new InstantCommand(intakeShooter::stopOuttake));
+        // NamedCommands.registerCommand("StopBoth",
+        // new ParallelCommandGroup(new InstantCommand(intakeShooter::stopIntake),
+        // new InstantCommand(intakeShooter::stopOuttake)));
     }
 
     private void setupAutos() {
