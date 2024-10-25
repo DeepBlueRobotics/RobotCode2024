@@ -271,8 +271,8 @@ public final class Constants {
 		// 12 = 0.2 + 0.00463 * v
 		// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
 		// public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
-		public static final double[] turnkV = { 0.00463, 0.00463, 0.00463, 0.00463 }; // swimshady
-		public static final double[] turnkA = { 0.000115, 0.000115, 0.000115, 0.000115 }; // swimshady
+		public static final double[] turnkV = { 2.6532, 2.7597, 2.7445, 2.7698 };
+		public static final double[] turnkA = { 0.17924, 0.17924, 0.17924, 0.17924 };
 
 		// kP is an average of the forward and backward kP values
 		// Forward: 1.72, 1.71, 1.92, 1.94
