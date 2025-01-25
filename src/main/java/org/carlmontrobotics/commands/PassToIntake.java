@@ -4,30 +4,24 @@
 
 package org.carlmontrobotics.commands;
 
+import static org.carlmontrobotics.Constants.Effectorc.PASS_RPM;
 
-import static org.carlmontrobotics.Constants.Effectorc.*;
-import static org.carlmontrobotics.Constants.Led.*;
-
-import org.carlmontrobotics.Constants;
 import org.carlmontrobotics.subsystems.IntakeShooter;
-import static org.carlmontrobotics.Constants.Effectorc.*;
-
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // TODO: where would we use this command?
 public class PassToIntake extends Command {
-  //pass ring from intake to outtake
+  // pass ring from intake to outtake
   private final IntakeShooter intake;
 
   public PassToIntake(IntakeShooter intake) {
-      this.intake = intake;
+    this.intake = intake;
   }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize(){
+  public void initialize() {
     intake.setRPMIntake(-PASS_RPM);
     intake.setRPMOutake(-PASS_RPM);
   }
