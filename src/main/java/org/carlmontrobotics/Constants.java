@@ -279,7 +279,7 @@ public final class Constants {
 				? new boolean[] { false, false, false, false }
 				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion =
-				{false, false, true, true};
+				{ true, true, true, true };
 		// kS
 		public static final double[] kForwardVolts = { 0.26744, 0.31897, 0.27967, 0.2461 };
 		public static final double[] kBackwardVolts = kForwardVolts;
