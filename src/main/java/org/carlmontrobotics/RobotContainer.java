@@ -188,9 +188,11 @@ public class RobotContainer {
         .onTrue(new InstantCommand(()->drivetrain.setFieldOriented(false)))
         .onFalse(new InstantCommand(()->drivetrain.setFieldOriented(true)));
 
-    axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new IntakeNEO(intakeShooter)));
+    /*
+     * axisTrigger(driverController, Manipulator.SHOOTER_BUTTON)
+     * .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+     * new IntakeNEO(intakeShooter)));
+     */
     new JoystickButton(driverController, Driver.rotateFieldRelative0Deg)
         .onTrue(new RotateToFieldRelativeAngle(Rotation2d.fromDegrees(0), drivetrain));
     new JoystickButton(driverController, Driver.rotateFieldRelative90Deg)
@@ -207,15 +209,19 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, Button.kB.value).whileTrue(new RampMaxRPM(intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).whileTrue(new EjectOuttakeSide(intakeShooter));
 
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-        .onTrue(
-            new SwitchRPMShootNEO(intakeShooter));
+   /*
+    * axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+    * .onTrue(
+    * new SwitchRPMShootNEO(intakeShooter));
+    */
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
-    axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
-        .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
-            new IntakeNEO(intakeShooter)));
+    /*
+     * axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
+     * .whileTrue(new SequentialCommandGroup(new PrintCommand("Running Intake"),
+     * new IntakeNEO(intakeShooter)));
+     */
     axisTrigger(manipulatorController, Manipulator.INTAKE_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopIntake, intakeShooter));
@@ -239,9 +245,11 @@ public class RobotContainer {
         .onFalse(new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
    new JoystickButton(manipulatorController, AMP_BUTTON).onTrue(new EjectOuttakeSide(intakeShooter));
 
-    axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
-        .onTrue(
-            new SwitchRPMShoot(intakeShooter));
+   /*
+    * axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
+    * .onTrue(
+    * new SwitchRPMShoot(intakeShooter));
+    */
     axisTrigger(manipulatorController, Manipulator.SHOOTER_BUTTON)
         .onFalse(
             new InstantCommand(intakeShooter::stopOuttake, intakeShooter));
@@ -336,7 +344,7 @@ public class RobotContainer {
 
   private void registerAutoCommands(){
     ////AUTO-USABLE COMMANDS
-    NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
+    // NamedCommands.registerCommand("Intake", new IntakeNEO(intakeShooter));
     NamedCommands.registerCommand("Eject", new Eject(intakeShooter));
 
     //  NamedCommands.registerCommand("ArmToSpeaker", new MoveToPos(arm, Armc.SPEAKER_ANGLE_RAD, 0));
@@ -346,7 +354,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmToGround", new ArmToPos(arm, GROUND_INTAKE_POS, 1));
 
 
-    NamedCommands.registerCommand("SwitchRPMShoot", new SwitchRPMShootNEO(intakeShooter));
+    // NamedCommands.registerCommand("SwitchRPMShoot", new
+    // SwitchRPMShootNEO(intakeShooter));
 
     NamedCommands.registerCommand("PassToOuttake", new PassToOuttake(intakeShooter));
 
