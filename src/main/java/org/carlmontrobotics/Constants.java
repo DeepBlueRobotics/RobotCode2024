@@ -253,13 +253,20 @@ public final class Constants {
 		// kP, kI, and kD constants for turn motor controllers in the order of
 		// front-left, front-right, back-left, back-right.
 		// Determine correct turn PID constants
-		public static final double[] turnkP = { 51.078, 60.885, 60.946, 60.986 }; // {0.00374, 0.00374, 0.00374,
+		public static final double[] turnkP = { 51.078, 60.885, 65.946, 100.986 }; // {0.00374, 0.00374,
+																					// 0.00374,
 																					// 0.00374};
 		public static final double[] turnkI = { 0, 0, 0, 0 };
-		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 1 }; // todo: use d
+		public static final double[] turnkD = { 0/* dont edit */, 0.5, 0.42, 0.5 };
+		// public static final double[] turnkD = { 0/* dont edit */, 0.9, 0.9, /* 1.5879
+		// */ 5.0 };
+		// // todo: use d
+		// // todo: use d
 		// public static final double[] turnkS = {0.2, 0.2, 0.2, 0.2};
 		public static final double[] turnkS = { 0.13027, 0.17026, 0.2, 0.23262 };
 
+		// Changed index 3 of D from 1 to 0.92
+		// last one back right
 		// V = kS + kV * v + kA * a
 		// 12 = 0.2 + 0.00463 * v
 		// v = (12 - 0.2) / 0.00463 = 2548.596 degrees/s
@@ -279,7 +286,8 @@ public final class Constants {
 				? new boolean[] { false, false, false, false }
 				: new boolean[] { true, false, true, false });
 		public static final boolean[] turnInversion =
-				{ true, true, true, true };
+				{ false, false, false, false };
+		// {true, true, true, true };
 		// kS
 		public static final double[] kForwardVolts = { 0.26744, 0.31897, 0.27967, 0.2461 };
 		public static final double[] kBackwardVolts = kForwardVolts;

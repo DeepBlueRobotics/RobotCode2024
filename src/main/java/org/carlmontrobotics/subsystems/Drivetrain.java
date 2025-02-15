@@ -308,10 +308,13 @@ public class Drivetrain extends SubsystemBase {
         // moduleBL.periodic();
         // moduleBR.periodic();
         // double goal = SmartDashboard.getNumber("bigoal", 0);
+
         for (SwerveModule module : modules) {
             module.periodic();
             // module.move(0, goal);
         }
+        modules[3].getCurrentPosition();
+        SmartDashboard.putNumber("Module3CurrentPos", modules[3].getCurrentPosition().angle.getDegrees());
 
         // field.setRobotPose(odometry.getPoseMeters());
 
