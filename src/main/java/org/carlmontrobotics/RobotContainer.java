@@ -142,7 +142,7 @@ public class RobotContainer {
         }
 
         setDefaultCommands();
-        setBindingsDriver();
+        setBindingsDriver();   
         // setBindingsManipulatorENDEFF();
         // setBindingsManipulator();
     }
