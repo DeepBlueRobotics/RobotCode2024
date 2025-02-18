@@ -108,6 +108,7 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("set x", 0);
         // SmartDashboard.putNumber("set y", 0);
         // Calibrate Gyro
+
         {
 
             double initTimestamp = Timer.getFPGATimestamp();
@@ -208,7 +209,7 @@ public class Drivetrain extends SubsystemBase {
             }
 
             SmartDashboard.putData("Field", field);
-
+            turnMotors[3].set(0.2);
             // for(CANSparkMax driveMotor : driveMotors)
             // driveMotor.setSmartCurrentLimit(80);
 
@@ -231,6 +232,7 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
+        System.out.print("Mooooooooonkey" + turnMotors[3].getOutputCurrent());
         for (var moduleSim : moduleSims) {
             moduleSim.update();
         }
